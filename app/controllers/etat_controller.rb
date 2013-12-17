@@ -367,7 +367,7 @@ class EtatController < ApplicationController
       @pa_autre_total                   = Notification.sum(:pa_autre, :conditions => [ "contrat_id in (?)", @ids_contrats]) || 0
       @pa_total = (@pa_doctorant_total + @pa_post_doc_total + @pa_ingenieur_total + @pa_autre_total).to_f
     else
-      @contrats = []
+      @ids_contrats = []
     end
   end
 
