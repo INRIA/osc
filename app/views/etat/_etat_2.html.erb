@@ -1,0 +1,92 @@
+<h2><strong>Moyens accordés</strong></h2>
+
+<table class="etat_moyens">
+		<thead>
+			<tr>
+				<th></th>
+				<th style="text-align:right;">Moyens accordés</th>
+				<th style="text-align:right;">Pourcentages</th>	
+			</tr>
+		</thead>
+		<tr class="even">
+			<th>Fonctionnement</th>
+			<td class="numbers"><%= my_number_to_currency @ma_fonctionnement_total %></td>
+			<td class="numbers"><%= ((@ma_fonctionnement_total/@ma_total)*100).round(1) %>%</td>
+		</tr>
+		<tr>
+			<th>Equipement</th>
+			<td class="numbers"><%= my_number_to_currency @ma_equipement_total %></td>
+			<td class="numbers"><%= ((@ma_equipement_total/@ma_total)*100).round(1) %>%</td>
+		</tr>
+		<tr class="even">
+			<th>Salaire</th>
+			<td class="numbers"><%= my_number_to_currency @ma_salaire_total %></td>
+			<td class="numbers"><%= ((@ma_salaire_total/@ma_total)*100).round(1) %>%</td>
+		</tr>
+		<tr>
+			<th>Mission</th>
+			<td class="numbers"><%= my_number_to_currency @ma_mission_total %></td>
+			<td class="numbers"><%= ((@ma_mission_total/@ma_total)*100).round(1) %>%</td>
+		</tr>
+		<tr class="even">
+			<th>Non ventilé</th>		
+			<td class="numbers"><%= my_number_to_currency @ma_non_ventile_total %></td>
+			<td class="numbers"><%= ((@ma_non_ventile_total/@ma_total)*100).round(1) %>%</td>
+		</tr>
+		<tr>
+			<th>Coûts indirects</th>
+			<td class="numbers"><%= my_number_to_currency @ma_couts_indirects_total %></td>
+			<td class="numbers"><%= ((@ma_couts_indirects_total/@ma_total)*100).round(1) %>%</td>
+		</tr>
+		<tr>
+      <th>Frais de gestion mutualisés locaux</th>
+      <td class="numbers"><%= my_number_to_currency @ma_frais_gestion_mutualises_local_total %></td>
+      <td class="numbers"><%= ((@ma_frais_gestion_mutualises_local_total/@ma_total)*100).round(1) %>%</td>
+    </tr>
+		<tr>
+      <th>Frais de gestion mutualisés nationaux</th>
+      <td class="numbers"><%= my_number_to_currency @ma_frais_gestion_mutualises_total %></td>
+      <td class="numbers"><%= ((@ma_frais_gestion_mutualises_total/@ma_total)*100).round(1) %>%</td>
+    </tr>
+		<tr class="total">
+			<th>Total</th>		
+			<td class="numbers"><%= my_number_to_currency @ma_total %></td>
+			<td class="numbers">100%</td>
+		</tr>
+	</table>
+
+<h2><strong>Personnel accordé</strong></h2>
+<table class="etat_moyens">
+	<thead>
+		<tr>
+			<th></th>
+			<th style="text-align:right;">Personnel accordé</th>
+			<th style="text-align:right;">Pourcentages</th>
+		</tr>
+	</thead>
+	<tr class="even">
+		<th>Doctorant</th>
+		<td class="numbers"><%= @pa_doctorant_total %> hommes-mois</td>
+		<td class="numbers"><%= ((@pa_doctorant_total/@pa_total)*100).round(1) if @pa_total != 0 %>% </td>
+	</tr>
+	<tr>
+		<th>Post-doc</th>
+		<td class="numbers"><%= @pa_post_doc_total %> hommes-mois</td>
+		<td class="numbers"><%= ((@pa_post_doc_total/@pa_total)*100).round(1) if @pa_total != 0 %>%</td>
+	</tr>
+	<tr class="even">
+		<th>Ingénieur</th>
+		<td class="numbers"><%= @pa_ingenieur_total %> hommes-mois</td>
+		<td class="numbers"><%= ((@pa_ingenieur_total/@pa_total)*100).round(1) if @pa_total != 0 %>%</td>
+	</tr>
+	<tr>
+		<th>Autres</th>
+		<td class="numbers"><%= @pa_autre_total %> hommes-mois</td>
+		<td class="numbers"><%= ((@pa_autre_total/@pa_total)*100).round(1) if @pa_total != 0 %>%</td>
+	</tr>
+	<tr class="total">
+		<th>Total</th>
+		<td class="numbers"><%= @pa_total.to_i %> hommes-mois</td>
+		<td class="numbers"><%= ((@pa_total/@pa_total)*100).round(1) if @pa_total != 0 %>%</td>
+	</tr>
+</table>

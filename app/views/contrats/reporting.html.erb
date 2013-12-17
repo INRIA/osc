@@ -1,0 +1,494 @@
+<h2 id="reporting_depenses_reelles">Synthèse des <strong>dépenses réellement enregistrées</strong></h2>
+
+<div class="reporting clearfix">
+  <div class="reporting-labels">
+    <table>
+      <thead>
+        <tr class="main">
+          <th><br /><br /></th>
+        </tr>
+        <tr>
+          <th>Total des dépenses éligibles</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="odd">
+          <th>En mission</th>
+        </tr>
+        <tr class="even">
+          <th>En fonctionnement</th>
+        </tr>
+        <tr class="odd">
+          <th>En équipement</th>
+        </tr>
+        <tr class="even">
+          <th>En prestations de service</th>
+        </tr>
+        <tr class="odd">
+          <th>En personnels contractuels</th>
+        </tr>
+        <tr class="even">
+          <th>En personnels permanents</th>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <div class="reporting-scroll-container">
+    <div class="reporting-first-sections clearfix" style="width:<%= (@periodes.size) * 262.5 %>px;">
+      <%- for period in @periodes -%>
+        <div class="data-section">
+          <table class="columns-2">
+            <thead>
+              <tr class="main">
+                <th colspan="2">
+                  <%- if period['type'] == "global" -%>
+                    <br />Total
+                  <%- else -%>
+                    Période <%= period['index'] %><br />
+                    du <%= french_date period['date_debut'] %>
+                    au <%= french_date period['date_fin'] %>
+                  <%- end -%>
+                </th>
+              </tr>
+              <tr>
+                <th>Réalisé</th>
+                <th>Contractuel</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="odd">
+                <td>
+                  <span class="with-percentage">
+                    <span class="percent"><%= period["realise"]["mission_%"] %></span>
+                    <%= my_number_to_currency period["realise"]["mission"] %>
+                  </span>
+                </td>
+                <td><%= my_number_to_currency period["contractuel"]["mission"] %></td>
+              </tr>
+              <tr class="even">
+                <td>
+                  <span class="with-percentage">
+                    <span class="percent"><%= period["realise"]["fonctionnement_%"] %></span>
+                    <%= my_number_to_currency period["realise"]["fonctionnement"] %>
+                  </span>
+                </td>
+                <td><%= my_number_to_currency period["contractuel"]["fonctionnement"] %></td>
+              </tr>
+              <tr class="odd">
+                <td>
+                  <span class="with-percentage">
+                    <span class="percent"><%= period["realise"]["equipement_%"] %></span>
+                    <%= my_number_to_currency period["realise"]["equipement"] %>
+                  </span>
+                </td>
+                <td><%= my_number_to_currency period["contractuel"]["equipement"] %></td>
+              </tr>
+              <tr class="even">
+                <td>
+                  <span class="with-percentage">
+                    <span class="percent"><%= period["realise"]["prestation_%"] %></span>
+                    <%= my_number_to_currency period["realise"]["prestation"] %>
+                  </span>
+                </td>
+                <td><%= my_number_to_currency period["contractuel"]["prestation"] %></td>
+              </tr>
+              <tr class="odd">
+                <td>
+                  <span class="with-percentage">
+                    <span class="percent"><%= period["realise"]["contractuel_%"] %></span>
+                    <%= my_number_to_currency period["realise"]["contractuel"] %>
+                  </span>
+                </td>
+                <td><%= my_number_to_currency period["contractuel"]["contractuel"] %></td>
+              </tr>
+              <tr class="even">
+                <td>
+                  <span class="with-percentage">
+                    <span class="percent"><%= period["realise"]["permanent_%"] %></span>
+                    <%= my_number_to_currency period["realise"]["permanent"] %>
+                  </span>
+                </td>
+                <td><%= my_number_to_currency period["contractuel"]["permanent"] %></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      <%- end -%>
+    </div>
+  </div>
+</div>
+
+
+<h2 id="reporting_depenses_totales">Synthèse des <strong>dépenses totales</strong> (réalisées et prévisionnelles)</h2>
+
+<div class="reporting clearfix width-<%= (@periodes.size) %>">
+  <div class="reporting-labels">
+    <table>
+      <thead>
+        <tr class="main">
+          <th><br /><br /></th>
+        </tr>
+        <tr>
+          <th>Total des dépenses éligibles</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="odd">
+          <th>En mission</th>
+        </tr>
+        <tr class="even">
+          <th>En fonctionnement</th>
+        </tr>
+        <tr class="odd">
+          <th>En équipement</th>
+        </tr>
+        <tr class="even">
+          <th>En prestations de service</th>
+        </tr>
+        <tr class="odd">
+          <th>En personnels contractuels</th>
+        </tr>
+        <tr class="even">
+          <th>En personnels permanents</th>
+        </tr>
+        <tr class="sep"></tr>
+        <tr class="odd">
+          <th>Total des dépenses non éligibles</th>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <div class="reporting-scroll-container">
+    <div class="reporting-second-sections clearfix" style="width:<%= (@periodes.size) * 520 %>px;">
+      <%- for period in @periodes -%>
+        <div class="data-section">
+          <table class="columns-4">
+            <thead>
+              <tr class="main">
+                <th colspan="4">
+                  <%- if period['type'] == "global" -%>
+                    <br />Total
+                  <%- else -%>
+                    Période <%= period['index'] %><br />
+                    du <%= french_date period['date_debut'] %>
+                    au <%= french_date period['date_fin'] %>
+                  <%- end -%>
+                </th>
+              </tr>
+              <tr>
+                <th>Réalisé</th>
+                <th>Engagé non réalisé</th>
+                <th>prévisionnel</th>
+                <th>Contractuel</th>
+              </tr>
+            </thead>
+            
+            <tbody>
+              <tr class="odd">
+                <td>
+                  <span class="with-percentage">
+                    <span class="percent"><%= period["realise"]["mission_%"] %></span>
+                    <%= my_number_to_currency period["realise"]["mission"] %>
+                  </span>
+                </td>
+                <td>
+                  <span class="with-percentage">
+                    <span class="percent"><%= period["engage"]["mission_%"] %></span>
+                    <%= my_number_to_currency period["engage"]["mission"] %>
+                  </span>
+                </td>
+                <td>
+                  <span class="with-percentage">
+                    <span class="percent"><%= period["previsionnel"]["mission_%"] %></span>
+                    <%= my_number_to_currency period["previsionnel"]["mission"] %>
+                  </span>
+                </td>
+                <td><%= my_number_to_currency period["contractuel"]["mission"] %></td>
+              </tr>
+              
+              <tr class="even">
+                <td>
+                  <span class="with-percentage">
+                    <span class="percent"><%= period["realise"]["fonctionnement_%"] %></span>
+                    <%= my_number_to_currency period["realise"]["fonctionnement"] %>
+                  </span>
+                </td>
+                <td>
+                  <span class="with-percentage">
+                    <span class="percent"><%= period["engage"]["fonctionnement_%"] %></span>
+                    <%= my_number_to_currency period["engage"]["fonctionnement"] %>
+                  </span>
+                </td>
+                <td>
+                  <span class="with-percentage">
+                    <span class="percent"><%= period["previsionnel"]["fonctionnement_%"] %></span>
+                    <%= my_number_to_currency period["previsionnel"]["fonctionnement"] %>
+                  </span>
+                </td>
+                <td><%= my_number_to_currency period["contractuel"]["fonctionnement"] %></td>
+              </tr>
+
+              <tr class="odd">
+                <td>
+                  <span class="with-percentage">
+                    <span class="percent"><%= period["realise"]["equipement_%"] %></span>
+                    <%= my_number_to_currency period["realise"]["equipement"] %>
+                  </span>
+                </td>
+                <td>
+                  <span class="with-percentage">
+                    <span class="percent"><%= period["engage"]["equipement_%"] %></span>
+                    <%= my_number_to_currency period["engage"]["equipement"] %>
+                  </span>
+                </td>
+                <td>
+                  <span class="with-percentage">
+                    <span class="percent"><%= period["previsionnel"]["equipement_%"] %></span>
+                    <%= my_number_to_currency period["previsionnel"]["equipement"] %>
+                  </span>
+                </td>
+                <td><%= my_number_to_currency period["contractuel"]["equipement"] %></td>
+              </tr>
+              
+              <tr class="even">
+                <td>
+                  <span class="with-percentage">
+                    <span class="percent"><%= period["realise"]["prestation_%"] %></span>
+                    <%= my_number_to_currency period["realise"]["prestation"] %>
+                  </span>
+                </td>
+                <td>
+                  <span class="with-percentage">
+                    <span class="percent"><%= period["engage"]["prestation_%"] %></span>
+                    <%= my_number_to_currency period["engage"]["prestation"] %>
+                  </span>
+                </td>
+                <td>
+                  <span class="with-percentage">
+                    <span class="percent"><%= period["previsionnel"]["prestation_%"] %></span>
+                    <%= my_number_to_currency period["previsionnel"]["prestation"] %>
+                  </span>
+                </td>
+                <td><%= my_number_to_currency period["contractuel"]["prestation"] %></td>
+              </tr>
+              
+              <tr class="odd">
+                <td>
+                  <span class="with-percentage">
+                    <span class="percent"><%= period["realise"]["contractuel_%"] %></span>
+                    <%= my_number_to_currency period["realise"]["contractuel"] %>
+                  </span>
+                </td>
+                <td>
+                  <span class="with-percentage">
+                    <span class="percent"><%= period["engage"]["contractuel_%"] %></span>
+                    <%= my_number_to_currency period["engage"]["contractuel"] %>
+                  </span>
+                </td>
+                <td>
+                  <span class="with-percentage">
+                    <span class="percent"><%= period["previsionnel"]["contractuel_%"] %></span>
+                    <%= my_number_to_currency period["previsionnel"]["contractuel"] %>
+                  </span>
+                </td>
+                <td><%= my_number_to_currency period["contractuel"]["contractuel"] %></td>
+              </tr>
+              
+              <tr class="even">
+                <td>
+                  <span class="with-percentage">
+                    <span class="percent"><%= period["realise"]["permanent_%"] %></span>
+                    <%= my_number_to_currency period["realise"]["permanent"] %>
+                  </span>
+                </td>
+                <td>
+                  <span class="with-percentage">
+                    <span class="percent"><%= period["engage"]["permanent_%"] %></span>
+                    <%= my_number_to_currency period["engage"]["permanent"] %>
+                  </span>
+                </td>
+                <td>
+                  <span class="with-percentage">
+                    <span class="percent"><%= period["previsionnel"]["permanent_%"] %></span>
+                    <%= my_number_to_currency period["previsionnel"]["permanent"] %>
+                  </span>
+                </td>
+                <td><%= my_number_to_currency period["contractuel"]["permanent"] %></td>
+              </tr>
+              
+              <tr class="sep"></tr>
+              
+              <tr class="odd">
+                <td colspan="4" style="line-height:3.3em; text-align:center;">
+                  <%= my_number_to_currency period["realise"]["total_non_eligible"] %>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      <%- end -%>
+    </div>
+  </div>
+</div>
+
+<%- if @contrat.notification.contrat_type.id == ID_CONTRAT_TYPE_EUROPEEN -%>
+  <h2 id="reporting_etats">Etats spécifiques aux <strong>contrats Européens</strong></h2>
+  <div class="reporting">
+    <table class="europe">
+      <thead>
+        <tr>
+          <th class="first"><strong>Dépenses réalisées<strong></th>
+          <th>R&amp;D</th>
+          <th>Démonstration</th>
+          <th>Training</th>
+          <th>Autres</th>
+          <th>Management</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="odd">
+          <th class="first">% de financement</th>
+          <td>75%</td>
+          <td>50%</td>
+          <td>100%</td>
+          <td>100%</td>
+          <td>100%</td>
+        </tr>
+        <tr class="even">
+          <th class="first">Montant des coût directs</th>
+          <td><%= my_number_to_currency @periodes[0]["realise_direct_r&d"] %></td>
+          <td><%= my_number_to_currency @periodes[0]["realise_direct_demonstration"] %></td>
+          <td><%= my_number_to_currency @periodes[0]["realise_direct_training"] %></td>
+          <td><%= my_number_to_currency @periodes[0]["realise_direct_autre"] %></td>
+          <td><%= my_number_to_currency @periodes[0]["realise_direct_management"] %></td>
+        </tr>
+        <tr class="odd">
+          <th class="first">Montant des coût indirects</th>
+          <td><%= my_number_to_currency 0 %></td>
+          <td><%= my_number_to_currency 0 %></td>
+          <td><%= my_number_to_currency 0 %></td>
+          <td><%= my_number_to_currency 0 %></td>
+          <td><%= my_number_to_currency 0 %></td>
+        </tr>
+        <tr class="even">
+          <th class="first">Financement de la CE</th>
+          <td><%= my_number_to_currency 0 %></td>
+          <td><%= my_number_to_currency 0 %></td>
+          <td><%= my_number_to_currency 0 %></td>
+          <td><%= my_number_to_currency 0 %></td>
+          <td><%= my_number_to_currency 0 %></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table class="europe">
+      <thead>
+        <tr>
+          <th class="first"><strong>Dépenses totales (réalisées et prévisionnelles)</strong></th>
+          <th>R&amp;D</th>
+          <th>Démonstration</th>
+          <th>Training</th>
+          <th>Autres</th>
+          <th>Management</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="odd">
+          <th class="first">% de financement</th>
+          <td>75%</td>
+          <td>50%</td>
+          <td>100%</td>
+          <td>100%</td>
+          <td>100%</td>
+        </tr>
+        <tr class="even">
+          <th class="first">Montant des coût directs</th>
+          <td><%= my_number_to_currency @periodes[0]["total_direct_r&d"] %></td>
+          <td><%= my_number_to_currency @periodes[0]["total_direct_demonstration"] %></td>
+          <td><%= my_number_to_currency @periodes[0]["total_direct_training"] %></td>
+          <td><%= my_number_to_currency @periodes[0]["total_direct_autre"] %></td>
+          <td><%= my_number_to_currency @periodes[0]["total_direct_management"] %></td>
+        </tr>
+        <tr class="odd">
+          <th class="first">Montant des coût indirects</th>
+          <td><%= my_number_to_currency 0 %></td>
+          <td><%= my_number_to_currency 0 %></td>
+          <td><%= my_number_to_currency 0 %></td>
+          <td><%= my_number_to_currency 0 %></td>
+          <td><%= my_number_to_currency 0 %></td>
+        </tr>
+        <tr class="even">
+          <th class="first">Financement de la CE</th>
+          <td><%= my_number_to_currency 0 %></td>
+          <td><%= my_number_to_currency 0 %></td>
+          <td><%= my_number_to_currency 0 %></td>
+          <td><%= my_number_to_currency 0 %></td>
+          <td><%= my_number_to_currency 0 %></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+<%- end -%>
+
+
+
+<h2 id="reporting_marge"><strong>Marge</strong> d'un contrat <strong>disponible</strong></h2>
+<div class="reporting">
+  <table class="marge">
+    <thead>
+      <tr>
+        <th></th>
+        <th><strong>Dépenses réelles</strong></th>
+        <th><strong>Dépenses totales <br />dont les prévisionnelles</strong></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="odd">
+        <th>Dépenses réalisées éligibles</th>
+        <td><%= my_number_to_currency @periodes[0]["realise"]["total_eligible"] %></td>
+        <td><%= my_number_to_currency @periodes[0]["all"]["total_eligible"] %></td>
+      </tr>
+      <tr class="even">
+        <th>Dépenses réalisées non éligibles</th>
+        <td><%= my_number_to_currency @periodes[0]["realise"]["total_non_eligible"] %></td>
+        <td><%= my_number_to_currency @periodes[0]["all"]["total_non_eligible"] %></td>
+      </tr>
+      <tr class="odd">
+        <th>Total des dépenses</th>
+        <td><%= my_number_to_currency @periodes[0]["realise"]["total"] %></td>
+        <td><%= my_number_to_currency @periodes[0]["all"]["total"] %></td>
+      </tr>
+      <tr class="even">
+        <th>Recettes prévues du contrat (contractuelles)</th>
+        <td><%= my_number_to_currency @periodes[0]["contractuel"]["total"] %></td>
+        <td><%= my_number_to_currency @periodes[0]["contractuel"]["total"] %></td>
+      </tr>
+      <tr class="odd">
+        <th>Disponible au vu de recettes contractuelles</th>
+        <td><%= my_number_to_currency(@periodes[0]["contractuel"]["total"] - @periodes[0]["realise"]["total"]) %></td>
+        <td><%= my_number_to_currency(@periodes[0]["contractuel"]["total"] - @periodes[0]["all"]["total"]) %></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<% content_for :right do %>
+  <div id="navigation">
+    <h2>Aide à la navigation</h2>
+    <ul>
+      <li><a href="#indicator">Haut de page</a></li>
+      <li><a href="#reporting_depenses_reelles">Synthèse des dépenses réellement enregistrées</a></li>
+      <li><a href="#reporting_depenses_totales">Synthèse des dépenses totales (réalisées et prévisionnelles)</a></li>
+      <%- if @contrat.notification.contrat_type.id == ID_CONTRAT_TYPE_EUROPEEN -%>
+        <li><a href="#reporting_etats">Etats spécifiques aux contrats Européens</a></li>
+      <%- end -%>
+      <li class="last"><a href="#reporting_marge">Marge d'un contrat disponible</a></li>    
+    </ul>
+  </div>
+  <script type="text/javascript">
+    new App.NavigatorHelper();
+  </script>
+<% end %>

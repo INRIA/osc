@@ -1,0 +1,65 @@
+<% content_for :right do %>
+<% if @contrat.is_editable? current_user %>
+
+	<% if @contrat.sous_contrats.size > 1 %>
+		<h2>Choix de l'échéancier</h2>
+		<ul class="echeancier">
+		<% if @contrat.echeancier.nil? %>
+			<% if @echeancier.echeanciable_type == 'Contrat' %>
+				<li>
+					<%= link_to @contrat.acronyme+" (en création)", new_contrat_echeancier_path(@contrat), :class => 'current' %>
+				</li>
+			<% else %>
+				<li>
+					<%= link_to @contrat.acronyme+" (à créer)", new_contrat_echeancier_path(@contrat) %>
+				</li>
+			<% end %>
+		<% else %>
+			<li>
+				<% if @echeancier.echeanciable_type == "Contrat" %>
+					<%= link_to @contrat.acronyme+" (en création)", contrat_echeancier_path(@contrat, @contrat.echeancier.id), :class => 'current' %>
+				<% else %>
+					<%= link_to @contrat.acronyme, contrat_echeancier_path(@contrat, @contrat.echeancier.id) %>
+				<% end %>
+			</li>
+		<% end %>
+		</ul>
+	<% end %>
+<% end %>
+<% end %>
+
+
+<% if @contrat.is_editable? current_user %>
+
+<h2>Création de l'échéancier<strong>
+<% if @echeancier.echeanciable_type == "SousContrat" %>	
+	<%=	@echeancier.echeanciable.nom %>
+<% else %>
+	<%= @contrat.acronyme %>
+<% end %>
+</strong></h2>
+
+
+<%= (my_echeancier_error_messages_for @echeancier).html_safe() %>
+
+<%= form_for(:echeancier, :url => contrat_echeanciers_path) do |f| %>
+
+<%= render :partial => 'form', :locals => { :f => f } %>
+
+<% if @echeancier.echeanciable_type == "Contrat" %>
+	<%= f.hidden_field :echeanciable_type, :value => "Contrat" %>
+	<%= f.hidden_field :echeanciable_id, :value => @contrat.id %>
+<% else %>
+	<%= f.hidden_field :echeanciable_type, :value => "SousContrat" %>
+	<%= f.hidden_field :echeanciable_id, :value => @echeancier.echeanciable_id %>
+<% end %>
+
+<div class="form-box submit" id="submit">
+	<%= submit_tag "Créer l'échéancier" %>
+	ou
+	<%= link_to "Annuler", contrat_path(@contrat) %>
+</div>
+<% end %>
+<% else %>
+<p>L'échéancier n'a pas été créé et vos droits de consultation sur ce contrat ne vous donnent pas la possibilité de le faire.</p>
+<% end %>

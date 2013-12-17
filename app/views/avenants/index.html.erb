@@ -1,0 +1,32 @@
+<h1>Listing avenants</h1>
+
+<table>
+  <tr>
+    <th>Notification</th>
+    <th>Date</th>
+    <th>Commentaires</th>
+    <th>Created at</th>
+    <th>Updated at</th>
+    <th>Created by</th>
+    <th>Updated by</th>
+  </tr>
+  
+<% for avenant in @avenants %>
+  <tr>
+    <td><%=h avenant.notification_id %></td>
+    <td><%=h avenant.date %></td>
+    <td><%=h avenant.commentaires %></td>
+    <td><%=h avenant.created_at %></td>
+    <td><%=h avenant.updated_at %></td>
+    <td><%=h avenant.created_by %></td>
+    <td><%=h avenant.updated_by %></td>
+    <td><%= link_to 'Show', avenant_path(avenant) %></td>
+    <td><%= link_to 'Edit', edit_avenant_path(avenant) %></td>
+    <td><%= link_to 'Destroy', avenant_path(avenant), :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New avenant', new_avenant_path %>

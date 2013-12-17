@@ -1,0 +1,390 @@
+<%-
+  case @type_montant.to_s
+	when "htr" then css_class_montants_htr = "selected"
+	when "ht" then css_class_montants_ht = "selected"
+	when "ttc" then css_class_montants_ttc = "selected"
+  end
+-%>
+<table id="table_bilan">
+  <tr>
+    <th></th>
+      <th style="border-color:#ccc;text-align:center;" colspan="7">
+				<a href="?type_montant=htr" class="type_montants <%= css_class_montants_htr %>" >Montants HTR</a> -
+				<a href="?type_montant=ht" class="type_montants <%= css_class_montants_ht %>" >Montants HT</a> -
+				<a href="?type_montant=ttc" class="type_montants <%= css_class_montants_ttc %>">Montants TTC</a>
+			</th>  </tr>
+  <tr>
+    <th></th>
+    <th class="odd">Fonctionnement</th>
+    <th class="even">Equipement</th>
+    <th class="odd">Mission</th>
+    <th class="even">SS Total (FEM)</th>
+    <th class="odd">Salaire</th>
+    <th class="even">Non ventile</th>
+    <th class="total">Total</th>
+  </tr>
+  <tr>
+    <th>Montants accord&eacute;s</th>
+    <td class="odd"><%= my_number_to_currency @total_a_ouvrir_fonctionnement %></td>
+    <td class="even"><%= my_number_to_currency @total_a_ouvrir_equipement %></td>
+    <td class="odd"><%= my_number_to_currency @total_a_ouvrir_mission %></td>
+    <td class="even"><%= my_number_to_currency (@total_a_ouvrir_fonctionnement + @total_a_ouvrir_equipement + @total_a_ouvrir_mission) %></td>
+    <td class="odd"><%= my_number_to_currency @total_a_ouvrir_salaire %></td>
+    <td class="even"><%= my_number_to_currency @total_a_ouvrir_non_ventile %></td>
+    <td class="total"><%= my_number_to_currency @total_a_ouvrir %></td>
+  </tr>
+  <%- if @current_date_start != @date_start.to_s -%>
+    <tr class="title">
+      <td colspan="7"><strong>Bilan</strong> pour la période du <strong><%= french_date @date_start %></strong> au <strong><%= french_date(@current_date_start.to_date - 1) %></strong></td>
+    </tr>
+
+    <tr>
+      <th>Cr&eacute;dits</th>
+      <td class="odd"><%= my_number_to_currency @somme_versements_fonctionnement_pre %></td>
+      <td class="even"><%= my_number_to_currency @somme_versements_equipement_pre %></td>
+      <td class="odd"><%= my_number_to_currency @somme_versements_mission_pre %></td>
+      <td class="even"><%= my_number_to_currency @sous_total_versement_fem_pre %></td>
+      <td class="odd"><%= my_number_to_currency @somme_versements_salaire_pre %></td>
+      <td class="even"><%= my_number_to_currency @somme_versements_non_ventile_pre %></td>
+      <td class="total"><%= my_number_to_currency @total_versements_pre %></td>
+    </tr>
+		<%if @distinct=='justifiable' || @distinct =='manuelle'%>
+	    <tr>
+	    	<% if @distinct == 'justifiable'%>
+	      <th>D&eacute;penses &eacute;ligibles</th>
+				<% elsif @distinct =='manuelle' %>
+				<th>D&eacute;penses manuelles</th>
+				<% end %>
+	      <td class="odd"><%= my_number_to_currency @somme_depense_fonctionnement_distinct_pre * -1 %></td>
+	      <td class="even"><%= my_number_to_currency @somme_depense_equipement_distinct_pre * -1 %></td>
+	      <td class="odd"><%= my_number_to_currency @somme_depense_mission_distinct_pre * -1 %></td>
+	      <td class="even"><%= my_number_to_currency @sous_total_depense_fem_distinct_pre * -1 %></td>
+	      <td class="odd"><%= my_number_to_currency @somme_depense_salaire_distinct_pre * -1 %></td>
+	      <td class="even"><%= my_number_to_currency @somme_depense_non_ventilee_distinct_pre * -1 %></td>
+	      <td class="total"><%= my_number_to_currency @total_depenses_distinct_pre * -1 %></td>
+	    </tr>
+	    <tr>
+	      <% if @distinct == 'justifiable'%>
+        <th>D&eacute;penses non &eacute;ligibles</th>
+        <% elsif @distinct =='manuelle' %>
+        <th>D&eacute;penses inject&eacute;es</th>
+        <% end %>
+        <td class="odd"><%= my_number_to_currency @somme_depense_fonctionnement_non_distinct_pre * -1 %></td>
+        <td class="even"><%= my_number_to_currency @somme_depense_equipement_non_distinct_pre * -1 %></td>
+        <td class="odd"><%= my_number_to_currency @somme_depense_mission_non_distinct_pre * -1 %></td>
+        <td class="even"><%= my_number_to_currency @sous_total_depense_fem_non_distinct_pre * -1 %></td>
+        <td class="odd"><%= my_number_to_currency @somme_depense_salaire_non_distinct_pre * -1 %></td>
+        <td class="even"><%= my_number_to_currency @somme_depense_non_ventilee_non_distinct_pre * -1 %></td>
+        <td class="total"><%= my_number_to_currency @total_depenses_non_distinct_pre * -1 %></td>
+      </tr>
+	  <%else%>
+	    <tr>
+	    <th>D&eacute;penses</th>
+      <td class="odd"><%= my_number_to_currency @somme_depense_fonctionnement_pre * -1 %></td>
+      <td class="even"><%= my_number_to_currency @somme_depense_equipement_pre * -1  %></td>
+      <td class="odd"><%= my_number_to_currency @somme_depense_mission_pre * -1  %></td>
+      <td class="even"><%= my_number_to_currency @sous_total_depense_fem_pre * -1 %></td>
+      <td class="odd"><%= my_number_to_currency @somme_depense_salaire_pre * -1  %></td>
+      <td class="even"><%= my_number_to_currency @somme_depense_non_ventilee_pre * -1  %></td>
+      <td class="total"><%= my_number_to_currency @total_depenses_pre * -1  %></td>
+      </tr>
+	  <%end%>
+    <tr>
+      <th>Total</th>
+      <td class="odd total<%= ' neg' if @total_fonctionnement_pre < 0 %>"><%= my_number_to_currency @total_fonctionnement_pre %></td>
+      <td class="even total<%= ' neg' if @total_equipement_pre < 0 %>"><%= my_number_to_currency @total_equipement_pre %></td>
+      <td class="odd total<%= ' neg' if @total_mission_pre < 0 %>"><%= my_number_to_currency @total_mission_pre %></td>
+      <td class="even total<%= ' neg' if @sous_total_depense_fem_pre < 0 %>"><%= my_number_to_currency @sous_total_fem_pre %></td>
+      <td class="odd total<%= ' neg' if @total_salaire_pre < 0 %>"><%= my_number_to_currency @total_salaire_pre %></td>
+      <td class="even total<%= ' neg' if @total_non_ventilee_pre < 0 %>"><%= my_number_to_currency @total_non_ventilee_pre %></td>
+      <td class="odd total<%= ' neg' if @total_pre < 0 %>"><%= my_number_to_currency @total_pre %></td>
+    </tr>
+  <%- end -%>
+  <%- if ((@current_date_start != @date_start.to_s) || (@current_date_end != @date_end.to_s )) -%>
+    <tr class="title">
+      <td colspan="7">
+	    <%- if(@periode_number.blank?) -%>
+	      <strong>Bilan</strong> <%= render :partial => 'lignes/info_selection_temporelle' %>
+      <%- else -%>
+	      <strong>Bilan</strong>  pour la p&eacute;riode <strong> <%=@periode_number %> </strong>
+      <%- end -%>
+      </td>
+    </tr>
+	<%- end -%>
+
+
+  <%- if(@detail == '2') -%>
+		<tr>
+      <td style="height:40px;" colspan="7"></td>
+    </tr>
+		<tr>
+		  <th>Recettes attendues</th>
+      <td class="odd"><%= my_number_to_currency @total_recettes_attendues_fonctionnement %></td>
+      <td class="even"><%= my_number_to_currency @total_recettes_attendues_equipement %></td>
+      <td class="odd"><%= my_number_to_currency @total_recettes_attendues_mission %></td>
+      <td class="even"><%= my_number_to_currency(@total_recettes_attendues_fonctionnement+@total_recettes_attendues_equipement+@total_recettes_attendues_mission) %></td>
+      <td class="odd"><%= my_number_to_currency @total_recettes_attendues_salaire %></td>
+      <td class="even"><%= my_number_to_currency @total_recettes_attendues_non_ventile %></td>
+      <td class="total"><%= my_number_to_currency(@total_recettes_attendues_fonctionnement+@total_recettes_attendues_equipement+@total_recettes_attendues_mission+@total_recettes_attendues_salaire+@total_recettes_attendues_non_ventile) %></td>
+		</tr>
+		<%- elsif !( @detail =='0' and @periode.blank?) -%>
+		<tr>
+		  <th>Recettes attendues</th>
+      <td class="odd"><%= my_number_to_currency @periode.depenses_fonctionnement %></td>
+      <td class="even"><%= my_number_to_currency @periode.depenses_equipement %></td>
+      <td class="odd"><%= my_number_to_currency @periode.depenses_missions %></td>
+      <td class="even"><%= my_number_to_currency(@periode.depenses_fonctionnement+@periode.depenses_equipement+@periode.depenses_missions) %></td>
+      <td class="odd"><%= my_number_to_currency @periode.depenses_salaires %></td>
+      <td class="even"><%= my_number_to_currency @periode.depenses_non_ventile %></td>
+      <td class="total"><%= my_number_to_currency(@periode.depenses_fonctionnement+@periode.depenses_equipement+@periode.depenses_missions+@periode.depenses_salaires+@periode.depenses_non_ventile) %></td>
+		</tr>
+		<%- end -%>
+	<%- if ((@current_date_start != @date_start.to_s) || (@current_date_end != @date_end.to_s )) -%>
+
+		<tr>
+			<th>Cr&eacute;dits</th>
+	      <td class="odd"><%= my_number_to_currency @somme_versements_fonctionnement %></td>
+	      <td class="even"><%= my_number_to_currency @somme_versements_equipement %></td>
+	      <td class="odd"><%= my_number_to_currency @somme_versements_mission %></td>
+	      <td class="even"><%= my_number_to_currency @sous_total_versement_fem %></td>
+	      <td class="odd"><%= my_number_to_currency @somme_versements_salaire %></td>
+	      <td class="even"><%= my_number_to_currency @somme_versements_non_ventile %></td>
+	      <td class="total"><%= my_number_to_currency @total_versements %></td>
+		</tr>
+		<%if @distinct=='justifiable' || @distinct =='manuelle'%>
+	  <tr>
+	  	<% if @distinct == 'justifiable'%>
+      <th>D&eacute;penses &eacute;ligibles</th>
+      <% elsif @distinct =='manuelle' %>
+      <th>D&eacute;penses manuelles</th>
+      <% end %>
+	    <td class="odd"><%= my_number_to_currency @somme_depense_fonctionnement_distinct * -1 %></td>
+	    <td class="even"><%= my_number_to_currency @somme_depense_equipement_distinct * -1 %></td>
+	    <td class="odd"><%= my_number_to_currency @somme_depense_mission_distinct * -1 %></td>
+	    <td class="even"><%= my_number_to_currency @sous_total_depense_fem_distinct * -1 %></td>
+	        <td class="odd"><%= my_number_to_currency @somme_depense_salaire_distinct * -1 %></td>
+	    <td class="even"><%= my_number_to_currency @somme_depense_non_ventilee_distinct * -1 %></td>
+	    <td class="total"><%= my_number_to_currency @total_depenses_distinct * -1 %></td>
+	  </tr>
+	  <tr>
+	    <% if @distinct == 'justifiable'%>
+      <th>D&eacute;penses non &eacute;ligibles</th>
+      <% elsif @distinct =='manuelle' %>
+      <th>D&eacute;penses inject&eacute;es</th>
+			<% end %>
+			<td class="odd"><%= my_number_to_currency @somme_depense_fonctionnement_non_distinct * -1 %></td>
+      <td class="even"><%= my_number_to_currency @somme_depense_equipement_non_distinct * -1 %></td>
+      <td class="odd"><%= my_number_to_currency @somme_depense_mission_non_distinct * -1 %></td>
+      <td class="even"><%= my_number_to_currency @sous_total_depense_fem_non_distinct * -1 %></td>
+      <td class="odd"><%= my_number_to_currency @somme_depense_salaire_non_distinct * -1 %></td>
+      <td class="even"><%= my_number_to_currency @somme_depense_non_ventilee_non_distinct * -1 %></td>
+      <td class="total"><%= my_number_to_currency @total_depenses_non_distinct * -1 %></td>
+    </tr>
+	  <%else%>
+	  <tr>
+	    <th>D&eacute;penses</th>
+			<td class="odd"><%= my_number_to_currency @somme_depense_fonctionnement * -1  %></td>
+			<td class="even"><%= my_number_to_currency @somme_depense_equipement * -1  %></td>
+			<td class="odd"><%= my_number_to_currency @somme_depense_mission * -1  %></td>
+			<td class="even"><%= my_number_to_currency @sous_total_depense_fem * -1  %></td>
+      <td class="odd"><%= my_number_to_currency @somme_depense_salaire * -1  %></td>
+			<td class="even"><%= my_number_to_currency @somme_depense_non_ventilee  * -1 %></td>
+			<td class="total"><%= my_number_to_currency @total_depenses * -1  %></td>
+		</tr>
+		<%end%>
+		<tr>
+      <th>Total</th>
+      <td class="odd total<%= ' neg' if @total_fonctionnement < 0 %>"><%= my_number_to_currency @total_fonctionnement %></td>
+      <td class="even total<%= ' neg' if @total_equipement < 0 %>"><%= my_number_to_currency @total_equipement %></td>
+      <td class="odd total<%= ' neg' if @total_mission < 0 %>"><%= my_number_to_currency @total_mission %></td>
+      <td class="even total<%= ' neg' if @sous_total_fem < 0 %>"><%= my_number_to_currency @sous_total_fem %></td>
+      <td class="odd total<%= ' neg' if @total_salaire < 0 %>"><%= my_number_to_currency @total_salaire %></td>
+      <td class="even total<%= ' neg' if @total_non_ventilee < 0 %>"><%= my_number_to_currency @total_non_ventilee %></td>
+      <td class="odd total<%= ' neg' if @total < 0 %>"><%= my_number_to_currency @total %></td>
+		</tr>
+	  <%- if ( @detail =='0' and !@periode.blank?) -%>
+    <tr>
+      <th>Reste &agrave; d&eacute;penser attendu sur la p&eacute;riode</th>
+      <td class="odd total<%= ' neg' if @somme_depense_fonctionnement > @periode.depenses_fonctionnement %>"><%= my_number_to_currency @periode.depenses_fonctionnement - @somme_depense_fonctionnement %></td>
+      <td class="even total<%= ' neg' if @somme_depense_equipement > @periode.depenses_equipement %>"><%= my_number_to_currency @periode.depenses_equipement - @somme_depense_equipement %></td>
+      <td class="odd total<%= ' neg' if @somme_depense_mission > @periode.depenses_missions %>"><%= my_number_to_currency @periode.depenses_missions - @somme_depense_mission %></td>
+      <td class="even total<%= ' neg' if @sous_total_depense_fem > (@periode.depenses_fonctionnement+@periode.depenses_equipement+@periode.depenses_missions) %>"><%= my_number_to_currency(@periode.depenses_fonctionnement+@periode.depenses_equipement+@periode.depenses_missions - @sous_total_depense_fem) %></td>
+      <td class="odd total<%= ' neg' if @somme_depense_salaire > @periode.depenses_salaires %>"><%= my_number_to_currency @periode.depenses_salaires - @somme_depense_salaire %></td>
+      <td class="even total<%= ' neg' if @somme_depense_non_ventilee > @periode.depenses_non_ventile %>"><%= my_number_to_currency @periode.depenses_non_ventile - @somme_depense_non_ventilee %></td>
+      <td class="total total<%= ' neg' if @total_depenses > (@periode.depenses_fonctionnement+@periode.depenses_equipement+@periode.depenses_missions+@periode.depenses_salaires+@periode.depenses_non_ventile) %>"><%= my_number_to_currency(@periode.depenses_fonctionnement+@periode.depenses_equipement+@periode.depenses_missions+@periode.depenses_salaires+@periode.depenses_non_ventile - @total_depenses) %></td>
+    </tr>
+    <%- end -%>
+	<% end %>
+
+	<%- if @current_date_end != @date_end.to_s -%>
+
+	<tr class="title">
+		<td colspan="7"><strong>Bilan</strong> pour la période du <strong><%= french_date(@current_date_end.to_date + 1) %></strong> au <strong><%= french_date(@date_end) %></strong></td>
+	</tr>
+	<tr>
+		<th>Cr&eacute;dits</th>
+		<td class="odd"><%= my_number_to_currency @somme_versements_fonctionnement_post %></td>
+		<td class="even"><%= my_number_to_currency @somme_versements_equipement_post %></td>
+		<td class="odd"><%= my_number_to_currency @somme_versements_mission_post %></td>
+		<td class="even"><%= my_number_to_currency @sous_total_versement_fem_post %></td>
+        <td class="odd"><%= my_number_to_currency @somme_versements_salaire_post %></td>
+		<td class="even"><%= my_number_to_currency @somme_versements_non_ventile_post %></td>
+		<td class="total"><%= my_number_to_currency @total_versements_post %></td>
+	</tr>
+	<%if @distinct=='justifiable' || @distinct =='manuelle'%>
+	<tr>
+		<% if @distinct == 'justifiable'%>
+    <th>D&eacute;penses &eacute;ligibles</th>
+    <% elsif @distinct =='manuelle' %>
+    <th>D&eacute;penses manuelles</th>
+    <% end %>
+    <td class="odd"><%= my_number_to_currency @somme_depense_fonctionnement_distinct_post * -1 %></td>
+    <td class="even"><%= my_number_to_currency @somme_depense_equipement_distinct_post * -1 %></td>
+    <td class="odd"><%= my_number_to_currency @somme_depense_mission_distinct_post * -1 %></td>
+    <td class="even"><%= my_number_to_currency @sous_total_depense_fem_distinct_post * -1 %></td>
+    <td class="odd"><%= my_number_to_currency @somme_depense_salaire_distinct_post * -1 %></td>
+    <td class="even"><%= my_number_to_currency @somme_depense_non_ventilee_distinct_post * -1 %></td>
+    <td class="total"><%= my_number_to_currency @total_depenses_distinct_post * -1 %></td>
+  </tr>
+	<tr>
+    <% if @distinct == 'justifiable'%>
+    <th>D&eacute;penses non &eacute;ligibles</th>
+    <% elsif @distinct =='manuelle' %>
+    <th>D&eacute;penses inject&eacute;es</th>
+		<% end%>
+		<td class="odd"><%= my_number_to_currency @somme_depense_fonctionnement_non_distinct_post * -1 %></td>
+    <td class="even"><%= my_number_to_currency @somme_depense_equipement_non_distinct_post * -1 %></td>
+    <td class="odd"><%= my_number_to_currency @somme_depense_mission_non_distinct_post * -1 %></td>
+    <td class="even"><%= my_number_to_currency @sous_total_depense_fem_non_distinct_post * -1 %></td>
+    <td class="odd"><%= my_number_to_currency @somme_depense_salaire_non_distinct_post * -1 %></td>
+    <td class="even"><%= my_number_to_currency @somme_depense_non_ventilee_non_distinct_post * -1 %></td>
+    <td class="total"><%= my_number_to_currency @total_depenses_non_distinct_post * -1 %></td>
+  </tr>
+	<%else%>
+	<tr>
+		<th>D&eacute;penses</th>	
+		<td class="odd"><%= my_number_to_currency @somme_depense_fonctionnement_post * -1 %></td>
+		<td class="even"><%= my_number_to_currency @somme_depense_equipement_post * -1 %></td>
+		<td class="odd"><%= my_number_to_currency @somme_depense_mission_post * -1 %></td>
+		<td class="even"><%= my_number_to_currency @sous_total_depense_fem_post * -1 %></td>
+    <td class="odd"><%= my_number_to_currency @somme_depense_salaire_post * -1 %></td>
+		<td class="even"><%= my_number_to_currency @somme_depense_non_ventilee_post * -1 %></td>
+		<td class="total"><%= my_number_to_currency @total_depenses_post * -1 %></td>
+	</tr>
+  <%end%>
+	<tr>
+		<th>Total</th>
+    <td class="odd total<%= ' neg' if @total_fonctionnement_post < 0 %>"><%= my_number_to_currency @total_fonctionnement_post %></td>
+    <td class="even total<%= ' neg' if @total_equipement_post < 0 %>"><%= my_number_to_currency @total_equipement_post %></td>
+    <td class="odd total<%= ' neg' if @total_mission_post < 0 %>"><%= my_number_to_currency @total_mission_post %></td>
+    <td class="even total<%= ' neg' if @sous_total_fem_post < 0 %>"><%= my_number_to_currency @sous_total_fem_post %></td>
+    <td class="odd total<%= ' neg' if @total_salaire_post < 0 %>"><%= my_number_to_currency @total_salaire_post %></td>
+    <td class="even total<%= ' neg' if @total_non_ventilee_post < 0 %>"><%= my_number_to_currency @total_non_ventilee_post %></td>
+      <td class="odd total<%= ' neg' if @total_post < 0 %>"><%= my_number_to_currency @total_post %></td>
+	</tr>
+	<%- end -%>
+	<tr>
+	  <td style="height:40px;" colspan="7"></td>
+	</tr>
+	<tr>
+    <th>Cr&eacute;dits Totaux</th>
+    <td class="odd"><%= my_number_to_currency @total_versements_fonctionnement %></td>
+    <td class="even"><%= my_number_to_currency @total_versements_equipement %></td>
+    <td class="odd"><%= my_number_to_currency @total_versements_mission %></td>
+    <td class="even"><%= my_number_to_currency @total_versements_fem %></td>
+    <td class="odd"><%= my_number_to_currency @total_versements_salaire %></td>
+    <td class="even"><%= my_number_to_currency @total_versements_non_ventile %></td>
+    <td class="total"><%= my_number_to_currency @total_versements_ligne %></td>
+  </tr>
+	<%if @distinct=='justifiable' || @distinct =='manuelle'%>
+  <tr>
+  	<% if @distinct == 'justifiable'%>
+    <th>D&eacute;penses Totales &eacute;ligibles</th>
+    <% elsif @distinct =='manuelle' %>
+    <th>D&eacute;penses Totales manuelles</th>
+    <% end %>
+    <td class="odd"><%= my_number_to_currency @total_depenses_fonctionnement_distinct_ligne * -1 %></td>
+    <td class="even"><%= my_number_to_currency @total_depenses_equipement_distinct_ligne * -1 %></td>
+    <td class="odd"><%= my_number_to_currency @total_depenses_mission_distinct_ligne * -1 %></td>
+    <td class="even"><%= my_number_to_currency @total_depense_fem_distinct * -1 %></td>
+    <td class="odd"><%= my_number_to_currency @total_depenses_salaire_distinct_ligne * -1 %></td>
+    <td class="even"><%= my_number_to_currency @total_depenses_non_ventile_distinct_ligne * -1 %></td>
+    <td class="total"><%= my_number_to_currency @total_depenses_distinct_ligne * -1 %></td>
+  </tr>
+  <tr>
+    <% if @distinct == 'justifiable'%>
+    <th>D&eacute;penses Totales non &eacute;ligibles</th>
+    <% elsif @distinct =='manuelle' %>
+    <th>D&eacute;penses Totales inject&eacute;es</th>
+		<% end %>
+		<td class="odd"><%= my_number_to_currency @total_depenses_fonctionnement_non_distinct_ligne * -1 %></td>
+    <td class="even"><%= my_number_to_currency @total_depenses_equipement_non_distinct_ligne * -1 %></td>
+    <td class="odd"><%= my_number_to_currency @total_depenses_mission_non_distinct_ligne * -1 %></td>
+    <td class="even"><%= my_number_to_currency @total_depense_fem_non_distinct * -1 %></td>
+    <td class="odd"><%= my_number_to_currency @total_depenses_salaire_non_distinct_ligne * -1 %></td>
+    <td class="even"><%= my_number_to_currency @total_depenses_non_ventile_non_distinct_ligne * -1 %></td>
+    <td class="total"><%= my_number_to_currency @total_depenses_non_distinct_ligne * -1 %></td>
+  </tr>
+  <%else%>
+  <tr>
+    <th>D&eacute;penses Totales</th> 
+    <td class="odd"><%= my_number_to_currency @total_depenses_fonctionnement_ligne * -1 %></td>
+    <td class="even"><%= my_number_to_currency @total_depenses_equipement_ligne * -1  %></td>
+    <td class="odd"><%= my_number_to_currency @total_depenses_mission_ligne * -1  %></td>
+    <td class="even"><%= my_number_to_currency @total_depense_fem * -1 %></td>
+    <td class="odd"><%= my_number_to_currency @total_depenses_salaire_ligne * -1  %></td>
+    <td class="even"><%= my_number_to_currency @total_depenses_non_ventile_ligne * -1  %></td>
+    <td class="total"><%= my_number_to_currency @total_depenses_ligne * -1  %></td>
+  </tr>
+	<%end%>
+  <tr>
+    <th>Bilan Total</th>
+    <td class="odd total<%= ' neg' if @bilan_total_fonctionnement < 0 %>"><%= my_number_to_currency @bilan_total_fonctionnement %></td>
+    <td class="even total<%= ' neg' if @bilan_total_equipement < 0 %>"><%= my_number_to_currency @bilan_total_equipement %></td>
+    <td class="odd total<%= ' neg' if @bilan_total_mission < 0 %>"><%= my_number_to_currency @bilan_total_mission %></td>
+    <td class="even total<%= ' neg' if @bilan_total_fem < 0 %>"><%= my_number_to_currency @bilan_total_fem %></td>
+    <td class="odd total<%= ' neg' if @bilan_total_salaire < 0 %>"><%= my_number_to_currency @bilan_total_salaire %></td>
+    <td class="even total<%= ' neg' if @bilan_total_non_ventile < 0 %>"><%= my_number_to_currency @bilan_total_non_ventile %></td>
+    <td class="odd total<%= ' neg' if @bilan_total_ligne < 0 %>"><%= my_number_to_currency @bilan_total_ligne %></td>
+  </tr>
+  <tr>
+    <th></th>
+  <td style="height:20px;" colspan="7"></td>
+  </tr>
+<tr>
+	<th>Reste &agrave; ouvrir</th>
+    <td class="odd total<%= ' neg' if @reste_a_ouvrir_fonctionnement < 0 %>"><%= my_number_to_currency @reste_a_ouvrir_fonctionnement %></td>
+    <td class="even total<%= ' neg' if @reste_a_ouvrir_equipement < 0 %>"><%= my_number_to_currency @reste_a_ouvrir_equipement %></td>
+    <td class="odd total<%= ' neg' if @reste_a_ouvrir_mission < 0 %>"><%= my_number_to_currency @reste_a_ouvrir_mission %></td>
+    <% tot = (@reste_a_ouvrir_fonctionnement + @reste_a_ouvrir_equipement + @reste_a_ouvrir_mission) -%>
+    <td class="even total<%= ' neg' if tot %>"><%= my_number_to_currency tot %></td>
+    <td class="odd total<%= ' neg' if @reste_a_ouvrir_salaire < 0 %>"><%= my_number_to_currency @reste_a_ouvrir_salaire %></td>
+    <td class="even total<%= ' neg' if @reste_a_ouvrir_non_ventile < 0 %>"><%= my_number_to_currency @reste_a_ouvrir_non_ventile %></td>
+    <td class="odd total<%= ' neg' if @reste_a_ouvrir < 0 %>"><%= my_number_to_currency @reste_a_ouvrir %></td>
+  </tr>
+  <tr>
+  	<th></th>
+	<td style="height:20px;" colspan="7"></td>
+  </tr>
+  <tr>
+	<th>Reste &agrave; engager</th>
+    <td class="odd total<%= ' neg' if @reste_a_depenser_fonctionnement < 0 %>"><%= my_number_to_currency @reste_a_depenser_fonctionnement %></td>
+    <td class="even total<%= ' neg' if @reste_a_depenser_equipement < 0 %>"><%= my_number_to_currency @reste_a_depenser_equipement %></td>
+    <td class="odd total<%= ' neg' if @reste_a_depenser_mission < 0 %>"><%= my_number_to_currency @reste_a_depenser_mission %></td>
+    <% tot = (@reste_a_depenser_fonctionnement + @reste_a_depenser_equipement + @reste_a_depenser_mission) -%>
+    <td class="even total<%= ' neg' if tot %>"><%= my_number_to_currency tot %></td>
+    <td class="odd total<%= ' neg' if @reste_a_depenser_salaire < 0 %>"><%= my_number_to_currency @reste_a_depenser_salaire %></td>
+    <td class="even total<%= ' neg' if @reste_a_depenser_non_ventile < 0 %>"><%= my_number_to_currency @reste_a_depenser_non_ventile %></td>
+    <td class="odd total<%= ' neg' if @reste_a_depenser < 0 %>"><%= my_number_to_currency @reste_a_depenser %></td>
+  </tr>
+  <tr>
+	<th></th>
+	<th class="odd">Fonctionnement</th>
+	<th class="even">Equipement</th>
+	<th class="odd">Mission</th>
+    <th class="even">SS Total (FEM)</th>
+	<th class="odd">Salaire</th>
+	<th class="even">Non ventile</th>
+	<th class="total">Total</th>
+  </tr>
+</table>

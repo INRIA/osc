@@ -1,0 +1,26 @@
+<h1>Listing tutelle_subscriptions</h1>
+
+<table>
+  <tr>
+    <th>Projet</th>
+    <th>Tutelle</th>
+    <th>Created at</th>
+    <th>Updated at</th>
+  </tr>
+  
+<% for tutelle_subscription in @tutelle_subscriptions %>
+  <tr>
+    <td><%=h tutelle_subscription.projet.nom %></td>
+    <td><%=h tutelle_subscription.tutelle.nom %></td>
+    <td><%=h tutelle_subscription.created_at %></td>
+    <td><%=h tutelle_subscription.updated_at %></td>
+    <td><%= link_to 'Show', tutelle_subscription_path(tutelle_subscription.projet, tutelle_subscription) %></td>
+    <td><%= link_to 'Edit', edit_tutelle_subscription_path(tutelle_subscription.projet, tutelle_subscription) %></td>
+    <td><%= link_to 'Destroy', tutelle_subscription_path(tutelle_subscription.projet, tutelle_subscription), :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New tutelle_subscription', new_tutelle_subscription_path %>

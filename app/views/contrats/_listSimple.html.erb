@@ -1,0 +1,26 @@
+<div class="underh2" style="border:none;">
+</div>
+<div class="content" style="padding-left:0;padding-right:0;">
+<% for contrat in @contrats %>
+<div class="contrat">
+	<div class="infos_contrat <%= contrat.etat %>">
+		<div class="acronyme">
+		  <%= image_tag 'bullet_yellow.png', :alt => 'consultation' %>
+		  <%= link_to h(contrat.acronyme), contrat_path(contrat) %>
+		  <% for sous_contrat in contrat.sous_contrats %>
+			  <% case sous_contrat.entite_type %> 
+	 			  <% when 'Projet' %>
+					  <span class="projet_name">
+				  <% when 'Departement' %>
+					  <span class="departement_name">
+				  <% when 'Laboratoire' %>
+					  <span class="laboratoire2_name">
+				  <% end %>
+			  <%= h sous_contrat.entite.nom %></span>
+		  <% end %>
+	  </div>
+	</div>
+</div>
+<% end %>
+
+</div>

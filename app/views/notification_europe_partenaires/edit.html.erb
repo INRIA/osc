@@ -1,0 +1,42 @@
+<h1>Editing notification_europe_partenaire</h1>
+
+<%= error_messages_for :notification_europe_partenaire %>
+
+<% form_for(:notification_europe_partenaire, :url => notification_europe_partenaire_path(@notification_europe_partenaire), :html => { :method => :put }) do |f| %>
+  <p>
+    <b>Notification</b><br />
+    <%= f.text_field :notification_id %>
+  </p>
+
+  <p>
+    <b>Nom</b><br />
+    <%= f.text_field :nom %>
+  </p>
+
+  <p>
+    <b>Etablissement gestionnaire</b><br />
+    <%= f.text_field :etablissement_gestionnaire %>
+  </p>
+
+  <p>
+    <b>Ville</b><br />
+    <%= f.text_field :ville %>
+  </p>
+
+  <p>
+    <b>Pays</b><br />
+    <%= f.text_field :pays %>
+  </p>
+
+  <p>
+    <b>Localisation</b><br />
+    <%= f.text_field :localisation %>
+  </p>
+
+  <p>
+    <%= submit_tag "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', notification_europe_partenaire_path(@notification_europe_partenaire) %> |
+<%= link_to 'Back', notification_europe_partenaires_path %>

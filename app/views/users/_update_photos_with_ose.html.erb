@@ -1,0 +1,10 @@
+<p>
+  <% if @text.nil? %>
+    Aucune mise à jour effectuée, les données étaient déjà à jour.
+  <% else %>
+    <%= @text %>
+  <% end %>
+</p>
+<script type="text/javascript">
+  notice();
+</script>

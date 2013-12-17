@@ -1,0 +1,206 @@
+<% content_for :right do %>
+  <%- if @ligne.contrat.is_budget_editable? current_user -%>
+    <%= link_to 'Ajouter une dépense non ventilée', new_ligne_depense_non_ventilee_path(@ligne), {:class => "add-depense-non-ventilee"} %>
+		<%= link_to 'Dupliquer cette dépense',  duplicate_ligne_depense_non_ventilee_path(@ligne, @depense_non_ventilee),  {:class => "duplicate-depense", :method => :post} %>
+  <%- end -%>
+<%- end -%>
+
+<%- if @ref_exist -%>
+  <div id="errorExplanation" class="errorExplanation"><h2>Attention, la référence a déjà été saisie pour une autre dépense. </h2></div>
+<%- end -%>
+
+<div class="box parent">
+  <%= "<span class='come-from-inria'>S.I. INRIA</span>".html_safe() if @depense_non_ventilee.come_from_inria? %>
+  <h2>Demande d'achat</h2>
+  <div class="clearfix">
+    <div class="large-col">
+      <div class='line clearfix'>
+        <span class="attribute">Date de demande d'achat</span>
+        <span class="value"><%= french_date @depense_non_ventilee.date_commande %></span>
+      </div>
+      <div class='line clearfix'>
+        <span class="attribute">N° de demande d'achat</span>
+        <span class="value"><%=  @depense_non_ventilee.reference %></span>
+      </div>
+      <div class='line clearfix'>
+        <span class="attribute">Fournisseur</span>
+        <span class="value"><%=h @depense_non_ventilee.fournisseur %></span>
+      </div>
+      <div class='line clearfix'>
+        <span class="attribute">Intitulé</span>
+        <div class="value"><%= simple_format @depense_non_ventilee.intitule %></div>
+      </div>
+      <div class='line clearfix'>
+        <span class="attribute">Structure</span>
+        <span class="value"><%= @depense_non_ventilee.structure %></span>
+      </div>
+      <div class='line last clearfix'>
+        <span class="attribute">Commentaire</span>
+        <div class="value"><%= simple_format @depense_non_ventilee.commentaire %></div>
+      </div>
+    </div>
+    <div class="small-col">
+      <div class='line last clearfix'>
+        <span class="attribute">Montant engagé</span>
+        <span class="value <%= "soldee" if @depense_non_ventilee.commande_solde %>">
+          <strong><%= my_number_to_currency @depense_non_ventilee.montant_engage %></strong>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="justification-data" <%= 'style="display:none;"'.html_safe() if @user_preferences_show_justifacation_data == 'no' %>>
+  <div class="box sub-parent">
+    <h2>Justification</h2>
+    <div class="clearfix">
+      <div class="large-col">
+        <div class='line clearfix'>
+          <span class="attribute">Nom de la tâche imputée</span>
+          <span class="value"><%= @depense_non_ventilee.tache %></span>
+        </div>
+        <div class='line clearfix'>
+          <span class="attribute">Commande éligible ?</span>
+          <span class="value"><% if @depense_non_ventilee.eligible %>Oui<% else %>Non<% end %></span>
+        </div>
+        <div class='line last clearfix'>
+          <span class="attribute">Type d'activité</span>
+          <span class="value"><%= @depense_non_ventilee.type_activite %></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="sub-parent-toggle-container">
+  <a href="#" id="toggle-justification">
+    <%- if @user_preferences_show_justifacation_data == 'no' -%>
+      Afficher les données de justification
+    <%- else -%>
+      Masquer les données de justification
+    <%- end -%>
+  </a>
+</div>
+
+<% i = 1 %>
+<% for facture in @depense_non_ventilee.depense_non_ventilee_factures %>
+  <%- if i == @depense_non_ventilee.depense_non_ventilee_factures.size -%>
+    <div class="child-container last">
+  <%- else -%>
+    <div class="child-container default">
+  <%- end -%>
+
+  <div class="box child">
+    <%= "<span class='come-from-inria'>S.I. INRIA</span>".html_safe() if facture.come_from_inria? %>
+    <h2>Facture</h2>
+    <div class="clearfix">
+      <div class="large-col">
+        <div class='line clearfix'>
+          <span class="attribute">Date de la facture</span>
+          <span class="value"><%= french_date facture.date %></span>
+        </div>
+        <div class='line clearfix'>
+          <span class="attribute">Date de service fait (millésime)</span>
+          <span class="value"><%= french_date facture.millesime unless facture.millesime.nil? %></span>
+      </div>
+      <div class='line clearfix'>
+          <span class="attribute">N° de la facture</span>
+          <span class="value"><%= facture.numero_facture %></span>
+        </div>
+        <div class='line clearfix'>
+          <span class="attribute">Rubrique comptable</span>
+          <span class="value"><%= facture.rubrique_comptable.intitule %></span>
+        </div>
+        <div class='line clearfix'>
+          <span class="attribute">Commentaire</span>
+          <div class="value"><%= simple_format facture.commentaire %></div>
+        </div>
+        <div class='line clearfix'>
+          <span class="attribute">Justification</span>
+          <span class="value"><%= facture.justifiable %></span>
+        </div>
+        <div class='line clearfix'>
+          <span class="attribute">N° de mandat</span>
+          <span class="value"><%= facture.numero_mandat %></span>
+        </div>
+        <div class='line clearfix'>
+          <span class="attribute">Date de mandatement</span>
+          <span class="value"><%= french_date facture.date_mandatement if !facture.date_mandatement.blank? %></span>
+        </div>
+      </div>
+      <div class="small-col">
+        <div class='line clearfix'>
+          <span class="attribute">Montant Payé (HT)</span>
+          <span class="value"><%= my_number_to_currency facture.cout_ht %></span>
+        </div>
+        <div class='line clearfix'>
+          <span class="attribute">Taux de TVA</span>
+          <span class="value"><%= facture.taux_tva %>%</span>
+        </div>
+        <div class='line clearfix'>
+          <span class="attribute">Montant Payé (TTC)</span>
+          <span class="value"><%= my_number_to_currency facture.cout_ttc %></span>
+        </div>
+        <div class='line last clearfix'>
+          <span class="attribute">Montant Payé (HTR)</span>
+          <span class="value"><%= my_number_to_currency facture.montant_htr %></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+
+<div class="box dashboard">
+  <div class="clearfix">
+    <div class="large-col">
+      <%- if @depense_non_ventilee.commande_solde -%>
+        La commande est soldée.
+      <%- else -%>
+        La commande n'est pas soldée.
+      <%- end -%>
+    </div>
+    <div class="small-col">
+      <div class='line clearfix'>
+        <span class="attribute">Coût Total HT</span>
+        <span class="value">
+          <%= my_number_to_currency @depense_non_ventilee.montant_factures('ht') %>
+        </span>
+      </div>
+      <div class='line clearfix'>
+        <span class="attribute">Coût Total TTC</span>
+        <span class="value">
+          <%= my_number_to_currency @depense_non_ventilee.montant_factures('ttc') %>
+        </span>
+      </div>
+      <div class='line last clearfix'>
+        <span class="attribute">Coût Total HTR</span>
+        <span class="value">
+          <%= my_number_to_currency @depense_non_ventilee.montant_factures('htr') %>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="content_footer">
+  <div class="left">
+    Création le <%= french_datetime @depense_non_ventilee.created_at %> par <%= print_user_infos @depense_non_ventilee.created_by %>
+    <% if @depense_non_ventilee.created_at != @depense_non_ventilee.updated_at %>
+    <br />
+    Dernière modification le <%= french_datetime @depense_non_ventilee.updated_at %> par <%= print_user_infos @depense_non_ventilee.updated_by %>
+    <% end %>
+  </div>
+  <div class="right">
+    <%- if (@ligne.contrat.is_budget_editable? current_user) and (@depense_non_ventilee.verrou == "Aucun") -%>
+    <%= link_to_remote_redbox "Supprimer la dépense",
+        { :url => ask_delete_ligne_depense_non_ventilee_path(@ligne, @depense_non_ventilee), :method => :get},
+        { :class => "destroy",
+          :title => "Supprimer la dépense" }  %>
+    <%- end -%>
+  </div>
+  <div style="clear:both;"></div>
+</div>
+
+<script type="text/javascript">
+  new App.Budget.ToggleJustificationData();
+</script>

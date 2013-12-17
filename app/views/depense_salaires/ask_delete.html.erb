@@ -1,0 +1,8 @@
+<div class="content">
+	<p>
+	Etes-vous certain de vouloir supprimer ce salaire ?<br />
+	</p>
+	<%= link_to_close_redbox "Non", :class => 'annuler' %>
+	<%= link_to "Oui", ligne_depense_salaire_path(@ligne, @depense_salaire), :method => :delete %>
+	<div style="clear:both;"></div>
+</div>

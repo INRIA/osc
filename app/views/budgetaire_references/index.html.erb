@@ -1,0 +1,25 @@
+<% for budgetaire_reference in @budgetaire_references %>
+<div class="box_1_per_line <%= cycle("even", "odd") %>" id="rf_<%= budgetaire_reference.id %>">
+	<div class="infos">
+		<div class="primary">
+      <%= link_to budgetaire_reference.code, budgetaire_reference_path(budgetaire_reference) %>
+    </div>
+		<div class="secondary">
+			<%= budgetaire_reference.intitule %>. Utilisé dans <%= budgetaire_reference.depense_communs.size %> dépenses du commun.
+		</div>
+	</div>
+	<div class="actions">
+		<% count = budgetaire_reference.depense_communs.size  %>
+		<%= link_to 'Editer', edit_budgetaire_reference_path(budgetaire_reference) %>
+		<%- if count == 0 -%>
+  		<%= link_to_remote_redbox "Supprimer",
+  		    {	:url => ask_delete_budgetaire_reference_path(budgetaire_reference),
+  					:method => :get},
+  				{	:title => "Supprimer cette référence" } %>
+
+		<% end %>
+	</div>
+	<div style="clear: both;"></div>
+</div>
+<div style="clear:both;"></div>
+<%end%>

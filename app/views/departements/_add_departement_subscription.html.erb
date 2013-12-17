@@ -1,0 +1,7 @@
+<% if !@projets_restants.empty? %>
+  <%= form_for(:todoitem, :url => "/departement_subscriptions/create?departement_id="+@departement.id.to_s,:remote => true, :html => {:class => 'inline',:method => :post }) do |f| %>
+		<label for="departement_subscription_projet_id">Projets disponibles</label>
+		<%= select "departement_subscription", "projet_id", @projets_restants.collect {|p| [ p.nom, p.id ] } %>		
+	 	<%= submit_tag "Ajouter" %>
+	<% end %>
+<% end %>

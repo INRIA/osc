@@ -1,0 +1,28 @@
+<%= error_messages_for @rubrique_comptable %>
+<%= form_for(@rubrique_comptable) do |f| %>
+<fieldset>
+	<p>
+  	<label>Numéro de compte</label><br />
+  	<%= f.text_field :numero_rubrique %>
+	</p>
+	<p>
+  	<label>Intitulé</label><br />
+  	<%= f.text_field :label %>
+	</p>
+  <p>
+    <label>Choix de l'élément parent</label><br />
+		<ul class='tree' style="border:none;">
+			<li>
+				<%= radio_button('rubrique_comptable', 'parent_id', '0') %> 
+				Niveau 0
+			</li>
+			<%= display_form_tree_recursive_rubrique_comptable(f, @rubrique_comptables, 0) %>
+		</ul>
+  </p>
+</fieldset>
+ <p class="submit">
+   <%= f.submit "Créer" %> ou <%= link_to "Annuler", rubrique_comptables_path %>
+ </p>
+<% end %>
+
+

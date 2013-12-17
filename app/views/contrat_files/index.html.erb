@@ -1,0 +1,41 @@
+
+<div class="section">
+<h2><strong>Documents</strong> associés au contrat</h2>
+	<p class="init" id="init_file"
+	<% if !@contrat_files.empty? %>
+	style="display:none"
+	<% end %>	
+	>Aucun document n'est associé au contrat.</p>
+
+<% if flash[:warning].nil? -%>
+<div id="form_for_add_file" style="display:none;margin-top:10px;">
+<% else -%>
+<div id="form_for_add_file" style="margin-top:10px;">
+<% end -%>
+	<%= form_for(:contrat_file, :url => contrat_contrat_files_path(@contrat), :html => {:multipart => true} ) do |f| %>
+	<p style="color:red;"><%= flash[:warning] -%></p>	
+  <p>
+    <label class="required" for="contrat_file_file">Sélectionner le document</label> <br />
+		<%= file_column_field 'contrat_file', 'file' %>
+  </p>
+  <p>
+    <label class="required" for="contrat_file_description">Description du document</label> <br />
+    <%= f.text_field :description, :class => "textfield" %>
+  </p>
+  <p>
+    <%= submit_tag "Uploader le fichier sur le serveur", :class => "submit"  %> ou 
+<a href="" onclick="Effect.toggle('link_to_add','appear', {duration:0.5}); Effect.toggle('form_for_add_file','blind', {duration:0.5}); return false;" >Annuler</a>
+  </p>
+<% end %>
+</div>
+
+<div id="list_files">
+	<% if params[:classement] == "date" %>
+		<%= render :partial => 'list_files' 	%>
+	<% else %>
+		<%= render :partial => 'list_files_by_AZ' 	%>
+	<% end %>
+</div>
+
+
+</div>

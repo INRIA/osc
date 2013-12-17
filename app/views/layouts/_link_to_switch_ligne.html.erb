@@ -1,0 +1,13 @@
+<a href="" 	id="link_to_remove_switch" 
+						style="display:none;" 
+						onclick="$('link_to_remove_switch').toggle();$('switch').toggle();$('link_to_switch').toggle();return false;">
+	&nbsp;
+</a>
+<%= link_to_remote "&nbsp;".html_safe(), 
+										:update => "switch",
+										:url => "/redirections/show_menu_ligne?previous_controller="+controller.class.to_s.gsub("Controller","")+
+															"&previous_action="+controller.action_name.to_s+
+															"&previous_ligne_id="+@ligne.id.to_s,
+										:html => { :id => "link_to_switch"} %>
+										
+<div id="switch" style="display:none;"></div>

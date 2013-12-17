@@ -1,0 +1,253 @@
+<%- content_for :right do -%>
+  <%- if @ligne.contrat.is_budget_editable? current_user -%>
+    <%= link_to 'Ajouter un salaire', new_ligne_depense_salaire_path(@ligne), {:class => "add-depense-salaire"} %>
+    <%= link_to 'Dupliquer ce salaire', duplicate_ligne_depense_salaire_path(@ligne, @depense_salaire), {:class => "duplicate-salaire", :method => :post} %>
+  <%- end -%>
+<%- end -%>
+
+<div class="box parent">
+  <%= "<span class='come-from-inria'>S.I. INRIA</span>".html_safe() if @depense_salaire.come_from_inria? %>
+  <h2>Salaire</h2>
+  <div class="clearfix">
+    <div class="large-col">
+      <div class='line clearfix'>
+        <span class="attribute">Agent :</span>
+        <span class="value"><%=h @depense_salaire.nom_agent %></span>
+      </div>
+      <div class='line clearfix'>
+        <span class="attribute">Type de contrat : </span>
+        <span class="value"><%=h @depense_salaire.type_contrat %></span>
+      </div>
+      <div class='line clearfix'>
+        <span class="attribute">Statut : </span>
+        <span class="value"><%=h @depense_salaire.statut %></span>
+      </div>
+      <div class='line clearfix'>
+        <span class="attribute">Date de début :</span>
+        <span class="value"><%= french_date @depense_salaire.date_debut %></span>
+      </div>
+      <div class='line clearfix'>
+        <span class="attribute">Date de fin :</span>
+        <span class="value"><%= french_date @depense_salaire.date_fin %></span>
+      </div>
+      <div class='line clearfix'>
+        <span class="attribute">Nombre de mois :</span>
+        <span class="value"><%=h @depense_salaire.nb_mois %></span>
+      </div>
+      <div class='line clearfix'>
+        <span class="attribute">Coût mensuel :</span>
+        <span class="value"><%= my_number_to_currency @depense_salaire.cout_mensuel %></span>
+      </div>
+      <div class='line clearfix'>
+        <span class="attribute">Commentaire :</span>
+        <div class="value"><%= simple_format @depense_salaire.commentaire %></div>
+      </div>
+      <div class='line clearfix'>
+        <span class="attribute">Structure :</span>
+        <span class="value"><%= @depense_salaire.structure %></span>
+      </div>
+      <div class='line last clearfix'>
+        <span class="attribute">% r&eacute;partition contrat :</span>
+        <span class="value"><%= @depense_salaire.pourcentage %> %</span>
+      </div>
+    </div>
+    <div class="small-col">
+      <div class='line last clearfix'>
+        <span class="attribute">Montant engagé : </span>
+        <span class="value <%= "soldee" if @depense_salaire.commande_solde %>">
+          <strong><%= my_number_to_currency @depense_salaire.cout_periode %></strong>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="justification-data" <%= 'style="display:none;"'.html_safe() if @user_preferences_show_justifacation_data == 'no' %>>
+  <div class="box sub-parent">
+    <h2>Justification</h2>
+    <div class="clearfix">
+      <div class="large-col">
+        <div class='line clearfix'>
+          <span class="attribute">Nom de la tâche imputée</span>
+          <span class="value"><%= @depense_salaire.tache %></span>
+        </div>
+        <div class='line clearfix'>
+          <span class="attribute">Commande éligible ?</span>
+          <span class="value"><% if @depense_salaire.eligible %>Oui<% else %>Non<% end %></span>
+        </div>
+        <div class='line clearfix'>
+          <span class="attribute">Type d'activité</span>
+          <span class="value"><%= @depense_salaire.type_activite %></span>
+        </div>
+        <div class='line clearfix <%- if @depense_salaire.type_personnel == "unknown" -%>last<%- end -%>'>
+          <span class="attribute">Type de personnel : </span>
+          <span class="value">
+            <%- if @depense_salaire.type_personnel == "unknown" -%>
+              Non défini
+            <%- else -%>
+              <%= @depense_salaire.type_personnel %>
+            <%- end -%>
+          </span>
+        </div>
+        <%- if @depense_salaire.type_personnel != "unknown" -%>
+          <%- if @depense_salaire.type_personnel == "Titulaire" -%>
+            <div class='line clearfix'>
+              <span class="attribute">Heures déclarées</span>
+              <span class="value"><%= @depense_salaire.nb_heures_declarees %></span>
+            </div>
+          <%- end -%>
+          <%- if @depense_salaire.type_personnel == "Contractuel" -%>
+            <div class='line clearfix'>
+              <span class="attribute">Début de prise en charge</span>
+              <span class="value"><%= french_date @depense_salaire.date_debut_prise_en_charge_sur_contrat %></span>
+            </div>
+            <div class='line clearfix'>
+              <span class="attribute">Fin de prise en charge</span>
+              <span class="value"><%= french_date @depense_salaire.date_fin_prise_en_charge_sur_contrat %></span>
+            </div>
+          <%- end -%>
+          <div class='line clearfix'>
+            <span class="attribute">Heures justifiées</span>
+            <span class="value"><%= @depense_salaire.nb_heures_justifiees %></span>
+          </div>
+          <div class='line clearfix'>
+            <span class="attribute">Coût indirect unitaire</span>
+            <span class="value"><%= my_number_to_currency @depense_salaire.cout_indirect_unitaire %></span>
+          </div>
+          <div class='line clearfix'>
+            <span class="attribute">Coût indirect total</span>
+            <span class="value"><%= my_number_to_currency @depense_salaire.cout_indirect_total %></span>
+          </div>
+          <div class='line last clearfix'>
+            <span class="attribute">Somme des salaires chargés</span>
+            <span class="value"><%= my_number_to_currency @depense_salaire.somme_salaires_charges %></span>
+          </div>
+        <%- end -%>
+
+      </div>
+      <div class="small-col">
+        <%- if @depense_salaire.type_personnel != "unknown" -%>
+          <div class='line last clearfix'>
+            <span class="attribute">Coût total : </span>
+            <span class="value">
+              <strong><%= my_number_to_currency @depense_salaire.cout_total %></strong>
+            </span>
+          </div>
+        <%- end -%>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="sub-parent-toggle-container">
+  <a href="#" id="toggle-justification">
+    <%- if @user_preferences_show_justifacation_data == 'no' -%>
+      Afficher les données de justification
+    <%- else -%>
+      Masquer les données de justification
+    <%- end -%>
+  </a>
+</div>
+
+<% i = 1 %>
+<% for facture in @depense_salaire.depense_salaire_factures %>
+  <%- if i == @depense_salaire.depense_salaire_factures.size -%>
+    <div class="child-container last">
+  <%- else -%>
+    <div class="child-container default">
+  <%- end -%>
+
+  <div class="box child">
+    <%= "<span class='come-from-inria'>S.I. INRIA</span>".html_safe() if facture.come_from_inria? %>
+    <h2><%= to_ieme(i) %> Paye</h2>
+    <div class="clearfix">
+      <div class="large-col">
+        <div class='line clearfix'>
+          <span class="attribute">Commentaire</span>
+          <div class="value"><%= facture.commentaire %></div>
+        </div>
+        <div class='line clearfix'>
+          <span class="attribute">Numéro de mandat</span>
+          <div class="value"><%= facture.numero_mandat %></div>
+        </div>
+        <div class='line  clearfix'>
+          <span class="attribute">Date de mandatement</span>
+          <div class="value"><%= french_date facture.date_mandatement %></div>
+        </div>
+        <% if !facture.millesime.blank? %>
+          <div class='line last clearfix'>
+            <span class="attribute">Date de service fait (millésime)</span>
+            <span class="value"><%= french_date facture.millesime  %></span>
+          </div>
+        <% end %>
+      </div>
+      <div class="small-col">
+        <div class='line clearfix'>
+          <span class="attribute">Co&ucirc;t Charg&eacute; Payé (TTC)</span>
+          <span class="value"><%= my_number_to_currency facture.cout %></span>
+        </div>
+        <div class='line last clearfix'>
+          <span class="attribute">Co&ucirc;t Charg&eacute; (HTR)</span>
+          <span class="value"><%= my_number_to_currency facture.montant_htr %></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% i += 1 %>
+<% end %>
+
+<div class="box dashboard">
+  <div class="clearfix">
+    <div class="large-col">
+      <%- if @depense_salaire.commande_solde -%>
+        La feuille de salaire est soldée.
+      <%- else -%>
+        La feuille de salaire n'est pas soldée.
+      <%- end -%>
+    </div>
+    <div class="small-col">
+      <div class='line clearfix'>
+        <span class="attribute">Coût Total HT</span>
+        <span class="value">
+          <%= my_number_to_currency @depense_salaire.montant_factures('ht') %>
+        </span>
+      </div>
+      <div class='line clearfix'>
+        <span class="attribute">Coût Total TTC</span>
+        <span class="value">
+          <%= my_number_to_currency @depense_salaire.montant_factures('ttc') %>
+        </span>
+      </div>
+      <div class='line last clearfix'>
+        <span class="attribute">Coût Total HTR</span>
+        <span class="value">
+          <%= my_number_to_currency @depense_salaire.montant_factures('htr') %>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div id="content_footer">
+  <div class="left">
+    Création le <%= french_datetime @depense_salaire.created_at %> par <%= print_user_infos @depense_salaire.created_by %>
+    <% if @depense_salaire.created_at != @depense_salaire.updated_at %>
+    <br />
+    Dernière modification le <%= french_datetime @depense_salaire.updated_at %> par <%= print_user_infos @depense_salaire.updated_by %>
+    <% end %>
+  </div>
+  <div class="right">
+    <%- if (@ligne.contrat.is_budget_editable? current_user) and (@depense_salaire.verrou == "Aucun") -%>
+    <%= link_to_remote_redbox "Supprimer le salaire",
+        { :url => ask_delete_ligne_depense_salaire_path(@ligne, @depense_salaire), :method => :get},
+        { :class => "destroy",
+          :title => "Supprimer la d&eacute;pense en salaire"}  %>
+    <%- end -%>
+  </div>
+  <div style="clear:both;"></div>
+</div>
+
+<script type="text/javascript">
+  new App.Budget.ToggleJustificationData();
+</script>

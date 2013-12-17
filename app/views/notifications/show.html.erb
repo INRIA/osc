@@ -1,0 +1,877 @@
+<%= "<div class='come-from-inria-container'><span class='come-from-inria'>S.I. INRIA</span></div>".html_safe() if @notification.come_from_inria? %>
+
+<% if @notification.avenants.size > 0 %>
+<div class="section impair">
+	<h2>Avenants</h2>
+	<% for avenant in @notification.avenants %>
+	<div class='entree'>
+		<div class='intitule'>
+			Date de l'avenant
+		</div>
+		<div class='valeur'>
+			<%=h french_date avenant.date %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	<div class='entree'>
+		<div class='intitule'>
+			Commentaires
+		</div>
+		<div class='valeur'>
+			<%=h  avenant.commentaires %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	<br />
+	<% end %>
+</div>
+<% end %>
+
+<div class="section impair">
+	<h2>Informations générales</h2>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Type de contrat
+		</div>
+		<div class='valeur'>
+			<%= display_contrat_type @notification.contrat_type %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Date de notification
+		</div>
+		<div class='valeur'>
+			<%=h french_date( @notification.date_notification ) %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Date de début
+		</div>
+		<div class='valeur'>
+			<%=h french_date( @notification.date_debut )%>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Date de fin
+		</div>
+		<div class='valeur'>
+			<%=h french_date( @notification.date_fin ) %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Nombre de mois
+		</div>
+		<div class='valeur'>
+			<%=h @notification.nombre_mois %>  <span class='unite'>mois</span>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Etablissement gestionnaire
+		</div>
+		<div class='valeur'>
+			<%=h @notification.organisme_gestionnaire.nom %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+
+	<div class='entree'>
+		<div class='intitule'>
+			Organisme financeur
+		</div>
+		<div class='valeur'>
+			<%=h @notification.organisme_financeur %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+
+	<div class='entree'>
+		<div class='intitule'>
+			Organisme payeur
+		</div>
+		<div class='valeur'>
+			<%=h @notification.organisme_payeur %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+
+	<div class='entree'>
+		<div class='intitule'>
+			N° de ligne budgétaire
+		</div>
+		<div class='valeur'>
+			<%=h @notification.numero_ligne_budgetaire %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			N° de contrat
+		</div>
+		<div class='valeur'>
+			<%=h @notification.numero_contrat %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Le contrat est-il à justifier ?
+		</div>
+		<div class='valeur'>
+			<% if @notification.a_justifier %>
+			Oui
+			<% else %>
+			Non
+			<% end %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+</div>
+
+
+<div class="section pair">
+	
+	<h2>Porteur et coordinateur</h2>
+
+	<div class='entree'>
+		<div class='intitule'>
+			Porteur
+		</div>
+		<div class='valeur'>
+			<%=h @notification.porteur %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+
+	<div class='entree'>
+		<div class='intitule'>
+			Etablissement de rattachement du porteur
+		</div>
+		<div class='valeur'>
+			<%=h @notification.etablissement_rattachement_porteur %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+<% if  @notification.est_porteur %>
+	<div class='entree'>
+		<div class='intitule'>
+			Le porteur est-il coordinateur ?
+		</div>
+		<div class='valeur'>
+			Oui
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+<% else %>
+	<div class='entree'>
+		<div class='intitule'>
+			Coordinateur
+		</div>
+		<div class='valeur'>
+			<%=h @notification.coordinateur %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+
+	<div class='entree'>
+		<div class='intitule'>
+			Etablissement gestionnaire du coordinateur
+		</div>
+		<div class='valeur'>
+			<%=h @notification.etablissement_gestionnaire_du_coordinateur %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+<% 	end %>
+</div>
+
+<div class="section impair">
+	<h2>Site web</h2>
+	<div class='entree'>
+		<div class='intitule'>
+			URL
+		</div>
+		<div class='valeur'>
+			<a href="http://<%= @notification.url %>" target="_blank"><%= @notification.url %></a>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+</div>
+<div class="section impair">
+	<h2>Mots clés et thématiques</h2>
+
+	<div class='entree'>
+		<div class='intitule'>
+			Mots clés
+		</div>
+		<div class='valeur'>
+			<% txt = "" %>
+			<% if @notification.key_words.size > 0 %>
+				<% pre_txt = "<strong>Du laboratoire "+@notification.key_words.find(:all, :include => [:laboratoire], :order => "laboratoires.nom, key_words.section, key_words.intitule").first.laboratoire.nom+" :</strong>" %>				
+				<% current_labo = @notification.key_words.find(:all, :include => [:laboratoire], :order => "laboratoires.nom, key_words.section, key_words.intitule").first.laboratoire.id %>
+				<% current_section = @notification.key_words.find(:all, :include => [:laboratoire], :order => "laboratoires.nom, key_words.section, key_words.intitule").first.section %>
+			<% end %>
+			
+			<% txt += "<ul  class='keyword'>" %>
+			<% txt += "<span class='keyword_section'>"+current_section.to_s+"</span>" %>
+				
+			<% for key_word in @notification.key_words.find(:all, :include => [:laboratoire], :order => "laboratoires.nom, key_words.section, key_words.intitule") %>
+			
+				<% if current_labo != key_word.laboratoire.id %>
+					<% txt = pre_txt+txt+"<br />" %>
+					<% txt += "<strong>Du laboratoire "+key_word.laboratoire.nom+" :</strong>" %>
+					<% current_labo = key_word.laboratoire.id %>
+				<% end %>
+			
+				<% if current_section != key_word.section %>
+					<% txt += "<span class='keyword_section'>"+key_word.section.to_s+"</span>" %>
+					<% current_section = key_word.section %>
+				<% end %>
+			
+				<% txt += "<li>"+key_word.intitule+"</li>" %>
+			<% end %>
+			<% txt += "</ul>" %>
+			<%= txt.html_safe() %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+
+	<div class='entree'>
+		<div class='intitule'>
+			Mots clés libres	
+		</div>
+		<div class='valeur'>
+			<%=h @notification.mots_cles_libres %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+
+	<div class='entree'>
+		<div class='intitule'>
+			Thématiques
+		</div>
+		<div class='valeur'>
+			<%=h @notification.thematiques %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+
+	<div class='entree'>
+		<div class='intitule'>
+			Pôles de compétivites
+		</div>
+		<div class='valeur'>
+			<%=h @notification.poles_competivites %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+</div>
+
+
+
+<div class="section pair">
+	<h2>Partenaires</h2>
+	<table class="partenaires">
+	  <caption>Partenaires en France</caption>  
+		<tr>
+			<th>Nom</th>
+			<th>Laboratoire</th>
+			<th>Etablissement gestionnaire</th>
+			<th>Ville</th>
+		</tr>
+		<% for partenaire in @notification.notification_france_partenaires %>
+			<tr>
+				<td><%= partenaire.nom %></td>
+				<td><%= partenaire.laboratoire %></td>
+				<td><%= partenaire.etablissement_gestionnaire %></td>
+				<td><%= partenaire.ville %></td>
+		<% end %>
+	</table>
+	
+	<table class="partenaires">
+	  <caption>Partenaires en Europe</caption>  
+		<tr>
+			<th>Nom</th>
+			<th>Etablissement gestionnaire</th>
+			<th>Ville</th>
+			<th>Pays</th>
+		</tr>
+		<% for partenaire in @notification.notification_europe_partenaires %>
+		<tr>
+			<td><%= partenaire.nom %></td>
+			<td><%= partenaire.etablissement_gestionnaire %></td>
+			<td><%= partenaire.ville %></td>
+			<td><%= partenaire.pays %></td>
+		</tr>
+		<% end %>
+	</table>
+	
+	<table class="partenaires">
+	  <caption>Partenaires hors Europe</caption>  
+		<tr>
+			<th>Nom</th>
+			<th>Etablissement gestionnaire</th>
+			<th>Ville</th>
+			<th>Pays</th>
+		</tr>
+		<% for partenaire in @notification.notification_partenaires %>
+		<tr>
+			<td><%= partenaire.nom %></td>
+			<td><%= partenaire.etablissement_gestionnaire %></td>
+			<td><%= partenaire.ville %></td>
+			<td><%= partenaire.pays %></td>
+		</tr>
+		<% end %>
+	</table>
+
+</div>
+
+
+
+<div class="section impair">
+	<h2>Moyens accordés</h2>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Les montants sont
+		</div>
+		<div class='valeur'>
+			<%=h @notification.ma_type_montant %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+
+	<% if @contrat.sous_contrats.size > 1 %>
+    <% nb_infos_par_lignes = 3%>
+	  <% number_of_tables = ((1+@contrat.sous_contrats.size).to_f/nb_infos_par_lignes).ceil %>
+		<% first_current_sous_contrat_number_of_table = 0 %>
+		
+		<% for current_table_number in 1..number_of_tables do %>
+		  <% number_of_sous_contrat_in_table = (@contrat.sous_contrats.size) - (first_current_sous_contrat_number_of_table) %>
+		  <% if current_table_number == 1 and number_of_sous_contrat_in_table > (nb_infos_par_lignes-1) %>
+		    <% number_of_sous_contrat_in_table = (nb_infos_par_lignes-1) %>
+		  <% elsif number_of_sous_contrat_in_table > nb_infos_par_lignes %>
+			  <% number_of_sous_contrat_in_table = nb_infos_par_lignes %>
+			<% end%>
+			<% number_of_sous_contrat_in_table = number_of_sous_contrat_in_table -1 %>
+			<table>
+				<thead>
+					<tr>
+						<td style="width:39%;"></td>
+						<% if(current_table_number == 1) %>
+						  <td class="size_<%= number_of_sous_contrat_in_table %> moyens"><%= @contrat.long_acronyme %></td>
+						<% end %>
+						<% for i in 0..number_of_sous_contrat_in_table do %>
+						  <td class="size_<%= number_of_sous_contrat_in_table %> moyens"><%= @contrat.sous_contrats[first_current_sous_contrat_number_of_table+i].entite.nom %></td>
+						<% end %>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Fonctionnement</td>
+						<% if(current_table_number == 1) %>
+						  <td class="somme_<%= number_of_sous_contrat_in_table %> moyens"><%= my_number_to_currency(@notification.ma_fonctionnement) %></td>
+						<% end %>
+						<% for i in 0..number_of_sous_contrat_in_table do %>
+						<td class="somme_<%= number_of_sous_contrat_in_table %> moyens">
+							<% if @contrat.sous_contrats[first_current_sous_contrat_number_of_table+i].sous_contrat_notification.nil? %>
+								<%= my_number_to_currency(0) %>
+							<%- else -%>
+								<%= my_number_to_currency(@contrat.sous_contrats[first_current_sous_contrat_number_of_table+i].sous_contrat_notification.ma_fonctionnement) %>
+							<%- end -%>
+						</td>
+						<%- end -%>
+					</tr>
+					<tr>
+						<td>Equipement</td>
+						<% if(current_table_number == 1) %>
+						  <td class="somme_<%= number_of_sous_contrat_in_table %> moyens"><%= my_number_to_currency(@notification.ma_equipement) %></td>
+						<% end %>
+						<% for i in 0..number_of_sous_contrat_in_table do %>
+						<td class="somme_<%= number_of_sous_contrat_in_table %> moyens">
+							<% if @contrat.sous_contrats[first_current_sous_contrat_number_of_table+i].sous_contrat_notification.nil? %>
+								<%= my_number_to_currency(0) %>
+							<%- else -%>
+								<%= my_number_to_currency(@contrat.sous_contrats[first_current_sous_contrat_number_of_table+i].sous_contrat_notification.ma_equipement) %>
+							<%- end -%>
+						</td>
+						<%- end -%>
+					</tr>
+					<tr>
+						<td>Salaire</td>
+						<% if(current_table_number == 1) %>
+						  <td class="somme_<%= number_of_sous_contrat_in_table %> moyens"><%= my_number_to_currency(@notification.ma_salaire) %></td>
+						<% end %>
+						<% for i in 0..number_of_sous_contrat_in_table do %>
+						<td class="somme_<%= number_of_sous_contrat_in_table %> moyens">
+							<% if @contrat.sous_contrats[first_current_sous_contrat_number_of_table+i].sous_contrat_notification.nil? %>
+								<%= my_number_to_currency(0) %>
+							<%- else -%>
+								<%= my_number_to_currency(@contrat.sous_contrats[first_current_sous_contrat_number_of_table+i].sous_contrat_notification.ma_salaire) %>
+							<%- end -%>
+						</td>
+						<%- end -%>
+					</tr>
+					<tr>
+						<td>Mission</td>
+						<% if(current_table_number == 1) %>
+						  <td class="somme_<%= number_of_sous_contrat_in_table %> moyens"><%= my_number_to_currency(@notification.ma_mission) %></td>
+						<% end %>
+						<% for i in 0..number_of_sous_contrat_in_table do %>
+						<td class="somme_<%= number_of_sous_contrat_in_table %> moyens">
+							<% if @contrat.sous_contrats[first_current_sous_contrat_number_of_table+i].sous_contrat_notification.nil? %>
+								<%= my_number_to_currency(0) %>
+							<%- else -%>
+								<%= my_number_to_currency(@contrat.sous_contrats[first_current_sous_contrat_number_of_table+i].sous_contrat_notification.ma_mission) %>
+							<%- end -%>
+						</td>
+						<%- end -%>
+					</tr>
+					<tr>
+						<td>Non ventilé</td>
+						<% if(current_table_number == 1) %>
+						  <td class="somme_<%= number_of_sous_contrat_in_table %> moyens"><%= my_number_to_currency(@notification.ma_non_ventile) %></td>
+						<% end %>
+						<% for i in 0..number_of_sous_contrat_in_table do %>
+						<td class="somme_<%= number_of_sous_contrat_in_table %> moyens">
+							<% if @contrat.sous_contrats[first_current_sous_contrat_number_of_table+i].sous_contrat_notification.nil? %>
+								<%= my_number_to_currency(0) %>
+							<%- else -%>
+								<%= my_number_to_currency(@contrat.sous_contrats[first_current_sous_contrat_number_of_table+i].sous_contrat_notification.ma_non_ventile) %>
+							<%- end -%>
+						</td>
+						<%- end -%>
+					</tr>
+					<tr>
+						<td>Frais de gestion d&eacute;ductibles</td>
+						<% if(current_table_number == 1) %>
+						  <td class="somme_<%= number_of_sous_contrat_in_table %> moyens"><%= my_number_to_currency(@notification.ma_couts_indirects) %></td>
+						<% end %>
+						<% for i in 0..number_of_sous_contrat_in_table do %>
+						<td class="somme_<%= number_of_sous_contrat_in_table %> moyens">
+							<% if @contrat.sous_contrats[first_current_sous_contrat_number_of_table+i].sous_contrat_notification.nil? %>
+								<%= my_number_to_currency(0) %>
+							<%- else -%>
+								<%= my_number_to_currency(@contrat.sous_contrats[first_current_sous_contrat_number_of_table+i].sous_contrat_notification.ma_couts_indirects) %>
+							<%- end -%>
+						</td>
+						<%- end -%>
+					</tr>	
+					<tr>
+            <td>Frais de gestion mut. loc. ou non justifi&eacute;s</td>
+            <% if(current_table_number == 1) %>
+              <td class="somme_<%= number_of_sous_contrat_in_table %> moyens"><%= my_number_to_currency(@notification.ma_frais_gestion_mutualises_local) %></td>
+            <% end %>
+            <% for i in 0..number_of_sous_contrat_in_table do %>
+            <td class="somme_<%= number_of_sous_contrat_in_table %> moyens">
+              <% if @contrat.sous_contrats[first_current_sous_contrat_number_of_table+i].sous_contrat_notification.nil? %>
+                <%= my_number_to_currency(0) %>
+              <%- else -%>
+                <%= my_number_to_currency(@contrat.sous_contrats[first_current_sous_contrat_number_of_table+i].sous_contrat_notification.ma_frais_gestion_mutualises_local) %>
+              <%- end -%>
+            </td>
+            <%- end -%>
+          </tr>
+					<tr>
+						<td>Frais de gestion mutualis&eacute;s nationaux</td>
+						<% if(current_table_number == 1) %>
+						  <td class="somme_<%= number_of_sous_contrat_in_table %> moyens"><%= my_number_to_currency(@notification.ma_frais_gestion_mutualises) %></td>
+						<% end %>
+						<% for i in 0..number_of_sous_contrat_in_table do %>
+						<td class="somme_<%= number_of_sous_contrat_in_table %> moyens">
+							<% if @contrat.sous_contrats[first_current_sous_contrat_number_of_table+i].sous_contrat_notification.nil? %>
+								<%= my_number_to_currency(0) %>
+							<%- else -%>
+								<%= my_number_to_currency(@contrat.sous_contrats[first_current_sous_contrat_number_of_table+i].sous_contrat_notification.ma_frais_gestion_mutualises) %>
+							<%- end -%>
+						</td>
+						<%- end -%>
+					</tr>
+					<tr>
+						<td>Allocation</td>
+						<% if(current_table_number == 1) %>
+						  <td class="somme_<%= number_of_sous_contrat_in_table %> moyens"><%= @notification.ma_allocation %> <span class='unite'>mois<span></td>
+						<% end %>
+						<% for i in 0..number_of_sous_contrat_in_table do %>
+						<td class="somme_<%= number_of_sous_contrat_in_table %> moyens">
+							<% if @contrat.sous_contrats[first_current_sous_contrat_number_of_table+i].sous_contrat_notification.nil? %>
+								0 <span class='unite'>mois<span>	
+							<%- else -%>
+								<%= @contrat.sous_contrats[first_current_sous_contrat_number_of_table+i].sous_contrat_notification.ma_allocation %> <span class='unite'>mois<span>	
+							<%- end -%>
+						</td>
+						<%- end -%>
+					</tr>
+					<tr>
+						<td>Total</td>
+						<% if(current_table_number == 1) %>
+						  <td class="somme_<%= number_of_sous_contrat_in_table %> moyens"><%= my_number_to_currency(@notification.ma_total) %></td>
+						<% end %>
+						<% for i in 0..number_of_sous_contrat_in_table do %>
+						<td class="somme_<%= number_of_sous_contrat_in_table %> moyens">
+							<% if @contrat.sous_contrats[first_current_sous_contrat_number_of_table+i].sous_contrat_notification.nil? %>
+								<%= my_number_to_currency(0) %>
+							<%- else -%>
+								<%= my_number_to_currency(@contrat.sous_contrats[first_current_sous_contrat_number_of_table+i].sous_contrat_notification.ma_total) %>
+							<%- end -%>
+						</td>
+						<%- end -%>
+					</tr>											
+				</tbody>
+			</table>
+			<% if(current_table_number ==1)%>
+			  <% first_current_sous_contrat_number_of_table = first_current_sous_contrat_number_of_table +(nb_infos_par_lignes-1) %>
+			<% else %>
+			  <% first_current_sous_contrat_number_of_table = first_current_sous_contrat_number_of_table +nb_infos_par_lignes %>
+			<% end %>
+		<% end %>
+	<% else %>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Fonctionnement
+		</div>
+		<div class='valeur moyens'>
+			<%= my_number_to_currency(@notification.ma_fonctionnement) %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Equipement
+		</div>
+		<div class='valeur moyens'>
+			<%= my_number_to_currency(@notification.ma_equipement) %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Salaire
+		</div>
+		<div class='valeur moyens'>
+			<%= my_number_to_currency(@notification.ma_salaire) %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Mission
+		</div>
+		<div class='valeur moyens'>
+			<%= my_number_to_currency(@notification.ma_mission) %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Non ventilé
+		</div>
+		<div class='valeur moyens'>
+			<%= my_number_to_currency(@notification.ma_non_ventile) %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Frais de gestion déductibles
+		</div>
+		<div class='valeur moyens'>
+			<%= my_number_to_currency(@notification.ma_couts_indirects) %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	<div class='entree'>
+    <div class='intitule'>
+      Frais de gestion mut. loc. ou non justifi&eacute;s
+    </div>
+    <div class='valeur moyens'>
+      <%= my_number_to_currency(@notification.ma_frais_gestion_mutualises_local) %>
+    </div>
+    <div style="clear:both;"></div>
+  </div>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Frais de gestion mutualis&eacute;s nationaux
+		</div>
+		<div class='valeur moyens'>
+			<%= my_number_to_currency(@notification.ma_frais_gestion_mutualises) %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Allocation
+		</div>
+		<div class='valeur moyens'>
+			<%=h @notification.ma_allocation %> <span class='unite'>mois<span>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Total
+		</div>
+		<div class='valeur moyens'>
+			<%= my_number_to_currency(@notification.ma_total) %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+<% end %>
+</div>
+
+<div class="section pair">
+	<h2>Personnel accordé</h2>
+	<% if @contrat.sous_contrats.size > 1 %>
+	  <% nb_infos_par_lignes = 5%>
+	  <% number_of_tables = ((1+@contrat.sous_contrats.size).to_f/nb_infos_par_lignes).ceil %>
+    <% first_current_sous_contrat_number_of_table = 0 %>
+    
+    <% for current_table_number in 1..number_of_tables do %>
+      <% number_of_sous_contrat_in_table = (@contrat.sous_contrats.size) - (first_current_sous_contrat_number_of_table) %>
+      <% if current_table_number == 1 and number_of_sous_contrat_in_table > (nb_infos_par_lignes-1) %>
+        <% number_of_sous_contrat_in_table = (nb_infos_par_lignes-1) %>
+      <% elsif number_of_sous_contrat_in_table > nb_infos_par_lignes %>
+        <% number_of_sous_contrat_in_table = nb_infos_par_lignes %>
+      <% end%>
+      <% number_of_sous_contrat_in_table = number_of_sous_contrat_in_table -1 %>
+      <table>
+        <thead>
+          <tr>
+            <td style="width:39%;"></td>
+            <% if(current_table_number == 1) %>
+              <td class="moyens"><%= @contrat.long_acronyme %></td>
+            <% end %>
+            <% for i in 0..number_of_sous_contrat_in_table do %>
+              <td class="moyens"><%= @contrat.sous_contrats[first_current_sous_contrat_number_of_table+i].entite.nom %></td>
+            <% end %>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Doctorant <span class="unite">(hommes-mois)<span></td>
+            <% if(current_table_number == 1) %>
+              <td class="moyens"><%= @notification.pa_doctorant %></td>
+            <% end %>
+            <% for i in 0..number_of_sous_contrat_in_table do %>
+            <td class="moyens">
+              <% if @contrat.sous_contrats[first_current_sous_contrat_number_of_table+i].sous_contrat_notification.nil? %>
+                <%= 0 %>
+              <%- else -%>
+                <%= @contrat.sous_contrats[first_current_sous_contrat_number_of_table+i].sous_contrat_notification.pa_doctorant %>
+              <%- end -%>
+            </td>
+            <%- end -%>
+          </tr>
+          <tr>
+            <td>Post-doc <span class="unite">(hommes-mois)<span></td>
+            <% if(current_table_number == 1) %>
+              <td class="moyens"><%= @notification.pa_post_doc %></td>
+            <% end %>
+            <% for i in 0..number_of_sous_contrat_in_table do %>
+            <td class="moyens">
+              <% if @contrat.sous_contrats[first_current_sous_contrat_number_of_table+i].sous_contrat_notification.nil? %>
+                <%= 0 %>
+              <%- else -%>
+                <%= @contrat.sous_contrats[first_current_sous_contrat_number_of_table+i].sous_contrat_notification.pa_post_doc %>
+              <%- end -%>
+            </td>
+            <%- end -%>
+          </tr>
+          <tr>
+            <td>Ingénieur <span class="unite">(hommes-mois)<span></td>
+            <% if(current_table_number == 1) %>
+              <td class="moyens"><%= @notification.pa_ingenieur %></td>
+            <% end %>
+            <% for i in 0..number_of_sous_contrat_in_table do %>
+            <td class="moyens">
+              <% if @contrat.sous_contrats[first_current_sous_contrat_number_of_table+i].sous_contrat_notification.nil? %>
+                <%= 0 %>
+              <%- else -%>
+                <%= @contrat.sous_contrats[first_current_sous_contrat_number_of_table+i].sous_contrat_notification.pa_ingenieur %>
+              <%- end -%>
+            </td>
+            <%- end -%>
+          </tr>
+          <tr>
+            <td>Autre <span class="unite">(hommes-mois)<span></td>
+            <% if(current_table_number == 1) %>
+              <td class="moyens"><%= @notification.pa_autre %></td>
+            <% end %>
+            <% for i in 0..number_of_sous_contrat_in_table do %>
+            <td class="moyens">
+              <% if @contrat.sous_contrats[first_current_sous_contrat_number_of_table+i].sous_contrat_notification.nil? %>
+                <%= 0 %>
+              <%- else -%>
+                <%= @contrat.sous_contrats[first_current_sous_contrat_number_of_table+i].sous_contrat_notification.pa_autre %>
+              <%- end -%>
+            </td>
+            <%- end -%>
+          </tr>
+          <tr>
+            <td>Equivalent temps plein</td>
+            <% if(current_table_number == 1) %>
+              <td class="moyens"><%= @notification.pa_equivalent_temps_plein %></td>
+            <% end %>
+            <% for i in 0..number_of_sous_contrat_in_table do %>
+            <td class="moyens">
+              <% if @contrat.sous_contrats[first_current_sous_contrat_number_of_table+i].sous_contrat_notification.nil? %>
+                <%= 0 %>
+              <%- else -%>
+                <%= @contrat.sous_contrats[first_current_sous_contrat_number_of_table+i].sous_contrat_notification.pa_equivalent_temps_plein %>
+              <%- end -%>
+            </td>
+            <%- end -%>
+          </tr>                    
+        </tbody>
+      </table>
+      <% if(current_table_number ==1)%>
+        <% first_current_sous_contrat_number_of_table = first_current_sous_contrat_number_of_table +(nb_infos_par_lignes-1) %>
+      <% else %>
+        <% first_current_sous_contrat_number_of_table = first_current_sous_contrat_number_of_table +nb_infos_par_lignes %>
+      <% end %>
+    <% end %>
+	<% else %>
+	<div class='entree'>
+		<div class='intitule'>
+			Doctorant
+		</div>
+		<div class='valeur'>
+			<%=h @notification.pa_doctorant %> <span class='unite'>hommes-mois<span>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Post-doc
+		</div>
+		<div class='valeur'>
+			<%=h @notification.pa_post_doc %> <span class='unite'>hommes-mois<span>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Ingénieur
+		</div>
+		<div class='valeur'>
+			<%=h @notification.pa_ingenieur %> <span class='unite'>hommes-mois<span>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Autre
+		</div>
+		<div class='valeur'>
+			<%=h @notification.pa_autre %> <span class='unite'>hommes-mois<span>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Equivalent temps plein
+		</div>
+		<div class='valeur'>
+			<%=h @notification.pa_equivalent_temps_plein %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	<% end %>
+</div>
+
+<div class="section pair">
+	<h2>Personnel impliqué</h2>
+	<table class="partenaires">
+	  <caption>Personnel impliqué</caption>  
+		<tr>
+			<th>Nom</th>
+			<th>Prénom</th>
+			<th>Statut</th>
+			<th>Tutelle</th>
+			<th>Pourcentage</th>
+		</tr>
+		<% for personne in @notification.notification_personnels %>
+		<tr>
+			<td><%= personne.nom %></td>
+			<td><%= personne.prenom %></td>
+			<td><%= personne.statut %></td>
+			<td><%= personne.tutelle %></td>
+			<td><%= personne.pourcentage %>%</td>
+		</tr>
+		<% end %>
+	</table>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Équivalent Temps plein
+		</div>
+		<div class='valeur'>
+			<%= @notification.equivalent_temps_plein_personnel %>
+		</div>
+		<div style="clear:both;">
+		</div>
+	</div>
+</div>
+
+
+<div id="content_footer">
+	<div class="left">
+		Création le <%= french_datetime @notification.created_at %> par <%= print_user_infos @notification.created_by %>
+		<% if @notification.created_at != @notification.updated_at %>
+		<br />
+		Dernière modification le <%= french_datetime @notification.updated_at %> par <%= print_user_infos @notification.updated_by %>
+		<% end %>
+	</div>
+	<div class="right">
+		<% if @contrat.is_editable? current_user and @contrat.cloture.nil? %>
+		<% if @contrat.lignes.size == 0 %>
+		<%= link_to_remote_redbox "Supprimer la notification",
+		    {	:url => ask_delete_contrat_notification_path(@contrat, @notification), :method => :get}, 
+				{	:class => "destroy",
+					:title => "Supprimer la notification" }	%>
+		<% end %>
+		<% end %>
+	</div>
+	<div style="clear:both;"></div>
+</div>
+
+
+<% content_for :right do %>
+	<%= render :partial => 'contrats/show_entite_tree' %>
+	<div class="section">
+	  <h2>Export PDF</h2>
+	  <%= link_to 'Obtenir la notification au format PDF', contrat_notification_path(@contrat, @notification, :pdf), :class => "to_pdf" %>
+	</div>
+<% end %>

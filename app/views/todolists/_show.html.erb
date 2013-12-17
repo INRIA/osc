@@ -1,0 +1,25 @@
+	<div class="todolist_actions" id="todolist_action_<%= @todolist.id.to_s %>" style="display:none;" >
+
+		<%= link_to_remote_redbox image_tag('trash.gif', :alt =>'del'),
+		    {	:url => ask_delete_contrat_todolist_path(@todolist.contrat, @todolist), :method => :get}, 
+				{	:class => "delete_todolist",
+					:title => "Supprimer cette To-Do List" } %>
+		
+		<%=	link_to_remote "Editer",
+	 										{ :update => "edit_todolist_"+@todolist.id.to_s,
+   											:url => edit_contrat_todolist_path(@todolist.contrat, @todolist),
+ 												:method => :get },
+											{
+												:onclick => "$('show_todolist_#{@todolist.id.to_s}').hide();$('edit_todolist_#{@todolist.id.to_s}').show()"
+											}%>
+		
+		<%  if @todolist.contrat.todolists.size < 2 %> 
+		  <% style="display:none;" %>
+		<% else %>
+		  <% style = "" %> 
+		<% end %>
+		<%= image_tag "drag_handle.gif", :id => "todolist_drag_"+@todolist.id.to_s, :class => "draglist", :alt => "Up/Do<n", :style => style %> 
+		
+	</div>
+
+	<div><%=h @todolist.nom %></div>

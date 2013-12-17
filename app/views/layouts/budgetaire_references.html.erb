@@ -1,0 +1,48 @@
+<% if controller.action_name.to_s == 'ask_delete' %>
+	<%= yield  %>
+<% else %>
+
+  <% content_for :head do %>
+    <% if controller.action_name.to_s == 'index' %>
+    <div class='header_title'>
+      <strong>Liste des références budgétaires</strong>
+    </div>
+    <div class='header_link'>
+    </div>
+    <div style='clear:both;'></div>
+    <% end %>
+
+    <% if controller.action_name.to_s == 'edit' || controller.action_name.to_s == 'update' %>
+      <div class='header_title'>
+        <strong><%= @budgetaire_reference.intitule %></strong>
+        // Edition
+      </div>
+      <div class='header_link'>
+      </div>
+      <div style='clear:both;'></div>
+    <% end %>
+
+    <% if controller.action_name.to_s == 'new' or controller.action_name.to_s == 'create' %>
+      <div class='header_title'>
+        <strong>Création d'une référence budgétaire</strong>
+      </div>
+      <div class='header_link'>
+      </div>
+      <div style='clear:both;'></div>
+    <% end %>
+
+  <% end %>
+
+  <% content_for :right do %>
+
+  <% if controller.action_name.to_s == 'index' %>
+    <%= link_to '', new_budgetaire_reference_path, {:class => "addReference"} %>
+    <div class="aide">
+      <p>Vous avez la possibilité de supprimer uniquement les références budgétaires non référencées dans une dépense.</p>
+    </div>
+  <% end %>
+
+  <% end %>
+
+  <%= render :file => 'layouts/application_admin' %>
+<%end%>

@@ -1,0 +1,46 @@
+<h1>New avenant</h1>
+
+<%= error_messages_for :avenant %>
+
+<% form_for(:avenant, :url => avenants_path) do |f| %>
+  <p>
+    <b>Notification</b><br />
+    <%= f.text_field :notification_id %>
+  </p>
+
+  <p>
+    <b>Date</b><br />
+    <%= f.date_select :date %>
+  </p>
+
+  <p>
+    <b>Commentaires</b><br />
+    <%= f.text_area :commentaires %>
+  </p>
+
+  <p>
+    <b>Created at</b><br />
+    <%= f.datetime_select :created_at %>
+  </p>
+
+  <p>
+    <b>Updated at</b><br />
+    <%= f.datetime_select :updated_at %>
+  </p>
+
+  <p>
+    <b>Created by</b><br />
+    <%= f.text_field :created_by %>
+  </p>
+
+  <p>
+    <b>Updated by</b><br />
+    <%= f.text_field :updated_by %>
+  </p>
+
+  <p>
+    <%= submit_tag "Create" %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', avenants_path %>

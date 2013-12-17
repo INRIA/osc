@@ -1,0 +1,48 @@
+<div class="pagination">
+  <%= will_paginate @users,  :previous_label => "&nbsp;&laquo;&nbsp;",
+                              :next_label => "&nbsp;&raquo;&nbsp;",
+                              :renderer => "PaginationLinkRenderer",
+                              :remote => {:with =>"'query='+escape($F('query'))"}%>
+</div>
+
+<% for user in @users %>
+<div class="photo_infos_actions <%= cycle("even", "odd") %>">
+	<div class="photo">
+		<%= show_user_image user %>
+	</div>
+
+	<div class="infos">
+		<div class="primary"><%= link_to user.nom+' '+user.prenom, user_path(user) %>
+			<% if user.has_role? "Administrateur" %>
+				<span>Administrateur</span>
+			<% end %>
+			<% if user.has_role? "Administrateur de contrat" %>
+				<span>Administrateur de contrat</span>
+			<% end %>
+			<% if user.has_role? "Administrateur fonctionnel" %>
+				<span>Administrateur fonctionnel</span>
+			<% end %>
+		</div>
+		<div class="secondary"> Email : <strong><%= user.email %></strong></div>
+		<div class="secondary"> Commentaire : <strong><%= user.commentaire %></strong></div>
+		<div class="secondary"> Authentification : <strong><%= user.login %> // <%- if user.ldap -%> LDAP : <%= user.type_ldap %> <%- else -%> Local <%- end -%></strong></div>
+		
+		<% if user.has_role? "Administrateur" %>
+			<div class="secondary">L'administrateur à des droits de modification sur tous les contrats</div>
+		<% end %>
+	</div>
+
+	<div class="actions">
+		<%= link_to 'Editer', edit_user_path(user) %>
+		<% if @admin || @admin_fonc %>
+  		<br />
+  		<%= link_to_remote_redbox "Supprimer",
+          { :url => ask_delete_user_path(user),
+            :method => :get},
+          { :title => "Supprimer cet utilisateur" } %>
+		<% end %>
+	</div>
+	
+	<div style="clear:both;"></div>
+</div>
+<% end %>

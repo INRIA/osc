@@ -1,0 +1,32 @@
+<%= "<div class='come-from-inria-container'><span class='come-from-inria'>S.I. INRIA</span></div>".html_safe() if @soumission.come_from_inria? %>
+
+<%= (my_soumission_error_messages_for @soumission).html_safe() %>
+
+
+<%= form_for(:soumission, :url => contrat_soumission_path(@contrat, @soumission), :html => { :method => :put }) do |f| %>
+  <%= render :partial => 'form', :locals => { :f => f } %>
+  <div class="form-box submit" id="submit">
+    <%= submit_tag "Enregistrer les modifications" %> 
+    ou
+    <%= link_to "Annuler", contrat_soumission_path(@contrat) %>
+  </div>
+<% end %>
+
+<% content_for :right do %>
+  <div id="navigation">
+    <h2>Aide à la navigation dans le formulaire</h2>
+    <ul>
+      <li><a href="#indicator">Haut de page</a></li>
+      <li><a href="#TypeContrat">Type de contrat</a></li>
+      <li><a href="#InformationsGenerales">Informations générales - Porteur et coordinateur</a></li>
+      <li><a href="#MotsCles">Mots clés et thématiques</a></li>
+      <li><a href="#Partenaires">Partenaires</a></li>
+      <li><a href="#MoyensDemandes">Moyens demandés - Personnel demandé</a></li>
+      <li><a href="#PersonnelImplique">Personnel impliqué</a></li>
+      <li class="last"><a href="#submit">Enregistrement des modifications</a></li>
+    </ul>
+  </div>
+  <script type="text/javascript">
+    new App.NavigatorHelper();
+  </script>
+<% end %>

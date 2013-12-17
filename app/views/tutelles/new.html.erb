@@ -1,0 +1,18 @@
+<%= error_messages_for @tutelle %>
+
+<%= form_for(:tutelle, :url => tutelles_path) do |f| %>
+	<fieldset>
+  	<p>
+    	<label for="tutelle_nom" class="required">Nom</label><br />
+    	<%= f.text_field :nom %>
+  	</p>
+  	<p>
+    	<label for="tutelle_description">Description</label><br />
+    	<%= f.text_area :description %>
+  	</p>
+	</fieldset>
+  <p class="submit">
+    <%= submit_tag "Créer la tutelle" %> ou <%= link_to "Annuler", tutelles_path %>
+  </p>
+<% end %>
+

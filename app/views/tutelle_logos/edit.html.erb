@@ -1,0 +1,20 @@
+<h1> Modifier le logo associé à la tutelle <%= @tutelle_logo.tutelle.nom %> </h1>
+<div class="lien">
+	<%= link_to 'Annuler', edit_tutelle_path(@tutelle_logo.tutelle) %>
+</div>
+<%= error_messages_for :tutelle_logos %>
+
+<% form_for(:tutelle_logos, :url => tutelle_logo_path, :html => {:method => :put, :multipart => true, :class => "with_photo" }) do |f| %>
+	<p>
+		<label for="tutelle_logo_logo">Logo associé</label>
+		<%= file_column_field 'tutelle_logo', 'logo' %><br />
+		<span class="aide">Le logo associé doit être au format Jpg</span>
+	</p>
+  	<p>
+    	<%= submit_tag "Créer" %>
+  	</p>
+<% end %>
+<div class="photo_form">
+	<%= image_tag url_for_file_column(@tutelle_logo, "logo") %>
+</div>
+<div style="clear:both;"></div>

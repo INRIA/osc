@@ -1,0 +1,639 @@
+/* Manifest pour la compilation des css 
+ *= require_self
+ */
+<%
+
+#Definition des couleurs generiques
+white = '#FFF'
+black = '#000'
+
+brown_background = '#E9D2A3'
+brown_text = '#5E5542'
+brown_border = '#80745B'
+
+menu_black = '#363842'
+menu_select_black = '#7B7F88'
+menu_hover_black = '#375063'
+menu_text_grey = '#CCC'
+
+red_link = '#E33729'
+dark_red = '#C34949'
+
+gold = '#EAC12E'
+
+background_grey = '#E5E5E5'
+light_grey ='#F5F5F5'
+grey = '#AAA'
+dark_grey = '#888'
+
+%>
+/* index */
+a {
+  color: <%= red_link %>;
+  text-decoration:underline;
+}
+a:hover{
+  color: <%= red_link %>;
+  text-decoration:none;
+}
+#right .content a:hover{
+  text-decoration:none;
+}
+a#link_to_switch,
+#link_to_remove_switch {
+  text-decoration:none;
+  background-color:<%= background_grey %>;
+  border-color:<%= white %>
+}
+#switch ul li a:hover, #switch_contrat ul li a:hover {
+    text-decoration: none;
+}
+#entete a {
+  text-decoration: none;
+}
+#entete a:hover {
+  text-decoration: underline;
+}
+body{
+  border-top-color:<%= menu_black %>;
+}
+a.delete {
+  background: url("/assets/Inria/delete.png") no-repeat scroll 2px 2px transparent;
+}
+#entete #admin {
+  border-color:<%= dark_grey %>;
+  margin-top: 5px;
+}
+
+#entete #current_user {
+  margin-top: 5px;
+}
+#entete #deconnection {
+  border-color:<%= dark_grey %>;
+  margin-top: 5px;
+}
+#entete #manuel {
+  border-color:<%= dark_grey %>;
+  margin-top: 5px;
+}
+#entete #style_choice {
+  border-color:<%= dark_grey %>;
+  margin-top: 5px;
+}
+#entete{
+  background-color:<%= menu_black %>;  
+  border-top:none;
+}
+#entete h1 {
+    color: <%= white  %>;  
+    font-weight: bold;
+}
+#menu{
+  background: url("/assets/Inria/inr_logo_corpo_FR_coul.png") ,url("/assets/Inria/INRIA_bkgd_body2.png");
+  background-position: left top, 0 -20px;
+  background-repeat: no-repeat;
+  background-color: <%= white %>; 
+  height: 95px;
+  padding-left: 225px;
+  font-size: 1.1em;
+}
+#menu .wrapper{
+  padding-top:68px;
+}
+#menu a {
+  background-color:<%= menu_select_black %>;  
+  font-weight:bold;
+}
+#menu a.current-with-sub-menu {
+  background-color: <%= menu_black %>;
+  color:<%= red_link %>;
+}
+#menu a.current-with-sub-menu:hover {
+  background-color: <%= menu_black %>;
+}
+#menu a:hover{
+  background-color: <%= menu_hover_black %>;
+}
+#menu a.current {
+  color:<%= red_link %>;
+}
+#menu a.current:hover {
+  background-color: <%= background_grey %>;
+  color:<%= red_link %>;
+}
+#sub-menu {
+    background-color: <%= menu_black %>;
+    border-bottom-color: <%= menu_black %>;
+    border-top-color: <%= menu_black %>;
+    font-size: 1.1em;
+    font-weight:bold;
+}
+#sub-menu a {
+    border-bottom-color: <%= menu_black %>;
+    border-top-color: <%= menu_black %>;
+    padding:0px;
+    margin-right:20px;
+}
+#sub-menu a.current {
+    border-bottom-color: <%= red_link %>;
+    color: <%= red_link %>;
+}
+#sub-menu a:hover {
+    background-color: <%= menu_hover_black %>;
+    border-bottom-color: <%= menu_select_black %>;
+    border-top-color: <%= menu_hover_black %>;
+}
+#sub-menu a.current:hover {
+    border-bottom-color: <%= red_link %>;
+    color: <%= red_link %>;
+}
+form .form-box {
+  margin-top:-4px;
+}
+
+#recent_history tr.history_item td a.todo {
+  color: <%= red_link %>;
+}
+#recent_history tr.history_item td a.todo:hover {
+  text-decoration:none;
+}
+#recent_history tr.history_item td.type span.Soumission {
+  background-color: <%= gold %>;
+  color: <%= black %>;
+}
+#recent_history tr.history_item td.type span.Salaire {
+  background-color: <%= menu_hover_black %>;
+}
+#recent_history tr.history_item td a:hover {
+  text-decoration: none;
+}
+#right a{
+  text-decoration:none;
+}
+.pagination a {
+    color: <%= red_link %>;
+}
+#left h2 strong, #right_extraction .h2 strong {
+  color: <%= white %>;
+  font-weight:bold;
+}
+
+#left h2.h2_subtitle,
+#left #errorExplanation h2{
+  background:none;
+  color:<%= red_link %>;
+}
+#left .content,
+#left .innercol, 
+#right_extraction .innercol {
+ /* background-color:<%= light_grey %>;*/
+}
+
+#left .content h2.float_head {
+  float:left;
+}
+#left h2, #left .section h2, #right_extraction h2 {
+  background-color: <%= red_link %>;
+  color: <%= white %>;
+  padding-left:4px;
+  padding-right:4px;
+  padding-top:2px;
+  padding-bottom:2px;
+  display:inline-block;
+  
+}
+
+#left ul.alertes li span.contrat a,
+form .form-box.submit a {
+  color: <%= red_link %>;
+
+}
+#left ul.alertes li span.contrat a:hover,
+form .form-box.submit a:hover {
+  text-decoration:none;
+}
+#left .head, #right_extraction .head {
+  background-color: <%= light_grey %>;
+}
+#left .head a:hover{
+  color:<%= red_link %>
+}
+#left .infos_generales_1 {
+  clear: left;
+}
+.stats_box {
+  background-color: <%= white %>;
+}
+#recherche input[type="submit"] {
+    background-color: <%= menu_hover_black %>;
+    border-color: <%= menu_black %>;
+    color: <%= white %>;
+}
+.stats_box .chiffre {
+  color: <%= black %>;
+}
+.stats_box .titre {
+  color: <%= dark_grey %>;
+}
+
+#right .infos_contrat.soumission {
+    border-right-color: <%= gold %>;
+}
+
+#navigation ul li a,
+.form.sub-parent-toggle-container a {
+  text-decoration:none; 
+}
+.come-from-inria {
+  background: url("/assets/come-from-inria-grey.png") no-repeat scroll 0 0 transparent;
+  color: <%= menu_black %>;
+}
+/* Etat/* */
+table.etat_type_contrat tr.even td,
+table.etat_moyens tr.even th, 
+table.etat_moyens tr.even td,
+#show_result_extraction table tr.even td,
+#box_with_slider,
+#sort_and_filter {
+  background-color: <%= light_grey %>;
+}
+
+#commands {
+  background-color: <%= light_grey %>;
+  border: 2px solid <%= white %>;
+}
+#commands #paginate .pagination a {
+  color: <%= red_link %>;
+}
+table.etat_type_contrat tr.big_total td,
+table.etat_moyens tr.total th, 
+table.etat_moyens tr.total td {
+    background-color: <%= grey %>;
+    padding-bottom: 0;
+}
+table.etat_type_contrat tr.total td.pourcentage, 
+table.etat_type_contrat tr.big_total td.pourcentage {
+  color: <%= white %>;
+}
+#show_result_extraction table tr th.Contrat {
+    border-bottom-color: <%= menu_select_black %>;
+}
+#sort_and_filter #sort, #sort_and_filter #filter {
+  background-color: <%= white %>;
+}
+#sort_and_filter a.add_sort_item, #sort_and_filter a.add_filter_item {
+  background: url("/assets/Inria/add_item.png") no-repeat scroll 0 0 transparent;
+}
+#sort_and_filter a.remove_sort_item, #sort_and_filter a.remove_filter_item {
+  background: url("/assets/Inria/delete.png") no-repeat scroll 0 0 transparent;
+}
+#left_extraction .select_soumission {
+  border-left-color: <%= gold %>;
+}
+#show_result_extraction table tr th.Soumission {
+    border-bottom-color: <%= gold %>;
+}
+#extraction_wrapper{
+  background-color: <%= background_grey %>;
+}
+
+/* Contrat */
+.come-from-inria-container .come-from-inria {
+  top: 5px;
+}
+#navig_to_suivi_budget,
+.prototip .LinkTip .content a{
+  background-color: <%= menu_select_black %>;
+  text-decoration:none;
+} 
+#left #tab_control {
+  background: url("/assets/Inria/tab_control_background.png") repeat-x scroll left center transparent;
+ /* border-bottom-color: */
+ /* border-top-color: */
+  background-color: <%= menu_black %>;
+  
+}
+  
+#left #tab_control a.first_active,
+#left #tab_control a.active,
+#left #tab_control a.first_active:hover,
+#left #tab_control a.active:hover {
+  color:<%= red_link %>;
+  background: url("/assets/Inria/tab_control_sep_barre.png") no-repeat scroll right center transparent;
+  background: url("/assets/Inria/puce_marqueur_top_nat.png") no-repeat scroll center 27px transparent;
+  border-bottom:3px solid <%= red_link %>;
+  font-weight:bold;
+}
+#left #tab_control a.first_active:hover,
+#left #tab_control a.active:hover {
+  color:<%= red_link %>;
+  background: url("/assets/Inria/tab_control_sep_barre.png") no-repeat scroll right center transparent;
+  background: url("/assets/Inria/puce_marqueur_top_nat.png") no-repeat scroll center 27px <%= menu_hover_black %>;
+  border-bottom:3px solid <%= red_link %>;
+  font-weight:bold;
+}
+#left #tab_control a{
+  color:<%= white %>;
+  text-decoration:none;
+  letter-spacing: 0px;
+}
+#left #tab_control a:hover,
+#left #tab_control a.first_active:hover,
+#left #tab_control a.first:hover,
+#left #tab_control a.child:hover,
+#left #tab_control a.before_active:hover,
+#left #tab_control a.first_before_active:hover{
+  border-bottom:3px solid <%= menu_select_black %>;
+  background: url("/assets/Inria/puce_marqueur_top_gris.png") no-repeat scroll center 27px <%= menu_hover_black %>;
+}
+#left #tab_control a.first,
+#left #tab_control a.child,
+#left #tab_control a.before_active,
+#left #tab_control a.first_before_active {
+  background: url("/assets/Inria/tab_control_sep_barre.png") no-repeat scroll right center transparent;
+  
+}
+ 
+#onglets_tab {
+  background-image:none;
+  background-color: <%= menu_black %>;
+  font-size: 1.1em;
+} 
+#onglets_tab a.active {
+  background-image:none;
+  color:<%= red_link %>;
+  border-bottom:3px solid <%= red_link %>;
+}
+#onglets_tab a {
+  background-image:none;
+  color:<%= white %>;
+  border-bottom:3px solid <%= menu_select_black %>;
+}
+#onglets_tab a.before_active {
+  background-image:none;
+}
+
+.small_infos_actions.first {
+  border-top-color: <%= grey %>;
+}
+.small_infos_actions.even{
+  background-color: <%= light_grey %>;
+}
+.small_infos_actions.odd {
+  background-color: <%= white %>;
+}
+
+form.inline {
+    background-image: url("/assets/Inria/add_item.png");
+    background-color: <%= light_grey %>;
+    border-bottom-color:  <%= grey %>;
+    border-top-color:  <%= grey %>;
+}
+#left ul.droits_list li.even,
+table.echeancier tr th {
+    background-color: <%= light_grey %>;
+}
+#left ul.droits_list li.odd {
+    background-color: <%= white %>;
+}
+#left ul.droits_list li form input.add[type="submit"] {
+    background-image: url("/assets/Inria/add_item.png");
+}
+fieldset, div.fieldset,
+form .form-box.parent, form .form-box.sub-parent,
+form .form-box.submit {
+  background-color: <%= light_grey %>;
+  border-color: <%= grey %>;
+}
+form .form-box.parent h3, form .form-box.sub-parent h3{
+  background-color: <%= menu_black %>;
+  color: <%= white %>;
+  text-shadow: 0 1px <%= black %>;
+}
+table.echeancier tr.odd th,
+table.solde tr th {
+  
+}
+table.echeancier tr td {
+  background-color: <%= white %>;
+}
+form .form-box.submit input[type="submit"],
+.login form .submit input {
+  background-color: hsl(201, 100%, 12%) !important; 
+  background-repeat: repeat-x; filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#006399", endColorstr="#00273d");
+  background-image: -khtml-gradient(linear, left top, left bottom, from(#006399), to(#00273d)); 
+  background-image: -moz-linear-gradient(top, #006399, #00273d); 
+  background-image: -ms-linear-gradient(top, #006399, #00273d); 
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #006399), color-stop(100%, #00273d)); 
+  background-image: -webkit-linear-gradient(top, #006399, #00273d); background-image: -o-linear-gradient(top, #006399, #00273d); 
+  background-image: linear-gradient(#006399, #00273d); border-color: #00273d #00273d hsl(201, 100%, 7.5%); color: #fff !important; 
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.29); -webkit-font-smoothing: antialiased;
+}
+form .form-box.submit input[type="submit"]:hover,
+.login form .submit input:hover{
+  background-position: 0 -15px;
+  color: #333;
+  text-decoration:none;
+  background-image:none;
+  border-color: #006399 #006399 hsl(201, 100%, 25%); 
+}
+
+/* BUDGET */
+
+#left .box.sub-parent h2, #left .box.parent h2,
+#left .box.child h2 {
+  background-color: <%= red_link %>;
+  color: <%= white %>;
+}
+.box.dashboard {
+  background-color: <%= menu_black %>;
+  color: <%= menu_text_grey %>;
+}
+.change-line a,
+.form.sub-parent-toggle-container a {
+  color: <%= red_link %>;
+  text-decoration:underline;
+}
+.sub-parent-toggle-container a {
+  color: <%= red_link %>;
+}
+form .form-box.submit .delete_depense a {
+  color: <%= white %>;
+}
+.delete_depense {
+  border-color: <%= red_link %>;
+}
+.delete_depense:hover {
+  border-color: <%= red_link %>;
+}
+form .form-box.child h3{
+  background-color: <%= menu_black %>;
+  color: <%= white %>;
+}
+
+#left table.depenses tbody tr td.total {
+  background-color: <%= background_grey %>;
+}
+#left table.depenses thead tr th a {
+  text-decoration:none;
+}
+#left table.depenses tr td a:hover {
+    text-decoration: none;
+}
+#right .time-selection-links-container a {
+  text-decoration:none;
+}
+#right .time-selection-links-container a:hover,
+#right a.adjust_date {
+  text-decoration:none;
+}
+#right form.search a.toggle {
+  color: <%= red_link %>;
+}
+#right form.search a.toggle:hover {
+  text-decoration:none;
+}
+#right .checkbox a{
+  text-decoration:underline;
+}
+#right .checkbox a:hover{
+  text-decoration:none;
+}
+#line_per_page span.infos {
+  color: <%= white %>
+}
+
+#line_per_page .track {
+  background: url("/assets/Inria/sliderTrack.png") no-repeat scroll 0 0 transparent;
+}
+#left #content_footer .right a.destroy:hover {
+  text-decoration: none;
+}
+#left .impair, #left .pair {
+  padding-top:10px; 
+}
+
+#options a {
+  text-decoration:none;
+  color: <%= white %>;
+}
+#options {
+  background: url("/assets/Inria/optionsBackground-3.jpg") repeat-x scroll 0 0 transparent;
+  border-top-color: <%= menu_black %>;
+  color: <%= white %>;
+}
+#options a.selected, #options a.selected2 {
+    background-image:none; 
+    color: <%= red_link %>;
+    border-bottom:2px solid <%= red_link %>;
+}
+#options a:hover {
+    background-color:<%= menu_hover_black %>;
+    border-bottom:2px solid <%= menu_select_black %>;
+}
+p#export_to_csv {
+    padding-top: 5px;
+}
+#options a.selected span.habillage_left, #options a.selected2 span.habillage_left {
+  background-image:none;
+}   
+#options a.selected span.habillage_right, #options a.selected2 span.habillage_right {
+  background-image:none;
+}
+#options select {
+  background-color: <%= background_grey %>;
+  border: 1px solid <%= menu_black %>;
+  color: <%= menu_black %>
+}
+.head .sub {
+  background-color:<%= background_grey %>;
+}
+table#table_bilan tr td.total {
+  background-color: <%= background_grey %>;
+}
+table#table_bilan tr td.even.total {
+  background-color: <%= menu_text_grey %>;
+}
+table#table_bilan tr.title td {
+  color: <%= dark_grey %>
+}
+table#table_bilan tr.title td strong {
+  color: <%= menu_black %>
+}
+#recherche_avancee {
+  background: url("/assets/Inria/rechercheAvanceeBackground.png") repeat-x scroll 0 0 transparent;
+  border-bottom: 1px solid <%= menu_black %>;
+  color: <%= menu_text_grey %>;
+}
+#recherche_avancee h3 {
+  color: <%= white %>;
+  padding-left: 3px;
+  border-color:<%= dark_red %>;
+}
+#recherche_avancee label span {
+  color: <%= grey %>;
+}
+#recherche_avancee input {
+  background-color: <%= background_grey %>;
+  border: 1px solid <%= menu_black %>;
+}
+#recherche_avancee input.submit {
+  background-color: <%= menu_hover_black %>;
+  color: <%= red_link %>;
+}
+
+#left table.depenses tr.odd td,
+#left table.depenses tbody tr.odd th,
+#left table.depenses tbody tr.odd td.soldee,
+#left table.depenses tbody tr.odd td.verrou,
+#left table.depenses tbody tr.odd td.non_soldee,
+#left table.depenses tbody tr.odd td.no-verrou {
+  background-color: <%= background_grey %>;
+  border-color:<%= grey %>;
+  border-bottom:none;
+}
+#left table.depenses tr.even td,
+#left table.depenses tbody tr.even td.soldee,
+#left table.depenses tbody tr.even td.verrou,
+#left table.depenses tbody tr.even td.non_soldee,
+#left table.depenses tbody tr.even td.no-verrou {
+  border-color:<%= grey %>;
+  border-bottom:none;
+}
+#left table.depenses tbody tr td.sous-total {
+  background-color: <%= grey %>
+}
+#left table.depenses tbody tr td.total-header a {
+  background-color: <%= menu_hover_black %>;
+  border-color: <%= menu_black%>;
+  color: <%= red_link %>;
+}
+#recherche_avancee select {
+  background-color: <%= background_grey %>;
+  border-color: <%= menu_black %>;
+  color: <%= menu_black %>
+}
+table#table_bilan tr th.titre a:hover {
+    text-decoration: none;
+}
+/* login */
+.login {
+  background-color: <%= white %>;
+  background: url("/assets/Inria/inr_logo_corpo_FR_coul.png") ,url("/assets/Inria/INRIA_bkgd_body2.png");
+  background-position: left top, 0 -20px;
+  background-repeat: no-repeat;
+}
+.login.inner {
+  background-color: <%= background_grey %>;
+}
+.login_infos{
+  display:block;
+  background-color: <%= menu_black %>;
+  color: <%= white %>;
+  width:auto;
+}
+.login_infos p {
+    margin:none;
+    padding-bottom: 10px;
+    text-align:center;
+}

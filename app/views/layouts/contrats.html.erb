@@ -1,0 +1,150 @@
+<% if controller.action_name.to_s == 'ask_delete' %>
+	<%= yield  %>
+<% else %>
+	<% if controller.action_name.to_s == 'show' %>
+		<% content_for :right do %>
+		
+		  <%- if (@contrat.is_editable? current_user  and current_user.is_contrat_admin?) or current_user.is_admin? -%>
+		    <%= link_to 'Dupliquer le contrat',  duplicate_contrat_path(@contrat), :method => :post, :class => "duplicate-contrat",:onclick => "var f = document.createElement('form'); f.style.display = 'none'; this.parentNode.appendChild(f); f.method = 'POST'; f.action = this.href;f.submit();return false;"  %>
+			<%- end -%>
+			
+			<% if controller.action_name.to_s != "new" %>
+				<% if @contrat.is_editable? current_user %>
+					<% if @contrat.refu.nil?  %>
+						<% if !@contrat.notification.nil? %>
+							<% if @contrat.cloture.nil? %>
+								<%= link_to "", new_contrat_cloture_path(@contrat) ,:class => 'addCloture' %>		
+							<% end %>
+						<% elsif @contrat.soumission.nil? %>
+							<%= link_to "", new_contrat_soumission_path(@contrat) ,:class => 'addSoumission' %>
+						<% elsif !@contrat.signature.nil? %>
+							<%= link_to "", new_contrat_notification_path(@contrat) ,:class => 'addNotification' %>
+						<% else %>
+							<%= link_to "", new_contrat_signature_path(@contrat) ,:class => 'addSignature' %>
+							<%= link_to "", new_contrat_refu_path(@contrat) ,:class => 'addRefus' %>
+						<% end %>
+					<% end %>
+				<% end %>
+			<% end %>
+			
+			<%= render :partial => 'show_entite_tree' %>
+			
+			<div class="section">
+			  <h2>Export PDF</h2>
+			  <%= link_to 'Obtenir le contrat au format PDF', contrat_path(@contrat, :pdf), :class => "to_pdf" %>
+			</div>
+			
+			<%= render :partial => 'show_users' %>
+		
+		<% end %>
+	<% end %>
+	
+	<% if ['edit', 'update'].include? controller.action_name.to_s  %>
+		<% content_for :right do %>
+			<%= render :partial => 'show_entite_tree' %>
+			<%= render :partial => 'show_users' %>
+		<% end %>
+	<% end %>
+	
+	<% if ['reporting_depenses_reelles'].include? controller.action_name.to_s  %>
+		<% content_for :right do %>
+			<h2>Reporting</h2>
+			<ul>
+			  <li><a href="#">Synthèse des dépenses réellement enregistrées</a></li>
+			  <li><a href="#">Synthèse des dépenses totales</a></li>
+			  <li><a href="#">Etats spécifiques aux contrats européens</a></li>
+			  <li><a href="#">Marge du contrat disponible</a></li>
+			</ul>
+		<% end %>
+	<% end %>
+	
+
+	<% content_for :head do %>
+	
+		<% if controller.action_name.to_s == 'index' %>
+			<div class='long_header_title'>
+				<strong>Tableau de bord</strong> de la section suivi des contrats		
+			</div>	
+		<% end %>
+			
+		<% if ['new', 'create'].include? controller.action_name.to_s %>
+			<div class='long_header_title'>
+				<strong>Création de contrat</strong> // Etape 1/2
+			</div>
+		<% end %>
+			
+		<% if controller.action_name.to_s == 'show' %>
+			<div class="clearfix">
+  			<div class='header_title'>		
+  				<div class="showInfos">
+  					<p class="visibilite">
+  						<strong><%= @contrat.long_acronyme %></strong>
+  						<%= render :partial => 'layouts/link_to_switch_contrat' %>		
+  						<% if !@contrat.notification.nil? %>
+  							<% if !@contrat.notification.url.blank? %>
+  								<span  style="font-size:0.7em;">(<a href="http://<%= @contrat.notification.url %>" target="_blank" title="Visiter le site web du contrat">site web</a>)</span>
+  							<% end %>
+  						<% end %>
+  					</p>
+  				</div>
+  			</div>
+  			<div class='header_link'>
+  			<% if (@contrat.is_editable? current_user  and current_user.is_contrat_admin?) or current_user.is_admin? %>
+  				<%= link_to 'Editer le contrat', edit_contrat_path(@contrat) %><br/>
+  			<% end %>
+  			</div>
+			</div>
+			<div id="switch_contrat" style="display:none;	margin-top:2px;"></div>
+			<p class="under_link">
+				<%= @contrat.nom %>
+			</p>
+		<% end %>
+			
+		<% if ['edit', 'update'].include? controller.action_name.to_s %>
+			<div class='header_title'>		
+				<div class="showInfos">
+					<p class="visibilite">
+						<% if @contrat.acronyme == '' %>
+							<strong><%= Contrat.find(params[:id]).acronyme %></strong> 
+						<% else %>
+							<strong><%= @contrat.long_acronyme %></strong>
+						<% end %>
+					</p>
+				</div>
+			</div>
+			<div class='header_link'>
+			  <%= link_to 'Tableau de bord', contrat_path(@contrat) %>
+		  </div>
+		  <div style='clear:both;'></div>
+  		<p class="under_link">
+  			<% if  @contrat.nom == '' %>
+  				<%= Contrat.find(params[:id]).nom %>
+  			<% else %>
+  				<%= @contrat.nom %>
+  			<% end %>
+  		</p>
+		<% end %>
+		
+		<% if controller.action_name.to_s == 'reporting' %>
+		  <div class='long_header_title'>
+				<strong><%= @contrat.long_acronyme %></strong> > Reporting
+    	</div>
+  		<p><%= @contrat.nom %></p>
+		<% end %>
+		
+	<% end %>
+
+	<% content_for :sub_menu do %>
+		<% if ['edit', 'update'].include? controller.action_name.to_s %>
+		<div id="onglets_tab">
+			<a href="#associations">Entités associées</a>
+			<a href="#utilisateurs">Utilisateurs/droits</a>
+			<a href="#groupes">Groupes/droits</a>
+			<a href="#generalites">Nom/Acronyme/Publicité</a>
+			<div style="clear:both;"></div>		
+		</div>
+		<% end %>
+	<% end %>
+
+	<%= render :file => 'layouts/application_suivi_des_contrats' %>
+<% end %>

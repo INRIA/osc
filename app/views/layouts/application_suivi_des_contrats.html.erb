@@ -1,0 +1,365 @@
+<%- content_for :footer do -%>
+  Outil de Suivi des Contrats - Assistance : <%= SUPPORT_INFOS.html_safe() %>
+<%- end -%>
+
+<%- @submenu = false -%>
+<% if (controller.class.to_s == "ContratsController" && controller.action_name.to_s == "index") ||
+      controller.class.to_s == "etatsController"  -%>
+  <%- @submenu = true -%>
+<%- end -%>
+
+<% content_for :admin_sub_menu do -%>
+  <%- if @submenu -%>
+    <div id="sub-menu">
+      <div class="wrapper">
+        <% if controller.class.to_s == "ContratsController" && controller.action_name.to_s == "index" -%>
+          <%= link_to "Tableau de bord", contrats_path, {:class =>'current'} -%>
+        <% else -%>
+          <%= link_to "Tableau de bord", contrats_path -%>
+        <% end %>
+        <%= link_to "Extraction de données", {:controller => "Etat", :action => "extraction"} -%>     
+        <%= link_to "Récapitulatif Soumissions vs Notifications", {:controller => "Etat", :action => "soumission_vs_notification"} -%>
+        <%= link_to "Récapitulatif Notifications", {:controller => "Etat", :action => "notification"} -%>
+        <div style="clear:both;"></div>
+      </div>
+    </div>
+  <%- end -%>
+<%- end %>
+
+<%- content_for :menu do -%>
+  <div class="wrapper">
+    <%- if @submenu -%>
+      <%= link_to "Suivi de contrats", contrats_path, {:class =>'current-with-sub-menu'} %>
+    <%- else -%>
+      <%= link_to "Suivi de contrats", contrats_path, {:class =>'current'} %>
+    <%- end -%>
+  
+    <% @text = "" %>
+    <%- if !( (['index', 'new', 'create','my_last_search'].include? controller.action_name.to_s) && (['ContratsController'].include? controller.class.to_s) ) -%>
+      <%- if @contrat.lignes.size > 0 -%>
+        <div id="navig_to_suivi_budget">&nbsp;</div>
+        <%
+          @text = ""
+          for ligne in @contrat.lignes
+            @text += link_to "Aller au suivi du budget #{ligne.nom.gsub(/'/,' ')}", ligne_path(ligne)
+            @text += link_to "Crédits", ligne_versements_path(ligne), {:class => "sub"}
+            if ligne.contrat_dotation
+              @text += link_to "Dépenses", ligne_depense_communs_path(ligne), {:class => "sub"}
+            else
+              @text += link_to "Dépenses en fonctionnement", ligne_depense_fonctionnements_path(ligne), {:class => "sub"}
+              @text += link_to "Dépenses en équipement", ligne_depense_equipements_path(ligne), {:class => "sub"}
+              @text += link_to "Dépenses en mission", ligne_depense_missions_path(ligne), {:class => "sub"}
+              @text += link_to "Dépenses en salaire", ligne_depense_salaires_path(ligne), {:class => "sub"}
+              @text += link_to "Dépenses non ventilées", ligne_depense_non_ventilees_path(ligne), {:class => "sub"}
+            end
+            @text += link_to "Bilan", bilan_ligne_path(ligne), {:class => "sub"}
+          end
+         %>
+        <script type="text/javascript">
+        //<![CDATA[
+          new Tip('navig_to_suivi_budget', '<%= @text.html_safe() %>',
+            { className: 'LinkTip', effect: "slide",
+              hook:{ target: 'bottomLeft', tip: 'topLeft'},
+              hideOn: false, hideAfter: 0.5, offset: { x: 0, y: 4 }
+            }
+          );
+          //]]>
+         </script>
+      <%- end -%>
+    <%- end -%>
+    <%= link_to "Suivi du budget", lignes_path %>
+    <!-- <%= link_to "Etats", {:controller => "Etat", :action => "show" } -%> -->
+
+    <%- if @my_research -%>
+      <%= link_to "Ma recherche", {:controller => "Contrats", :action => "my_last_search" }, {:style=>"margin-left:500px; background-color:#E5E5E5;color:#333333"} %>
+    <%- end -%>
+
+  <div style="clear:both;"></div>
+</div>
+<%- end -%> 
+
+
+<% content_for :sub_menu do %>
+  <% if controller.class.to_s == "ContratsController" and ['index', 'new', 'edit', 'create', 'update','my_last_search'].include?  controller.action_name.to_s %>  
+  <% else %>
+    <div id="tab_control">
+      <%- if controller.class.to_s == "ContratsController" && controller.action_name != 'reporting' -%>
+        <%= link_to "Tableau de Bord", contrat_path(@contrat), :class => "first_active" %>
+      <%- else -%>
+        <%- if controller.class.to_s == "DescriptifsController" -%>
+          <%= link_to "Tableau de Bord", contrat_path(@contrat), :class => "first_before_active" %>
+        <%- else -%>
+          <%= link_to "Tableau de Bord", contrat_path(@contrat), :class => "first" %>
+        <%- end -%>
+      <%- end -%>
+  
+      <%- if controller.class.to_s == "DescriptifsController" -%>
+        <%= link_to "Descriptifs", contrat_descriptifs_path(@contrat), :class => "first_active" %>
+      <%- else -%>
+        <%- if controller.class.to_s == "ContratFilesController" -%>
+          <%= link_to "Descriptifs", contrat_descriptifs_path(@contrat), :class => "first_before_active" %>
+        <%- else -%>
+          <%= link_to "Descriptifs", contrat_descriptifs_path(@contrat), :class => "first" %>
+        <%- end -%>
+      <%- end -%>
+
+      <%- if controller.class.to_s == "ContratFilesController" -%>
+        <%= link_to "Doc", contrat_contrat_files_path(@contrat), :class => "first_active" %>
+      <%- else -%>
+        <%- if controller.class.to_s == "TodolistsController" -%>
+          <%= link_to "Doc", contrat_contrat_files_path(@contrat), :class => "first_before_active" %>
+        <%- else -%>
+          <%= link_to "Doc", contrat_contrat_files_path(@contrat), :class => "first" %>
+        <%- end -%>
+      <%- end -%>
+      
+      <%- if controller.class.to_s == "TodolistsController" -%>
+        <%= link_to "ToDo", contrat_todolists_path(@contrat), :class => "first_active" %>
+      <%- else -%>
+        <%- if @contrat.notification.nil? -%>
+          <%- if controller.class.to_s == "SoumissionsController"  -%>
+            <%= link_to "ToDo", contrat_todolists_path(@contrat), :class => "first_before_active" %>
+          <%- else -%>
+            <%= link_to "ToDo", contrat_todolists_path(@contrat), :class => "first" %>
+          <%- end -%>
+        <%- else -%>
+          <%- if controller.class.to_s == "EcheanciersController"  -%>
+            <%= link_to "ToDo", contrat_todolists_path(@contrat), :class => "first_before_active" %>
+          <%- else -%>
+            <%= link_to "ToDo", contrat_todolists_path(@contrat), :class => "first" %>
+          <%- end -%>
+        <%- end -%>
+      <%- end -%>
+    
+      <%- if !@contrat.notification.nil? -%>
+        <%- if controller.class.to_s == "EcheanciersController" -%>
+          <% if !@contrat.echeancier.nil? %>
+            <%= link_to "Echéancier", contrat_echeancier_path(@contrat, @contrat.echeancier), :class => "first_active" %>
+          <%- else -%>
+            <%= link_to "Echéancier",  new_contrat_echeancier_path(@contrat), :class => "first_active" %>
+          <%- end -%>
+        <%- else -%>
+          <% if !@contrat.echeancier.nil? %>
+            <%- if controller.class.to_s == "ContratsController" && controller.action_name == 'reporting' -%>
+              <%= link_to "Echéancier", contrat_echeancier_path(@contrat, @contrat.echeancier), :class => "first_before_active" %>
+            <%- else -%>
+              <%= link_to "Echéancier", contrat_echeancier_path(@contrat, @contrat.echeancier), :class => "first" %>
+            <%- end -%>
+          <% else %>
+            <%- if controller.class.to_s == "ContratsController" && controller.action_name == 'reporting' -%>
+              <%= link_to "Echéancier",  new_contrat_echeancier_path(@contrat), :class => "first_before_active" %>
+            <%- else -%>
+              <%= link_to "Echéancier",  new_contrat_echeancier_path(@contrat), :class => "first" %>
+            <%- end -%>
+          <%- end -%>
+        <%- end -%>
+
+        <%- if controller.class.to_s == "ContratsController" && controller.action_name == 'reporting' -%>
+          <%= link_to "Reporting", reporting_contrat_path(@contrat), :class => "first_active" %>
+        <%- else -%>
+          <%- if controller.class.to_s == "SoumissionsController"  -%>
+            <%= link_to "Reporting", reporting_contrat_path(@contrat), :class => "first_before_active" %>
+          <%- else -%>
+            <%= link_to "Reporting", reporting_contrat_path(@contrat), :class => "first" %>
+          <%- end -%>
+        <%- end -%>
+      <%- end -%>
+    
+      <%- if controller.class.to_s == "SoumissionsController" -%>
+        <%- if !@contrat.soumission.nil? -%>
+          <%= link_to "Soumission", contrat_soumission_path(@contrat, @contrat.soumission), :class => "active" %>
+        <%- else -%>
+          <%= link_to "Soumission", new_contrat_soumission_path(@contrat), :class => "active" %>
+        <%- end -%>
+      <%- else -%>
+        <%- if !@contrat.soumission.nil? -%>
+          <%- if controller.class.to_s == "SignaturesController" or controller.class.to_s == "RefusController" -%>
+            <%= link_to "Soumission", contrat_soumission_path(@contrat, @contrat.soumission), :class => "before_active" %>
+          <%- else -%>
+            <%= link_to "Soumission", contrat_soumission_path(@contrat, @contrat.soumission), :class => "child" %>
+          <%- end -%>
+        <%- end -%>
+      <%- end -%>
+    
+      <%- if controller.class.to_s == "SignaturesController" -%>
+        <%- if !@contrat.signature.nil? -%>
+          <%= link_to "Signature", contrat_signature_path(@contrat, @contrat.signature), :class => "child active" %>
+        <%- else -%>
+          <%= link_to "Signature", new_contrat_signature_path(@contrat), :class => "child active" %>
+        <%- end -%>
+      <%- else -%>
+        <%- if !@contrat.signature.nil? -%>
+          <%- if controller.class.to_s == "NotificationsController" -%>
+            <%= link_to "Signature", contrat_signature_path(@contrat, @contrat.signature), :class => "before_active" %>
+          <%- else -%>
+            <%= link_to "Signature", contrat_signature_path(@contrat, @contrat.signature), :class => "child" %>
+          <%- end -%>
+        <%- end -%>
+      <%- end -%>
+    
+      <%- if controller.class.to_s == "NotificationsController" -%>
+        <%- if !@contrat.notification.nil? -%>
+          <%= link_to "Notification", contrat_notification_path(@contrat, @contrat.notification), :class => "child active"  %>
+        <%- else -%>
+          <%= link_to "Notification", new_contrat_notification_path(@contrat), :class => "child active"  %>
+        <%- end -%>
+      <%- else -%>
+        <%- if !@contrat.notification.nil? -%>
+          <%- if controller.class.to_s == "CloturesController" -%>
+            <%= link_to "Notification", contrat_notification_path(@contrat, @contrat.notification), :class => "before_active" %>
+          <%- else -%>
+            <%= link_to "Notification", contrat_notification_path(@contrat, @contrat.notification), :class => "child" %>
+          <%- end -%>
+        <%- end -%>
+      <%- end -%>
+    
+      <%- if controller.class.to_s == "CloturesController" -%>
+        <%- if !@contrat.cloture.nil? -%>
+          <%= link_to "Clôture", contrat_cloture_path(@contrat, @contrat.cloture), :class => "child active" %>
+        <%- else -%>
+          <%= link_to "Clôture", new_contrat_cloture_path(@contrat), :class => "child active" %>
+        <%- end -%>
+      <%- else -%>
+        <%- if !@contrat.cloture.nil? -%>
+          <%= link_to "Clôture", contrat_cloture_path(@contrat, @contrat.cloture), :class => "child" %>
+        <%- end -%>
+      <%- end -%>
+    
+      <%- if controller.class.to_s == "RefusController" -%>
+        <%- if !@contrat.refu.nil? -%>
+          <%= link_to "Refus", contrat_refu_path(@contrat, @contrat.refu), :class => "child active" %>
+        <%- else -%>
+          <%= link_to "Refus", new_contrat_refu_path(@contrat), :class => "child active" %>
+        <%- end -%>
+      <%- else -%>
+        <%- if !@contrat.refu.nil? -%>
+          <%= link_to "Refus", contrat_refu_path(@contrat, @contrat.refu), :class => "child" %>
+        <%- end -%>
+      <%- end -%>
+    
+      <div style="clear:both;"></div>
+    </div>
+  <%- end -%>
+<%- end -%>
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <%= csrf_meta_tag %>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  <title>OSC <%= controller.class.to_s.gsub("Controller", '') %> :: <%= controller.action_name %></title>
+  <%= javascript_include_tag 'application' %>
+  <%= stylesheet_link_tag "application" %>
+  <%# if session[:current_user_ldap]=="ildap INRIA" %>
+  <% if cookies[:style] && cookies[:style]!='' %>
+    <%= stylesheet_link_tag cookies[:style],:id =>'style_bis_css' %>
+    <link id='favicon' rel="shortcut icon" href="<%= asset_path 'Inria/favicon.ico' %>" />
+  <% else %>
+    <% if DEFAULT_STYLE %>
+      <%= stylesheet_link_tag DEFAULT_STYLE,:id =>'style_bis_css' %>
+      <link id='favicon' rel="shortcut icon" href="<%= asset_path 'Inria/favicon.ico' %>" />
+    <% else %>
+      <link id='favicon' rel="shortcut icon" href="<%= asset_path 'favicon.ico' %>" />
+    <% end %>
+  <% end %>
+    
+  <%- if controller.class.to_s == "ContratsController" && controller.action_name == 'reporting' -%>
+    <link href="/stylesheets/print_reporting.css?v1" media="print" rel="stylesheet" type="text/css" />
+  <%- end -%>
+</head>
+<body>
+  <div id='indicator' style='display:none;'>Chargement en cours... Merci de patienter !</div>
+  <div id='notice' style="display:none" onclick="fadeInfobox('notice');">
+  <%- if flash[:notice] -%>
+    <p id='notice_content'><%= flash[:notice] -%></p>
+    <%=  javascript_tag "notice();" %>
+  <%- end -%>
+  </div>
+  
+  <div id='error' style="display:none" onclick="fadeInfobox('error');">
+  <%- if flash[:error] -%>
+    <p id='notice_content'><%= flash[:error] -%></p>
+    <%= javascript_tag "error();" %>
+  <%- end -%>
+  </div>
+    
+  <div id="entete">
+    <h1><strong>OSC</strong> Outil de Suivi des Contrats</h1>
+    <% if logged_in? %>
+      <% if CHOIX_STYLE %>
+        <% if cookies[:style] && cookies[:style]!='' %>
+          <% style_bis_active = true %>
+        <% else %>
+          <% style_bis_active = nil %>
+        <% end %>
+        <div id="style_choice">
+          <%= check_box_tag 'style_bis' , nil, style_bis_active, :class => "checkbox", :onchange =>onclick="toggle_css_bis('style_bis','"+CHOIX_STYLE+"'); return false;" %>
+          <%= STYLE_TEXT %>
+        </div>
+      <% end %>
+      <div id="deconnection">
+          <%= link_to "Se déconnecter", :controller => "account", :action => "logout" %>
+      </div>
+      <% if (current_user.is_admin?) || (current_user.is_contrat_admin?) || (current_user.is_fonc_admin?) %>
+        <div id="admin">
+          <%= link_to "Administration", users_path %> &nbsp;
+        </div>
+      <% end %>
+      <% if AFFICHE_MANUEL_INRIA and session[:current_user_ldap]=="ildap INRIA" %>
+        <div id="manuel">
+          <%= link_to "#{LINK_MANUEL_INRIA}", "#{MANUEL_INRIA}",:target =>"_blank", :title => "Accéder aux fichiers" %> <%=SUP_MANUEL_INRIA%>
+        </div>
+      <% elsif AFFICHE_MANUEL %>
+        <div id="manuel">
+          <%= link_to "#{LINK_MANUEL}", "#{MANUEL}", :title => "Télécharger le fichier" %> <%=SUP_MANUEL%>
+        </div>
+      <% end %>
+      <div id="current_user">
+        <%= current_user.prenom %> <%= current_user.nom %>
+      </div>
+      
+    <%- end -%>
+    <div style="clear:both;"></div>
+  </div>
+
+  <div id="menu">
+    <%= yield :menu -%>
+    <%- if !@submenu -%>
+      <div style="clear:both;border-top:1px solid #e5e5e5;"></div>
+    <%- else -%>
+      <div style="clear:both;"></div>
+    <%- end -%>
+  </div>
+  
+  <%= yield :admin_sub_menu -%>
+
+  <div id="wrapper">
+    <div id="container" class="clearfix">
+      <div id="left">
+        <div class='innercol'>
+          <div class='head'>
+            <%= yield :head %>
+          </div>
+          <%= yield :sub_menu %>
+          <div class='content'>
+            <%= yield %>
+          </div>
+        </div>
+        <div id="footer">
+          <%= yield :footer %>
+        </div>
+      </div>
+      <div id="right">
+        <div class='innercol'>
+          <%= yield :right %>
+        </div>
+      </div>
+    </div>
+  </div>  
+
+</body>
+</html>

@@ -1,0 +1,60 @@
+<tr class="depense <%= cycle('odd', 'even') %>">
+	<%
+	soldee_class = 'non_soldee'
+	soldee_class = 'soldee' if depense.commande_solde
+	%>
+	<td class="<%= soldee_class %> "></td>
+	<%
+	verrou_class = 'no-verrou'
+	verrou_class = 'verrou' if depense.come_from_inria?
+	%>
+	<td class="<%= verrou_class %> "></td>
+	<td><%= link_to truncate(depense.ligne.nom,:length =>30, :ommission => '...'), ligne_path(depense.ligne), {:title=>depense.ligne.nom} %></td>
+	<td><%= french_small_date depense.date_commande %>
+		<% if !@millesime.blank? %><br/><%= display_millesime depense %><% end %>
+	</td>
+	<td><%=h depense.reference %></td>
+	<td>
+		<%- if params['data'] == "fonctionnement" -%>
+      <%#= link_to simple_format(depense.intitule), ligne_depense_fonctionnement_path(depense.ligne, depense) %>
+    	<%= link_to simple_format(truncate(depense.intitule, :length =>25, :ommission => '...')), ligne_depense_fonctionnement_path(depense.ligne, depense), {:title => depense.intitule} %>
+    <%- end -%>
+    <%- if params['data'] == "equipement" -%>
+      <%#= link_to simple_format(depense.intitule), ligne_depense_equipement_path(depense.ligne, depense) %>
+    	<%= link_to simple_format(truncate(depense.intitule, :length =>25, :ommission => '...')), ligne_depense_equipement_path(depense.ligne, depense), {:title => depense.intitule} %>
+    <%- end -%>
+    <%- if params['data'] == "non_ventilee" -%>
+      <%#= link_to simple_format(depense.intitule), ligne_depense_non_ventilee_path(depense.ligne, depense) %>
+    	<%= link_to simple_format(truncate(depense.intitule, :length =>25, :ommission => '...')), ligne_depense_non_ventilee_path(depense.ligne, depense), {:title => depense.intitule} %>
+    <%- end -%>
+	</td>
+	<td>
+		<%= french_small_date facture.date %>
+	</td><td>
+		<%= facture.numero_facture %>
+	</td>	<td>
+    <% if !facture.date_mandatement.blank? %>
+       <%= french_small_date facture.date_mandatement  %>
+    <% end %>
+	</td><td>
+		<%= facture.numero_mandat %>
+	</td><td>
+		<%= facture.rubrique_comptable.numero_rubrique %>
+	</td>
+	<td class="money"
+	<%- if depense.commande_solde? -%>
+		style="font-weight: bold;text-decoration : underline;"
+	<%- end -%>>
+	<%= my_number_to_currency depense.montant_engage %>
+	</td>
+	<td class="money">
+		<%= my_number_to_currency facture.montant_htr %>
+	</td>
+	<td class="money">
+		<%= my_number_to_currency facture.cout_ht %>
+	</td>
+	<td class="money">
+				<%= my_number_to_currency facture.cout_ttc %>
+	</td>
+
+</tr>

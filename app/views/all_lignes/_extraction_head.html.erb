@@ -1,0 +1,13 @@
+<div class='long_header_title'>
+	<strong>Vision de l'ensemble des lignes</strong> //
+	<%- if params['data'].nil? && controller.action_name.to_s == 'extraction' -%>Crédits<%- end -%>
+	<%- if params['data'] == "toutes_depenses_hors_salaires" -%>Dépenses en fonctionnement / équipement / mission / non ventilées <%- end -%>
+	<%- if params['data'] == "fonctionnement" -%>Dépenses en fonctionnement<%- end -%>
+	<%- if params['data'] == "equipement" -%>Dépenses en équipement<%- end -%>
+	<%- if params['data'] == "mission" -%>Dépenses en missions<%- end -%>
+	<%- if params['data'] == "salaire" -%>Dépenses en salaires<%- end -%>
+	<%- if params['data'] == "non_ventilee" -%>Dépenses en non ventilées<%- end -%>
+	<%- if params['data'] == "commun" -%>Dépenses du commun<%- end -%>
+	<%- if controller.action_name.to_s == "bilans" -%>Bilans<%- end -%>
+
+</div>

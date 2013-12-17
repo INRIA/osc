@@ -1,0 +1,9 @@
+  <label for="agent_filter">Filtrer la liste des agents sur le nom </label>
+  <%= text_field_tag("agent_filter", params['agent_filter'], :size => 5, :class => "textfield" ) %>
+  <%= observe_field 'agent_filter',  :url => {:action => 'filter_referentiel_agent'},                                                    
+                                     :frequency => 1,
+                                     :with => "Form.serializeElements($('agent_filter', 'depense_salaire_agent_si_origine'))" %>
+
+
+
+			

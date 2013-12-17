@@ -1,0 +1,9 @@
+<%= error_messages_for @organisme_gestionnaire %>
+
+<%= form_for(@organisme_gestionnaire) do |f| %>
+	<%= render :partial => 'form', :locals => { :f => f} %>
+  <p class="submit">
+    <%= f.submit "Mettre à jour" %> ou <%= link_to 'Annuler', organisme_gestionnaire_path(@organisme_gestionnaire) %>
+  </p>
+<% end %>
+

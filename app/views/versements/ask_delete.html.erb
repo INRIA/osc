@@ -1,0 +1,9 @@
+<div class="content">
+	<p>
+		Etes-vous certain de vouloir supprimer ce crédit ?
+	</p>
+	<%= link_to_close_redbox "Non", :class => 'annuler' %>
+	<%= link_to "Oui", ligne_versement_path(@ligne, @versement), :method => :delete %>
+	
+ 	<div style="clear:both;"></div>
+</div>

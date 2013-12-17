@@ -1,0 +1,10 @@
+<%= error_messages_for @cloture %>
+
+<%= form_for(:cloture, :url => contrat_cloture_path(@contrat, @cloture), :html => { :method => :put }) do |f| %>
+  <%= render :partial => 'form', :locals => { :f => f } %>
+  <div class="form-box submit" id="submit">
+    <%= submit_tag "Enregistrer les modifications" %>
+    ou
+    <%= link_to "Annuler", contrat_cloture_path(@contrat) %>
+  </div>
+<% end %>

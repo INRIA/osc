@@ -1,0 +1,30 @@
+<h1>Listing soumission_partenaires</h1>
+
+<table>
+  <tr>
+    <th>Soumissions</th>
+    <th>Nom</th>
+    <th>Etablissement gestionnaire</th>
+    <th>Ville</th>
+    <th>Pays</th>
+    <th>Type</th>
+  </tr>
+  
+<% for soumission_partenaire in @soumission_partenaires %>
+  <tr>
+    <td><%=h soumission_partenaire.soumission_id %></td>
+    <td><%=h soumission_partenaire.nom %></td>
+    <td><%=h soumission_partenaire.etablissement_gestionnaire %></td>
+    <td><%=h soumission_partenaire.ville %></td>
+    <td><%=h soumission_partenaire.pays %></td>
+    <td><%=h soumission_partenaire.type %></td>
+    <td><%= link_to 'Show', soumission_partenaire_path(soumission_partenaire) %></td>
+    <td><%= link_to 'Edit', edit_soumission_partenaire_path(soumission_partenaire) %></td>
+    <td><%= link_to 'Destroy', soumission_partenaire_path(soumission_partenaire), :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New soumission_partenaire', new_soumission_partenaire_path %>

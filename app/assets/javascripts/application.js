@@ -1,0 +1,13 @@
+//= require prototype
+//= require effects
+//= require dragdrop
+//= require controls
+//= require osc
+//= require datepicker
+//= require glider
+//= require number.extension
+//= require prototip
+//= require rails
+//= require redbox
+//= require scriptaculous
+//= require slider

@@ -1,0 +1,271 @@
+<%-
+txt = ""
+if session[:contrats_affichage_arbre_complet]
+	add_no_sous_contrat_in = "style=''"
+else
+	add_no_sous_contrat_in ="style='display:none;'"
+end
+
+if session[:contrats_affichage_contrat_non_visible]
+		add_not_visible = "style=''"
+	else
+		add_not_visible ="style='display:none;'"
+	end
+
+for labo in Laboratoire.find(:all)
+	sc_in_lab = false
+	txt_lab = ""
+	txt_labo_n1 = ""
+	txt_deps = ""
+	txt_projet =""
+	
+	for sous_contrat in labo.sous_contrats
+		for contrat in @contrats
+			if @ids_consultables.include? contrat.id
+				if contrat.sous_contrats.include? sous_contrat
+					sc_in_lab = true
+				end
+			end
+		end
+		if sc_in_lab
+			txt_labo_n1 += "<li class='contrat_n1 visible'>\n"
+			txt_labo_n1 += "  <div class ='"+sous_contrat.etat+"'>\n"
+			if @ids_editables.include? sous_contrat.contrat.id
+				txt_labo_n1 += image_tag("bullet_green.png",:alt => 'c') 
+			elsif @ids_consultables.include? sous_contrat.contrat.id
+				txt_labo_n1 += image_tag("bullet_yellow.png",:alt => 'm')
+			else
+				txt_labo_n1 += image_tag("bullet_black.png",:alt => 'x')
+			end
+			txt_labo_n1 += link_to(h(sous_contrat.contrat.acronyme), contrat_path(sous_contrat.contrat))+"\n"
+		else
+			txt_labo_n1 += "<li class='contrat_n1 not_visible' id='sc_"+sous_contrat.id.to_s+"' "+add_not_visible+" >\n"
+			txt_labo_n1 += "  <div class ='"+sous_contrat.etat+"'>"
+			if @ids_editables.include? sous_contrat.contrat.id
+				txt_labo_n1 += image_tag("bullet_green.png",:alt => 'c')
+			elsif  @ids_consultables.include? sous_contrat.contrat.id
+				txt_labo_n1 += image_tag("bullet_yellow.png",:alt => 'm')
+			else
+				txt_labo_n1 += image_tag("bullet_black.png",:alt => 'x')
+			end
+			txt_labo_n1 += h(sous_contrat.contrat.acronyme)+"\n"
+			
+		end
+		txt_labo_n1 += "  </div>\n"
+		txt_labo_n1 += "</li>\n"
+		
+	end
+
+
+
+	# les départements du labo
+	for dep in labo.departements
+		sc_in_dep = false
+		one_sc_in_projets_of_dep = false
+		txt_dep = ""
+		txt_n2 = ""
+		txt_n3 = ""
+		
+		for sous_contrat in dep.sous_contrats
+			for contrat in @contrats
+				if @ids_consultables.include? contrat.id
+					if contrat.sous_contrats.include? sous_contrat
+						sc_in_dep = true
+						sc_in_lab = true
+					end
+				end
+			end
+			if sc_in_dep
+				txt_n2 += "<li class='contrat_n2 visible'>\n"
+				txt_n2 += "  <div class ='"+sous_contrat.etat+"'>\n"
+				if @ids_editables.include? sous_contrat.contrat.id
+					txt_n2 += image_tag("bullet_green.png",:alt => 'c')
+				elsif @ids_consultables.include? sous_contrat.contrat.id
+					txt_n2 += image_tag("bullet_yellow.png",:alt => 'm')
+				else
+					txt_n2 += image_tag("bullet_black.png",:alt => 'x')
+				end
+				txt_n2 += link_to(h(sous_contrat.contrat.acronyme), contrat_path(sous_contrat.contrat))+"\n"
+			else
+				txt_n2 += "<li class='contrat_n2 not_visible' id='sc_"+sous_contrat.id.to_s+"' "+add_not_visible+"\n"
+				txt_n2 += "  <div class ='"+sous_contrat.etat+"'>\n"
+				if @ids_editables.include? sous_contrat.contrat.id
+					txt_n2 += image_tag("bullet_green.png",:alt => 'c')
+				elsif @ids_consultables.include? sous_contrat.contrat.id
+					txt_n2 += image_tag("bullet_yellow.png",:alt => 'm')
+				else
+					txt_n2 += image_tag("bullet_black.png",:alt => 'x')
+				end
+				txt_n2 +=h(sous_contrat.contrat.acronyme)+"\n"
+			end
+			txt_n2 += "  </div>\n"
+			txt_n2 += "</li>\n"
+			
+		end
+		
+		# Projets du département
+		for projet in dep.projets
+			txt_n4 = ""
+			one_sc_in_projet_of_dep = false
+			for sous_contrat in projet.sous_contrats
+				sc_is_in_projet = false
+				for contrat in @contrats
+					if @ids_consultables.include? contrat.id
+						if contrat.sous_contrats.include? sous_contrat
+							one_sc_in_projet_of_dep = true
+							one_sc_in_projets_of_dep = true
+							sc_in_lab = true
+							sc_is_in_projet = true
+						end
+					end
+				end
+				if sc_is_in_projet
+					txt_n4 += "<li class='contrat_n3 visible'>\n"
+					txt_n4 += "  <div class ='"+sous_contrat.etat+"'>\n"
+					if @ids_editables.include? sous_contrat.contrat.id
+						txt_n4 += image_tag("bullet_green.png",:alt => 'c')
+					elsif @ids_consultables.include? sous_contrat.contrat.id
+						txt_n4 += image_tag("bullet_yellow.png",:alt => 'm')
+					else
+						txt_n4 += image_tag("bullet_black.png",:alt => 'x')
+					end
+					txt_n4 += link_to(h(sous_contrat.contrat.acronyme), contrat_path(sous_contrat.contrat))+"\n"
+				else
+					txt_n4 += "<li class='contrat_n3 not_visible' id='sc_"+sous_contrat.id.to_s+"' "+add_not_visible+">\n"
+					txt_n4 += "  <div class ='"+sous_contrat.etat+"'>\n"
+					if @ids_editables.include? sous_contrat.contrat.id
+						txt_n4 += image_tag("bullet_green.png",:alt => 'c')
+					elsif @ids_consultables.include? sous_contrat.contrat.id
+						txt_n4 += image_tag("bullet_yellow.png",:alt => 'm')
+					else
+						txt_n4 += image_tag("bullet_black.png",:alt => 'x')
+					end
+					txt_n4 += h(sous_contrat.contrat.acronyme)+"\n"
+				end
+				txt_n4 += "  </div>\n"
+				txt_n4 += "</li>\n"
+				
+			end
+			
+			if one_sc_in_projet_of_dep
+				txt_n3 += "<li class='n3 sous_contrat_in'>"+h(projet.nom)+" <span>Equipe</span></li>\n"+txt_n4
+			else
+				txt_n3 += "<li class='n3 no_sous_contrat_in' id='p_"+projet.id.to_s+"' "+add_no_sous_contrat_in+">"+h(projet.nom)+" <span>Equipe</span></li>\n"+txt_n4
+			end
+			
+		end
+		
+		if sc_in_dep or one_sc_in_projets_of_dep
+			txt_dep = "<li class='n2 sous_contrat_in'>"+h(dep.nom)+" <span>Département</span></li>\n"
+		else
+			txt_dep = "<li class='n2 no_sous_contrat_in' id='d_"+dep.id.to_s+"'  "+add_no_sous_contrat_in+">"+h(dep.nom)+" <span>Département</span></li>\n"
+		end
+		
+		txt_deps += txt_dep+txt_n2+txt_n3
+	end
+	
+	# les projets directement rattachés au labo
+	for projet in labo.projets
+		one_sc_in_projet = false
+		txt_n2 = ""
+		for sous_contrat in projet.sous_contrats
+			sc_is_in_projet = false
+			for contrat in @contrats
+				if @ids_consultables.include? contrat.id
+					if contrat.sous_contrats.include? sous_contrat
+						one_sc_in_projet = true
+						sc_in_lab = true
+						sc_is_in_projet = true
+					end
+				end
+			end
+			if sc_is_in_projet
+				txt_n2 += "<li class='contrat_n2 visible'>\n"
+				txt_n2 += "  <div class ='"+sous_contrat.etat+"'>\n"
+				if @ids_editables.include? sous_contrat.contrat.id
+					txt_n2 += image_tag("bullet_green.png",:alt => 'c')
+				elsif  @ids_consultables.include? sous_contrat.contrat.id
+					txt_n2 += image_tag("bullet_yellow.png",:alt => 'm')
+				else
+					txt_n2 += image_tag("bullet_black.png",:alt => 'x')
+				end
+				txt_n2 += link_to(h(sous_contrat.contrat.acronyme), contrat_path(sous_contrat.contrat))+"\n"
+			else
+				txt_n2 += "<li class='contrat_n2 not_visible' id='sc_"+sous_contrat.id.to_s+"'  "+add_not_visible+">\n"
+				txt_n2 += "  <div class ='"+sous_contrat.etat+"'>\n"
+				if @ids_editables.include? sous_contrat.contrat.id
+					txt_n2 += image_tag("bullet_green.png",:alt => 'c')
+				elsif @ids_consultables.include? sous_contrat.contrat.id
+					txt_n2 += image_tag("bullet_yellow.png",:alt => 'm')
+				else
+					txt_n2 += image_tag("bullet_black.png",:alt => 'x')
+				end
+				txt_n2 += h(sous_contrat.contrat.acronyme)+"\n"
+			end
+			txt_n2 += "  </div>\n"
+			txt_n2 += "</li>\n"
+			
+			
+		end
+		if one_sc_in_projet
+			txt_projet += "<li class='n2 sous_contrat_in'>"+h(projet.nom)+" <span>Equipe</span></li>\n"+txt_n2
+		else
+			txt_projet += "<li class='n2 no_sous_contrat_in' id='p_"+projet.id.to_s+"'  "+add_no_sous_contrat_in+">"+h(projet.nom)+" <span>Equipe</span></li>\n"+txt_n2
+		end
+	end
+	
+	if sc_in_lab
+		txt_lab = "<li class='sous_contrat_in'>"+h(labo.nom)+" <span>Laboratoire</span></li>\n"
+	else
+		txt_lab = "<li class='no_sous_contrat_in' id='l_"+labo.id.to_s+"' "+add_no_sous_contrat_in+">"+h(labo.nom)+" <span>Laboratoire</span></li>\n"
+	end
+	
+	txt += txt_lab+txt_labo_n1+txt_deps+txt_projet
+end
+-%>
+
+
+
+<div class="underh2">
+</div>
+<div class="content">
+
+<ul id="structure" class="hierarchie">
+<%= txt %>
+<br />
+Equipe(s) non rattachée(s) à un laboratoire
+
+<% 
+add =""
+for p in Projet.find(:all) 
+	flag = true 
+	for labo in Laboratoire.find(:all) 
+		if p.is_in_laboratoire? labo 
+			flag = false 
+		end 
+	end 
+	
+	if flag 
+		add += "<li class=''>"+p.nom+"<s>Equipe</span></li>"
+	  for sous_contrat in p.sous_contrats
+			if @contrats.include? sous_contrat.contrat
+			add += "<li class='contrat_n1'>"
+			add += "  <div class ='"+sous_contrat.etat+"'>\n"
+			if @ids_editables.include? sous_contrat.contrat.id
+				add += image_tag("bullet_green.png",:alt => 'c')
+			elsif @ids_consultables.include? sous_contrat.contrat.id
+				add += image_tag("bullet_yellow.png",:alt => 'm')
+			else
+				add += image_tag("bullet_black.png",:alt => 'x')
+			end
+			add += link_to(h(sous_contrat.contrat.acronyme), contrat_path(sous_contrat.contrat))+"\n"
+			add += "</li>"
+		end
+		end	
+	end
+	  
+end %>
+<%= add %>
+
+</ul>
+</div>

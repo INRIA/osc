@@ -1,0 +1,8 @@
+<div class="content">
+	<p>
+	Etes-vous certain de vouloir supprimer cette dépense du commun ?<br />
+	</p>
+	<%= link_to_close_redbox "Non", :class => 'annuler' %>
+	<%= link_to "Oui", ligne_depense_commun_path(@ligne, @depense_commun), :method => :delete %>
+	<div style="clear:both;"></div>
+</div>

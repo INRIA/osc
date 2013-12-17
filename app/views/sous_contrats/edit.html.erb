@@ -1,0 +1,32 @@
+<h1>Editing sous_contrat</h1>
+
+<%= error_messages_for :sous_contrat %>
+
+<% form_for(:sous_contrat, :url => sous_contrat_path(@sous_contrat), :html => { :method => :put }) do |f| %>
+  <p>
+    <b>Entite</b><br />
+    <%= f.text_field :entite_id %>
+  </p>
+
+  <p>
+    <b>Entite type</b><br />
+    <%= f.text_field :entite_type %>
+  </p>
+
+  <p>
+    <b>Created at</b><br />
+    <%= f.datetime_select :created_at %>
+  </p>
+
+  <p>
+    <b>Updated at</b><br />
+    <%= f.datetime_select :updated_at %>
+  </p>
+
+  <p>
+    <%= submit_tag "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', sous_contrat_path(@sous_contrat) %> |
+<%= link_to 'Back', sous_contrats_path %>

@@ -1,0 +1,12 @@
+<h2><strong>Projets</strong> associés au département</h2>
+<% for projet in @projets %>
+<% add ="" %>
+<% if projet.date_fin < Date.today %>
+<% add = " archive" %>
+<% end %>
+	
+<div class="list_infos<%= add %>">
+	<div class="name"><%= link_to projet.nom, projet_path(projet) %></div>
+	<div class="description"><%=h truncate(projet.description,:length =>100,:ommission => "...") %></div>
+</div>
+<% end %>

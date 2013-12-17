@@ -1,0 +1,8 @@
+<div class="content">
+  <p>
+  Etes-vous certain de vouloir supprimer le groupe <strong>"<%= @group.nom %>"</strong> ?
+  </p>
+  <%= link_to_close_redbox "Non", :class => 'annuler' %>
+  <%= link_to "Oui", group_path(@group), :method => :delete %>
+  <div style="clear:both;"></div>
+</div>

@@ -1,0 +1,32 @@
+<h1>Editing departement_subscription</h1>
+
+<%= error_messages_for :departement_subscription %>
+
+<% form_for(:departement_subscription, :url => departement_subscription_path(@departement_subscription), :html => { :method => :put }) do |f| %>
+  <p>
+    <b>Projet</b><br />
+    <%= f.text_field :projet_id %>
+  </p>
+
+  <p>
+    <b>Departement</b><br />
+    <%= f.text_field :departement_id %>
+  </p>
+
+  <p>
+    <b>Created at</b><br />
+    <%= f.datetime_select :created_at %>
+  </p>
+
+  <p>
+    <b>Updated at</b><br />
+    <%= f.datetime_select :updated_at %>
+  </p>
+
+  <p>
+    <%= submit_tag "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', departement_subscription_path(@departement_subscription) %> |
+<%= link_to 'Back', departement_subscriptions_path %>

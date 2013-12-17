@@ -1,0 +1,15 @@
+<div class="content">
+	<p>
+	Etes-vous certain de vouloir supprimer l'échéancier du contrat <strong>
+		<% if @echeancier.echeanciable_type == "SousContrat" %>	
+			<%=	@echeancier.echeanciable.nom %>
+		<% else %>
+			<%= @contrat.acronyme %>
+		<% end %>
+	</strong> ?<br />
+	</p>
+	<%= link_to_close_redbox "Non", :class => 'annuler' %>
+	<%= link_to "Oui", contrat_echeancier_path(@contrat, @echeancier.id), :method => :delete %>
+ 
+	<div style="clear:both;"></div>
+</div>

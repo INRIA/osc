@@ -1,0 +1,30 @@
+<%= error_messages_nested_resources_for @depense_commun %>
+
+<%= form_for([@ligne, @depense_commun]) do |f| %>
+
+  <%- if (@depense_commun.verrou == "Aucun") -%>
+    <p class="change-line" id="build-migration-form-link-container">
+      <%= link_to 'Déplacer cette dépense du commun sur une autre ligne', 
+                  build_migration_form_ligne_depense_commun_path(@ligne, @depense_commun), 
+                  :id => "build-migration-form-link" %>
+    </p>
+    <div class="form-box parent" id="migration-form" style="display:none;"></div>
+    <script type="text/javascript">
+      new App.Budget.LigneMigration();
+    </script>
+  <% end %>
+  
+  <%= render :partial => 'form', :locals => { :f => f} %>
+
+  <div class="form-box submit">
+    <%= f.submit "Enregistrer les modifications" %> ou <%= link_to 'Annuler', ligne_depense_commun_path(@ligne, @depense_commun) %>
+    <%- if (@ligne.contrat.is_budget_editable? current_user) -%>
+    <span class="delete_depense">
+    <%= link_to_remote_redbox "Supprimer la dépense",
+        { :url => ask_delete_ligne_depense_commun_path(@ligne, @depense_commun), :method => :get},
+        { :class => "destroy",
+          :title => "Supprimer la dépense" }  %>
+    </span>
+    <%- end -%>
+  </div>
+<% end %>

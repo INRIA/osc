@@ -1,0 +1,67 @@
+<%= error_messages_for @laboratoire %>
+<div class='section'>
+	<h2><strong>Descriptif</strong> du laboratoire</h2>
+	
+	<%= form_for(:laboratoire, :url => laboratoire_path(@laboratoire), :html => { :method => :put }) do |f| %>
+	<fieldset>
+		<p>
+			<label for="laboratoire_nom" class="required">Nom</label><br />
+			<%= f.text_field :nom %>
+		</p>
+		<p>
+			<label for="laboratoire_description">Description</label><br />
+			<%= f.text_area :description %>
+		</p>
+	</fieldset>
+	<p class="submit">
+		<%= submit_tag "Mettre à jour" %>
+	</p>
+	<% end %>
+</div>
+
+
+<div class='section'>
+	<h2><strong>Equipe(s)</strong> associée(s) au laboratoire via des <strong>départements</strong></h2>
+	<% if @departements.size == 0 %>
+		<p class="comment">Aucune équipe n'est associée au laboratoire <%= @laboratoire.nom %> via un département.</p>
+	<% end %>	
+	<% for departement in @departements %>
+	<div class="small_infos_actions" style="margin-bottom:10px;border-left:4px solid #bbb; padding-left:5px;border-bottom:1px solid #ddd; border-top:none;	">
+		<div class="infos">
+			<div class="name"><strong>Département <%= link_to departement.nom, departement_path(departement) %></strong></div>
+			<div class="description"><%=h truncate(departement.description, :length =>75,:ommission => "...") %></div>
+		</div>
+		<div class="actions">
+			<%= link_to "Editer", edit_departement_path(departement) %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+		<% for projet in departement.projets %>
+			<% add ="" %>
+			<% if projet.date_fin < Date.today %>
+				<% add = " archive" %>
+			<% end %>
+			<div class="small_infos_actions<%= add %>" style="margin-left:10px;border-bottom:1px solid #ddd; border-top:none;">
+				<div class="infos">
+					<div class="name">Equipe <%= link_to projet.nom, projet_path(projet) %></div>
+					<div class="description"><%=h truncate(projet.description,:length => 75, :ommission =>"...") %></div>
+				</div>
+				<div class="actions">
+					<%= link_to "Editer", edit_projet_path(projet) %>
+				</div>
+				<div style="clear:both;"></div>
+			</div>
+		<% end %>
+		<br />
+	<% end %>
+	</div>
+
+<div class='section'>
+	<h2><strong>Equipe(s)</strong> directement associée(s) au laboratoire</h2>
+	<div id="laboratoireEditProjets">
+	<%= render :partial => "list_laboratoire_subscriptions" %>	
+	</div>
+	<div id="add_laboratoire_subscription">
+	<%= render :partial => 'add_laboratoire_subscription' %>
+	</div>
+</div>

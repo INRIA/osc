@@ -1,0 +1,2 @@
+page.remove "tutelle_subscription_#{@tutelle_subscription.id}"
+page.visual_effect :highlight, 'tutelle_subscription_list'

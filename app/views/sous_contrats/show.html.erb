@@ -1,0 +1,23 @@
+<p>
+  <b>Entite:</b>
+  <%=h @sous_contrat.entite_id %>
+</p>
+
+<p>
+  <b>Entite type:</b>
+  <%=h @sous_contrat.entite_type %>
+</p>
+
+<p>
+  <b>Created at:</b>
+  <%=h @sous_contrat.created_at %>
+</p>
+
+<p>
+  <b>Updated at:</b>
+  <%=h @sous_contrat.updated_at %>
+</p>
+
+
+<%= link_to 'Edit', edit_sous_contrat_path(@sous_contrat) %> |
+<%= link_to 'Back', sous_contrats_path %>

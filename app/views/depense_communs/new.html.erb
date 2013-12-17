@@ -1,0 +1,8 @@
+<%= error_messages_nested_resources_for @depense_commun %>
+
+<%= form_for([@ligne, @depense_commun]) do |f| %>
+	<%= render :partial => 'form', :locals => { :f => f} %>
+  <div class="form-box submit">
+    <%= f.submit "Créer la dépense en commun" %> ou <%= link_to 'Annuler', ligne_depense_communs_path(@ligne) %>
+  </div>
+<% end %>

@@ -1,0 +1,27 @@
+<h1>Listing sous_contrats</h1>
+
+<table>
+  <tr>
+    <th>Entite</th>
+    <th>Entite type</th>
+    <th>Created at</th>
+    <th>Updated at</th>
+  </tr>
+  
+<% for sous_contrat in @sous_contrats %>
+  <tr>
+		<td><%=h sous_contrat.contrat_id %></td>
+    <td><%=h sous_contrat.entite_id %></td>
+    <td><%=h sous_contrat.entite_type %></td>
+    <td><%=h sous_contrat.created_at %></td>
+    <td><%=h sous_contrat.updated_at %></td>
+    <td><%= link_to 'Show', sous_contrat_path(sous_contrat) %></td>
+    <td><%= link_to 'Edit', edit_sous_contrat_path(sous_contrat) %></td>
+    <td><%= link_to 'Destroy', sous_contrat_path(sous_contrat), :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New sous_contrat', new_sous_contrat_path %>

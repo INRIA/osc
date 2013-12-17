@@ -1,0 +1,20 @@
+    <div class="descriptif_actions" id="descriptif_action_<%= @descriptif.id.to_s %>"  >
+        <%=	link_to_remote "Editer",
+	 		{ :update => "edit_descriptif_"+@descriptif.id.to_s,
+   			  :url => edit_contrat_descriptif_path(@descriptif.contrat, @descriptif),
+ 			  :method => :get },
+			{ :onclick => "$('show_descriptif_#{@descriptif.id.to_s}').hide();$('edit_descriptif_#{@descriptif.id.to_s}').show()" }
+        %>
+
+		<%= link_to_remote_redbox image_tag('delete.png', :alt =>'Supprimer le fichier'),
+		    {	:url => ask_delete_contrat_descriptif_path(@descriptif.contrat, @descriptif), :method => :get},
+				{	:class => "delete_descriptif",
+					:title => "Supprimer ce descriptif" }
+        %>
+	</div>
+    <div>
+      <% @langue = Langue.find(:first, :conditions =>["langue_id=?",@descriptif.langue_id]) %>
+      <p><strong>Langue : </strong><%= @langue.nom_langue  %></p>
+      <p> <%= @descriptif.descriptif %> </p>
+    </div>
+    <div style="clear:both"> </div>

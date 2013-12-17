@@ -1,0 +1,12 @@
+  <%- if @display_subtotals -%>
+  <tr>
+    <td colspan='<%= @colspan_totals %>'></td><td class="total-header">Sous-total</td>
+    <td class="money sous-total<%= ' neg' if @subtotal_versements < 0 %>"><%= my_number_to_currency @subtotal_versements %></td>
+    <td></td>
+  </tr>
+  <%- end -%>
+  <tr>
+    <td colspan='<%= @colspan_totals %>'></td><td class="total-header">Total</td>
+    <td class="money total<%= ' neg' if @total_versements < 0 %>"><%= my_number_to_currency @total_versements %></td>
+    <td></td>
+  </tr>

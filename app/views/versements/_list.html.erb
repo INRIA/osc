@@ -1,0 +1,60 @@
+<h2><strong>Crédits</strong>
+<%= render :partial => 'lignes/info_selection_temporelle' %>
+</h2>
+
+<%= will_paginate @versements,
+            :renderer => "PaginationLinkRenderer",
+            :remote => {:update => "to-update", :method => :get} %>
+
+<table class="depenses">
+  <thead>
+    <tr>
+      <th class="verrou"></th>
+      <th>
+        <a href="?order_by=reference" class="order-by <%= @order_by_direction if @order_by_field == 'reference' %>">Référence</a>
+      </th>
+      <th>
+        <a href="?order_by=date_effet" class="order-by <%= @order_by_direction if @order_by_field == 'date_effet' %>">Date</a>
+      </th>
+      <th>
+        <a href="?order_by=origine" class="order-by <%= @order_by_direction if @order_by_field == 'origine' %>">Origine</a>
+      </th>
+      <th>
+        <a href="?order_by=ventilation" class="order-by <%= @order_by_direction if @order_by_field == 'ventilation' %>">Ventilation</a>
+      </th>
+      <th>
+        <a href="?order_by=commentaire"  class="order-by <%= @order_by_direction if @order_by_field == 'commentaire' %>">Commentaire</a>
+      </th>
+      <th class="money">
+        <a href="?order_by=montant" class="order-by <%= @order_by_direction if @order_by_field == 'montant' %>">Montant</a>
+      </th>
+      <%- if @ligne.contrat.is_budget_editable? current_user -%>
+        <th class="actions"></th>
+      <%- end -%>
+      </tr>
+  </thead>
+  <tbody id="depense_list">
+    <% for versement in @versements %>
+    <%- @subtotal_versements += versement.montant if @display_subtotals -%>
+    <tr class="depense">
+      <%
+      verrou_class = 'no-verrou'
+      verrou_class = 'verrou' if versement.come_from_inria?
+      %>
+      <td class="<%= verrou_class %> "></td>
+      <td <%- if (versement.verrou == 'Droit de modification') -%>style="font-weight: bold;" <%- end -%> ><%=h versement.reference %></td>
+      <td <%- if (versement.verrou == 'Droit de modification') -%>style="font-weight: bold;" <%- end -%> ><%= french_small_date versement.date_effet %></td>
+      <td <%- if (versement.verrou == 'Droit de modification') -%>style="font-weight: bold;" <%- end -%> ><%=h versement.origine %></td>
+      <td <%- if (versement.verrou == 'Droit de modification') -%>style="font-weight: bold;" <%- end -%> ><%=h versement.ventilation %></td>
+      <td <%- if (versement.verrou == 'Droit de modification') -%>style="font-weight: bold;" <%- end -%> ><abbr title="<%= versement.commentaire %>"><%=h truncate(versement.commentaire,:length => 25, :ommission => '...') %></abbr></td>
+      <td class="money" <%- if (versement.verrou == 'Droit de modification') -%>style="font-weight: bold;" <%- end -%> ><%= link_to my_number_to_currency(versement.montant), ligne_versement_path(@ligne, versement) %></td>
+      <%- if (versement.come_from_inria? || ((versement.verrou == 'Aucun') && (@ligne.contrat.is_budget_editable? current_user)) || ((versement.verrou == 'Droit de modification') && (@ligne.contrat.is_editable? current_user))) -%>
+        <td class="actions_depenses"><%= link_to 'Editer', edit_ligne_versement_path(@ligne, versement) %></td>
+      <%- end -%>
+    </tr>
+    <%- end -%>
+    <%= render :partial => 'depenses/list_versements_totals' %>
+  </tbody>
+</table>
+
+<input type="hidden" value="1" id="page" name="page" />

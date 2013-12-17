@@ -1,0 +1,8 @@
+<% if !@users_restant.empty? %>
+  <%= form_for(:membership, :remote => true, :url => {:controller => :memberships, :group_id => @group.id}, :html => { :class=>"inline",:method => :post} ) do |f| %>
+
+  	<label for="membership_user_id">Utilisateurs disponibles</label>
+  	<%= select "membership", "user_id", @users_restant.collect {|u| [ u.nom+' '+u.prenom, u.id ] } %>
+    <%= submit_tag "Ajouter au groupe" %>
+  <% end %>
+<% end %>

@@ -1,0 +1,23 @@
+<%- content_for :right do -%>
+	<%- if @ligne.contrat.is_budget_editable? current_user -%>
+		<%= link_to 'Ajouter une dépense en équipement', new_ligne_depense_equipement_path(@ligne), {:class => "add-depense-equipement"} %>
+	<%- end -%>
+	<%= render :partial => 'lignes/selection_temporelle' %>
+<%- end -%>
+
+<% content_for :options do %>
+	<%= render :partial => 'lignes/depenses_index_options' %>
+<% end %>
+
+<div id="to-update">
+	<%= render :partial => 'list' %>
+</div>
+
+<script type="text/javascript">
+	new App.Budget.ItemsParPageSlider(<%= @items_per_page.to_s %>);
+	new App.Budget.ListView();
+	function updateResult(page_number){
+    new Ajax.Updater('to-update', '/lignes/<%= @ligne.id.to_s %>/depense_equipements?page='+page_number,
+                    {asynchronous:true, evalScripts:true, method:'get'});
+  }
+</script>

@@ -1,0 +1,29 @@
+<%=  javascript_tag "$('edit_todoitem_"+@todoitem.id.to_s+"').show();$('show_todoitem_"+@todoitem.id.to_s+"').hide();" %>
+<%= form_for(:todoitem, :url => contrat_todolist_todoitem_path(@contrat, @todolist, @todoitem),:remote => true, :html => {:method => :put}) do |f| %>
+		<span class="comments">Edition de la tâche</span><br />
+    <%= f.text_area :intitule, :class => "inputadd" %>
+		<div id="error_edit_todoitem_<%= @todoitem.id.to_s %>" class="error"></div>
+		<%- if @todoitem.has_alerte -%>
+		<%- checked = 'checked="checked"' -%>
+		<%- else -%>
+		<%- checked = "" -%>
+		<%- end -%>
+		<input 	type="checkbox" value="1" <%= checked %>
+						name="todoitem[has_alerte]"
+						id="todoitem_has_alerte_<%= @todoitem.id.to_s %>"
+						onChange="$('date_<%= @todoitem.id.to_s %>').toggle();"/>
+
+		
+		<label for="todoitem_has_alerte_<%= @todoitem.id.to_s %>">
+			Mettre en place une alerte ?
+		</label><br />
+		<p class="inline" id="date_<%= @todoitem.id %>" <%-  if !@todoitem.has_alerte? -%> style="display:none;" <%- end -%> >
+			<span class="comments">Date à laquelle la tâche devra être réalisée :</span>
+			<%= f.date_select :date, :order => [:day, :month, :year],	:use_month_numbers => true %>
+		</p>
+    <hr />
+<%= submit_tag "Mettre à jour", :class => "submit" %> ou 
+		<%= link_to_function "Annuler", "$('edit_todoitem_#{@todoitem.id.to_s}').hide();$('show_todoitem_#{@todoitem.id.to_s}').show();" %>
+<% end %>
+<%= javascript_tag "$$('#edit_todoitem_#{@todoitem.id.to_s} .inputadd').first().focus()" %>
+

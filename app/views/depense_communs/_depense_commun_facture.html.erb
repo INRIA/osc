@@ -1,0 +1,97 @@
+<% @depense_commun_facture = depense_commun_facture %>
+
+<div id="<%= "depense_commun_facture_#{depense_commun_facture.id}" %>">
+  
+  <div class="form-box child">
+    <h3>Facture</h3>
+    <div class="remove_facture">
+       <%= sub_list_remove_link depense_commun_facture, 'DepenseCommunFacture' %>
+    </div>
+    
+    <div class="clearfix">
+      <div class="col-1-of-2">      
+        <p class="inline ">
+          <label class="required">Date de facture</label><br />
+            <%= unobtrusive_date_picker 'depense_commun_facture[]',
+                                        :date,
+                                        :include_blank => true,
+                                        :use_month_numbers => true,
+                                        :class => 'no-transparency',
+                                        :id => "#{@depense_commun_facture.id}" %>
+        </p>
+
+         <p class="inline ">
+          <label>Date de service fait  (millésime)</label><br />
+            <%= unobtrusive_date_picker 'depense_commun_facture[]',
+                                        :millesime,
+                                        :include_blank => true,
+                                        :use_month_numbers => true,
+                                        :class => 'no-transparency',
+                                        :id => "#{@depense_commun_facture.id}" %>
+        </p>
+
+       <p>
+          <label>N° de facture</label><br />
+          <%= text_field 'depense_commun_facture[]', 'numero_facture' %>
+        </p>
+    
+        <p >
+          <label>Commentaire</label><br />
+          <%= text_area 'depense_commun_facture[]', :commentaire %>
+        </p>
+    
+        <p >
+          <label>N° de mandat</label><br />
+          <%= text_field 'depense_commun_facture[]', :numero_mandat %>
+        </p>
+    
+        <p class="inline ">
+          <label>Date de mandatement</label><br />
+            <%= unobtrusive_date_picker 'depense_commun_facture[]',
+                                        :date_mandatement,
+                                        :include_blank => true,
+                                        :use_month_numbers => true,
+                                        :class => 'no-transparency',
+                                        :id => "#{@depense_commun_facture.id}" %>
+        </p>
+      </div>
+
+      <div class="col-2-of-2">
+    
+        <p >
+          <label class="required">Montant Payé (HT)</label><br />
+          <%= text_field 'depense_commun_facture[]', :cout_ht %>
+        </p>
+    
+        <p >
+          <label class="required">Taux de TVA</label><br />
+          <%= select 'depense_commun_facture[]',
+                     :taux_tva,  ["0","2.1", "5.5", "19.6"],
+                     {} %>
+        </p>
+    
+        <p >
+          <label>Justifiable</label><br />
+          <%= select 'depense_commun_facture[]',
+                     :justifiable, ["","Possible","Impossible","Utilisée","Refusée"],
+                     {} %>
+        </p>
+    
+        <p >
+          <label>Rubrique Comptable</label><br />
+          <%= select 'depense_commun_facture[]',
+                     :rubrique_comptable_id, 
+                     options_for_rubrique_comptables(RubriqueComptable.find(:all, :order => 'numero_rubrique')),
+                     {} %>
+        </p>
+  
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- if controller.action_name.to_s == "add_depense_commun_facture" -%>
+  <script type="text/javascript">
+    datePickerController.create();
+  </script>
+<%- end -%>

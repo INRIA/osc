@@ -1,0 +1,257 @@
+<%- if @ids_viewables.size != 0 -%>
+<div id="commands">
+	<div id="result_count">Aucune recherche</div>
+	<div id="toogle_screen"><a href="" onclick="toggle_plein_ecran();return false;"></a></div>
+	<div id="toogle_half_screen"><a href="" onclick="toggle_demi_ecran();return false;"></a></div>
+	<div id="export_oo"><a href="" onclick="export_to_csv('utf-8');return false;" title="Open Office (UTF-8) : Exporter le résultat vers un tableau (format csv)"></a></div>
+	<div id="export_mso"><a href="" onclick="export_to_csv('utf-16');return false;" title="MS Office (UTF-16): Exporter le résultat vers un tableau (format csv)"></a></div>
+	<div id="sort_filter"><a href="" onclick="toogle_sort_and_filter();return false;" title="Tris et filtres"></a></div>
+	<div id="submit_form"><a href="" onclick="submit_form();return false;" title="lancer la recherche"></a></div>
+	<div id="paginate"></div>
+</div>
+<div id="box_with_slider">
+	<div id="sort_and_filter" style="display:none;">
+		<%= render :partial => 'sort_and_filter' %>
+	</div>
+	<div id="show_result_extraction"></div>
+</div>
+<%- end -%>
+
+<%- if @ids_viewables.size != 0 -%>
+<%- content_for :right do -%>
+	<h2>Choix des contrats</h2>
+	<form name="form1" id="form1" method="post" action="">
+	<div class="left">
+		<%= radio_button_tag 'type', 'initial', true, {:class => 'radio'} %><label for="type_initial">Tous les contrats</label><br />	
+		<%= radio_button_tag 'type', 'soumission', false, {:class => 'radio'} %><label for="type_soumission">Contrats soumis</label><br />
+		<%= radio_button_tag 'type', 'refu', false, {:class => 'radio'} %><label for="type_refu">Contrats refusés</label>
+	</div>
+	<div class="right">
+		<%= radio_button_tag 'type', 'signature', false, {:class => 'radio'} %><label for="type_signature">Contrats signés</label><br />
+		<%= radio_button_tag 'type', 'notification', false, {:class => 'radio'} %><label for="type_notification">Contrats notifiés</label><br />
+		<%= radio_button_tag 'type', 'cloture', false, {:class => 'radio'} %><label for="type_cloture">Contrats clos</label>
+	</div>
+	<div style="clear:both;"></div>
+	<br />
+	</form>
+		
+	<h2>Sélection des champs à afficher</h2>
+	
+	<form id="form3"  action="/etat/show_result" method="post" >
+		<input type="hidden" name="params" id="params" />
+		<input type="hidden" name="action" id="action" value="export_csv" />
+	</form>
+	
+	<form action="/etat/show_result" method="post" 
+				onsubmit="submit_form();return false;" id="form2">
+	<p>
+		<%= submit_tag "Rechercher" %>
+		<div style="clear:both;"></div>
+	</p>
+
+	<div class="select_initial">
+		<h4 class="solo"><a href=""  onclick="toggle_select('init_select');return false;">Définition du contrat</a></h4>
+			<div class="select" id="init_select" style="display:none;">
+				<%= my_check_box("contrats.nom", "Nom du contrat").html_safe() %>
+				<%= my_check_box("contrats.num_contrat_etab", "Numéro contrat établissement").html_safe() %>
+				<%= my_check_box("contrats.etat", "Etat du contrat").html_safe() %>
+				<%= my_check_box("contrats.associations", "Associations", "last").html_safe() %>			
+		</div>
+	</div>
+	
+	<div id="select_choice_soumission" style="display:none;">
+		<%= render :partial => 'select_soumission' %>
+	</div>
+
+	<div id="select_choice_refu" style="display:none;">
+		<%= render :partial => 'select_refu' %>
+	</div>
+
+	<div id="select_choice_signature" style="display:none;">
+		<%= render :partial => 'select_signature' %>
+	</div>
+	
+	<div id="select_choice_notification" style="display:none;">
+		<%= render :partial => 'select_notification' %>
+	</div>
+	
+	<div id="select_choice_cloture" style="display:none;">
+		<%= render :partial => 'select_cloture' %>
+	</div>	
+</form>
+<%- end -%>
+<%- else -%>
+<p style="padding:5px;">
+ Vous n'avez de droits sur aucun contrats. Cette interface n'est donc pas disponible.
+</p>
+<%- end -%>
+
+
+
+
+
+
+<script type="text/javascript">
+//<![CDATA[
+  function updateResult(page_number){
+
+    new Ajax.Request('/etat/show_result',
+      {asynchronous:true, evalScripts:true, method:'get',
+      parameters: Form.serialize('form1')+
+                  '&'+Form.serialize('form2')+
+                  '&'+Form.serialize('form_sort')+
+                  '&'+Form.serialize('form_filter')+
+                  '&page='+page_number
+      });
+  }
+	function toggle_select(id){	
+		new Effect.toggle(id, 'blind', {duration : 0.25, onComplete:$(id).previous(0).toggleClassName('open')});
+	}
+
+	function toogle_sort_and_filter(){
+		new Effect.toggle("sort_and_filter", 'blind', {duration : 0.25});
+	}
+
+	plein_ecran = false;
+	demi_ecran = false;
+	
+	function toggle_plein_ecran(){
+		$('toogle_screen').down(0).toggleClassName('open');
+		if (plein_ecran){
+			plein_ecran = false;
+			document.body.setStyle("border-top:4px solid #D8BE99;");
+			$('entete').show();
+			$('menu').show();
+			$('sub-menu').show();
+		}else{
+			plein_ecran = true;
+			document.body.setStyle("border:none;");
+			$('entete').hide();
+			$('menu').hide();
+			$('sub-menu').hide();
+		}
+		adjust_height();
+	}
+	
+	function toggle_demi_ecran(){
+		$('toogle_half_screen').down(0).toggleClassName('open');
+		
+		if (demi_ecran){
+			demi_ecran = false;
+			$('right_extraction').setStyle("width:74%;left:24%;top:0;background: #fff url('<%= asset_path 'left-bg.gif' %>') repeat-y top left;margin-top:10px;");
+			$('show_result_extraction').setStyle('margin:5px;');
+			$('commands').setStyle('border:1px solid #fff;')
+			$('right_extraction').down(0).addClassName("innercol");
+		}else{
+			demi_ecran = true;
+			$('right_extraction').setStyle("width:100%;left:0;background:#fff;margin:0");
+			$('show_result_extraction').setStyle('margin:0;');
+			$('commands').setStyle('border:none;border-bottom:1px solid #888;')
+			$('right_extraction').down(0).removeClassName("innercol");
+		}
+		$('left_extraction').toggle();
+		$('footer').toggle();
+		adjust_height();
+		
+	}
+	
+	
+	function adjust_height(){
+		if (plein_ecran){
+			if (demi_ecran){
+				sub = 35;
+			}else{
+				sub = 80;
+			}
+		}else{
+			if (demi_ecran){
+				sub = $('entete').getHeight()+$('menu').getHeight()+$('sub-menu').getHeight()+40;
+			}else{
+				sub = $('entete').getHeight()+$('menu').getHeight()+$('sub-menu').getHeight()+80;
+			}
+		}
+		height = document.viewport.getHeight()-sub;
+		$('box_with_slider').setStyle("height:"+height+"px;");
+	}
+	
+	function submit_form(){
+		new Ajax.Request('/etat/show_result',
+															{	asynchronous:true, 
+																evalScripts:true, 
+																parameters:Form.serialize('form1')+'&'+Form.serialize('form2')+'&'+Form.serialize('form_sort')+'&'+Form.serialize('form_filter'),
+																onComplete: function(){
+																	$$('.sort a.remove_sort_item').each(function(e){e.show();})
+																	if ($$('.sort a.remove_sort_item').size() == 1){
+																		$$('.sort a.remove_sort_item').each(function(e){
+																			e.hide();
+																		})
+																	}
+																	$$('.sort a.remove_filter_item').each(function(e){e.show();})
+																	if ($$('.sort a.remove_filter_item').size() == 1){
+																		$$('.sort a.remove_filter_item').each(function(e){
+																			e.hide();
+																		})
+																	}
+																} });
+		
+	}
+	
+	function export_to_csv(encoding){
+		if (encoding == 'utf-8') {
+			window.location = "/etat/export_csv?encode=utf8&" + Form.serialize('form1') + '&' + Form.serialize('form2') + '&' + Form.serialize('form_sort') + '&' + Form.serialize('form_filter')
+		}else if(encoding == 'utf-16') {
+			window.location = "/etat/export_csv?encode=utf16&"+Form.serialize('form1')+'&'+Form.serialize('form2')+'&'+Form.serialize('form_sort')+'&'+Form.serialize('form_filter')
+		}
+	}
+
+	function add_sort_item(){
+		new Ajax.Request('/etat/add_sort_item',
+											{	asynchronous:true,
+												parameters:Form.serialize('form1')+'&'+Form.serialize('form2')+'&'+Form.serialize('form_sort')+'&'+Form.serialize('form_filter'),
+												onComplete: function(){$$('.sort a.remove_sort_item').each(function(e){e.show();})}
+											});
+	}
+	
+	function add_filter_item(){
+		new Ajax.Request('/etat/add_filter_item',
+											{	asynchronous:true,
+												parameters:Form.serialize('form1')+'&'+Form.serialize('form2')+'&'+Form.serialize('form_sort')+'&'+Form.serialize('form_filter'),
+												onComplete: function(){$$('.sort a.remove_filter_item').each(function(e){e.show();})}
+											});
+	}
+	
+	function remove_sort_item(link){
+		new Effect.Fade(link.up(0),{ duration: 0.5, afterFinish: function(){
+			link.up(0).remove();
+			if ($$('.sort a.remove_sort_item').size() == 1){
+				$$('.sort a.remove_sort_item').each(function(e){
+					e.hide();
+				})
+			}
+		}})
+	}
+	
+	function remove_filter_item(link){
+		new Effect.Fade(link.up(0),{ duration: 0.5, afterFinish: function(){
+			link.up(0).remove();
+			if ($$('.sort a.remove_filter_item').size() == 1){
+				$$('.sort a.remove_filter_item').each(function(e){
+					e.hide();
+				})
+			}
+		}})
+	}
+	
+	Event.observe(window, 'load', function() {
+		new Form.Observer('form1', 0.2, function(element, value) {
+								new Ajax.Request('/etat/update_select', {asynchronous:true, evalScripts:true, parameters:value})
+								}, 'changed')
+
+		new Ajax.Request('/etat/update_select', {asynchronous:true, evalScripts:true, parameters:Form.serialize('form1')});
+		adjust_height();
+		submit_form();
+	});
+
+	
+//]]>
+</script>

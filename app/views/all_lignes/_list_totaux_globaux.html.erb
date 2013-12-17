@@ -1,0 +1,56 @@
+  
+<% if @compute_totaux_globaux %>
+
+  <%  # ajustement des colonnes
+    if params['data']=='commun'
+      if !@ref_cp.blank?
+        @colspan1 = @colspan_totals 
+        @colspan2 = 3
+      else
+        @colspan1 = @colspan_totals - 1
+        @colspan2 = 2
+      end
+    elsif params['data']=='mission'
+      if !@ref_cp.blank?
+        @colspan1 = @colspan_totals - 1
+        @colspan2 = 3
+      else
+        @colspan1 = @colspan_totals - 1
+        @colspan2 = 2
+      end
+      
+    elsif params['data']=='salaire' || params['data'] == 'toutes_depenses_hors_salaires'
+      if !@ref_cp.blank?
+        @colspan1 = @colspan_totals - 2
+        @colspan2 = 3
+      else
+        @colspan1 = @colspan_totals - 1 
+        @colspan2 = 2 
+      end
+    else
+      if !@ref_cp.blank?
+        @colspan1 = @colspan_totals - 2
+        @colspan2 = 3
+      else
+        @colspan1 = @colspan_totals 
+        @colspan2 = 2
+      end
+    end
+  %>
+
+  <td colspan='<%= @colspan1 %>'></td><td colspan="<%=@colspan2%>" class="total-header">Total pour toutes les pages</td>
+  <% if params['data']=='salaire'%>
+	  <td class="money total<%= ' neg' if @total_cout_periode < 0 %>"><%= my_number_to_currency @total_cout_periode %></td>
+    <td class="money total<%= ' neg' if @total_montant_paye_htr < 0 %>"><%= my_number_to_currency @total_montant_paye_htr %></td>
+    <td class="money total<%= ' neg' if @total_montant_paye_ttc < 0 %>"><%= my_number_to_currency @total_montant_paye_ttc %></td>
+
+	<% else %>
+		<td class="money total <%= ' neg' if @total_montant_engages < 0 %>"><%= my_number_to_currency @total_montant_engages %></td>
+		<%if params['data']!='commun' %>
+	    <td class="money total <%= ' neg' if @total_montant_paye_htr < 0 %>"><%= my_number_to_currency @total_montant_paye_htr %></td>
+		<% end %>
+	  <td class="money total <%= ' neg' if @total_montant_paye_ht < 0 %>"><%= my_number_to_currency @total_montant_paye_ht %></td>
+	  <td class="money total <%= ' neg' if @total_montant_paye_ttc < 0 %>"><%= my_number_to_currency @total_montant_paye_ttc %></td>
+	<% end %>
+<% end %>
+  <td></td>

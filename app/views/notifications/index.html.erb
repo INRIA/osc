@@ -1,0 +1,22 @@
+<h1>Listing notifications</h1>
+
+<table>
+  <tr>
+    <th>Contrat</th>
+    <th>Contrat type</th>
+  </tr>
+  
+<% for notification in @notifications %>
+  <tr>
+    <td><%=h notification.contrat_id %></td>
+    <td><%=h notification.contrat_type_id %></td>
+    <td><%= link_to 'Show', notification_path(notification) %></td>
+    <td><%= link_to 'Edit', edit_notification_path(notification) %></td>
+    <td><%= link_to 'Destroy', notification_path(notification), :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New notification', new_notification_path %>

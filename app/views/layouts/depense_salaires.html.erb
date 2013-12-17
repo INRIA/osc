@@ -1,0 +1,51 @@
+<% if controller.action_name.to_s == 'ask_delete' %>
+	<%= yield  %>
+<% else %>
+<% content_for :head do %>
+	<%- if ['index','new','create','edit','update'].include? controller.action_name.to_s -%>
+	<div class='long_header_title'>		
+		<strong><%= @ligne.nom %></strong> >> Salaires
+		<% if ['new','create'].include? controller.action_name.to_s %> 
+		   // Cr&eacute;ation
+		<% elsif ['edit','update'].include? controller.action_name.to_s %>
+		   // Edition   
+		<% end %>     
+		<%= render :partial => 'layouts/link_to_switch_ligne' %>
+	</div>
+	<p>
+		<%- if !@ligne.contrat.notification.numero_ligne_budgetaire.blank? -%>
+			<strong>N° <%= @ligne.contrat.notification.numero_ligne_budgetaire %></strong> -
+		<%- end -%>
+		Contrat du <%= french_date @ligne.contrat.notification.date_debut %> au <%= french_date @ligne.contrat.notification.date_fin %> <br/>
+		Suivi du budget pour la période du <%= french_date @ligne.date_debut %> au <%= french_date @ligne.date_fin %>
+	</p>
+	<%- end -%>
+	
+	<% if ['show'].include? controller.action_name.to_s %>
+		<div class='header_title'>		
+			<div class="showInfos">
+			<p class="visibilite">
+				<strong><%= @ligne.nom %></strong> >> Salaires
+			</p>
+			</div>
+			<div style='clear:both;'></div>
+		</div>
+		<div class="header_link">
+			<% if @ligne.contrat.is_budget_editable? current_user %>
+		 		<%= link_to 'Editer la dépense', edit_ligne_depense_salaire_path(@ligne, @depense_salaire) %>
+			<% end %>
+		</div>
+		<div style="clear: both;"></div>
+		<p class="under_link">
+			<%- if !@ligne.contrat.notification.numero_ligne_budgetaire.blank? -%>
+				<strong>N° <%= @ligne.contrat.notification.numero_ligne_budgetaire %></strong> -
+			<%- end -%>
+			Contrat du <%= french_date @ligne.contrat.notification.date_debut %> au <%= french_date @ligne.contrat.notification.date_fin %> <br/>
+			Suivi du budget pour la période du <%= french_date @ligne.date_debut %> au <%= french_date @ligne.date_fin %>
+		</p>
+	<% end %>
+	
+<% end %>
+
+<%= render :file => 'layouts/application_suivi_budgetaire' %>
+<% end %>

@@ -1,0 +1,32 @@
+<h2>Notification de contrat</h2>
+
+<%= my_notification_error_messages_for @notification %>
+
+<%= form_for(:notification, :url => contrat_notifications_path) do |f| %>
+  <%= render :partial => 'form', :locals => { :f => f} %>
+  <div class="form-box submit" id="submit">
+    <%= submit_tag "Créer la notification" %>
+    ou
+    <%= link_to "Annuler", contrat_path(@contrat) %>
+  </div>
+<% end %>
+
+<% content_for :right do %>
+  <div id="navigation">
+    <h2>Aide à la navigation dans le formulaire</h2>
+    <ul>
+      <li><a href="#indicator">Haut de page</a></li>
+      <li><a href="#TypeContrat">Type de contrat</a></li>
+      <li><a href="#InformationsGenerales">Informations générales - Porteur et coordinateur - Site Web</a></li>
+      <li><a href="#MotsCles">Mots clés et thématiques</a></li>
+      <li><a href="#Partenaires">Partenaires</a></li>
+      <li><a href="#MoyensAccordes">Moyens accordés</a></li>
+      <li><a href="#PersonnelAccorde">Personnel accordé</a></li>
+      <li><a href="#PersonnelImplique">Personnel impliqué</a></li>
+      <li class="last"><a href="#submit">Création de la notification</a></li>
+    </ul>
+  </div>
+  <script type="text/javascript">
+    new App.NavigatorHelper();
+  </script>
+<% end %>

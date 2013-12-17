@@ -1,0 +1,61 @@
+<% content_for :right do %>
+	<% if @contrat.sous_contrats.size > 1 %>
+		<h2>Choix de l'échéancier</h2>
+		<ul class="echeancier">
+			<% if @contrat.echeancier.nil? %>
+			<li>
+				<%= link_to @contrat.acronyme+" (à créer)", new_contrat_echeancier_path(@contrat) %>
+			</li>
+			<% else %>
+			<li>
+				<% if params[:id] == @contrat.echeancier.id.to_s %>
+					<%= link_to @contrat.acronyme+" (édition)", edit_contrat_echeancier_path(@contrat, @contrat.echeancier.id), :class => 'current' %>
+				<% else %>
+					<%= link_to @contrat.acronyme+" (éditer)", edit_contrat_echeancier_path(@contrat, @contrat.echeancier.id) %>
+				<% end %>
+			</li>
+			<% end %>
+		<% for sc in @contrat.sous_contrats %>
+			<li>
+				<% if sc.echeancier.nil? %>
+					<%= link_to sc.nom+" (à créer)", new_contrat_echeancier_path( :echeanciable_type => 'SousContrat', :echeanciable_id => sc.id) %>
+				<% else %>
+					<% if params[:id] == sc.echeancier.id.to_s %>
+						<%= link_to sc.nom+" (édition)", edit_contrat_echeancier_path(@contrat, sc.echeancier.id), :class => 'current' %>
+					<% else %>
+						<%= link_to sc.nom+" (éditer)", edit_contrat_echeancier_path(@contrat, sc.echeancier.id) %>
+					<% end %>
+				<% end %>
+			</li>
+		<% end %>
+		</ul>
+	<% end %>
+<% end %>
+
+
+
+<script>
+</script>
+
+<%= (my_echeancier_error_messages_for @echeancier).html_safe() %>
+
+
+<h2><strong>Ech&eacute;ancier</strong> du contrat <strong>
+<% if @echeancier.echeanciable_type == "SousContrat" %>	
+	<%=	@echeancier.echeanciable.nom %>
+<% else %>
+	<%= @contrat.acronyme %>
+<% end %>
+</strong>
+</h2>
+<%= form_for(:echeancier, :url => contrat_echeancier_path(@contrat, @echeancier), :html => { :method => :put, :style => "padding:0;" }) do |f| %>
+<%= render :partial => 'form', :locals => { :f => f } %>
+
+<div class="form-box submit" id="submit">
+  <%= submit_tag "Enregistrer les modifications" %>
+	ou
+	<%= link_to "Annuler", contrat_echeancier_path(@contrat, @echeancier) %>
+</div>
+<% end %>
+
+

@@ -1,0 +1,21 @@
+<% @avenant = avenant %>
+<div id="<%= "avenant_#{avenant.id}" %>" style="border:1px dotted #aaa;padding:10px;margin-bottom:10px">
+	<div style="float:right;">
+	<% unless controller.action_name == 'show' %>
+		<%= sub_list_remove_link avenant, 'avenant' %>
+	<% end %>
+	</div>
+	
+	<p class="inline">
+		<label class="required">Date de l'avenant</label><br />
+		<%= date_select 'avenant[]', 'date',
+										:order => [:day, :month, :year],
+										:use_month_numbers => true %>
+	  
+	</p>
+	<p>
+		<label class="required">Commentaires</label><br />
+		<%= text_area 'avenant[]', 'commentaires', :class => "textareafield" %>
+	</p>
+	
+</div>

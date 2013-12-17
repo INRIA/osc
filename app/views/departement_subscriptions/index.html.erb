@@ -1,0 +1,26 @@
+<h1>Listing departement_subscriptions</h1>
+
+<table>
+  <tr>
+    <th>Projet</th>
+    <th>Departement</th>
+    <th>Created at</th>
+    <th>Updated at</th>
+  </tr>
+  
+<% for departement_subscription in @departement_subscriptions %>
+  <tr>
+    <td><%=h departement_subscription.projet_id %></td>
+    <td><%=h departement_subscription.departement_id %></td>
+    <td><%=h departement_subscription.created_at %></td>
+    <td><%=h departement_subscription.updated_at %></td>
+    <td><%= link_to 'Show', departement_subscription_path(departement_subscription) %></td>
+    <td><%= link_to 'Edit', edit_departement_subscription_path(departement_subscription) %></td>
+    <td><%= link_to 'Destroy', departement_subscription_path(departement_subscription), :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New departement_subscription', new_departement_subscription_path %>

@@ -1,0 +1,30 @@
+<h1>Listing notification_partenaires</h1>
+
+<table>
+  <tr>
+    <th>Notification</th>
+    <th>Nom</th>
+    <th>Etablissement gestionnaire</th>
+    <th>Ville</th>
+    <th>Pays</th>
+    <th>Localisation</th>
+  </tr>
+  
+<% for notification_partenaire in @notification_partenaires %>
+  <tr>
+    <td><%=h notification_partenaire.notification_id %></td>
+    <td><%=h notification_partenaire.nom %></td>
+    <td><%=h notification_partenaire.etablissement_gestionnaire %></td>
+    <td><%=h notification_partenaire.ville %></td>
+    <td><%=h notification_partenaire.pays %></td>
+    <td><%=h notification_partenaire.localisation %></td>
+    <td><%= link_to 'Show', notification_partenaire_path(notification_partenaire) %></td>
+    <td><%= link_to 'Edit', edit_notification_partenaire_path(notification_partenaire) %></td>
+    <td><%= link_to 'Destroy', notification_partenaire_path(notification_partenaire), :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New notification_partenaire', new_notification_partenaire_path %>

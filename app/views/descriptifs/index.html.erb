@@ -1,0 +1,17 @@
+<div class="section" id="descriptifs">
+  <h2><strong>Descriptifs : </strong>liste des descriptifs multilingues associés au contrat</h2>
+  <p class="init" id="init_descriptif"
+    <% if !@descriptifs.empty? %>
+      style="display:none"
+    <% end %>
+  >Aucun descriptif n'est associé au contrat.</p>
+
+  <div id="new_descriptif" style="display:none;"></div>
+
+  <div id="descriptif_container">
+		<%- for @descriptif in @descriptifs -%>
+			<%= render :partial => 'list', :local => @descriptif %>
+		<%- end -%>
+  </div>
+</div>
+

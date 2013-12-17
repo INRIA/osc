@@ -1,0 +1,82 @@
+<% @soumission_france_partenaire = soumission_france_partenaire %>
+<div id="<%= "soumission_france_partenaire_#{soumission_france_partenaire.id}" %>">
+	<p>
+		
+		<% @class = '' %>
+		<% if !soumission_france_partenaire.nom.nil? %>
+			<% if soumission_france_partenaire.nom.empty?  %>
+				<% @class = "blank"  %>
+				<% soumission_france_partenaire.nom = "Nom" %>
+			<% end %>
+		<% else %>
+			<% @class = "blank"  %>
+			<% soumission_france_partenaire.nom = "Nom" %>
+		<% end %>
+		
+		<%= text_field 'soumission_france_partenaire[]', 'nom',
+			{ :class => 'four_cell required_blank '+@class,
+				:onblur => "if (this.value == '') { $(this).addClassName('required_blank'); this.value='Nom' };",
+				:onfocus =>"if (this.value == 'Nom') { $(this).removeClassName('required_blank'); this.value=''; };"
+			} %>
+		
+		
+			<% @class = '' %>
+			<% if !soumission_france_partenaire.laboratoire.nil? %>
+				<% if soumission_france_partenaire.laboratoire.empty?  %>
+					<% @class = "blank"  %>
+					<% soumission_france_partenaire.laboratoire = "Laboratoire" %>
+				<% end %>
+			<% else %>
+				<% @class = "blank"  %>
+				<% soumission_france_partenaire.laboratoire = "Laboratoire" %>
+			<% end %>
+
+			<%= text_field 'soumission_france_partenaire[]', 'laboratoire',
+				{ :class => 'four_cell '+@class,
+					:onblur => "if (this.value == '') { $(this).addClassName('blank'); this.value='Laboratoire' };",
+					:onfocus =>"if (this.value == 'Laboratoire') { $(this).removeClassName('blank'); this.value=''; };"
+				} %>
+		
+		
+		<% @class = '' %>			
+		<% if !soumission_france_partenaire.etablissement_gestionnaire.nil? %>
+			<% if soumission_france_partenaire.etablissement_gestionnaire.empty?  %>
+				<% @class = "blank"  %>
+				<% soumission_france_partenaire.etablissement_gestionnaire = "Etab. gestionnaire" %>
+			<% end %>
+		<% else %>
+			<% @class = "blank"  %>
+			<% soumission_france_partenaire.etablissement_gestionnaire = "Etab. gestionnaire" %>
+		<% end %>
+	
+		<%= text_field 'soumission_france_partenaire[]', 'etablissement_gestionnaire',
+			{ :class => 'four_cell '+@class,
+				:onblur => "if (this.value == '') { $(this).addClassName('blank'); this.value='Etab. gestionnaire' };",
+				:onfocus =>"if (this.value == 'Etab. gestionnaire') { $(this).removeClassName('blank'); this.value=''; };"
+			} %>
+
+		<% @class = '' %>
+		<% if !soumission_france_partenaire.ville.nil? %>
+			<% if soumission_france_partenaire.ville.empty?  %>
+				<% @class = "blank"  %>
+				<% soumission_france_partenaire.ville = "Ville" %>
+			<% end %>
+		<% else %>
+			<% @class = "blank"  %>
+			<% soumission_france_partenaire.ville = "Ville" %>
+		<% end %>
+		
+		<%= text_field 'soumission_france_partenaire[]', 'ville',
+			{ :class => 'four_cell '+@class,
+				:onblur => "if (this.value == '') { $(this).addClassName('blank'); this.value='Ville' };",
+				:onfocus =>"if (this.value == 'Ville') { $(this).removeClassName('blank'); this.value=''; };"
+			} %>		
+
+				
+		<input class="four_cell" type="hidden" value="France" id="input_<%= soumission_france_partenaire.id %>" />
+				
+		<% unless controller.action_name == 'show' %>
+ 			<%= sub_list_remove_link soumission_france_partenaire, 'SoumissionFrancePartenaire' %>
+		<% end %>
+		</p>
+</div>

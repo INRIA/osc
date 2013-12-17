@@ -1,0 +1,56 @@
+<div class="sect">
+  <h2><strong>Rôles sp&eacute;cifiques</strong> dans l'application</h2>
+  <%
+  comment = ""
+  @user.roles.each do |role|
+    if !role.authorizable_id
+      comment = "<p class='comment'>Rôle(s) sp&eacute;cifique(s) attribu&eacute;(s) : </p>"
+    end
+  end
+
+  if comment == ""
+    comment = "<p class='comment'>Aucun rôle sp&eacute;cifique n'a &eacute;t&eacute; attribu&eacute;.</p>"
+  end
+  %>
+  <%= comment.html_safe() %>
+  <% @user.roles.each do |role| -%>
+    <% if ! role.authorizable_id %>
+      <div class="small_infos_actions">
+        <div class="infos">
+          <div class="name">
+            <%= role.name %>
+          </div>
+        </div>
+        <div class="actions">
+          <%= link_to_remote "Supprimer",
+            {:url => 'delete_role', :with =>  "'role_id="+role.id.to_s+"&user_id="+@user.id.to_s+"'" },
+             :title=> 'Supprimer' %>
+        </div>
+        <div style="clear:both;"></div>
+      </div>
+    <% end %>
+  <% end -%>
+
+  <% if (! @user.has_role? 'Administrateur' ) || (! @user.has_role? 'Administrateur de contrat') || (! @user.has_role? 'Administrateur fonctionnel')%>
+    <p class='comment'><br />Vous pouvez ajouter des rôles sp&eacute;cifiques à l'aide du formulaire ci-dessous.</p>
+    <%= form_for(:user, :url => "/users/add_role", :html => { :method => :post, :class=>"inline" }) do |f| %>
+      Ajouter le rôle d'
+        <select id="role" name="role">
+        <% if ! @user.has_role? 'Administrateur' %>
+          <option>Administrateur</option>
+        <% end %>
+        <% if ! @user.has_role? 'Administrateur de contrat' %>
+          <option>Administrateur de contrat</option>
+        <% end %>
+        <% if ! @user.has_role? 'Administrateur fonctionnel' %>
+          <option>Administrateur fonctionnel</option>
+        <% end %>
+      </select>
+      <%= text_field_tag :user_id, @user.id, {:style => "display:none;"} %>
+      <%= submit_tag 'Valider' %>
+    <% end %>
+  <% else %>
+    <br />
+    <p class="comment">L'utilisateur <%= @user.prenom %> <%= @user.nom %> dispose de l'ensemble des rôles possibles.</p>
+  <% end %>
+</div>

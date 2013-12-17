@@ -1,0 +1,14 @@
+<% if !@laboratoire_subscriptions.empty? %>
+<% for laboratoire_subscription in @laboratoire_subscriptions %>
+<div class="small_infos_actions" id="laboratoire_subscription_<%= laboratoire_subscription.id %>">
+		<div class="infos">
+			<div class="name"><%= link_to laboratoire_subscription.laboratoire.nom, laboratoire_path(laboratoire_subscription.laboratoire) %></div>
+			<div class="description"><%=h truncate(laboratoire_subscription.laboratoire.description,:length =>80,:ommission =>"...") %></div>
+		</div>
+		<div class="actions">
+			<%= link_to_remote "",{ :url => laboratoire_subscription_path(laboratoire_subscription),  :method => :delete } , :class => 'delete'%>			
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+<% end %>
+<% end %>

@@ -1,0 +1,82 @@
+<table class="echeancier">
+	<tr class="odd">
+		<th class="first"></th>
+		<th class="middle">Global</th>
+	</tr>
+	
+	<tr>
+		<th class="first left">Date de début</th>
+		<td><%= french_day_datetime(@contrat.notification.date_debut) %></td>
+	</tr>
+	
+	<tr class="odd">
+		<th class="first left">Date de fin</th>
+		<td><%= french_day_datetime(@contrat.notification.date_fin) %></td>
+	</tr>
+	
+	<tr>
+		<th class="first left">Référence</th>
+		<td></td>
+	</tr>
+	
+	<tr class="odd">
+		<th class="first left">N° de contrat</th>
+		<td></td>
+	</tr>
+	
+	<tr>
+		<th class="first left">Fonctionnement</th>
+		<td><%= my_number_to_currency(@echeancier.depenses_fonctionnement) %></td>
+	</tr>
+	
+	<tr class="odd">
+		<th class="first left">Equipement</th>
+		<td><%= my_number_to_currency(@echeancier.depenses_equipement) %></td>
+	</tr>
+	
+	<tr>
+		<th class="first left">Salaires</th>
+		<td><%= my_number_to_currency(@echeancier.depenses_salaires) %></td>
+	</tr>
+	
+	<tr class="odd">
+		<th class="first left">Missions</th>
+		<td><%= my_number_to_currency(@echeancier.depenses_missions) %></td>
+	</tr>
+	
+	<tr>
+		<th class="first left">Non ventil&eacute;</th>
+		<td><%= my_number_to_currency(@echeancier.depenses_non_ventile) %></td>
+	</tr>
+	
+	
+	<tr class="odd">
+		<th class="first left double_ligne">Frais de gestion<br> d&eacute;ductibles</th>
+		<td><%= my_number_to_currency(@echeancier.depenses_couts_indirects) %></td>
+	</tr>
+	<tr>
+    <th class="first left double_ligne">Frais de gestion<br>mutualis&eacute;s locaux</th>
+    <td><%= my_number_to_currency(@echeancier.depenses_frais_gestion_mut_local) %></td>
+  </tr>
+	<tr class="odd">
+		<th class="first left double_ligne">Frais de gestion<br>mutualis&eacute;s nat.</th>
+		<td><%= my_number_to_currency(@echeancier.depenses_frais_gestion_mut) %></td>
+	</tr>
+	
+	<tr>
+		<th class="first left double_ligne">Autres frais <br>de gestion</th>
+		<td><%= my_number_to_currency(@echeancier.global_depenses_frais_gestion) %></td>
+	</tr>
+		
+	<tr class="odd">
+		<th class="first left">Allocations </th>
+		<td><%=h @echeancier.allocations %> <span class='unite'>mois<span></td>
+	</tr>
+	
+	<tr>
+		<th class="first left">Total</th>
+		<td>
+			<%= my_number_to_currency(@echeancier.credit) %>
+		</td>
+	</tr>
+</table>

@@ -1,0 +1,258 @@
+<%= "<div class='come-from-inria-container'><span class='come-from-inria'>S.I. INRIA</span></div>".html_safe() if @contrat.come_from_inria? %>
+
+<%- if @contrat.sous_contrats.size == 0 -%>
+  <div class="alert">
+    Le contrat <%= @contrat.acronyme %> n'est pas rattaché à une entité (laboratoire, département ou équipe de recherche), merci d'éditer le contrat afin de corriger cela.
+  </div>
+<%- end -%>
+
+<%- if @alertes.size > 0 -%>
+  <h2><strong>Alertes</strong> du contrat</h2>
+  <ul class="alertes">
+  <%- for todo in @alertes -%>
+    <% nb_jour = (todo.date - DateTime.now).to_i + 1 %> 
+    <li>
+      <span class="intitule">
+      <%= todo.intitule %>
+      </span>
+      <%- if nb_jour < 0 -%>
+        <span class="date_niveau_1">(J+<%= nb_jour * -1 %>)
+      <%- elsif nb_jour == 0 -%>
+        <span class="date_niveau_2">(Aujourd'hui)
+      <%- elsif nb_jour <= 5 -%>
+        <span class="date_niveau_3">(J-<%= nb_jour %>)
+      <%- else nb_jour <= 5 -%>
+        <span class="date_niveau_4">(J-<%= nb_jour %>)
+      <%- end -%>
+      </span>
+    </li>
+  <%- end -%>
+  </ul>
+<%- end -%>
+
+<h2 class="float_head"><strong>Informations</strong> générales</h2>
+
+<div class="infos_generales_1">
+  <h3>Dates importantes</h3>
+  <table>
+    <tr class="impair">
+      <%- if !@contrat.soumission.nil? -%>
+        <td>Dépot de la soumission</td>
+        <td><%= french_day_datetime @contrat.soumission.date_depot %></td>
+      <%- else -%>
+        <td>Pas d'information</td>
+      <%- end -%>
+    </tr>
+    <%- if !@contrat.signature.nil? -%>
+      <tr class="pair">
+        <td>Signature</td>
+        <td><%= french_day_datetime @contrat.signature.date %></td>
+      </tr>
+    <%- end -%>
+    
+    <%- if !@contrat.refu.nil? -%>
+      <tr class="pair">
+        <td>Refus</td>
+        <td><%= french_day_datetime @contrat.refu.date %></td>
+      </tr> 
+    <%- end -%>
+    
+    <%- if !@contrat.notification.nil? -%>
+      <tr class="impair">
+        <td>Notification</td>
+        <td><%= french_day_datetime @contrat.notification.date_notification %></td>
+      </tr>
+      <tr class="pair">
+        <td>Début du contrat</td>
+        <td><%= french_day_datetime @contrat.notification.date_debut %></td>
+      </tr>
+      <tr class="impair">
+        <td>Fin du contrat</td>
+        <td><%= french_day_datetime @contrat.notification.date_fin %></td>
+      </tr>
+      <tr class="pair">
+        <td>Durée</td>
+        <td><%= @contrat.notification.nombre_mois %> mois</td>
+      </tr>
+      <tr class="impair">
+        <td>Total des montants accordés</td>
+        <td><%= my_number_to_currency @contrat.notification.ma_total %></td>
+      </tr>
+    <%- elsif !@contrat.soumission.nil? -%>
+      <tr class="impair">
+        <td>Durée</td>
+        <td><%= @contrat.soumission.nombre_mois %> mois</td>
+      </tr>
+      <tr class="pair">
+        <td>Total des montants demandés</td>
+        <td><%= my_number_to_currency @contrat.soumission.md_total %></td>
+      </tr>
+    <%- end -%>
+    
+    <%- if !@contrat.cloture.nil? -%>
+      <tr class="impair">
+        <td>Fin des dépenses</td>
+        <td><%= french_day_datetime @contrat.cloture.date_fin_depenses %></td>
+      </tr>
+    <%- end -%>
+  </table>
+</div>
+  
+<div class="infos_generales_2">
+  <h3>Porteur &amp; coordinateur</h3>
+  <table>
+    <%- if !@contrat.notification.nil? -%>
+      <tr class="impair">
+        <td>Porteur</td>
+        <td><%= h @contrat.notification.porteur %></td>
+      </tr>
+      <tr class="pair">
+        <td>Coordinateur</td>
+        <td><%= h @contrat.notification.coordinateur %></td>
+      </tr>
+    <%- elsif !@contrat.soumission.nil? -%>
+      <tr class="impair">
+        <td>Porteur</td>
+        <td><%= h @contrat.soumission.porteur %></td>
+      </tr>
+      <tr class="pair">
+        <td>Coordinateur</td>
+        <td><%= h @contrat.soumission.coordinateur %></td>
+      </tr>
+    <%- else -%>
+      <tr class="impair">
+        <td>Pas d'information</td>
+      </tr>
+    <%- end -%>
+  </table>
+  <h3>
+    <% if @contrat.sous_contrats.size > 1 %>
+      Equipes/labo./dépt. impliqués
+    <% else %>
+      Equipe/labo/dept impliqué
+    <% end %>
+  </h3>
+  <table>
+    <%- for sous_contrat in @contrat.sous_contrats -%>
+      <tr class="<%= cycle("impair", "pair") %>">
+        <td>
+          <%- if sous_contrat.entite.type.to_s == "Projet" -%>
+            Equipe
+          <%- else -%>
+          <%= h sous_contrat.entite.type %> 
+          <%- end -%>
+          <%= h sous_contrat.entite.nom %>
+        </td>
+      </tr>
+    <%- end -%>
+  </table>
+  <h3> Affichage public </h3>
+  <table>
+    <tr class="impair">
+      <td><%- if @contrat.publicite -%> OUI <%- else -%> NON <%- end -%>
+      </td>
+    </tr>
+  </table>
+</div>
+<div style="clear:both;"></div>
+
+<h2><strong>Activité récente</strong> du contrat</h2>
+
+<div id="recent_history">
+<table>
+<%-
+temp_d = ''
+i = 0 
+j = 0
+@lasts.each do |last| 
+  i = i+1 
+  if (french_datetime_with_word last[:updated_at]) != temp_d 
+    j = j+1 
+    if i > 10 or j > 3
+      break 
+    end -%>
+<tr>
+  <td class="date"><span><%= french_datetime_with_word last[:updated_at] %></span></td>
+</tr>
+<%- end -%>
+
+<tr class="history_item">
+  <td class="contrat">
+    <%= french_datetime_in_day last[:updated_at] %>
+  </td>
+  <td class="type">
+      <span class="<%= last[:type] %>"><%= last[:type] -%></span>
+  </td>
+  
+  <td class="infos">
+    <%- if last[:type] == 'ToDo' -%>
+      <%- if last[:done] -%>
+      <span style="text-decoration: line-through;"><%= last[:intitule] -%></span>
+      <%- else -%>
+      <span><%= last[:intitule] -%></span>
+      <%- end -%>
+       (<%= link_to last[:todo_list], contrat_todolists_path(@contrat), :class => "todo" -%>)
+    <%- elsif last[:type] == 'Fichier'  -%>
+      <img src='<%= get_file_img_src(File.extname(last[:file]['file'])) -%>' alt='<%= File.extname(last[:file]['file']) %>' />
+      <%= link_to last[:file]['file'], url_for_file_column(last[:file], "file"), :title => "Télécharger le fichier" -%><br />
+      <span class="file_name"><%= last[:file].description -%></span>
+    <%- elsif last[:type] == 'Contrat'  -%>
+      Création du contrat <%= link_to @contrat.acronyme, contrat_path(@contrat) %> : <%= @contrat.nom %>
+    <%- else -%>
+      <%- if last[:updated_at] == last[:created_at]  -%>
+        <%- temp = 'Création' -%>
+      <%- else -%>
+        <%- temp = 'Modification' -%>
+      <%- end -%>
+      <%- case last[:type]
+         when "Soumission" %>
+          <%= link_to temp+' de la soumission', contrat_soumission_path(@contrat, @contrat.soumission) %>
+      <%- when "Signature" -%>
+          <%= link_to temp+' de la signature', contrat_signature_path(@contrat, @contrat.signature) %>
+      <%- when "Refus" -%>
+          <%= link_to temp+' du refus', contrat_refu_path(@contrat, @contrat.refu) -%>
+      <%- when "Notification" -%>
+          <%= link_to temp+' de la notification', contrat_notification_path(@contrat, @contrat.notification) -%>
+      <%- when "Cloture" -%>
+          <%= link_to temp+' de la clôture', contrat_cloture_path(@contrat, @contrat.cloture) -%>
+      <%- when "Echeancier" -%>
+        <%- if last[:id].nil? -%>
+          <%= link_to temp+" de l'échéancier "+h(@contrat.acronyme), contrat_echeancier_path(@contrat, @contrat.echeancier) -%>
+        <%- else -%>
+          <%= link_to temp+" de l'échéancier "+Echeancier.find_by_id(last[:id]).echeanciable.nom, contrat_echeancier_path(@contrat, last[:id]) -%>
+        <%- end -%>
+      <%- end -%>
+    <%- end -%>
+  </td>
+
+  <td class="who">
+  <%- if last[:updated_at] == last[:created_at]  -%>
+    <%= print_small_user_infos last[:created_by] -%>
+  <%- else -%>
+    <%= print_small_user_infos last[:updated_by] -%>
+  <%- end -%>
+  <%- temp_d = french_datetime_with_word last[:updated_at] -%>
+  </td>
+
+</tr>
+<%- end -%>
+</table>
+</div>
+
+
+
+<% if ((current_user.is_contrat_admin?) and (@contrat.is_editable? current_user ))or 
+      current_user.is_admin? %>
+<div id="content_footer">
+  <div class="left">
+    Création le <%= french_datetime @contrat.created_at %> par <%= print_user_infos @contrat.created_by %>
+  </div>
+  <div class="right">
+    <%= link_to_remote_redbox "Supprimer le contrat",
+        { :url => ask_delete_contrat_path(@contrat), :method => :get}, 
+        { :class => "destroy",
+          :title => "Supprimer le contrat" }  %>
+  </div>
+  <div style="clear:both;"></div>
+</div>
+<% end %>

@@ -1,0 +1,22 @@
+<% for organisme_gestionnaire in @organisme_gestionnaires %>
+<div class="box_1_per_line <%= cycle("even", "odd") %>" id="og_<%= organisme_gestionnaire.id %>">
+	<div class="infos">
+		<div class="primary"><%= link_to organisme_gestionnaire.nom, organisme_gestionnaire_path(organisme_gestionnaire) %></div>
+		<div class="secondary">
+			Utilisé dans <%= organisme_gestionnaire.soumissions.size %> soumission(s) et dans <%= organisme_gestionnaire.notifications.size %> notification(s)
+		</div>
+	</div> 
+	<div class="actions">
+		<% count = organisme_gestionnaire.notifications.size + organisme_gestionnaire.soumissions.size  %>
+		<%= link_to 'Editer', edit_organisme_gestionnaire_path(organisme_gestionnaire) %>
+		<%- if count == 0 -%>
+		<%= link_to_remote_redbox "Supprimer",
+        { :url => ask_delete_organisme_gestionnaire_path(organisme_gestionnaire),
+          :method => :get},
+        { :title => "Supprimer cet organisme" } %>
+
+    <% end %>
+	</div>
+	<div style="clear: both;"></div>
+</div>
+<% end %>

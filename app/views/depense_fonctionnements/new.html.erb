@@ -1,0 +1,8 @@
+<%= error_messages_nested_resources_for @depense_fonctionnement %>
+
+<%= form_for([@ligne, @depense_fonctionnement]) do |f| %>
+	<%= render :partial => 'form', :locals => { :f => f} %>
+  <div class="form-box submit">
+    <%= f.submit "Créer la dépense en fonctionnement" %> ou <%= link_to 'Annuler', ligne_depense_fonctionnements_path(@ligne) %>
+  </div>
+<% end %>

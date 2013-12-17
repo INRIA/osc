@@ -1,0 +1,22 @@
+<h1>New contrat_file</h1>
+
+<%= error_messages_for :contrat_file %>
+
+<%= form_for(:contrat_file, :url => contrat_files_path, :html => {:multipart => true}) do |f| %>
+
+  <p>
+    <b>File</b><br />
+		<%= file_column_field 'contrat_file', 'file' %><br />
+  </p>
+
+  <p>
+    <b>Description</b><br />
+    <%= f.text_field :description %>
+  </p>
+
+  <p>
+    <%= submit_tag "Create" %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', contrat_files_path %>

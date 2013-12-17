@@ -1,0 +1,9 @@
+<div id="descriptif_box_<%= @descriptif.id.to_s %>" class="descriptiflist_box">
+
+	<div id="edit_descriptif_<%= @descriptif.id.to_s %>" style="display:none;"></div>
+    
+	<div class="descriptiflist_name" id="show_descriptif_<%= @descriptif.id.to_s %>">
+		<%= render :partial => 'descriptifs/show', :local => @descriptif %>
+	</div>
+
+</div>

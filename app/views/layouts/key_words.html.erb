@@ -1,0 +1,58 @@
+<% if controller.action_name.to_s == 'ask_delete' %>
+	<%= yield  %>
+<% else %>
+
+<% content_for :head do %>
+
+	<% if controller.action_name.to_s == 'index' %>
+		<div class='header_title'>
+			<strong>Listes des mots clés</strong>
+			// <span id="ajax_result"><%= pluralize(@key_words.size.to_s,"mot clé", "mots clés").html_safe() %></span>
+		</div>
+		<div class='header_link'></div>
+		<div style='clear:both;'></div>
+	<% end %>
+	
+	<% if controller.action_name.to_s == 'edit' || controller.action_name.to_s == 'update' %>
+		<div class='header_title'>
+			<strong>Mot clé</strong> // Edition
+		</div>
+		<div class='header_link'></div>
+		<div style='clear:both;'></div>
+	<% end %>
+	
+	<% if controller.action_name.to_s == 'new' || controller.action_name.to_s == 'create' %>
+		<div class='header_title'>
+			<strong>Création de mots clés</strong>
+		</div>
+		<div class='header_link'></div>
+		<div style='clear:both;'></div>
+	<% end %>
+	
+<% end %>
+
+<% content_for :right do %>
+	<% if controller.action_name.to_s == 'index' %>
+		<%= link_to '', new_key_word_path, {:class => "addKeyword"} %>
+		<h2>Recherche</h2>
+		<form id="search_and_sort_by">
+			<p>
+			<%= text_field_tag("query", params['query'], :size => 10, :class => "textfield" ) %>
+			</p>
+			<h2>Options d'affichage</h2>
+			<p>
+			<%= radio_button_tag("classement", "alphabetique", checked = true) %> <label for="classement_alphabetique">Classement alphabétique</label> <br />
+			<%= radio_button_tag("classement", "laboratoire", checked = false) %>	<label for="classement_laboratoire">Classement par laboratoire</label>
+			</p>
+		</form>
+		<%= observe_form 'search_and_sort_by',
+							:frequency => 0.5,
+							:on => 'changed',
+		         	:url => sort_by_key_words_path(),
+							:with => "'classement='+$F('classement_laboratoire')+'&query='+$F('query')" %>
+	<% end %>
+<% end %>
+
+<%= render :file => 'layouts/application_admin' %>
+
+<% end %>

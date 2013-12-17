@@ -1,0 +1,11 @@
+<div class="content">
+	<p>
+	Etes-vous certain de vouloir supprimer la tâche <strong>"<%= @todoitem.intitule %>"</strong> ?
+	</p>
+	<%= link_to_close_redbox "Non", :class => 'annuler' %>
+	<%= link_to_remote "Oui",
+ 									{ :url => contrat_todolist_todoitem_path(@todoitem.todolist.contrat, @todoitem.todolist, @todoitem),
+										:method => :delete,
+										:with => "'type="+@type+"'"} %>
+	<div style="clear:both;"></div>
+</div>

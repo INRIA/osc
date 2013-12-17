@@ -1,0 +1,8 @@
+<div class="content">
+	<p>
+	Etes-vous certain de vouloir supprimer le laboratoire <strong>"<%= @laboratoire.nom %>"</strong> ?
+	</p>
+	<%= link_to_close_redbox "Non", :class => 'annuler' %>
+	<%= link_to "Oui", laboratoire_path(@laboratoire), :method => :delete %>
+	<div style="clear:both;"></div>
+</div>

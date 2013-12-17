@@ -1,0 +1,11 @@
+<% form_for(:laboratoire_subscription, :url => laboratoire_subscriptions_path) do |f| %>
+
+  <p>
+    <b>Choix du laboratoire</b><br />
+    <%= f.select( "laboratoire_id", Laboratoire.find_all.collect {|p| [ p.nom, p.id ] }, { :include_blank => true }) %>
+  </p>
+
+  <p>
+    <%= submit_tag "Create" %>
+  </p>
+<% end %>

@@ -1,0 +1,337 @@
+<div class="form-box parent" id="salaire" style="margin-bottom:0;">
+  <%= "<span class='come-from-inria'>SI INRIA</span>".html_safe() if @depense_salaire.come_from_inria? %>
+  <h3>Salaire</h3>
+  <div class="clearfix">
+    <div class="col-1-of-2">
+      
+			<p <%= "class='disabled'" if @non_modifiables.include?('agent_si_origine')%>>
+        <label for="agent_si_origine">Utiliser un r&eacute;ferentiel Agent</label>
+        <%- if @non_modifiables.include?('agent_si_origine') -%>
+          <%= f.select :agent_si_origine, [@depense_salaire.agent_si_origine], :disable => true  %>
+        <%- else -%>
+          <%= f.select :agent_si_origine, ReferentielAgent.find(:all, :group => "si_origine").collect {|p| p.si_origine }, { :include_blank => true } %>
+        <%- end -%>
+      
+			
+			<%= observe_field 'depense_salaire_agent_si_origine',
+       :url => {:action => 'select_referentiel_agent'},
+       :frequency => 0.5,
+       :with => 'depense_salaire_agent_si_origine' %>
+			 
+			<span id='referentiel_agent_filter'>
+			  <% if @referentiel_selected && !@depense_salaire.come_from_inria? %>
+				   <%= render :partial => 'referentiel_agent_filter' %>
+				<% end %>	
+			</span>
+			</p>
+      <p <%= "class='disabled'" if @non_modifiables.include?('agent')%>>
+        <label for="depense_salaire_agent" class="required">Agent</label>
+        <%- if @non_modifiables.include?('agent') -%>
+				  <br />
+				  <%= f.text_field :nom_agent, {:disabled => true} %> 
+					<%= hidden_field "depense_salaire","agent" %>
+        <%- else -%>
+			  	<span id="agent_text_field">
+			  		<% if !@referentiel_selected %>
+						  <%= render :partial => 'agent_text_field' %>
+						<% end %>
+    	    </span>
+		    
+				  <span id='referentiel_agent_select'>
+        	  <% if @referentiel_selected %>					  
+							<%= render :partial => 'referentiel_agent_select' %>
+            <% end %>
+			    </span>
+        <%- end -%>
+      </p> 
+			
+      <p class="inline <%= "disabled" if @non_modifiables.include?('type_contrat')%>">
+        <label for="depense_salaire_type_contrat" class="required">Type de contrat</label><br />
+        <% if @non_modifiables.include?('type_contrat') %>
+          <%= f.select :type_contrat, ["","Vacataire","CDD","Stagiaire","Autre"], {}, :disabled => true %>
+        <% else %>
+          <%= f.select :type_contrat, ["","Vacataire","CDD","Stagiaire","Autre"] %>
+        <% end %>
+      </p>
+
+      <p <%= "class='disabled'" if @non_modifiables.include?('statut')%>>
+        <label for="depense_salaire_statut" class="required">Statut</label><br />
+        <% options = ({:disabled => true} if @non_modifiables.include?('statut')) || {} %>
+        <%= f.text_field :statut, options %>
+      </p>
+
+      <p class="inline <%= "disabled" if @non_modifiables.include?('date_debut')%>">
+        <label class="required">Date de début</label><br />
+        <% if @non_modifiables.include?('date_debut') %>
+          <%= f.date_select :date_debut,
+                            :use_month_numbers => true, 
+                            :start_year => 1970, 
+                            :order => [:day, :month, :year],
+                            :disabled => true %>
+        <% else %>
+          <%= f.unobtrusive_date_picker :date_debut, 
+                                        :use_month_numbers => true,
+                                        :start_year => 1970, 
+                                        :class => 'no-transparency' %>
+        <% end %>
+      </p>
+
+      <p class="inline <%= "disabled" if @non_modifiables.include?('date_fin')%>">
+        <label class="required">Date de fin</label><br />
+        <% if @non_modifiables.include?('date_fin') %>
+          <%= f.date_select :date_fin,
+                            :use_month_numbers => true,
+                            :start_year => 1970,
+                            :end_year => 2099,
+                            :order => [:day, :month, :year],
+                            :disabled => true %>
+        <% else %>
+          <%= f.unobtrusive_date_picker :date_fin,
+                                        :use_month_numbers => true,
+                                        :start_year => 1970,
+                                        :end_year => 2099,
+                                        :class => 'no-transparency' %>
+        <% end %>
+      </p>
+
+      <p <%= "class='disabled'" if @non_modifiables.include?('structure')%>>
+        <label for="depense_salaire_structure">Structure</label><br />
+        <% options = ({:disabled => true} if @non_modifiables.include?('structure')) || {} %>
+        <%= f.text_field :structure, options %>
+      </p>
+      
+    </div>
+    <div class="col-2-of-2">
+      
+      <p <%= "class='disabled'" if @non_modifiables.include?('nb_mois')%>>
+        <% if !@non_modifiables.include?('nb_mois') %>
+          <a href="" onclick="verouiller('depense_salaire_nb_mois'); return false;" 
+                     id="depense_salaire_nb_mois_deverouiller" class="verouiller" 
+                     title="Laisser l'application effectuer le calcul" ></a>
+          <a href="" onclick="deverouiller('depense_salaire_nb_mois'); return false;" 
+                     id="depense_salaire_nb_mois_verouiller" class="deverouiller" title="Saisir le nombre de mois sur l'ann&eacute;e" style="display:none;" ></a>
+        <% end %>
+ 
+        <label for="depense_salaire_nb_mois" class="required">Nombre de mois sur l'année</label><br />
+        <% options = ({:disabled => true} if @non_modifiables.include?('nb_mois')) || {} %>
+        <%= f.text_field :nb_mois, options %>
+				<span id='depense_salaire_nb_mois_cach' style="display:none;"><%= @depense_salaire.nb_mois.to_s %></span>
+
+      </p>
+
+      <p <%= "class='disabled'" if @non_modifiables.include?('cout_mensuel')%>>
+        <label for="depense_salaire_cout_mensuel" class="required">Coût mensuel</label><br />
+        <% options = ({:disabled => true} if @non_modifiables.include?('cout_mensuel')) || {} %>
+        <%= f.text_field :cout_mensuel, options %>
+      </p>
+
+      <p <%= "class='disabled'" if @non_modifiables.include?('cout_periode')%>>
+        <% if !@non_modifiables.include?('cout_periode') %>
+          <a href="" onclick="verouiller('depense_salaire_cout_periode'); return false;" 
+                     id="depense_salaire_cout_periode_deverouiller" class="verouiller" 
+                     title="Laisser l'application effectuer le calcul" style="display:none;"></a>
+          <a href="" onclick="deverouiller('depense_salaire_cout_periode'); return false;" 
+                     id="depense_salaire_cout_periode_verouiller" class="deverouiller" title="Saisir le coût période sur l'année" ></a>
+        <% end %>
+        <label for="depense_salaire_cout_periode" class="required">Coût période sur l'année</label><br />
+        <% options = ({:disabled => true} if @non_modifiables.include?('cout_periode')) || {} %>
+        <%= f.text_field :cout_periode, options %>
+        <span id='depense_salaire_cout_periode_cach' style="display:none;"><%= @depense_salaire.cout_periode.to_s %></span>
+      </p>
+      
+      <p <%= "class='disabled'" if @non_modifiables.include?('pourcentage')%>>
+        <label for="depense_salaire_pourcentage" class="required">% r&eacute;partition contrat</label><br />
+        <% options = ({:disabled => true} if @non_modifiables.include?('pourcentage')) || {} %>
+        <%= f.text_field :pourcentage, options %>
+      </p>
+      
+      <p <%= "class='disabled'" if @non_modifiables.include?('commentaire')%>>
+        <label for="depense_salaire_commentaire">Commentaire</label><br />
+        <% options = ({:disabled => true} if @non_modifiables.include?('commentaire')) || {} %>
+        <%= f.text_area :commentaire, options %>
+      </p>
+
+      <p <%= "class='disabled'" if @non_modifiables.include?('commande_solde')%>>
+        <% options = ({:disabled => true} if @non_modifiables.include?('commande_solde')) || {} %>
+        <%= f.check_box :commande_solde, options %>
+        <label for="depense_salaire_commande_solde">Feuille de salaire soldée ?</label><br/> 
+      </p>
+
+      <p <%= "class='disabled'" if @non_modifiables.include?('cout_periode')%>>
+        <% options = ({:disabled => true} if @non_modifiables.include?('cout_periode')) || {} %>
+        <%= check_box_tag 'ajuster_montant', "1", false, options %>
+        <label for="ajuster_montant">Ajuster le montant engagé en fonction des payes saisies</label>       
+      </p>
+      
+    </div>
+  </div>
+</div>
+
+<div id="justification-data" <%= 'style="display:none;"'.html_safe() if @user_preferences_show_justifacation_data == 'no' %>>
+  <div class="form-box sub-parent">
+    <h3>Justification</h3>
+    <div class="clearfix">
+      <div class="col-1-of-2">
+        
+        <p <%= "class='disabled'" if @non_modifiables.include?('tache')%>>
+          <label for="depense_salaire_tache">Nom de la tâche imputée</label><br />
+          <% options = ({:disabled => true} if @non_modifiables.include?('tache')) || {} %>
+          <%= f.text_field :tache, options %>
+        </p>
+
+        <p <%= "class='disabled'" if @non_modifiables.include?('eligible')%>>
+          <% options = ({:disabled => true} if @non_modifiables.include?('eligible')) || {} %>
+          <%= f.check_box :eligible, options %>
+          <label for="depense_salaire_eligible">Commande éligible ?</label><br/> 
+        </p>
+
+        <div <%= "class='disabled'" if @non_modifiables.include?('type_activite')%> style='padding-bottom:10px;'>
+          <% options = ({:disabled => true} if @non_modifiables.include?('type_activite')) || {} %>
+          <label>Type d'activité</label><br />
+          <div class="two_col">
+            <%= f.radio_button :type_activite, "R&D", options %>
+            <label for="depense_salaire_type_activite_rd">R&amp;D</label><br />
+
+            <%= f.radio_button :type_activite, "Démonstration", options %>
+            <label for="depense_salaire_type_activite_démonstration">Démonstration</label><br />
+
+            <%= f.radio_button :type_activite, "Training", options %>
+            <label for="depense_salaire_type_activite_training">Training</label>
+          </div>
+          <div class="two_col">
+            <%= f.radio_button :type_activite, "Management", options %>
+            <label for="depense_salaire_type_activite_management">Management</label><br />
+
+            <%= f.radio_button :type_activite, "Autre", options %>
+            <label for="depense_salaire_type_activite_autre">Autre</label>
+          </div>
+          <div style="clear:both;"></div>
+        </div>
+      </div>
+      <div class="col-2-of-2">
+        
+        <p <%= "class='disabled'" if @non_modifiables.include?('type_personnel')%>>
+          <% options = ({:disabled => true} if @non_modifiables.include?('type_personnel')) || {} %>
+          <label class="required">Type de personnel</label><br />
+          <span class="clearfix">
+            <span class="tab" id="tab-contractuel">
+              <%= f.radio_button :type_personnel, "Contractuel", options %>
+              <label for="depense_salaire_type_personnel_contractuel">Contractuel</label>
+            </span>
+            <span class="tab" id="tab-titulaire">
+              <%= f.radio_button :type_personnel, "Titulaire", options %>
+              <label for="depense_salaire_type_personnel_titulaire">Titulaire</label>
+            </span>
+            <span class="tab" id="tab-unknown">
+              <%= f.radio_button :type_personnel, "unknown", options %>
+              <label for="depense_salaire_type_personnel_unknown">&Oslash;</label>
+            </span>
+          </span>
+        </p>
+        
+        <div class="sub-form" id="type_personnel_sub_form">
+
+          <p class="inline for-contractuel <%= "disabled" if @non_modifiables.include?('date_debut_prise_en_charge_sur_contrat')%>">
+            <label class="required">Date de début de prise en charge</label><br />
+            <% if @non_modifiables.include?('date_debut_prise_en_charge_sur_contrat') %>
+              <%= f.date_select :date_debut_prise_en_charge_sur_contrat,
+                                :use_month_numbers => true, 
+                                :order => [:day, :month, :year],
+                                :disabled => true %>
+            <% else %>
+              <%= f.unobtrusive_date_picker :date_debut_prise_en_charge_sur_contrat , 
+                                            :use_month_numbers => true, 
+                                            :class => 'no-transparency' %>
+            <% end %>
+          </p>
+
+          <p class="inline for-contractuel <%= "disabled" if @non_modifiables.include?('date_fin_prise_en_charge_sur_contrat')%>">
+            <label class="required">Date de fin de prise en charge</label><br />
+            <% if @non_modifiables.include?('date_fin_prise_en_charge_sur_contrat') %>
+              <%= f.date_select :date_fin_prise_en_charge_sur_contrat,
+                                :use_month_numbers => true, 
+                                :order => [:day, :month, :year],
+                                :disabled => true %>
+            <% else %>
+              <%= f.unobtrusive_date_picker :date_fin_prise_en_charge_sur_contrat , 
+                                            :use_month_numbers => true, 
+                                            :class => 'no-transparency' %>
+            <% end %>
+          </p>
+
+          <p class="for-titulaire <%= "disabled" if @non_modifiables.include?('nb_heures_declarees')%>">
+            <label class="required" for="depense_salaire_nb_heures_declarees">Nombre d'heures déclarées</label><br />
+            <% options = ({:disabled => true} if @non_modifiables.include?('nb_heures_declarees')) || {} %>
+            <%= f.text_field :nb_heures_declarees, options %>
+          </p>
+
+          <p <%= "class='disabled'" if @non_modifiables.include?('nb_heures_justifiees')%>>
+            <label class="required" for="depense_salaire_nb_heures_justifiees">Nombre d'heures justifiées</label><br />
+            <% options = ({:disabled => true} if @non_modifiables.include?('nb_heures_justifiees')) || {} %>
+            <%= f.text_field :nb_heures_justifiees, options %>
+          </p>
+
+          <p <%= "class='disabled'" if @non_modifiables.include?('cout_indirect_unitaire')%>>
+            <label class="required" for="depense_salaire_cout_indirect_unitaire">Coût indirect unitaire</label><br />
+            <% options = ({:disabled => true} if @non_modifiables.include?('cout_indirect_unitaire')) || {} %>
+            <%= f.text_field :cout_indirect_unitaire, options %>
+          </p>
+
+          <p <%= "class='disabled'" if @non_modifiables.include?('somme_salaires_charges')%>>
+            <label class="required" for="depense_salaire_somme_salaires_charges">Somme des salaires chargés</label><br />
+            <% options = ({:disabled => true} if @non_modifiables.include?('somme_salaires_charges')) || {} %>
+            <%= f.text_field :somme_salaires_charges, options %>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="form sub-parent-toggle-container">
+  <a href="#" id="toggle-justification">
+    <%- if @user_preferences_show_justifacation_data == 'no' -%>
+      Afficher les données de justification
+    <%- else -%>
+      Masquer les données de justification
+    <%- end -%>
+  </a>
+</div>
+
+<div>
+  <% if controller.action_name != 'new' && controller.action_name != 'create' %>
+    <%= sub_list_content 'DepenseSalaireFacture', 'depense_salaire' %>
+    <%= sub_list_add_link 'depense_salaire_facture', 'Ajouter une paye' %>
+  <% end %>
+  <div style="clear:both;"></div>
+</div>
+
+<script type="text/javascript">
+  new App.Budget.ToggleJustificationData();
+</script>
+
+<script type="text/javascript">	
+  if (parseInt($('depense_salaire_cout_periode').value) != total()){
+    deverouiller('depense_salaire_cout_periode');
+  }
+  else{
+    verouiller('depense_salaire_cout_periode');
+  }
+
+  function deverouiller(input){
+    $(input).enable();
+    $(input+'_deverouiller').show();
+    $(input+'_verouiller').hide();
+    $(input).value = $(input+'_cach').innerHTML;
+  }
+
+  function verouiller(input){
+    $(input).disable();
+    $(input+'_deverouiller').hide();
+    $(input+'_verouiller').show();
+    $(input).value = "Calculé";
+  }
+
+  function total(){
+    return  Number($F('depense_salaire_nb_mois')) * Number($F('depense_salaire_cout_mensuel'))
+  }
+</script>

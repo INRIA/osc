@@ -1,0 +1,94 @@
+<% @depense_salaire_facture = depense_salaire_facture %>
+<% @non_modifiable_facture = @depense_salaire_facture.get_non_modifiables %>
+
+<div id="<%= "depense_salaire_facture_#{depense_salaire_facture.id}" %>">
+  
+  <div class="form-box child">
+    <%= "<span class='come-from-inria'>SI INRIA</span>".html_safe() if depense_salaire_facture.come_from_inria? %>
+    <h3 class="paye-title" id="paye_<%= depense_salaire_facture.id %>">Paye</h3>
+    <div class="remove_facture">
+      <% if( @depense_salaire_facture.verrou == 'Aucun') %>
+        <%= sub_list_remove_link depense_salaire_facture, 'DepenseSalaireFacture' %>
+      <% end %>
+    </div>
+    
+    <div class="clearfix">
+      <div class="col-1-of-2">
+        
+        <p <%= "class='disabled'" if @non_modifiable_facture.include?('cout')%>>
+          <label class="required">Co&ucirc;t Charg&eacute; (TTC)</label><br />
+          <% options = ({:disabled => true} if @non_modifiable_facture.include?('cout')) || {} %>
+          <%= text_field 'depense_salaire_facture[]', :cout, options %>
+        </p>
+
+        <p <%= "class='disabled'" if @non_modifiable_facture.include?('montant_htr')%>>
+          <label>Co&ucirc;t Charg&eacute; (HTR)</label><br />
+          <% options = ({:disabled => true} if @non_modifiable_facture.include?('montant_htr')) || {} %>
+          <%= text_field 'depense_salaire_facture[]', :montant_htr, options %>
+        </p>
+
+        <p <%= "class='disabled'" if @non_modifiable_facture.include?('commentaire')%>>
+          <label>Commentaire</label><br />
+          <% options = ({:disabled => true} if @non_modifiable_facture.include?('commentaire')) || {} %>
+          <%= text_field 'depense_salaire_facture[]', :commentaire, options %>
+        </p>
+        
+      </div>
+      <div class="col-2-of-2">
+        
+        <p <%= "class='disabled'" if @non_modifiable_facture.include?('numero_mandat')%>>
+          <label>N° de mandat</label><br />
+          <% options = ({:disabled => true} if @non_modifiable_facture.include?('numero_mandat')) || {} %>
+          <%= text_field 'depense_salaire_facture[]', :numero_mandat, options %>
+        </p>
+
+        <p class="inline <%= "disabled" if @non_modifiable_facture.include?('date_mandatement')%>">
+          <label class="required">Date de mandatement</label><br />
+          <% if @non_modifiable_facture.include?('date_mandatement') %>
+            <%= date_select 'depense_salaire_facture[]', 
+                            :date_mandatement,
+                            :default => nil,
+                            :include_blank => true,
+                            :order => [:day, :month, :year],
+                            :use_month_numbers => true,
+                            :disabled => true  %>
+          <% else %>
+            <%= unobtrusive_date_picker 'depense_salaire_facture[]',
+                                          :date_mandatement, 
+                                          :include_blank => true,
+                                          :use_month_numbers => true, 
+                                          :class => 'no-transparency',
+                                          :id => "#{@depense_salaire_facture.id}" %>
+          <% end %>
+        </p>
+         <p class="inline <%= "disabled" if @non_modifiable_facture.include?('millesime')%>">
+          <label>Date de service fait  (millésime)</label><br />
+          <% if @non_modifiable_facture.include?('millesime') %>
+            <%= date_select 'depense_salaire_facture[]',
+                            :millesime,
+                            :default => nil,
+                            :include_blank => true,
+                            :order => [:day, :month, :year],
+                            :use_month_numbers => true,
+                            :disabled => true %>
+          <% else %>
+            <%= unobtrusive_date_picker 'depense_salaire_facture[]',
+                                        :millesime,
+                                        :include_blank => true,
+                                        :use_month_numbers => true,
+                                        :class => 'no-transparency',
+                                        :id => "#{@depense_salaire_facture.id}" %>
+          <% end %>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- if controller.action_name.to_s == "add_depense_salaire_facture" -%>
+  <script type="text/javascript">
+    update_paye_legende();
+    update_aide_navigation_paye();
+    datePickerController.create();
+  </script>
+<%- end -%>

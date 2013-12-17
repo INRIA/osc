@@ -1,0 +1,57 @@
+<h1>Editing sous_contrat_notification</h1>
+
+<%= error_messages_for :sous_contrat_notification %>
+
+<% form_for(:sous_contrat_notification, :url => sous_contrat_notification_path(@sous_contrat_notification), :html => { :method => :put }) do |f| %>
+  <p>
+    <b>Sous contrat</b><br />
+    <%= f.text_field :sous_contrat_id %>
+  </p>
+
+  <p>
+    <b>Ma fonctionnement</b><br />
+    <%= f.text_field :ma_fonctionnement %>
+  </p>
+
+  <p>
+    <b>Ma equipement</b><br />
+    <%= f.text_field :ma_equipement %>
+  </p>
+
+  <p>
+    <b>Ma salaire</b><br />
+    <%= f.text_field :ma_salaire %>
+  </p>
+
+  <p>
+    <b>Ma mission</b><br />
+    <%= f.text_field :ma_mission %>
+  </p>
+
+  <p>
+    <b>Ma non ventile</b><br />
+    <%= f.text_field :ma_non_ventile %>
+  </p>
+
+  <p>
+    <b>Ma couts indirects</b><br />
+    <%= f.text_field :ma_couts_indirects %>
+  </p>
+
+  <p>
+    <b>Ma allocation</b><br />
+    <%= f.text_field :ma_allocation %>
+  </p>
+
+  <p>
+    <b>Ma total</b><br />
+    <%= f.text_field :ma_total %>
+  </p>
+
+  <p>
+    <%= submit_tag "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', sous_contrat_notification_path(@sous_contrat_notification) %> |
+<%= link_to 'Back', sous_contrat_notifications_path %>

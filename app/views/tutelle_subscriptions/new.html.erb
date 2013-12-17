@@ -1,0 +1,17 @@
+<h2>Association du projet <%= @tutelle_subscription.projet.nom %> à une tutelle</h2>
+
+<%= error_messages_for :tutelle_subscription %>
+
+<% form_for(:tutelle_subscription, :url => tutelle_subscriptions_path) do |f| %>
+
+  <p>
+    <b>Tutelle</b><br />
+    <%= f.select( "tutelle_id", Tutelle.find_all.collect {|p| [ p.nom, p.id ] }, { :include_blank => true}) %>
+  </p>
+
+  <p>
+    <%= submit_tag "Create" %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', edit_projet_path(@tutelle_subscription.projet) %>

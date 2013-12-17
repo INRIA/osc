@@ -1,0 +1,9 @@
+<a href="" 	id="link_to_remove_switch" style="display:none;"
+   onclick="$('link_to_remove_switch').toggle();$('switch_contrat').toggle();$('link_to_switch').toggle();return false;">&nbsp;</a>
+<%= link_to_remote "&nbsp;".html_safe(), 
+	:update => "switch_contrat",
+	:url => "/redirections/show_menu_contrat?previous_controller="+controller.class.to_s.gsub("Controller","")+
+			"&previous_action="+controller.action_name.to_s+
+        	"&previous_contrat_id="+@contrat.id.to_s,
+	:html => { :id => "link_to_switch"} %>
+										

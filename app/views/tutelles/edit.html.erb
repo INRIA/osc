@@ -1,0 +1,31 @@
+<div class="section">
+	<%= error_messages_for @tutelle %>
+	
+	<h2><strong>Descriptif</strong> de la tutelle</h2>
+	<%= form_for(:tutelle, :url => tutelle_path(@tutelle), :html => { :method => :put }) do |f| %>
+	<fieldset>
+		<p>
+			<label for="tutelle_nom" class="required">Nom</label><br />
+			<%= f.text_field :nom %>
+		</p>
+		<p>
+			<label for="tutelle_description">Description</label><br />
+			<%= f.text_area :description %>
+		</p>
+	</fieldset>
+	<p class="submit">
+		<%= submit_tag "Mettre à jour" %>
+	</p>
+	<% end %>
+</div>
+
+<div class="section">
+	<h2><strong>Projets</strong> associés à la tutelle</h2>
+	<div id="tutelleEditProjets">
+		<%= render :partial => "list_tutelle_subscriptions" %>	
+	</div>
+	<div id="add_tutelle_subscription">
+		<%= render :partial => 'add_tutelle_subscription' %>
+	</div>
+	<br />
+</div>

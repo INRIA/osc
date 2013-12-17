@@ -1,0 +1,19 @@
+
+<div class="showUserImage">
+	<%= show_user_image @user %>
+</div>
+<div class="showUserInfos">
+	<p class="visibilite">
+		<%=h @user.nom %>
+		<%=h @user.prenom %>
+		<a href="#" onclick="Effect.toggle('more', 'blind', {duration:0.4});return false;">+</a>
+	</p>
+	<p>
+		Email :	<strong><%=h @user.email %></strong>
+	</p>
+	<p>
+		Commentaire : <strong><%=h @user.commentaire %></strong>
+	</p>
+	<%= show_dates(@user) %>
+</div>
+<div style="clear:both;"></div>

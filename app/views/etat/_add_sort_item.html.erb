@@ -1,0 +1,7 @@
+<div class="sort">
+	<%= select_tag "sort[]", options_for_select( @select_for_sort.collect {|s| [ s[:intitule], s[:id] ] }, item[:sort] ) %>
+	<%= select_tag "order[]", options_for_select( [["Croissant", "ASC"], ["Décroissant", "DESC"]], item[:order] ) %>
+	<a href='' onclick="add_sort_item();return false;" class="add_sort_item"></a>
+	<a href='' onclick="remove_sort_item(this);return false;" class="remove_sort_item" style="display:none;"></a>
+	<div style="clear:both"></div>
+</div>

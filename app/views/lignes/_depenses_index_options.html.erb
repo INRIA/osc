@@ -1,0 +1,35 @@
+<%-
+	case @filter.to_s
+		when "all"           then css_class_all          = "selected"
+		when "soldees"       then css_class_soldees      = "selected"
+		when "non_soldees"   then css_class_non_soldees  = "selected"
+	end
+-%>
+<div id="options">
+  <div id="affichage">
+    <a href="?filter=all" class="filter <%= css_class_all %>"><span class="habillage_left">&nbsp;</span>Toutes<span class="habillage_right">&nbsp;</span></a>
+    <a href="?filter=soldees" class="filter <%= css_class_soldees %>"><span class="habillage_left">&nbsp;</span>Soldées<span class="habillage_right">&nbsp;</span></a>
+    <a href="?filter=non_soldees" class="filter <%= css_class_non_soldees %>"><span class="habillage_left">&nbsp;</span>Non soldées<span class="habillage_right">&nbsp;</span></a>
+    &nbsp;&nbsp;|&nbsp;&nbsp;
+    <% if controller.class.to_s == 'DepenseSalairesController' %>
+      <a href="?afficher_factures=toggle" class="toggle <%= 'selected' if @afficher_factures == 'true' %>"><span class="habillage_left">&nbsp;</span>Payes<span class="habillage_right">&nbsp;</span></a>
+    <% else %>
+      <a href="?afficher_factures=toggle" class="toggle <%= 'selected' if @afficher_factures == 'true' %>"><span class="habillage_left">&nbsp;</span>Factures<span class="habillage_right">&nbsp;</span></a>
+    <% end %>
+		<p id="export_to_csv">
+		  <%= link_to '<span class="habillage_left">&nbsp;</span>MS Office (UTF-16): Export au format csv<span class="habillage_right">&nbsp;</span>'.html_safe(), {:controller => controller_path,:action => "index", :encode => "utf16", :format => 'csv' },  :id => "export_budget_mso" %>
+		  <%= link_to '<span class="habillage_left">&nbsp;</span>Open Office (UTF-8) : Export au format csv<span class="habillage_right">&nbsp;</span>'.html_safe(), {:controller => controller_path,:action => "index", :encode => "utf8", :format => 'csv' },  :id => "export_budget_oo" %>
+	  </p>
+ 
+  </div>
+  <div id="line_per_page">
+    <span id="nb" class="infos"><%= @items_per_page.to_s %></span>
+    <div class="slider">
+      <div id="track" class="track"> </div>
+      <div id="handle" class="handle"> </div>
+    </div>
+    <div style="clear:both;"></div>
+  </div>
+  <div style="clear:both;"></div>
+</div>
+

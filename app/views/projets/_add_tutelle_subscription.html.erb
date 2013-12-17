@@ -1,0 +1,9 @@
+<% if !@tutelles_restantes.empty? %>
+  <p class="comment">Vous pouvez associer l'équipe <%= @projet.nom %> à des tutelles à l'aide du formulaire ci-dessous.</p>
+  <%= form_for(:projet, :url => "/tutelle_subscriptions/create?projet_id="+@projet.id.to_s,:remote => true, :html => {:class => 'inline',:method => :post }) do |f| %>  
+  	<label for="tutelle_subscription_tutelle_id">Associer la tutelle</label>
+  	<%= select "tutelle_subscription", "tutelle_id", @tutelles_restantes.collect {|t| [ t.nom, t.id ] } %>
+  	à l'équipe <%= @projet.nom %>	
+    <%= submit_tag "Valider" %>
+  <% end %>
+<% end %>

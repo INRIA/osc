@@ -1,0 +1,12 @@
+<% if (@projet.departement_subscriptions.empty?) && (@projet.laboratoire_subscriptions.empty?) %>
+  <p class="comment">Vous pouvez associer l'équipe <%= @projet.nom %> à un laboratoire à l'aide du formulaire ci-dessous.</p>
+  <%= form_for(:projet, :url => "/laboratoire_subscriptions/create?projet_id="+@projet.id.to_s,:remote => true, :html => {:class => 'inline',:method => :post }) do |f| %>
+  	<label for="laboratoire_subscription_laboratoire_id">Associer le laboratoire</label>
+  	<%= select "laboratoire_subscription", "laboratoire_id", @laboratoires.collect {|t| [ t.nom, t.id ] } %>		
+    à l'équipe <%= @projet.nom %> <%= submit_tag "Valider" %>
+<% end %>
+<% end %>
+
+<% if (!@projet.departement_subscriptions.empty?) %>
+<p class="comment">Association impossible car le projet est déjà rattaché à un laboratoire via un département.</p>
+<% end %>

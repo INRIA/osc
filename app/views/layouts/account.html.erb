@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  <title>OSC - Connexion à l'application</title>
+  <%= javascript_include_tag 'application' %>
+  <%= stylesheet_link_tag 'login' %>
+   <% if cookies[:style] && cookies[:style]!='' %>
+    <%= stylesheet_link_tag cookies[:style],:id =>'style_bis_css' %>
+    <link id='favicon' rel="shortcut icon" href="<%= asset_path 'Inria/favicon.ico' %>" />
+  <% else %>
+    <% if DEFAULT_STYLE %>
+      <%= stylesheet_link_tag DEFAULT_STYLE,:id =>'style_bis_css' %>
+      <link id='favicon' rel="shortcut icon" href="<%= asset_path 'Inria/favicon.ico' %>" />
+    <% else %>
+      <link id='favicon' rel="shortcut icon" href="<%= asset_path 'favicon.ico' %>" />
+    <% end %>
+  <% end %>
+</head>
+<body>
+  <div id='error' style="display:none">
+    <% if flash[:error] -%>
+      <p id='notice_content'><%= flash[:error] -%></p>
+      <%= javascript_tag "error();" %>
+    <% end -%>
+  </div>
+  <div id="entete">
+    <h1><strong>OSC</strong> Outil de Suivi des Contrats</h1>
+		
+		<div style="clear:both;"></div>
+  </div>
+  <%= yield %>
+</body>
+</html>

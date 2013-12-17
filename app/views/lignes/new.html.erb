@@ -1,0 +1,49 @@
+<%= error_messages_for @ligne %>
+
+<div>
+	<div class="left">
+		<h2>Recherche</h2>
+		<form id="search">
+			<p>
+				<label for="query">Nom du contrat</label>
+				<%= text_field_tag("query", params['query']) %>
+			</p>
+		</form>
+		<%= observe_form 'search',
+								:frequency => 0.5,
+								:on => 'changed',
+						    :url => { :action => "search_in_create" },
+								:with => "'&query='+$F('query')",
+								:method => :get,
+								:update => "list" %>
+		
+		<br />
+		<h2>Ligne sélectionnée</h2>
+		<p id="ligne_selectionnee">Aucune ligne sélectionnée pour le moment.</p>
+		<%= form_for(@ligne) do |f| %>
+			<%= f.hidden_field :sous_contrat_id %>
+			<div id="form_for_ligne_configs"></div>	
+			<p class="submit">
+				<%= f.submit "Créer la ligne" %> ou <%= link_to 'Annuler', lignes_path %>
+		  </p>
+		<% end %>
+		
+	</div>
+	<div class="right" id='list'>
+		<%= render :partial => 'list_for_new' %>
+	</div>
+<div style="clear:both;"></div>
+</div>
+
+
+
+<script type="text/javascript" language="javascript">
+// <![CDATA[
+function for_ligne_select(id){
+	$('ligne_sous_contrat_id').value = id;
+	$('ligne_selectionnee').update('<span>'+$('SousContrat_'+id).innerHTML+"</span>");
+	new Effect.Highlight('ligne_selectionnee', {duration:0.3});
+}
+// ]]>
+</script>
+

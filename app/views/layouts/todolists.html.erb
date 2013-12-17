@@ -1,0 +1,45 @@
+<% if controller.action_name.to_s == 'index' %>
+
+	<% content_for :head do %>
+		<div class='long_header_title'>		
+			<strong><%= @contrat.long_acronyme %></strong> > ToDo Lists
+			<%= render :partial => 'layouts/link_to_switch_contrat' %>
+		</div>
+		<div id="switch_contrat" style="display:none;"></div>
+		<p><%= @contrat.nom %></p>
+	<% end %>
+	
+	<% content_for :right do %>
+	
+		<div style="height:50px;">
+		<%=	link_to_remote "", {	:update => "new_todolist",
+    													:url => new_contrat_todolist_path(@contrat),
+ 															:method => :get}, 
+														{ :onclick =>	"Effect.toggle('link_to_add','appear', {duration:0.5});",
+															:class => "addToDoList",
+															:id => "link_to_add"
+															} %>
+		</div>
+		<div id="options_affichage"
+		<% if @contrat.todolists.empty? %>
+			style="display:none;"
+		<% end %>
+		>
+			<h2>Options d'affichage</h2>
+			<form id="toggle">
+				<%= radio_button_tag("classement", "date", checked = true) %>	<label for="classement_date">Afficher les tâches effectuées</label> <br />
+				<%= radio_button_tag("classement", "alphabetique", checked = false) %> <label for="classement_alphabetique">Masquer les tâches effectuées</label>
+			</form>
+			<%= observe_form 'toggle',
+							:frequency => 0.25,
+							:on => 'changed',
+							:function => "$$('#left .list_items_done').each(function(e){Effect.toggle(e,'blind', {duration:0.5});})" %>
+		</div>
+	
+	<% end %>
+	
+	<%= render :file => 'layouts/application_suivi_des_contrats' %>
+
+<% else %>
+	<%= yield  %>
+<% end %>

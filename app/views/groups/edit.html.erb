@@ -1,0 +1,79 @@
+<div id="my-glider">
+  <div class="scroller">
+    <div class="content">
+      <div id='droits' class="section">
+        <%=  render :partial => "droits" %>  
+      </div>
+
+      <div id='roles' class="section">
+        <%=  render :partial => "roles" %>   
+      </div>
+
+      <div id='description' class="section">
+	<div class="sect">
+	  <h2><strong>Descriptif</strong> du groupe</h2>
+
+	  <%= form_for(:group, :url => group_path(@group), :html => { :method => :put }) do |f| %>
+	    <div class="fieldset">
+	      <p>
+		<label for="group_nom" class="required">Nom</label><br />
+		<%= f.text_field :nom, :class => "textfield" %>
+	      </p>
+	      <p>
+		<label for="group_description">Description</label><br />
+		<%= f.text_area :description, :class => "textareafield" %>
+	      </p>
+	    </div>
+	    <p class="submit">
+	      <%= submit_tag "Mettre à jour" %> ou <%= link_to "Annuler", group_path(@group) %>
+	    </p>
+
+	  <% end %>
+	</div>
+
+      </div>
+
+      <div id='membres' class="section">
+	<div class="sect">
+	  <h2><strong>Utilisateur(s)</strong> du groupe</h2>
+	  <div id="groupEditUsers">
+	    <%= render :partial => "list_memberships" %>
+	  </div>
+	  <% if @users_restant.size != 0 %>
+	    <p class="comment">
+	      Vous pouvez ajouter des utilisateurs au groupe à l'aide du formulaire ci-dessous.
+	    </p>
+	  <% end %>
+	  <div id="add_membership">
+	    <%= render :partial => 'add_membership' %>
+	  </div>
+	  <br />
+	</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<%= error_messages_for @group %>
+<div id="error" style="display:none;"></div>
+
+<script type="text/javascript">
+<!--
+var currentpage = (document.location.href.match(/#([-_\w]+)$/) || []).last() || 'droits'
+
+$$('#onglets_tab a').each(function(a) {
+	var mypage = a.getAttribute('href').match(/[-_\w]+$/i)[0];
+	if (mypage == currentpage) {
+		$(a).addClassName('active')
+		Try.these(function(){$(a).previous('a').addClassName('before_active');});
+	}
+})
+var my_glider = new Glider('my-glider', {duration:0.25, initialSection : currentpage});
+
+$('contrat_id').observe('change', function(e){$('contrat').checked = true;});
+$('projet_id').observe('change', function(e){$('projet').checked = true;});
+
+//-->
+</script>

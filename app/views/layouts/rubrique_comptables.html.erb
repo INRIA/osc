@@ -1,0 +1,49 @@
+<% if controller.action_name.to_s == 'ask_delete' %>
+  <%= yield  %>
+<% else %>
+  <% content_for :head do %>
+  	<% if controller.action_name.to_s == 'index' %>
+  	<div class='header_title'>
+  		<strong>Liste des rubriques comptables</strong>
+  	</div>
+  	<div class='header_link'>
+  	</div>
+  	<div style='clear:both;'></div>
+  	<% end %>
+  	
+  	<% if controller.action_name.to_s == 'edit' || controller.action_name.to_s == 'update' %>
+  		<div class='header_title'>
+  			<strong><%= @rubrique_comptable.intitule %></strong>
+  			// Edition
+  		</div>
+  		<div class='header_link'>
+  		</div>
+  		<div style='clear:both;'></div>
+  	<% end %>
+  	
+  	<% if controller.action_name.to_s == 'new' or controller.action_name.to_s == 'create' %>
+  		<div class='header_title'>
+  			<strong>Création d'une rubrique comptable</strong>
+  		</div>
+  		<div class='header_link'>
+  		</div>
+  		<div style='clear:both;'></div>
+  	<% end %>
+  	
+  <% end %>
+  
+  <% content_for :right do %>
+  
+  <% if controller.action_name.to_s == 'index' %>
+  	<%= link_to '', new_rubrique_comptable_path, {:class => "addRubrique"} %>
+  <% end %>
+  
+  <div class="aide">
+  	<p>Les rubriques comptables sont classées dans une structure d'arbre.</p>
+  	<p>Vous ne pouvez supprimer que si la rubrique comptable n'est pas utilisée et n'a pas de sous-arborescence.</p>
+  </div>
+  
+  <% end %>
+  
+  <%= render :file => 'layouts/application_admin' %>
+<% end %>

@@ -1,0 +1,163 @@
+<div class="section">
+  <h2>Qui poss&egrave;de des droits de modification ?</h2>
+  <% @users = User.find(:all, :order => "nom, prenom") %>
+  <ul class="users-list">
+    <%- for user in @modification_users -%>
+      <li class="clearfix">
+        <%= show_user_image user %>
+        <span class="data">
+          <span class="name">
+            <%= user.prenom %> <%= user.nom %>
+            <%= "<span class='admin'>Admin Contrat</span>".html_safe() if @admin_contrat_users.include?(user) %>
+          </span>
+          <span class='comments' title='<%= user.commentaire %>'>
+            <%= truncate(user.commentaire, :length => 30, :ommission => '...')  %>
+          </span>
+        </span>
+      </li>
+    <%- end -%>
+    <%- for group in @modification_groups -%>
+      <li>
+        <div class="clearfix group">
+          <%= show_groups_image %>
+          <span class="data">
+            <span class="name">
+              <%= group.nom %>
+              <%= "<span class='admin'>Admin Contrat</span>".html_safe() if @admin_contrat_groups.include?(group) %>
+            </span>
+            <span class='comments' title='<%= group.description %>'>
+              <%= truncate(group.description, :length => 30, :ommission => '...')  %>
+            </span>
+          </span>
+          <a href="#" class="toggle toggle-group-members">+</a>
+        </div>
+        <ul style="display:none;" class='members'>
+          <%- for member in group.users -%>
+            <li class="clearfix">
+              <%= show_user_image member %>
+              <span class="data">
+                <span class="name">
+                  <%= member.prenom %> <%= member.nom %>
+                  <%= "<span class='admin'>Admin Contrat</span>".html_safe() if @admin_contrat_users.include?(member) %>
+                </span>
+                <span class='comments' title='<%= member.commentaire %>'>
+                  <%= truncate(member.commentaire, :length => 30, :ommission => '...')  %>
+                </span>
+              </span>
+            </li>
+          <%- end -%>
+        </ul>       
+      </li>
+    <%- end -%>
+  </ul>
+</div>
+
+<div class="section">
+  <h2>Qui poss&egrave;de des droits de modification du budget uniquement ?</h2>
+  <ul class="users-list">
+    <%- for user in @modification_budget_users -%>  
+      <li class="clearfix">
+        <%= show_user_image user %>
+        <span class="data">
+          <span class="name">
+            <%= user.prenom %> <%= user.nom %>
+            <%= "<span class='admin'>Admin Contrat</span>".html_safe() if @admin_contrat_users.include?(user) %>
+          </span>
+          <span class='comments' title='<%= user.commentaire %>'>
+            <%= truncate( user.commentaire, :length =>30, :ommission => '...' )%>
+          </span>
+        </span>
+      </li>
+    <%- end -%>
+    <%- for group in @modification_budget_groups -%>
+      <li>
+        <div class="clearfix group">
+          <%= show_groups_image %>
+          <span class="data">
+            <span class="name">
+              <%= group.nom %>
+              <%= "<span class='admin'>Admin Contrat</span>".html_safe() if @admin_contrat_groups.include?(group) %>
+            </span>
+            <span class='comments' title='<%= group.description %>'>
+              <%= truncate( group.description,:length => 30, :ommission => '...') %>
+            </span>
+          </span>
+          <a href="#" class="toggle toggle-group-members">+</a>
+        </div>
+        <ul style="display:none;" class='members'>
+          <%- for member in group.users -%>
+            <li class="clearfix">
+              <%= show_user_image member %>
+              <span class="data">
+                <span class="name">
+                  <%= member.prenom %> <%= member.nom %>
+                  <%= "<span class='admin'>Admin Contrat</span>".html_safe() if @admin_contrat_users.include?(member) %>
+                </span>
+                <span class='comments' title='<%= member.commentaire %>'>
+                  <%= truncate( member.commentaire,:length => 30, :ommission => '...') %>
+                </span>
+              </span>
+            </li>
+          <%- end -%>
+        </ul>
+      </li>
+    <%- end -%>
+  </ul>
+</div>
+
+<div class="section">
+  <h2>Qui poss&egrave;de des droits de consultation uniquement ?</h2>
+  <ul class="users-list">
+    <%- for user in @consultation_users -%>
+      <li class="clearfix">
+        <%= show_user_image user %>
+        <span class="data">
+          <span class="name">
+            <%= user.prenom %> <%= user.nom %>
+            <%= "<span class='admin'>Admin Contrat</span>".html_safe() if @admin_contrat_users.include?(user) %>
+          </span>
+          <span class='comments' title='<%= user.commentaire %>'>
+            <%= truncate( user.commentaire, :length =>30, :ommission => '...') %>
+          </span>
+        </span>
+      </li>
+    <%- end -%>
+    <%- for group in @consultation_groups -%>
+      <li>
+        <div class="clearfix group">
+          <%= show_groups_image %>
+          <span class="data">
+            <span class="name">
+              <%= group.nom %>
+              <%= "<span class='admin'>Admin Contrat</span>".html_safe() if @admin_contrat_groups.include?(group) %>
+            </span>
+            <span class='comments' title='<%= group.description %>'>
+              <%= truncate( group.description, :length =>30, :ommission => '...') %>
+            </span>
+          </span>
+          <a href="#" class="toggle toggle-group-members">+</a>
+        </div>
+        <ul style="display:none;" class='members'>
+          <%- for member in group.users -%>
+            <li class="clearfix">
+              <%= show_user_image member %>
+              <span class="data">
+                <span class="name">
+                  <%= member.prenom %> <%= member.nom %>
+                  <%= "<span class='admin'>Admin Contrat</span>".html_safe() if @admin_contrat_users.include?(member) %>
+                </span>
+                <span class='comments' title='<%= member.commentaire %>'>
+                  <%= truncate( member.commentaire,:length => 30, :ommission => '...') %>
+                </span>
+              </span>
+            </li>
+          <%- end -%>
+        </ul>
+      </li>
+    <%- end -%>
+  </ul>
+</div>
+
+<script type="text/javascript">
+  new App.GroupsAndRolesDisplay();
+</script>

@@ -1,0 +1,42 @@
+<%- temp_d = "" -%>
+<% for file in @contrat_files %>
+<%- if (french_datetime_with_word file.created_at) != temp_d  -%>
+	<div class="date_fichier">
+	<%= french_datetime_with_word file.created_at %>
+	</div>
+<%- end -%>
+
+	<div class="doc" id="file_<%= file.id.to_s %>">
+		<div class='icon'>
+				<img src="<%= get_file_img_src(File.extname(file['file'])) %>" alt="Fichier" />
+		</div>
+		<div class='infos'>
+			<div class="filename"><%= link_to file['file'], url_for_file_column(file, "file"), :title => "Télécharger le document" %></div>
+			<div class="description" id="file_description_<%= file.id %>">
+				<%= link_to_remote file.description,{
+					:update => 'edit_description_'+file.id.to_s,
+					:url => edit_description_contrat_contrat_file_path(file.contrat, file),
+					:method => :get},
+					:title => "Editer la description du fichier" %>
+			</div>
+			<div id="edit_description_<%= file.id %>"></div>
+			<div class="file">
+				Ajouté par <%= print_small_user_infos file.created_by %>
+				|				
+				<% begin %>
+				  <%= to_filesize( File.size("public"+url_for_file_column(file, "file")).to_f ) %>
+				<% rescue %>
+				  <%= "Fichier manquant!" %>
+				<% end %>				 
+				|
+				<%= link_to_remote_redbox image_tag("trash.gif", :alt=>'del'),
+				    {	:url => ask_delete_contrat_contrat_file_path(@contrat, file), :method => :get}, 
+						{	:class => "del",
+							:title => "Supprimer le document" }	 %>										
+			</div>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+<%- temp_d = french_datetime_with_word file.created_at -%>	
+<% end %>

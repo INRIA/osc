@@ -1,0 +1,115 @@
+<h2>Sélection temporelle</h2>		
+<div class="options">
+	<div class="time-selection-links-container">
+		<h3>Par année(s)</h3>
+		<%
+		class_all = class_all_by_year = class_all_periode = class_all_by_year_periode = ""
+		if (@current_date_start == @date_start.to_s) && (@current_date_end == @date_end.to_s)
+      if @detail == '0'
+	      class_all = "selected"
+			elsif @detail == '1'
+	      class_all_by_year = "selected"
+	    elsif @detail == '2'
+	      class_all_periode = "selected"
+	    elsif @detail == '3'
+	      class_all_by_year_periode = "selected"
+      end
+		end
+		%>
+		<a href="?date_start=<%= @date_start.to_s %>&amp;date_end=<%= @date_end.to_s %>&amp;with_detail=0" class="select-year <%= class_all %>" id="select-all-year"><span class="habillage_left">&nbsp;</span>Toutes<span class="habillage_right">&nbsp;</span></a>
+    <%- if controller.action_name == 'bilan' -%>
+		<a href="?date_start=<%= @date_start.to_s %>&amp;date_end=<%= @date_end.to_s %>&amp;with_detail=1" class="select-year <%= class_all_by_year %>"><span class="habillage_left">&nbsp;</span>Toutes par année<span class="habillage_right">&nbsp;</span></a>
+    <%- end -%>
+
+		<%
+		for y in (@date_start.year.to_i .. @date_end.year.to_i)
+			if y == @date_start.year.to_i
+				@start = @date_start.to_s
+			else
+				@start = y.to_s+"-01-01"
+			end
+
+			if y == @date_end.year.to_i
+				@end = @date_end.to_s
+			else
+				@end = y.to_s+"-12-31"
+			end
+
+			if @current_date_start == @start && @current_date_end == @end
+				@class = "selected"
+			else
+				@class = ""
+			end
+		%>
+		<a href="?date_start=<%= @start %>&amp;date_end=<%= @end %>&amp;with_detail=0"
+			 class="select-year <%= @class %>"
+			 id="select-year-<%= y.to_s %>"><span class="habillage_left">&nbsp;</span><%= y.to_s %><span class="habillage_right">&nbsp;</span></a>
+		<% end %>
+
+		<%- if @ligne.has_periods? -%>
+			<h3>Par p&eacute;riode de l'&eacute;ch&eacute;ancier</h3>
+			<%- if @ligne.periodes.size == 0 -%>
+			  Aucune p&eacute;riode n'a &eacute;t&eacute; d&eacute;finie pour l'&eacute;ch&eacute;ancier.
+			<%- else %>
+			<ul class="periods-list">
+				<%- if controller.action_name == 'bilan' -%>
+					<li>
+					  <a href="?date_start=<%= @date_start.to_s %>&amp;date_end=<%= @date_end.to_s %>&amp;with_detail=2" class="select-year <%= class_all_periode %>" id="select-all-year"><span class="habillage_left">&nbsp;</span>Toutes<span class="habillage_right">&nbsp;</span></a>
+					</li>
+					<li>
+	          <a href="?date_start=<%= @date_start.to_s %>&amp;date_end=<%= @date_end.to_s %>&amp;with_detail=3" class="select-year <%= class_all_by_year_periode %>"><span class="habillage_left">&nbsp;</span>Toutes par p&eacute;riode<span class="habillage_right">&nbsp;</span></a>
+	        </li>
+					<%- end -%>
+				  <%- @ligne.periodes.each_with_index do |period, i| -%>
+					<%- cssclass = "selected" if (@current_date_start == period.date_debut.to_s && @current_date_end == period.date_fin.to_s) -%>
+					<li>
+							P&eacute;riode <%= (i+1).to_s %> :
+							<a href="?date_start=<%= period.date_debut %>&amp;date_end=<%= period.date_fin %>&amp;with_detail=0&amp;periode_id=<%= period.id %>&amp;periode_number=<%= i+1 %>" class="select-year <%= cssclass %>" id="period-<%= i %>"><span class="habillage_left">&nbsp;</span><%= to_ddmmyyyy(period.date_debut) %> - <%= to_ddmmyyyy(period.date_fin) %><span class="habillage_right">&nbsp;</span></a>
+					</li>
+			  <%- end -%>
+			</ul>
+			<%- end -%>
+		<%- end -%>
+	</div>
+
+	<h3>Sélection fine</h3>
+
+	<div class="slider">
+  	<div id="track_date" class="track"> </div>
+		<div id="handle_date_start" class="handle"> </div>
+		<div id="handle_date_end" class="handle secondhandle"> </div>
+	</div>
+
+	<div class="slider-detail-info">
+		Du
+		<a href="#" class="adjust_date" id="remove-day-to-date-start" title="Enlever un jour à la date de début">&larr;</a>
+		<span class="slider_date_info">
+			<span id="date_start"><%= french_date @current_date_start.to_date %></span>
+		</span>
+		<a href="#" class="adjust_date" id="add-day-to-date-start" title="Ajouter un jour à la date de début">&rarr;</a>
+		au
+		<a href="#" class="adjust_date" id="remove-day-to-date-end" title="Enlever un jour à la date de fin">&larr;</a>
+		<span class="slider_date_info">
+			<span id="date_end"><%= french_date @current_date_end.to_date %></span>
+		</span>
+		<a href="#" class="adjust_date" id="add-day-to-date-end" title="Ajouter un jour à la date de fin">&rarr;</a>
+	</div>
+
+</div>
+
+<script type="text/javascript">
+	new App.Budget.TimeSelector(
+		{
+			'url'                   : '?',
+			'div_id_to_replace'     : 'to-update',
+			'slider_date_start'     : new Date(<%= @date_start.year %>, <%= @date_start.month - 1 %>, <%= @date_start.day %>),
+			'slider_date_end'       : new Date(<%= @date_end.year %>, <%= @date_end.month - 1 %>, <%= @date_end.day %>),
+			'current_date_start'    : new Date(<%= @current_date_start.to_date.year %>,
+			                                   <%= @current_date_start.to_date.month - 1 %>,
+			                                   <%= @current_date_start.to_date.day %>),
+			'current_date_end'      : new Date(<%= @current_date_end.to_date.year %>,
+			                                   <%= @current_date_end.to_date.month - 1 %>,
+			                                   <%= @current_date_end.to_date.day %>)
+		}
+	);
+</script>

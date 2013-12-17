@@ -1,0 +1,46 @@
+<div class="entete">
+	<div class="titre">Changer de contrat</div>
+	<div class="recherche">Recherche <input type="text" id="search_in_contrat" /></div>
+	<div style="clear:both;"></div>
+</div>
+<ul>
+	<%- i = 0 -%>
+	<%- saut = (@contrats.size.to_f / 4).ceil -%>
+	<%- for contrat in @contrats -%>	
+		<%- if i % saut == 0 && i != 0 -%>
+			</ul>
+			<ul>
+		<%- end -%>
+			
+		<%- if @previous_contrat_id.to_s == contrat[0]['id'].to_s -%>
+		<li class="current"><%- else -%><li><%- end -%>
+			<%= link_to contrat[0]['nom'].to_s,	contrat[0]['path'].to_s, :id => "switch_"+contrat[0]['id'].to_s %>
+		</li>
+		<%- i = i+1 -%>
+	<%- end -%>
+	</ul>
+	<div style="clear:both;"></div>
+	
+	
+	<script type="text/javascript" charset="utf-8">
+		$('link_to_remove_switch').toggle();
+		$('switch_contrat').toggle();
+		$('link_to_switch').toggle()
+
+		$('search_in_contrat').focus();
+		new Form.Element.Observer(
+		  'search_in_contrat',
+		  0.2,  // 200 milliseconds
+		  function(el, value){
+				$$('#switch_contrat ul li a').each(function(e){
+				    $(e.id).removeClassName('reject');
+				});
+				$$('#switch_contrat ul li a').reject(function(e) {
+				   return e.innerHTML.strip().toLowerCase().include(value.strip().toLowerCase())
+				}).each(function(e){
+				    $(e.id).addClassName('reject');
+				})
+		  }
+		)
+
+	</script>

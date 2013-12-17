@@ -1,0 +1,15 @@
+<% txt = "" %>
+
+<% txt = "pour la période du <strong>"+french_date(@current_date_start.to_date)+"</strong> au <strong>"+french_date(@current_date_end.to_date)+"</strong>"  %>
+
+<%- y = @current_date_start.to_date.year.to_s -%>
+
+<%- if (@current_date_start.to_s == @date_start.to_s && @current_date_end.to_s == y.to_s+"-12-31") ||
+			 (@current_date_start.to_s == y.to_s+"-01-01" && @current_date_end.to_s == @date_end.to_s) ||
+			 (@current_date_start.to_s == y.to_s+"-01-01" && @current_date_end.to_s == y.to_s+"-12-31")	-%>
+	<%- txt = "pour l'année <strong>"+y.to_s+"</strong>" -%>
+<%- end -%>
+
+<%- txt = "" if (@current_date_start.to_s == @date_start.to_s && @current_date_end.to_s == @date_end.to_s) -%>
+
+<%= txt.html_safe() %>

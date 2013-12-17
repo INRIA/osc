@@ -1,0 +1,23 @@
+<p>
+  <b>Projet:</b>
+  <%=h @tutelle_subscription.projet.nom %>
+</p>
+
+<p>
+  <b>Tutelle:</b>
+  <%=h @tutelle_subscription.tutelle.nom %>
+</p>
+
+<p>
+  <b>Created at:</b>
+  <%=h @tutelle_subscription.created_at %>
+</p>
+
+<p>
+  <b>Updated at:</b>
+  <%=h @tutelle_subscription.updated_at %>
+</p>
+
+
+<%= link_to 'Edit', edit_tutelle_subscription_path(@tutelle_subscription) %> |
+<%= link_to 'Back', tutelle_subscriptions_path %>

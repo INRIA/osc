@@ -1,0 +1,30 @@
+<%= error_messages_for @versement %>
+
+<%= form_for([@ligne, @versement]) do |f| %>
+
+  <%- if (@versement.verrou == "Aucun") -%>
+    <p class="change-line" id="build-migration-form-link-container">
+      <%= link_to 'Déplacer ce crédit sur une autre ligne', 
+                  build_migration_form_ligne_versement_path(@ligne, @versement), 
+                  :id => "build-migration-form-link" %>
+    </p>
+    <div class="form-box parent" id="migration-form" style="display:none;"></div>
+    <script type="text/javascript">
+      new App.Budget.LigneMigration();
+    </script>
+  <% end %>
+  
+  <%= render :partial => 'form', :locals => {:f => f} %>
+  
+  <div class="form-box submit">
+    <%= f.submit "Enregistrer les modifications" %> ou <%= link_to "Annuler", ligne_versement_path(@ligne, @versement) %>
+    <%- if (@ligne.contrat.is_budget_editable? current_user) and (@versement.verrou == "Aucun") -%>
+    <span class="delete_depense">
+    <%= link_to_remote_redbox "Supprimer le crédit",
+        { :url => ask_delete_ligne_versement_path(@ligne, @versement), :method => :get}, 
+        { :class => "destroy",
+          :title => "Supprimer le versement" }  %>
+    </span>
+    <%- end -%>
+  </div>
+<% end %>

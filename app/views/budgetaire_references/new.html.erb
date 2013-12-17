@@ -1,0 +1,19 @@
+<%= error_messages_for @budgetaire_reference %>
+<%= form_for(@budgetaire_reference) do |f| %>
+<fieldset>
+	<p>
+  	<label>Code rubrique</label><br />
+  	<%= f.text_field :code %>
+	</p>
+	<p>
+  	<label>Intitulé</label><br />
+  	<%= f.text_field :intitule %>
+	</p>
+
+</fieldset>
+ <p class="submit">
+   <%= f.submit "Créer" %> ou <%= link_to "Annuler", budgetaire_references_path %>
+ </p>
+<% end %>
+
+

@@ -1,0 +1,48 @@
+<% if @projet.date_fin < Date.today %>
+<div class="archive">
+<% end %>
+
+<div class="section">
+	<% if @projet.departements.size != 0 %>
+	<h2>Association à un <strong>laboratoire</strong></h2>
+		<% for departement in @projet.departements %>
+		<div class="list_infos">
+			<div class="name"><%= link_to departement.laboratoire.nom, laboratoire_path(departement.laboratoire) %> via le département  <%= link_to departement.nom, departement_path(departement) %></div>
+			<div class="description"><%=h departement.laboratoire.description %></div>
+		</div>
+		<% end %>
+	<% end %>
+
+	<% if @laboratoires.size != 0 %> 
+	<h2>Association à un <strong>laboratoire</strong></h2>
+		<% for laboratoire in @laboratoires %>
+		<div class="list_infos">
+			<div class="name"><%= link_to laboratoire.nom, laboratoire_path(laboratoire) %></div>
+			<div class="description"><%=h laboratoire.description %></div>
+		</div>
+		<% end %>
+		<% end %>
+
+		<% if (@projet.departements.size == 0) && (@laboratoires.size == 0) %>
+		<h2><strong>Aucune</strong> association à un <strong>laboratoire</strong></h2>
+		<% end %>
+</div>
+
+<div class="section">
+	<h2>Associations à des <strong>tutelles</strong></h2>
+	<% for tutelle in @tutelles %>
+	<div class="small_photo_infos">
+		<div class="photo">
+			<%= show_tutelle_logo_small tutelle.tutelle_logo %>
+		</div>
+		<div class="infos">
+			<div class="name"><%= link_to tutelle.nom, tutelle_path(tutelle) %></div>
+			<div class="description"><%=h tutelle.description %></div>
+		</div>
+		<div style="clear:left;"></div>
+	</div>
+	<% end %>
+</div>
+<% if @projet.date_fin < Date.today %>
+</div>
+<% end %>

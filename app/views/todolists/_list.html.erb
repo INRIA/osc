@@ -1,0 +1,30 @@
+<div id="todolist_box_<%= @todolist.id.to_s %>" class="todolist_box">
+
+	<div id="edit_todolist_<%= @todolist.id.to_s %>" style="display:none;"></div>
+	
+	<div class="todolist_name without_actions" id="show_todolist_<%= @todolist.id.to_s %>" 
+		onmouseover="$('todolist_action_<%= @todolist.id.to_s %>').show();
+								 $('show_todolist_<%= @todolist.id.to_s %>').removeClassName('without_actions');"
+		onmouseout="$('todolist_action_<%= @todolist.id.to_s %>').hide();
+		 						$('show_todolist_<%= @todolist.id.to_s %>').addClassName('without_actions');" >
+		<%= render :partial => 'todolists/show', :local => @todolist %>
+	</div>
+
+	<div id="list_items_undone_<%= @todolist.id.to_s %>">
+		<%= render :partial => 'todoitems/list_items_undone', :local => @todolist %>
+	</div>
+
+	<div class="add_todoitem" id="add_todoitem_<%= @todolist.id %>" style="display:none;">
+		<%= render :partial => 'todoitems/new', :local => @todolist %>
+	</div>	
+	
+	<div class="new_todoitem" id="link_to_add_todoitem_<%= @todolist.id.to_s %>">
+		<a href=""
+			onclick="$('add_todoitem_<%= @todolist.id.to_s %>').show();$('link_to_add_todoitem_<%= @todolist.id.to_s %>').hide();$$('#add_todoitem_<%= @todolist.id.to_s %> .inputadd').first().focus();return false;">Ajouter une tâche</a>
+	</div>
+	
+	<div id="list_items_done_<%= @todolist.id.to_s %>" class="list_items_done">
+		<%= render :partial => 'todoitems/list_items_done', :local => @todolist %>
+	</div>
+
+</div>

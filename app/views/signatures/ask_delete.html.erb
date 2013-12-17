@@ -1,0 +1,8 @@
+<div class="content">
+	<p>
+		Etes-vous certain de vouloir supprimer la signature du contrat <strong> <%= @contrat.long_acronyme %> </strong> ?
+	</p>
+	<%= link_to_close_redbox "Non", :class => 'annuler' %>
+	<%= link_to "Oui", contrat_signature_path(@contrat, @signature), :method => :delete %>
+	<div style="clear:both;"></div>
+</div>

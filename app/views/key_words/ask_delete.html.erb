@@ -1,0 +1,10 @@
+<div class="content">
+	<p>
+	Etes-vous certain de vouloir supprimer le mot clé <strong>"<%= @key_word.intitule %>"</strong> ?
+	</p>
+	<%= link_to_close_redbox "Non", :class => 'annuler' %>
+	<%= link_to_remote "Oui",
+ 									{ :url => key_word_path(@key_word),
+										:method => :delete } %>
+	<div style="clear:both;"></div>
+</div>

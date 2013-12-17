@@ -1,0 +1,28 @@
+<%= error_messages_for @contrat_type %>
+
+<%= form_for(:contrat_type, :url => contrat_type_path(@contrat_type), :html => { :method => :put }) do |f| %>
+
+<fieldset>
+	
+	<p>
+	  <label>Intitulé du type de contrat</label><br />
+	  <%= f.text_field :nom %>
+	</p>
+	<br />
+
+	<p>
+	  <label>Choix de l'élément parent</label><br />
+		<ul class='tree' style="border:none;">
+		<li>
+			<%= radio_button('contrat_type', 'parent_id', '0') %> 
+			Niveau 0
+		</li>
+		<%= display_form_edit_tree_recursive_for_contrat_types(f, @contrat_types, 0, @contrat_type.id) %>
+		</ul>
+	</p>
+	
+</fieldset>
+<p class="submit">
+    <%= submit_tag "Mettre à jour" %> ou <%= link_to "Annuler", contrat_types_path %>
+</p>
+<% end %>

@@ -1,0 +1,49 @@
+<%- if @response_status == 'ok' -%>
+  <%- if !@people.nil? -%>
+    <p>
+      <%= pluralize(@people.size, 'personne trouvée', 'personnes trouvées').html_safe() %>
+      <%- if @query_type == 'nom' %>
+        pour le nom <strong><%= @query.capitalize %></strong>.
+      <%- end -%>
+      <%- if @query_type == 'prenom' %>
+        pour le prénom <strong><%= @query.capitalize %></strong>.
+      <%- end -%>
+      <%- if @query_type == 'projet_service' %>
+        dans le projet ou équipe <strong><%= @query.upcase %></strong>.
+      <%- end -%>
+    </p>
+    <p>
+      Cliquez sur la personne souhaitée pour pré-remplir le formulaire de création de dépense en salaire.
+    </p>
+    <ul class='people'>
+      <%- @people.each do |person| -%>
+      <li>
+        <a href="#" class="clearfix">
+          <img src='<%= person['photo'][0]['content'] %>' />
+          <span class='data'>
+            <span class='strong'>
+              <span class='nom'><%= person['nom'] %></span>
+              <span class='prenom'><%= person['prenom'] %></span>
+            </span>
+            <br />
+            <span class='statut'><%= person['statut'] %></span>
+            - <span class='equipe'><%= person['projet_service'] %></span>
+            <br />
+            <span class='date_start'><%= person['date_debut_contrat'] %></span> -
+            <span class='date_end'><%= person['date_fin_contrat'] %></span>
+          </span>
+        </a>
+      </li>
+      <%- end -%>
+    </ul>
+  <%- else -%>
+    <p>
+      Aucune personne trouvée dans OSE ayant pour nom, prénom ou équipe la valeur "<strong><%= @query %></strong>".
+    </p>
+  <%- end -%>
+<%- else -%>
+  <h3>Erreur survenue lors de l'interrogation de l'API OSE</h3>
+  <p>
+    <%= @api_error_message %>
+  </p>
+<%- end -%>

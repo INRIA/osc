@@ -1,0 +1,53 @@
+<tr class="factures <%= @tr_class %>">
+  <th></th>
+  <th></th>
+  <th class="first">N° de facture</th>
+  <th>Date <br/>(Millesime)</th>
+  <th>N° de mandat</th>
+  <th>Date de mandatement</th> 
+  <th>Justifiable</th>
+  <th>Rubrique</th>
+  <th>TVA</th>
+  <th class="money">Pay&eacute; HTR</th>
+  <th class="money">Pay&eacute; HT</th>
+  <th class="money">Pay&eacute; TTC</th>
+  <th></th>
+</tr>
+
+<% for facture in @factures %>
+      <tr class="factures <%= @tr_class %>">
+      <td></td>
+      <%
+      verrou_class = 'no-verrou'
+      verrou_class = 'verrou' if facture.come_from_inria?
+      %>
+      <td class="<%= verrou_class %> "></td>
+      <td  class="first"><abbr title="<%= facture.numero_facture %>"><%= truncate(facture.numero_facture, :length =>45, :ommission => '...') %></abbr></td>
+			<td><%= french_small_date facture.date %>
+        <% if !facture.millesime.blank? %>
+          <br/> (<%= french_small_date facture.millesime %>)
+        <% end %>
+      </td>
+      <td>
+        <abbr title="<%= facture.numero_mandat %>"><%= truncate(facture.numero_mandat,:length => 25, :ommission => '...') %></abbr>
+      </td>
+      <td>
+        <% if !facture.date_mandatement.blank? %>
+          <%= french_small_date facture.date_mandatement %>
+        <%end%>
+      </td>
+      <td>
+        <% if (!facture.justifiable || facture.justifiable == "") %>
+          ?
+        <% else %>
+          <%= facture.justifiable %>
+        <% end %>
+      </td>
+      <td><%= facture.rubrique_comptable.small_intitule %></td>
+      <td><%= my_number_to_currency facture.taux_tva %>%</td>
+      <td class="money"><%= my_number_to_currency facture.montant_htr %></td>
+      <td class="money"><%= my_number_to_currency facture.cout_ht %></td>
+      <td class="money"><%= my_number_to_currency facture.cout_ttc %></td>
+      <td></td>
+    </tr>
+<% end %>

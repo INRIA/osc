@@ -1,0 +1,23 @@
+<p>
+  <b>Projet :</b>
+  <%=h @laboratoire_subscription.projet.nom %>
+</p>
+
+<p>
+  <b>Laboratoire :</b>
+  <%=h @laboratoire_subscription.laboratoire.nom %>
+</p>
+
+<p>
+  <b>Date de création :</b>
+  <%=h @laboratoire_subscription.created_at %>
+</p>
+
+<p>
+  <b>Date de dernière modification :</b>
+  <%=h @laboratoire_subscription.updated_at %>
+</p>
+
+
+<%= link_to 'Edit', edit_laboratoire_subscription_path(@laboratoire_subscription.projet, @laboratoire_subscription) %> |
+<%= link_to 'Back', laboratoire_subscriptions_path() %>

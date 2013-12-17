@@ -1,0 +1,8 @@
+<%= select_tag("contrat_clos_select", 
+               options_for_select({"Masquer les contrats clos et les lignes désactivées" => "no",
+                                   "Afficher les contrats clos" => "yes",
+                                   "Afficher les lignes désactivées" => "lignes_desactivees"},
+                                   :selected => @show_contrat_clos
+                                 ),
+               {:style => "width:auto;",
+                :onchange => "selectContratClos(this.value);return false;"}) %>

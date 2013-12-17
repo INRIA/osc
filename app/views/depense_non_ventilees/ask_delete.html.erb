@@ -1,0 +1,8 @@
+<div class="content">
+	<p>
+	Etes-vous certain de vouloir supprimer cette dépense non ventilée ?<br />
+	</p>
+	<%= link_to_close_redbox "Non", :class => 'annuler' %>
+	<%= link_to "Oui", ligne_depense_non_ventilee_path(@ligne, @depense_non_ventilee), :method => :delete %>
+	<div style="clear:both;"></div>
+</div>

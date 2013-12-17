@@ -1,0 +1,100 @@
+<% if controller.action_name.to_s == 'ask_delete' %>
+  <%= yield  %>
+<% else %>
+  <%- content_for :head do -%>
+  	<%- if controller.action_name.to_s == 'index' -%>
+  		<div class='header_title'>
+  			<strong>Listes des équipes</strong>
+  			// <span id="ajax_result"><%= @count %> projets référencés</span>
+  		</div>
+  		<div class='header_link'>
+  		</div>
+  	<%- end -%>
+  	
+  	<%- if controller.action_name.to_s == 'new' or controller.action_name.to_s == 'create' -%>
+  		<div class='header_title'>
+  			<strong>Création d'équipe</strong>
+  		</div>
+  		<div class='header_link'></div>
+  	<%- end -%>
+  	
+  	<%- if controller.action_name.to_s == 'show' -%>
+  		<div class='header_title'>		
+  			<div class="showInfos">
+  				<p class="visibilite">
+  					<strong><%= @projet.nom %></strong>
+  					<a href="#" onclick="Effect.toggle('more', 'blind', {duration:0.4});return false;">(+)</a>
+  				</p>
+  				<p>
+  					Description :	<strong><%=h @projet.description %></strong>
+  				</p>
+  				<p>
+  					Date de début : <strong><%=h french_date @projet.date_debut %></strong>
+  				</p>
+  				<p>
+  					Date de fin : <strong><%=h french_date @projet.date_fin %></strong>
+  				</p>
+  				<p>
+  					Verrou : <strong><%=h @projet.verrou %></strong>
+  				</p>
+  				<%= show_dates(@projet) %>
+  			</div>
+  			<div style='clear:both;'></div>		
+  		</div>
+  		<div class='header_link'>
+  			<%= link_to "Editer l'équipe", edit_projet_path(@projet) %>
+  		</div>
+  	<%- end -%>
+  	
+  	<%- if controller.action_name.to_s == 'edit' -%>
+  		<div class='header_title'>
+  			<strong><%= @projet.nom %></strong>
+  			// Edition
+  		</div>
+  		<div class='header_link'>
+  			<%= link_to "Visualiser l'équipe", projet_path(@projet) %>
+  		</div>
+  		<div style='clear:both;'></div>
+  	<%- end -%>
+  	<div style='clear:both;'></div>
+  <%- end -%>
+  
+  
+  <%- content_for :right do -%>
+  
+  <%- if controller.action_name.to_s == 'index' -%>
+  	<%= link_to '', new_projet_path, {:class => "addProjet"} %>
+  	<h2>Rechercher sur le nom</h2>
+  	
+  	<form name="sform" action="">
+  		<p>
+  			<%= text_field_tag("query", params['query'], :size => 10, :class => "textfield" ) %>
+  		</p>
+  	</form>
+  	
+  	<%= observe_field 'query',  :frequency => 0.5,
+         :url => {:action => 'search_by_name'},
+         :with => 'query' %>
+  	   
+  	<h2>Options</h2>
+  	<a href="" onclick="$$('.archive').each(Element.toggle);return false;">Afficher/masquer les équipes en archive</a>
+  <%- end -%>
+  
+  <%- if controller.action_name.to_s != 'show' && controller.action_name.to_s != 'index' -%>
+  	<div class="aide">
+  	<%- if controller.action_name.to_s == 'new' or controller.action_name.to_s == 'create' -%>
+  		<p>Une date de début et de fin d'équipe doivent être définies, la date de fin peut être dite "infinie" lorsque celle-ci n'est pas connue.</p>
+  		<p>Une équipe peut être associée à un laboratoire et à plusieurs tutelles. Vous devez créer l'équipe avant de pouvoir la modifier et lui associer un laboratoire et des tutelles</p>
+  	<%- end -%>
+  	<%- if controller.action_name.to_s == 'edit' -%>
+  		<p>Le champ Nom de l'équipe est un champ obligatoire.</p>	
+  		<p>Une date de début et de fin d'équipe doivent être définies, la date de fin peut être dite "infinie" lorsque celle-ci n'est pas connue.</p>
+  		<p>Une équipe peut être associée à un laboratoire et à plusieurs tutelles.</p>
+  	<%- end -%>
+  	</div>
+  <%- end -%>
+  <%- end -%>
+  
+  <%= render :file => 'layouts/application_admin' %>
+
+<% end %>

@@ -1,0 +1,21 @@
+<div class='head'>
+	<div class='header_title'>
+		<strong>Listes des contrats</strong>
+	</div>
+	<div class='header_link'>
+	</div>
+	<div style='clear:both;'></div>
+</div>
+
+<h1>Soumissions</h1>
+  <tr>
+    <td><%=h @soumission.acronyme %></td>
+    <td><%= link_to 'Show', soumission_path(@soumission) %></td>
+    <td><%= link_to 'Edit', edit_soumission_path(@soumission) %></td>
+    <td><%= link_to 'Destroy', soumission_path(@soumission), :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+</table>
+
+<br />
+
+<%= link_to 'New soumission', new_soumission_path %>

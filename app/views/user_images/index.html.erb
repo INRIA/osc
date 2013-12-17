@@ -1,0 +1,21 @@
+<h1>Listing user_images</h1>
+
+<table>
+  <tr>
+    <th>User</th>
+    <th>Image</th>
+    <th>Created at</th>
+    <th>Updated at</th>
+  </tr>
+  
+<% for user_image in @user_images %>
+  <tr>
+    <td><%=h user_image.user_id %></td>
+    <td><%=h user_image.image %></td>
+    <td><%=h user_image.created_at %></td>
+    <td><%=h user_image.updated_at %></td>
+ </tr>
+<% end %>
+</table>
+<br />
+<%= link_to 'New user_images', new_user_image_path %>

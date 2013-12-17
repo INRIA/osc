@@ -1,0 +1,8 @@
+<div class="sort">
+	<%= select_tag "filter_item[]", options_for_select( @select_for_filter.collect {|s| [ s[:intitule], s[:id] ] }, item[:filter_item] ) %>
+	<%= select_tag "filter_type[]", options_for_select( [ ["contient", "contient"], ["ne contient pas", "ne_contient_pas"], ["est", "est"], ["n'est pas", "n_est_pas"], ["commence par", "commence_par"], ["se termine par", "se_termine_par"], ["est supérieur à", "great"], ["est inférieur à", "less"]], item[:filter_type]), :class => "filter_type" %>
+	<%= text_field_tag("filter_value[]", item[:filter_value], :class => 'filter_value') %>
+	<a href='' onclick="add_filter_item();return false;" class="add_filter_item"></a>
+	<a href='' onclick="remove_filter_item(this);return false;" class="remove_filter_item"  style="display:none;"></a>
+	<div style="clear:both"></div>
+</div>

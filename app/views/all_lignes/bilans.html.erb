@@ -1,0 +1,407 @@
+<%- content_for :sub_menu do -%>
+	<%= render :partial => 'extration_sub_menu' %>
+<%- end -%>
+
+<% content_for :head do %>
+	<%= render :partial => 'extraction_head' %>
+<% end %>
+
+<% content_for :options do %>
+
+<%-
+  if @type_bilan == "factures" or @type_bilan == "factures_htr"
+    bilan_factures_add = ("class='selected'").html_safe()
+  end
+  if @type_bilan == "sommes_engagees" or @type_bilan == "sommes_engagees_htr"
+    bilan_sommes_engagees_add = ("class='selected'").html_safe()
+  end
+  if @bilan_detail == "global"
+    bilan_global_add = ("class='selected'").html_safe()
+  elsif @bilan_detail =="detail"
+    bilan_detail_add = ("class='selected'").html_safe()
+  else
+    bilan_annee_add = ("class='selected'").html_safe()
+  end
+  if @type_montant == "htr"
+    bilan_htr_add = ("class='selected'").html_safe()
+  end
+  if @type_montant == "ht"
+    bilan_ht_add = ("class='selected'").html_safe()
+  end
+  if @type_montant == "ttc"
+    bilan_ttc_add = ("class='selected'").html_safe()
+  end
+%>
+<div id="options">
+	<%- if @affiche_selection -%>
+
+	<div>
+      <a href="" onClick="selectBilan('1','sommes_engagees');return false;" id="link_sommes_engagees" <%= bilan_sommes_engagees_add %> ><span class="habillage_left">&nbsp;</span>Bilan sur dépenses soldées et sommes engagées<span class="habillage_right">&nbsp;</span></a>
+      <a href="" onClick="selectBilan('1','factures');return false;"  id="link_factures" <%= bilan_factures_add %> ><span class="habillage_left">&nbsp;</span>Bilan sur factures payées<span class="habillage_right">&nbsp;</span></a>
+      &nbsp;|&nbsp;
+      <a href="" onClick="selectBilan('2','global');return false;" id="link_global" <%=bilan_global_add%> ><span class="habillage_left">&nbsp;</span>Bilan global<span class="habillage_right">&nbsp;</span></a>
+      <a href="" onClick="selectBilan('2','detail');return false;" id="link_detail" <%=bilan_detail_add%> ><span class="habillage_left">&nbsp;</span>Bilan par année<span class="habillage_right">&nbsp;</span></a>
+			<a id="link_annee" <%=bilan_annee_add%> ><span class="habillage_left">&nbsp;</span>Bilan pour l'ann&eacute;e :<span class="habillage_right">&nbsp;</span></a>
+			<form action="?" method get id="select_year" style="display:inline;">
+				<select onChange="selectAnnee(this);return false;" name="annee" style="width:auto;">
+				  <option></option>
+					<% @annee_for_select.each{ |annee|
+					  if @bilan_detail.to_i==annee %> 
+						<option selected="selected">
+					  <%else%>
+					  <option>
+					  <%end%>
+					  <%=annee%></option>
+					<% } %>
+				</select>
+			</form>
+
+			&nbsp;|&nbsp;
+      <a href="" onclick="toggleRechercheAvancee(); return false;" id="link_recherche_avancee" class="selected"><span class="habillage_left">&nbsp;</span>Sélection des bilans à afficher<span class="habillage_right">&nbsp;</span></a>
+      <p id="export_to_csv">
+        <p id="link_contrat_clos">
+        <a href="" onClick="selectBilan('3','htr');return false;" id="link_htr" <%=bilan_htr_add%><span class="habillage_left">&nbsp;</span>Montants HTR<span class="habillage_right">&nbsp;</span></a>
+        <a href="" onClick="selectBilan('3','ht');return false;" id="link_ht" <%=bilan_ht_add%><span class="habillage_left">&nbsp;</span>Montants HT<span class="habillage_right">&nbsp;</span></a>
+        <a href="" onClick="selectBilan('3','ttc');return false;" id="link_ttc" <%=bilan_ttc_add%><span class="habillage_left">&nbsp;</span>Montants TTC<span class="habillage_right">&nbsp;</span></a>
+        &nbsp;|&nbsp;
+       <%= select_tag("contrat_clos_select", 
+                 options_for_select({"Masquer les contrats clos et les lignes désactivées" => "no",
+                                     "Afficher les contrats clos" => "yes",
+                                     "Afficher les lignes désactivées" => "lignes_desactivees"},
+                                     :selected => @show_contrat_clos
+                                   ),
+                 {:style => "width:auto;",
+                  :onchange => "selectContratClos(this.value);return false;"}) %>      &nbsp;|&nbsp;
+        <a href="" onclick="exportToCsv('utf16'); return false;" id="export_budget_mso"><span class="habillage_left">&nbsp;</span>MS Office (UTF-16)<span class="habillage_right">&nbsp;</span></a>
+        <a href="" onclick="exportToCsv('utf8'); return false;" id="export_budget_oo"><span class="habillage_left">&nbsp;</span>Open Office (UTF-8)<span class="habillage_right">&nbsp;</span></a>
+  			</p>
+  	  </p>
+	  </div>
+	<div style="clear:both;"></div>
+	<%- end -%>
+</div>
+
+<%- if @affiche_selection -%>
+<div id="recherche_avancee" style="height:185px">
+		<div class="small_box_bilan">
+			<h3>Lignes associ&eacute;es au contrat</h3>
+			<form action="?" method="get" id="form_contrat">
+			<%= select_tag "contrat", options_for_select(@contrats_for_select, params['contrat']) %>
+			<input type="hidden" name="type_recherche" value="<%= @type_bilan %>" class="type_bilan" />
+			<input type="hidden" name="type_affichage" value="contrat" />
+      <input type="hidden" name="type_detail" value="<%=@bilan_detail%>" class="type_detail"  />
+			<input type="hidden" name="type_montant" value="<%=@type_montant%>" class="type_montant"  />
+      <input type="hidden" id="contrat_clos" name="contrat_clos"  value="<%= @show_contrat_clos %>" />
+			<input type="submit" class="submit" value="Afficher" />
+			</form>
+			<%- if @contrats_dotation_for_select.size > 0 -%>
+			<h3>Lignes associ&eacute;es aux dotations du commun</h3>
+			<form action="?" method="get" id="form_contrat_dotation">
+			<%= select_tag "contrat", options_for_select(@contrats_dotation_for_select, params['contrat']) %>
+			<input type="hidden" name="type_recherche" value="<%= @type_bilan %>" class="type_bilan" />
+			<input type="hidden" name="type_affichage" value="contrat_dotation" />
+      <input type="hidden" name="type_detail" value="<%=@bilan_detail%>" class="type_detail"  />
+			<input type="hidden" name="type_montant" value="<%=@type_montant%>" class="type_montant"  />
+      <input type="hidden" id="contrat_clos" name="contrat_clos"  value="<%= @show_contrat_clos %>" />
+			<input type="submit" class="submit" value="Afficher" />
+			</form>
+			<%-end-%>
+		</div>
+
+		<div class="small_box_bilan">
+			<h3>Lignes associ&eacute;es à l'&eacute;quipe</h3>
+			<form action="?" method="get" id="form_equipe"> 
+			  Limiter &agrave;  <a href="" onclick="alert('<%= @tool_tip_mes_equipes.html_safe() %>');return false;" %>mes &eacute;quipes</a> 
+        <%= check_box_tag "filtre_projet", "filtre_projet_active", @filtre_mes_projets_checked, :style=>'width:15px;', :onchange =>onclick="toggle_disable_other_inputs('filtre_projet'); return false;" %>   
+				<%= select_tag "equipe", options_for_select(@projets_for_select, params['equipe']), :disabled=>@filtre_mes_projets_checked %>
+				<h3>Limit&eacute; à l'organisme gestionnaire :</h3>
+				<%= select_tag "organisme_gestionnaire", options_for_select(@organisme_gestionnaires, params['organisme_gestionnaire']) %>
+				<input type="hidden" name="type_recherche" value="<%= @type_bilan %>" class="type_bilan" />
+				<input type="hidden" name="type_affichage" value="equipe" />
+        <input type="hidden" name="type_detail" value="<%=@bilan_detail%>" class="type_detail"  />
+				<input type="hidden" name="type_montant" value="<%=@type_montant%>" class="type_montant"  />
+        <input type="hidden" id="contrat_clos" name="contrat_clos"  value="<%= @show_contrat_clos %>" />
+				<input type="submit" class="submit" value="Afficher" />
+			</form>
+		</div>
+
+		<div class="small_box_bilan">
+			<h3>Lignes associ&eacute;es directement au laboratoire</h3>
+			<%- if @laboratoires_for_select.size == 1 -%>
+			Aucune ligne n'est associ&eacute;e à un laboratoire
+			<%- else -%>
+			<form action="?" method="get" id="form_laboratoire">
+				<%= select_tag "laboratoire", options_for_select(@laboratoires_for_select, params['laboratoire']) %>
+				<input type="hidden" name="type_recherche" value="<%= @type_bilan %>" class="type_bilan" />
+				<input type="hidden" name="type_affichage" value="laboratoire" />
+        <input type="hidden" name="type_detail" value="<%=@bilan_detail%>" class="type_detail"  />
+				<input type="hidden" name="type_montant" value="<%=@type_montant%>" class="type_montant"  />
+        <input type="hidden" id="contrat_clos" name="contrat_clos"  value="<%= @show_contrat_clos %>" />
+				<input type="submit" class="submit" value="Afficher" />
+			</form>
+			<%- end -%>
+			<h3>Lignes associ&eacute;es directement au d&eacute;partement</h3>
+			<%- if @departements_for_select.size == 1 -%>
+			Aucune ligne n'est associ&eacute;e directement ou indirectement &agrave; un d&eacute;partement
+			<%- else -%>
+			<form action="?" method="get" id="form_departement">
+				<%= select_tag "departement", options_for_select(@departements_for_select, params['departement']) %>
+				<input type="hidden" name="type_recherche" value="<%= @type_bilan %>" class="type_bilan" />
+				<input type="hidden" name="type_affichage" value="departement" />
+        <input type="hidden" name="type_detail" value="<%=@bilan_detail%>" class="type_detail" />
+				<input type="hidden" name="type_montant" value="<%=@type_montant%>" class="type_montant"  />
+        <input type="hidden" id="contrat_clos" name="contrat_clos"  value="<%= @show_contrat_clos %>" />
+				<input type="submit" class="submit" value="Afficher" />
+			</form>
+			<%- end -%>
+		</div>
+
+		<div class="small_box_bilan">
+		  <form action="?" method="get" id="form_in">
+		    <h3>Lignes appartenant &agrave; la tutelle</h3>
+        <%- if @tutelles_for_select.size == 1 -%>
+          Aucune tutelle n'a &eacute;t&eacute; d&eacute;finie.
+        <%- else -%>
+          <%= select_tag "in_tutelle", options_for_select(@tutelles_for_select, params['in_tutelle']) %>
+        <%- end -%>
+  		  <h3>Lignes appartenant au laboratoire</h3>
+        <%- if @laboratoires_for_select.size == 1 -%>
+          Aucun laboratoire n'a &eacute;t&eacute; d&eacute;fini.
+        <%- else -%>
+          <%= select_tag "in_laboratoire", options_for_select(@laboratoires_for_select, params['in_laboratoire']) %>
+        <%- end -%>
+  			<h3>Lignes appartenant au d&eacute;partement</h3>
+  			<%- if @departements_for_select.size == 1 -%>
+          Aucune ligne n'est associ&eacute;e directement ou indirectement &agrave; un d&eacute;partement
+        <%- else -%>
+          <%= select_tag "in_departement", options_for_select(@departements_for_select, params['in_departement']) %>
+        <%- end -%>
+        <input type="hidden" name="type_recherche" value="<%= @type_bilan %>" class="type_bilan" />
+        <input type="hidden" name="type_affichage" value="in" />
+        <input type="hidden" name="type_detail" value="<%=@bilan_detail%>" class="type_detail"  />
+        <input type="hidden" name="type_montant" value="<%=@type_montant%>" class="type_montant"  />
+        <input type="hidden" id="contrat_clos" name="contrat_clos"  value="<%= @show_contrat_clos %>" />
+        <input type="submit" class="submit" value="Afficher" />  
+      </form>
+		</div>
+</div>
+<%- end -%>
+<%- end -%>
+
+<%- if @affiche_selection -%>
+  <form id="saved_params" action="?" method="get">
+  	<input type="hidden" id="type_affichage" name="type_affichage" value="<%= params['type_affichage'] %>" />
+    <input type="hidden" id="type_detail" name="type_detail" value="<%= params['type_detail'] %>" />
+  	<input type="hidden" id="type_montant" name="type_montant" value="<%= params['type_montant'] %>" />
+  	<input type="hidden" id="contrat_clos" name="contrat_clos"  value="<%= @show_contrat_clos %>" />
+  </form>
+  <% if !params['contrat'].blank? && (params['type_affichage'] == "contrat" or params['type_affichage'] == "contrat_dotation")   -%>
+  <h2>Bilans des lignes associ&eacute;es au contrat <strong><%= params['contrat'] %></strong></h2>
+  <% elsif params['type_affichage'] == "equipe" %>
+    <% if !params['filtre_projet'].blank? -%>
+      <h2>Bilans des lignes associ&eacute;es &agrave; mes &eacute;quipes de recherche</h2>
+    <% elsif !params['equipe'].blank? %>
+      <h2>Bilans des lignes associ&eacute;es &agrave; l'&eacute;quipe de recherche <strong><%= params['equipe'] %></strong></h2>
+  <% end %>
+  <%- elsif params['type_affichage'] == "departement" && !params['departement'].blank? -%>
+  <h2>Bilans des lignes associ&eacute;es au d&eacute;partement de recherche <strong><%= params['departement'] %></strong></h2>
+  <%- elsif params['type_affichage'] == "laboratoire" && !params['laboratoire'].blank? -%>
+  <h2>Bilans des lignes associ&eacute;es au laboratoire <strong><%= params['laboratoire'] %></strong></h2>
+  <%- elsif params['type_affichage'] == "in" && ( !params['in_laboratoire'].blank? || !params['in_departement'].blank?) -%>
+    <h2>Bilans des lignes appartenant 
+      <% if !params['in_laboratoire'].blank? %>
+        au laboratoire <strong><%= params['in_laboratoire'] %></strong>
+      <% end %>
+      <% if !params['in_departement'].blank? %>
+        au d&eacute;partement <strong><%= params['in_departement'] %></strong>
+      <% end %> 
+     </h2> 
+  <%- else -%>
+    <p>Merci de s&eacute;lectionner ci-dessus les bilans à afficher.</p>
+  <%- end -%>
+  <br/>
+<%- else -%>
+  <p>Vous n'avez de droit sur aucune ligne. Cette interface n'est donc pas disponible.</p>
+<%- end -%>
+
+
+
+<div id="bilans">
+   <%= render :partial => 'list_bilans' %>  
+</div>
+
+
+
+
+<script type="text/javascript" language="javascript">
+
+
+function selectBilan(num,type){
+  addClassName_for_bilan_global = false;
+  addClassName_for_bilan_detail = false;
+  addClassName_for_sommes_engagees = false;
+  addClassName_for_factures = false;
+	addClassName_for_recherche_avancee = false;
+	addClassName_for_htr = false;
+	addClassName_for_ttc = false;
+
+  if ($('link_recherche_avancee').hasClassName('selected')){
+		addClassName_for_recherche_avancee = true;
+	}
+
+	if ((num == '1')||(num == '3') ){
+    if  ($('link_global').hasClassName('selected')){
+      addClassName_for_bilan_global = true;
+    } else {
+      addClassName_for_bilan_detail = true;
+    }
+  }
+
+  if ((num == '2')||(num == '3') ) {
+    if  ($('link_factures').hasClassName('selected')){
+      addClassName_for_factures = true;
+    } else {
+      addClassName_for_sommes_engagees = true;
+    }
+  }
+
+  if ((num == '1')||(num == '2') ) {
+	  if ($('link_htr').hasClassName('selected')) {
+      addClassName_for_htr = true;
+	  }else {
+	    addClassName_for_ttc = true;
+	  }
+	}
+	$$("#options a.selected").each(function(element){element.removeClassName('selected')})
+
+  if (addClassName_for_recherche_avancee){
+		$('link_recherche_avancee').addClassName('selected');
+	}
+
+  if (addClassName_for_bilan_global){
+		$('link_global').addClassName('selected');
+	}
+
+    if (addClassName_for_bilan_detail){
+		$('link_detail').addClassName('selected');
+    }
+
+    if (addClassName_for_sommes_engagees){
+		$('link_sommes_engagees').addClassName('selected');
+	}
+	if (addClassName_for_factures){
+		$('link_factures').addClassName('selected');
+	}
+	if (addClassName_for_htr){
+		$('link_htr').addClassName('selected');
+	}
+	if (addClassName_for_ttc){
+		$('link_ttc').addClassName('selected');
+	}
+
+
+	$('link_'+type).addClassName('selected');
+
+  if (num == '1') {
+    if ($('type_affichage').value != ''){
+      id_form = 'form_'+$('type_affichage').value;
+      $(id_form).elements.type_recherche.value = type;
+      $(id_form).submit();
+    }else{
+      $$('form input.type_bilan').each(function(e){
+        e.value = type;
+      })
+    }
+  } else if( num == '2') {
+    if ($('type_affichage').value != ''){
+      id_form = 'form_'+$('type_affichage').value;
+      $(id_form).elements.type_detail.value = type;
+      $(id_form).submit();
+    }else{
+      $$('form input.type_detail').each(function(e){
+        e.value = type;
+      })
+    }
+  } else if (num == '3') {
+    if ($('type_affichage').value != ''){
+      id_form = 'form_'+$('type_affichage').value;
+      $(id_form).elements.type_montant.value = type;
+      $(id_form).submit();
+    }else{
+      $$('form input.type_montant').each(function(e){
+        e.value = type;
+      })
+    }
+  }
+
+}
+
+function selectAnnee(select){
+	annee=select.options[select.selectedIndex].value;
+	$('link_global').removeClassName('selected');
+	$('link_detail').removeClassName('selected');
+	$('link_annee').addClassName('selected');
+	if ($('type_affichage').value != ''){
+    id_form = 'form_'+$('type_affichage').value;
+    $(id_form).elements.type_detail.value = annee
+    $(id_form).submit();
+  }else{
+    $$('form input.type_detail').each(function(e){
+      e.value = annee;
+    })
+  }
+}
+
+function selectContratClos(valeur){
+  if ($('type_affichage').value != ''){
+    id_form = 'form_'+$('type_affichage').value;
+    $(id_form).elements.contrat_clos.value = valeur;
+    $(id_form).submit();
+  }else{
+    $$('form input.contrat_clos').each(function(e){
+      e.value = valeur;
+    })
+  }
+}
+
+function exportToCsv(valeur){
+	var url = "/all_lignes/bilans?csv="+valeur;
+	if($('type_affichage').value != ''){
+		id_form = 'form_'+$('type_affichage').value;
+	  var form = document.getElementById(id_form).elements;	
+    for(var i = 0; i < form.length-1; i++){
+      if((form[i].type != "checkbox") || form[i].checked){
+        url = url+"&"+form[i].name+"="+form[i].value;  
+      }
+    } 	
+	}
+	if($('current_page').value!=''){
+	  url = url+"&page="+$('current_page').value;
+	}
+	window.location = encodeURI(url);
+}
+function toggleRechercheAvancee(){
+	$('link_recherche_avancee').toggleClassName('selected');
+	new Effect.toggle('recherche_avancee','slide', {duration: 0.3});
+}
+function toggle_disable_other_inputs(valeur){
+  var form = document.getElementById('form_equipe');
+  if(form.filtre_projet.checked){
+    form.equipe.value = "";
+    form.equipe.disabled = true;
+  }else{
+    form.equipe.disabled = false;
+  }
+  
+}
+function updateResult(page_number){
+  if(typeof(page_number)==='undefined') page_number = 1; 
+  id_form = 'form_'+$('type_affichage').value;
+  new Ajax.Updater('bilans', '/all_lignes/bilans',
+    {asynchronous:true, evalScripts:true, method:'get',
+    parameters:Form.serialize('saved_params')+
+               '&'+Form.serialize(id_form)+
+               '&partial=yes'+
+               '&page='+page_number});
+}
+</script>

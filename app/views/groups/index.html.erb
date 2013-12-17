@@ -1,0 +1,12 @@
+<div id='list'>
+<%=  render :partial => "list" %>	
+</div>
+<script type="text/javascript" language="javascript">
+  function updateResult(page_number){
+
+    new Ajax.Request('/groups/search_by_name?page='+page_number,
+      {asynchronous:true, evalScripts:true, method:'get',
+      parameters:'query='+escape($F('query'))
+                      });
+    }
+  </script>

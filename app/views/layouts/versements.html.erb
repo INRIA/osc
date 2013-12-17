@@ -1,0 +1,86 @@
+<% if controller.action_name.to_s == 'ask_delete' %>
+  <%= yield  %>
+<% else %>
+
+<% content_for :head do %>
+  <% if controller.action_name.to_s == 'index' %>
+    <div class='long_header_title'>   
+      <strong><%= @ligne.nom %></strong> >> Crédits
+      <%= render :partial => 'layouts/link_to_switch_ligne' %>
+    </div>
+    <p>
+      <%- if !@ligne.contrat.notification.numero_ligne_budgetaire.blank? -%>
+        <strong>N° <%= @ligne.contrat.notification.numero_ligne_budgetaire %></strong> -
+      <%- end -%>
+      Suivi du budget pour la période du <%= french_date @ligne.date_debut %> au <%= french_date @ligne.date_fin %>
+    </p>
+  <% end %>
+  
+  <% if ['new','create'].include? controller.action_name.to_s %>
+    <div class='long_header_title'>   
+      <strong><%= @ligne.nom %></strong> >> Crédits // Création
+      <%= render :partial => 'layouts/link_to_switch_ligne' %>
+    </div>
+    <p>
+      <%- if !@ligne.contrat.notification.numero_ligne_budgetaire.blank? -%>
+        <strong>N° <%= @ligne.contrat.notification.numero_ligne_budgetaire %></strong> -
+      <%- end -%>
+      Suivi du budget pour la période du <%= french_date @ligne.date_debut %> au <%= french_date @ligne.date_fin %>
+    </p>
+  <% end %>
+  
+  <% if ['edit','update'].include? controller.action_name.to_s %>
+    <div class='long_header_title'>   
+      <strong><%= @ligne.nom %></strong> >> Crédits // Edition
+    </div>
+    <p>
+      <%- if !@ligne.contrat.notification.numero_ligne_budgetaire.blank? -%>
+        <strong>N° <%= @ligne.contrat.notification.numero_ligne_budgetaire %></strong> -
+      <%- end -%>Suivi du budget pour la période du <%= french_date @ligne.date_debut %> au <%= french_date @ligne.date_fin %>
+    </p>
+  <% end %>
+  
+  <% if ['show'].include? controller.action_name.to_s %>
+    <div class='header_title'>    
+      <div class="showInfos">
+      <p class="visibilite">
+        <strong><%= @ligne.nom %></strong> >> Crédits
+      </p>
+      </div>
+      <div style='clear:both;'></div>
+    </div>
+    <div class="header_link">
+      <% if @ligne.contrat.is_budget_editable? current_user %>
+          <% if ((@versement.verrou != 'Droit de modification') || ((@versement.verrou == 'Droit de modification') && (@ligne.contrat.is_editable? current_user)))%>
+            <%= link_to 'Editer le crédit', edit_ligne_versement_path(@ligne, @versement) %>
+        <% end%>
+      <% end %>
+    </div>
+    <div style="clear: both;"></div>
+    <p class="under_link">
+      <%- if !@ligne.contrat.notification.numero_ligne_budgetaire.blank? -%>
+        <strong>N° <%= @ligne.contrat.notification.numero_ligne_budgetaire %></strong> -
+      <%- end -%>
+      Suivi du budget pour la période du <%= french_date @ligne.date_debut %> au <%= french_date @ligne.date_fin %>
+    </p>
+  <% end %>
+  <div class="sub">
+    <table class="simple">
+      <tr>
+        <th>Montant initial total :</th>
+        <td><%= my_number_to_currency @total_a_ouvrir -%></td>
+        <th>Reste à ouvrir :</th>
+        <td class="last"><%= my_number_to_currency @reste_a_ouvrir -%></td>
+      </tr>
+      <tr>
+        <th>Total des ouvertures de crédit :</th>
+        <td><%= my_number_to_currency @total_versements_ligne -%></td>
+        <th>Reste à engager ( <%=@type_montant.upcase  %> ) :</th>
+        <td class="last"><%= my_number_to_currency @reste_a_depenser -%></td>
+      </tr>
+    </table>
+  </div>
+<% end %>
+
+<%= render :file => 'layouts/application_suivi_budgetaire' %>
+<% end %>

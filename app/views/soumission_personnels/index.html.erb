@@ -1,0 +1,30 @@
+<h1>Listing soumission_personnels</h1>
+
+<table>
+  <tr>
+    <th>Soumissions</th>
+    <th>Nom</th>
+    <th>Prenom</th>
+    <th>Statut</th>
+    <th>Tutelle</th>
+    <th>Pourcentage</th>
+  </tr>
+  
+<% for soumission_personnel in @soumission_personnels %>
+  <tr>
+    <td><%=h soumission_personnel.soumissions_id %></td>
+    <td><%=h soumission_personnel.nom %></td>
+    <td><%=h soumission_personnel.prenom %></td>
+    <td><%=h soumission_personnel.statut %></td>
+    <td><%=h soumission_personnel.tutelle %></td>
+    <td><%=h soumission_personnel.pourcentage %></td>
+    <td><%= link_to 'Show', soumission_personnel_path(soumission_personnel) %></td>
+    <td><%= link_to 'Edit', edit_soumission_personnel_path(soumission_personnel) %></td>
+    <td><%= link_to 'Destroy', soumission_personnel_path(soumission_personnel), :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New soumission_personnel', new_soumission_personnel_path %>

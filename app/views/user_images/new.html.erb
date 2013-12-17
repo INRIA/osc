@@ -1,0 +1,17 @@
+<div class="section">
+	<%= error_messages_for @user_image %>
+
+	<%= form_for(:user_images, :url => user_user_images_path, :html => {:multipart => true }) do |f| %>
+		<fieldset>
+			<legend>Selectionner la photo sur votre ordinateur</legend>
+			<p>
+			<%= file_column_field 'user_image', 'image' %><br />
+			<p style="font-size:.8em;margin-top:5px;">L'image associée doit être au format jpg</p>
+			</p>
+		</fieldset>
+	  	<p class="submit">
+	    	<%= submit_tag "Uploader l'image sur le serveur" %> ou
+			<%= link_to 'Annuler', edit_user_path(@user_image.user)+"#photo" %>
+	  	</p>
+	<% end %>
+</div>

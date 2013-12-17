@@ -1,0 +1,11 @@
+<%= error_messages_for @refu %>
+
+<%= form_for(:refu, :url => contrat_refus_path) do |f| %>
+<%= render :partial => 'form', :locals => { :f => f } %>
+  <div class="form-box submit" id="submit">
+    <%= submit_tag "Créer le refus" %>
+		ou
+		<%= link_to "Annuler", contrat_path(@contrat) %>
+  </div>
+<% end %>
+

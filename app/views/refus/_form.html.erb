@@ -1,0 +1,19 @@
+<div class="form-box parent">
+  <h3>Informations relatives au refus du contrat</h3>
+  <p class="inline">
+    <label for="refu_date_3i">Date du refus</label><br />
+    <%= f.unobtrusive_date_picker :date , :use_month_numbers => true, :class => 'no-transparency' %>
+  </p>
+  <p>
+    <%= f.check_box :liste_attente, :class => "checkbox" %>
+    <label for="refu_liste_attente">est sur une liste d'attente</label>
+  </p>
+  <p>
+    <%= f.check_box :labelise, :class => "checkbox" %>
+    <label for="refu_labelise">est labellisé</label>
+  </p>
+  <p>
+    <label for="refu_commentaire">Commentaires</label><br />
+    <%= f.text_area :commentaire, :class => "textareafield" %>
+  </p>
+</div>

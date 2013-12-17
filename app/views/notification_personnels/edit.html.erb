@@ -1,0 +1,42 @@
+<h1>Editing notification_personnel</h1>
+
+<%= error_messages_for :notification_personnel %>
+
+<% form_for(:notification_personnel, :url => notification_personnel_path(@notification_personnel), :html => { :method => :put }) do |f| %>
+  <p>
+    <b>Notification</b><br />
+    <%= f.text_field :notification_id %>
+  </p>
+
+  <p>
+    <b>Nom</b><br />
+    <%= f.text_field :nom %>
+  </p>
+
+  <p>
+    <b>Prenom</b><br />
+    <%= f.text_field :prenom %>
+  </p>
+
+  <p>
+    <b>Statut</b><br />
+    <%= f.text_field :statut %>
+  </p>
+
+  <p>
+    <b>Tutelle</b><br />
+    <%= f.text_field :tutelle %>
+  </p>
+
+  <p>
+    <b>Pourcentage</b><br />
+    <%= f.text_field :pourcentage %>
+  </p>
+
+  <p>
+    <%= submit_tag "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', notification_personnel_path(@notification_personnel) %> |
+<%= link_to 'Back', notification_personnels_path %>

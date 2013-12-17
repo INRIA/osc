@@ -1,0 +1,38 @@
+<p>
+  <b>Notification:</b>
+  <%=h @avenant.notification_id %>
+</p>
+
+<p>
+  <b>Date:</b>
+  <%=h @avenant.date %>
+</p>
+
+<p>
+  <b>Commentaires:</b>
+  <%=h @avenant.commentaires %>
+</p>
+
+<p>
+  <b>Created at:</b>
+  <%=h @avenant.created_at %>
+</p>
+
+<p>
+  <b>Updated at:</b>
+  <%=h @avenant.updated_at %>
+</p>
+
+<p>
+  <b>Created by:</b>
+  <%=h @avenant.created_by %>
+</p>
+
+<p>
+  <b>Updated by:</b>
+  <%=h @avenant.updated_by %>
+</p>
+
+
+<%= link_to 'Edit', edit_avenant_path(@avenant) %> |
+<%= link_to 'Back', avenants_path %>

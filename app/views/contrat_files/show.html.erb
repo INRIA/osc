@@ -1,0 +1,23 @@
+<p>
+  <b>Contrat:</b>
+  <%=h @contrat_file.contrat_id %>
+</p>
+
+<p>
+  <b>File:</b>
+  <%=h @contrat_file.file %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%=h @contrat_file.description %>
+</p>
+
+<p>
+  <b>Created at:</b>
+  <%=h @contrat_file.created_at %>
+</p>
+
+
+<%= link_to 'Edit', edit_contrat_file_path(@contrat_file) %> |
+<%= link_to 'Back', contrat_files_path %>

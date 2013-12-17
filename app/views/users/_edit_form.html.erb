@@ -1,0 +1,28 @@
+	<h2><strong>Identité</strong> de l'utilisateur</h2>
+	<%= form_for(:user, :url => user_path(@user), :html => { :method => :put }) do |f| %>
+	<div class="fieldset">
+		<p>
+			<label for="user_nom">Nom</label><br />
+			<%= f.text_field :nom, :class => "textfield" %>
+		</p>
+		<p>
+			<label for="user_prenom">Prénom</label><br />
+			<%= f.text_field :prenom, :class => "textfield" %>
+		</p>
+		<p>
+			<label for="user_email">Email</label><br />
+			<%= f.text_field :email, :class => "textfield" %>
+		</p>
+		<p>
+			<label for="user_commentaire">Commentaire</label><br />
+			<%= f.text_field :commentaire, :class => "textfield" %>
+		</p>
+	</div>
+	<br />
+	<p class="submit">
+		<%= submit_tag "Mettre à jour" %> ou <%= link_to "Annuler", user_path(@user) %>
+	</p>
+	<% end %>
+
+
+

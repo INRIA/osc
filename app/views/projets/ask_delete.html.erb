@@ -1,0 +1,8 @@
+<div class="content">
+	<p>
+	Etes-vous certain de vouloir supprimer l'équipe <strong>"<%= @projet.nom %>"</strong> ?
+	</p>
+	<%= link_to_close_redbox "Non", :class => 'annuler' %>
+	<%= link_to "Oui", projet_path(@projet), :method => :delete %>
+	<div style="clear:both;"></div>
+</div>

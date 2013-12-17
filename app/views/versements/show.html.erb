@@ -1,0 +1,62 @@
+<% content_for :right do %>
+  <% if @ligne.contrat.is_budget_editable? current_user %>
+    <%= link_to 'Ajouter un versement', new_ligne_versement_path(@ligne), {:class => "add-versement"} %>
+    <%= link_to 'Dupliquer ce crédit',  duplicate_ligne_versement_path(@ligne, @versement),  {:method => :post, :class => "duplicate-versement"} %>
+  <%- end -%>
+<%- end -%>
+
+<div class="box parent">
+  <%= "<span class='come-from-inria'>S.I. INRIA</span>".html_safe() if @versement.come_from_inria? %>
+  <h2>Crédit</h2>
+  <div class="clearfix">
+    <div class="large-col">
+      <div class='line clearfix'>
+        <span class="attribute">Date d'effet</span>
+        <span class="value"><%= french_date @versement.date_effet %></span>
+      </div>
+      <div class="line clearfix">
+        <span class="attribute">Référence</span>
+        <span class="value"><%=h @versement.reference %></span>
+      </div>
+      <div class="line clearfix">
+        <span class="attribute">Origine</span>
+        <span class="value"><%=h @versement.origine %></span>
+      </div>
+      <div class="line clearfix">
+        <span class="attribute">Ventilation</span>
+        <span class="value"><%=h @versement.ventilation %></span>
+      </div>
+      <div class="line last clearfix">
+        <span class="attribute">Commentaire</span>
+        <div class="value"><%=simple_format @versement.commentaire %></div>
+      </div>
+    </div>
+    <div class="small-col">
+      <div class='line last clearfix'>
+        <span class="attribute">Montant</span><br />
+        <span class="value">
+          <strong><%= my_number_to_currency @versement.montant %></strong>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="content_footer">
+  <div class="left">
+    Création le <%= french_datetime @versement.created_at %> par <%= print_user_infos @versement.created_by %>
+    <% if @versement.created_at != @versement.updated_at %>
+    <br />
+    Dernière modification le <%= french_datetime @versement.updated_at %> par <%= print_user_infos @versement.updated_by %>
+    <% end %>
+  </div>
+  <div class="right">
+    <%- if (@ligne.contrat.is_budget_editable? current_user) and (@versement.verrou == "Aucun") -%>
+    <%= link_to_remote_redbox "Supprimer le crédit",
+        { :url => ask_delete_ligne_versement_path(@ligne, @versement), :method => :get}, 
+        { :class => "destroy",
+          :title => "Supprimer le versement" }  %>
+    <%- end -%>
+  </div>
+  <div style="clear:both;"></div>
+</div>

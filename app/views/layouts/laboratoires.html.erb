@@ -1,0 +1,75 @@
+<% if controller.action_name.to_s == 'ask_delete' %>
+  <%= yield  %>
+<% else %>
+  <% content_for :head do %>
+  	<% if controller.action_name.to_s == 'index' %>
+  		<div class='header_title'>
+  			<strong>Listes des laboratoires</strong>
+  			// <%= @laboratoires.size %> entrées
+  		</div>
+  		<div class='header_link'></div>
+  		<div style='clear:both;'></div>
+  	<% end %>
+  	
+  	<% if controller.action_name.to_s == 'show' %>
+  	<div class='header_title'>		
+  		<div class="showInfos">
+  			<p class="visibilite">
+  				<strong><%= @laboratoire.nom %></strong>
+  				<a href="#" onclick="Effect.toggle('more', 'blind', {duration:0.4});return false;">(+)</a>
+  			</p>
+  			<p>
+  				Description :	<strong><%=h @laboratoire.description %></strong>
+  			</p>
+  			<%= show_dates(@laboratoire) %>
+  		</div>
+  		<div style='clear:both;'></div>		
+  	</div>
+  	<div class='header_link'>
+  		<%= link_to 'Editer le laboratoire', edit_laboratoire_path(@laboratoire) %>
+  	</div>
+  	<div style='clear:both;'></div>
+  	<% end %>
+  	
+  	<% if controller.action_name.to_s == 'edit' or controller.action_name.to_s == 'update' %>
+  		<div class='header_title'>
+  			<strong><%= @laboratoire.nom %></strong>
+  			// Edition
+  		</div>
+  		<div class='header_link'>
+  			<%= link_to 'Visualiser le laboratoire', laboratoire_path(@laboratoire) %>
+  		</div>
+  		<div style='clear:both;'></div>
+  	<% end %>
+  	
+  	<% if controller.action_name.to_s == 'new' or controller.action_name.to_s == 'create' %>
+  		<div class='header_title'>
+  			<strong>Création de laboratoire</strong>
+  		</div>
+  		<div class='header_link'></div>
+  		<div style='clear:both;'></div>
+  	<% end %>
+  	
+  <% end %>
+  
+  
+  <% content_for :right do %>
+  	<% if controller.action_name.to_s == 'index' %>
+  		<%= link_to '', new_laboratoire_path, {:class => "addLaboratoire"} %>
+  	<% end %>
+  
+  	<% if controller.action_name.to_s != 'index' && controller.action_name.to_s != 'show' %>
+  		<div class="aide">
+  			<% if controller.action_name.to_s == 'new' or controller.action_name.to_s == 'create' %>
+  				<p>Un laboratoire peut être associé à un ou plusieurs projets. Vous devez dans un premier temps créer le laboratoire et ensuite l'éditer afin de lui associer des projets.</p>
+  			<% end %>
+  			<% if controller.action_name.to_s == 'edit' or controller.action_name.to_s == 'update' %>
+  				<p>Un laboratoire peut être associé à un ou plusieurs projets. Vous avez ici la possibilité d'ajouter et supprimer des associations.</p>
+  			<% end %>
+  		</div>
+  	<% end %>
+  <% end %>
+  
+  <%= render :file => 'layouts/application_admin' %>
+
+<% end %>

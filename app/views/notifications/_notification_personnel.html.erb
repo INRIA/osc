@@ -1,0 +1,94 @@
+<% @notification_personnel = notification_personnel %>
+<div id="<%= "notification_personnel_#{notification_personnel.id}" %>">
+	<p>
+		<% @class = '' %>
+		<% if !notification_personnel.nom.nil? %>
+			<% if notification_personnel.nom.empty?  %>
+				<% @class = "blank"  %>
+				<% notification_personnel.nom = "Nom" %>
+			<% end %>
+		<% else %>
+			<% @class = "blank"  %>
+			<% notification_personnel.nom = "Nom" %>
+		<% end %>
+
+		<%= text_field 'notification_personnel[]', 'nom',
+		{ :class => 'five_cell required '+@class,
+			:onblur => "if (this.value == '') { $(this).addClassName('blank'); this.value='Nom' };",
+			:onfocus =>"if (this.value == 'Nom') { $(this).removeClassName('blank'); this.value=''; };"
+			} %>
+
+		<% @class = '' %>
+		<% if !notification_personnel.prenom.nil? %>
+			<% if notification_personnel.prenom.empty?  %>
+				<% @class = "blank"  %>
+				<% notification_personnel.prenom = "Prénom" %>
+			<% end %>
+		<% else %>
+			<% @class = "blank"  %>
+			<% notification_personnel.prenom = "Prénom" %>
+		<% end %>
+		<%= text_field 'notification_personnel[]', 'prenom',
+		{ :class => 'five_cell required '+@class,
+			:onblur => "if (this.value == '') { $(this).addClassName('blank'); this.value='Prénom' };",
+			:onfocus =>"if (this.value == 'Prénom') { $(this).removeClassName('blank'); this.value=''; };"
+			} %>
+			
+		<% @class = '' %>
+		<% if !notification_personnel.statut.nil? %>
+			<% if notification_personnel.statut.empty?  %>
+				<% @class = "blank"  %>
+				<% notification_personnel.statut = "Statut" %>
+			<% end %>
+		<% else %>
+			<% @class = "blank"  %>
+			<% notification_personnel.statut = "Statut" %>
+		<% end %>
+
+		<%= text_field 'notification_personnel[]', 'statut',
+		{ :class => 'five_cell required '+@class,
+			:onblur => "if (this.value == '') { $(this).addClassName('blank'); this.value='Statut' };",
+			:onfocus =>"if (this.value == 'Statut') { $(this).removeClassName('blank'); this.value=''; };"
+			} %>
+
+		<% @class = '' %>
+		<% if !notification_personnel.tutelle.nil? %>
+			<% if notification_personnel.tutelle.empty?  %>
+				<% @class = "blank"  %>
+				<% notification_personnel.tutelle = "Tutelle" %>
+			<% end %>
+		<% else %>
+			<% @class = "blank"  %>
+			<% notification_personnel.tutelle = "Tutelle" %>
+		<% end %>
+
+		<%= text_field 'notification_personnel[]', 'tutelle',
+		{ :class => 'five_cell required '+@class,
+			:onblur => "if (this.value == '') { $(this).addClassName('blank'); this.value='Tutelle' };",
+			:onfocus =>"if (this.value == 'Tutelle') { $(this).removeClassName('blank'); this.value=''; };"
+			} %>
+
+		<% @class = '' %>
+		<% if !notification_personnel.pourcentage.nil? %>
+			<% if notification_personnel.pourcentage.nil?  %>
+				<% @class = "blank"  %>
+				<% notification_personnel.pourcentage = "%" %>
+			<% end %>
+		<% else %>
+			<% @class = "blank"  %>
+			<% notification_personnel.pourcentage = "%" %>
+		<% end %>
+
+		<%= text_field 'notification_personnel[]', 'pourcentage',
+		{ :class => 'five_cell required '+@class,
+			:onblur => "if (this.value == '') { $(this).addClassName('blank'); this.value='%' };",
+			:onfocus =>"if (this.value == '%') { $(this).removeClassName('blank'); this.value=''; };"
+		} %>
+
+		
+		<% unless controller.action_name == 'show' %>
+			<%= sub_list_remove_link notification_personnel, 'notificationPersonnel' %>
+		<% end %>
+
+	</p>
+</div>

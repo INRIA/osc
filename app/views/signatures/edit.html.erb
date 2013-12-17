@@ -1,0 +1,11 @@
+<%= "<div class='come-from-inria-container'><span class='come-from-inria'>S.I. INRIA</span></div>".html_safe() if @signature.come_from_inria? %>
+
+<%= error_messages_for @signature %>
+<%= form_for(:signature, :url => contrat_signature_path(@contrat, @signature), :html => { :method => :put }) do |f| %>
+  <%= render :partial => 'form', :locals => { :f => f } %>
+  <div class="form-box submit" id="submit">
+    <%= submit_tag "Enregistrer les modifications" %>
+    ou
+    <%= link_to "Annuler", contrat_signature_path(@contrat) %>
+  </div>
+<% end %>

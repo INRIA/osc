@@ -1,0 +1,13 @@
+<div class="aide">
+	<h2>Calcul du coût projet</h2>
+	<p>
+		Le coût projet est calculé ainsi : <br />Coût projet = coût TTC * Taux<br />
+		Taux est fonction de l'année et de l'établissement gestionnaire.<br />
+	</p>
+	<h3><%= @ligne.organisme_gestionnaire.nom %></h3>
+	<p>
+	<%- for y in (@ligne.date_debut.year .. @ligne.date_fin.year) -%>
+		Pour l'année <%= y %>, Taux = <%= @ligne.taux_by_year(y) %><br />
+	<%- end -%>
+	</p>
+</div>

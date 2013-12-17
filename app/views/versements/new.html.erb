@@ -1,0 +1,8 @@
+<%= error_messages_for @versement %>
+
+<%= form_for([@ligne, @versement]) do |f| %>
+  <%= render :partial => 'form', :locals => { :f => f} %>
+  <div class="form-box submit">
+    <%= f.submit "Créer le crédit" %> ou <%= link_to 'Annuler', ligne_versements_path(@ligne) %>
+  </div>
+<% end %>

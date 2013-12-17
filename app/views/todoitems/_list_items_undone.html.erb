@@ -1,0 +1,66 @@
+<% if @todolist.todoitems.size != 0 %>
+	<div id="sortable_list_undone_<%= @todolist.id.to_s %>">
+	<% for todoitem in @todolist.todoitems.find(:all, :conditions => "done = 0")  %>
+			<div class="todoitem" id="todo_item_undone_<%= todoitem.id.to_s %>"
+				onmouseover="	$('todoitem_actions_<%= todoitem.id.to_s %>').show();
+											$('todoitem_content_<%= todoitem.id.to_s %>').removeClassName('without_actions');"
+				onmouseout="$('todoitem_actions_<%= todoitem.id.to_s %>').hide();
+											$('todoitem_content_<%= todoitem.id.to_s %>').addClassName('without_actions');"
+											>
+				
+				<div class="todoitem_actions" id="todoitem_actions_<%= todoitem.id.to_s %>" style="display:none;">
+
+				<%= link_to_remote_redbox image_tag('trash.gif', :alt => 'del'),
+				    {	:url => ask_delete_contrat_todolist_todoitem_path(@todolist.contrat, @todolist, todoitem),
+					 		:method => :get,
+							:with => "'type=undone'" }, 
+						{	:class => "delete_item",
+							:title => "Supprimer cette tâche" } %>
+				
+				
+				<%= link_to_remote 'Editer',{
+					:update => 'edit_todoitem_'+todoitem.id.to_s,
+					:url => edit_contrat_todolist_todoitem_path(@todolist.contrat, @todolist, todoitem),
+					:method => :get					
+				} %>
+				<%= image_tag "drag_handle.gif",:class =>"drag", :alt => "Up/Down" %>
+				</div>
+				
+				<div id="todoitem_content_<%= todoitem.id.to_s %>" class="todoitem_content without_actions">
+					<table>
+						<tr>
+							<td style="width:25px">
+								<%= check_box_tag 'cb_'+todoitem.id.to_s, "0", false,
+										:onclick => remote_function( :url => done_contrat_todolist_todoitem_path(@todolist.contrat, @todolist, todoitem)),
+										:class => "checkbox"
+					 			%>
+							</td>
+							<td style="width:490px;">
+								<div id="edit_todoitem_<%= todoitem.id.to_s %>"></div>
+								<div id="show_todoitem_<%= todoitem.id.to_s %>">
+								<%- if todoitem.has_alerte -%>
+									<span class="date_alerte">Pour le <%= french_date todoitem.date %> : </span>
+								<%- end -%>
+								<%= todoitem.intitule %>
+								<span class="auteur_todo">(<%=h print_small_user_infos todoitem.updated_by %>)</span>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+	<% end %>
+	</div>
+	<% if @todolist.get_items_undone.size != 0 %>
+	<%=	
+		sortable_element('sortable_list_undone_'+@todolist.id.to_s,
+											:url => update_positions_contrat_todolist_todoitem_path(@todolist.contrat, @todolist, todoitem),
+											:handle => 'drag',
+											:scroll => 'window',
+											:constraint => "vertical",
+											:overlap => "vertical",
+											:tag => "div"
+										)		
+	%>
+	<% end %>
+<% end %>

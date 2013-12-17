@@ -1,0 +1,21 @@
+<%-
+case @type_depense.to_s
+	when "all"  						then versements_all_add 						= ("class='selected'").html_safe()
+	when "fonctionnement"  	then versements_fonctionnement_add 	= ("class='selected'").html_safe()
+	when "equipement"  			then versements_equipement_add 			= ("class='selected'").html_safe()
+	when "mission"  				then versements_mission_add 				= ("class='selected'").html_safe()
+	when "salaire"  				then versements_salaire_add 				= ("class='selected'").html_safe()
+	when "non_ventilee"  		then versements_non_ventile_add 		= ("class='selected'").html_safe()
+end
+if @show_contrat_clos == 'yes'
+  yc_contrats_clos_add = ("class='selected'").html_safe()
+else
+  nc_contrats_clos_add = ("class='selected'").html_safe()
+end
+-%>
+<a href="" onClick="selectTypeDepense('all');return false;"  id="link_all" <%= versements_all_add %> ><span class="habillage_left">&nbsp;</span>Tous<span class="habillage_right">&nbsp;</span></a>
+<a href="" onClick="selectTypeDepense('fonctionnement');return false;" id="link_fonctionnement" <%= versements_fonctionnement_add %> ><span class="habillage_left">&nbsp;</span>Fonctionnement<span class="habillage_right">&nbsp;</span></a>
+<a href="" onClick="selectTypeDepense('equipement');return false;" id="link_equipement" <%= versements_equipement_add %> ><span class="habillage_left">&nbsp;</span>Equipement<span class="habillage_right">&nbsp;</span></a>
+<a href="" onClick="selectTypeDepense('mission');return false;" id="link_mission" <%= versements_mission_add %> ><span class="habillage_left">&nbsp;</span>Mission<span class="habillage_right">&nbsp;</span></a>
+<a href="" onClick="selectTypeDepense('salaire');return false;" id="link_salaire" <%= versements_salaire_add %> ><span class="habillage_left">&nbsp;</span>Salaire<span class="habillage_right">&nbsp;</span></a>
+<a href="" onClick="selectTypeDepense('non_ventilee');return false;" id="link_non_ventilee" <%= versements_non_ventile_add %> ><span class="habillage_left">&nbsp;</span>Non ventilé<span class="habillage_right">&nbsp;</span></a>

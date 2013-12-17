@@ -1,0 +1,81 @@
+<% @notification_partenaire = notification_partenaire %>
+<div id="<%= "notification_partenaire_#{notification_partenaire.id}" %>">
+	<p>
+		<% @class = '' %>
+		<% if !notification_partenaire.nom.nil? %>
+			<% if notification_partenaire.nom.empty?  %>
+				<% @class = "blank"  %>
+				<% notification_partenaire.nom = "Nom" %>
+			<% end %>
+		<% else %>
+			<% @class = "blank"  %>
+			<% notification_partenaire.nom = "Nom" %>
+		<% end %>
+
+		<%= text_field 'notification_partenaire[]', 'nom',
+			{ :class => 'four_cell required '+@class,
+				:onblur => "if (this.value == '') { $(this).addClassName('blank'); this.value='Nom' };",
+				:onfocus =>"if (this.value == 'Nom') { $(this).removeClassName('blank'); this.value=''; };"
+			} %>
+		
+		
+		<% @class = '' %>
+		<% if !notification_partenaire.etablissement_gestionnaire.nil? %>
+			<% if notification_partenaire.etablissement_gestionnaire.empty?  %>
+				<% @class = "blank"  %>
+				<% notification_partenaire.etablissement_gestionnaire = "Etab. gestionnaire" %>
+			<% end %>
+		<% else %>
+			<% @class = "blank"  %>
+			<% notification_partenaire.etablissement_gestionnaire = "Etab. gestionnaire" %>
+		<% end %>
+		
+		<%= text_field 'notification_partenaire[]', 'etablissement_gestionnaire',
+			{ :class => 'four_cell '+@class,
+				:onblur => "if (this.value == '') { $(this).addClassName('blank'); this.value='Etab. gestionnaire' };",
+				:onfocus =>"if (this.value == 'Etab. gestionnaire') { $(this).removeClassName('blank'); this.value=''; };"
+				} %>
+
+
+			<% @class = '' %>
+			<% if !notification_partenaire.ville.nil? %>
+				<% if notification_partenaire.ville.empty?  %>
+					<% @class = "blank"  %>
+					<% notification_partenaire.ville = "Ville" %>
+				<% end %>
+			<% else %>
+				<% @class = "blank"  %>
+				<% notification_partenaire.ville = "Ville" %>
+			<% end %>
+
+			<%= text_field 'notification_partenaire[]', 'ville',
+				{ :class => 'four_cell '+@class,
+					:value => @value,
+					:onblur => "if (this.value == '') { $(this).addClassName('blank'); this.value='Ville' };",
+					:onfocus =>"if (this.value == 'Ville') { $(this).removeClassName('blank'); this.value=''; };"
+					} %>
+
+
+		<% @class = '' %>
+		<% if !notification_partenaire.pays.nil? %>
+			<% if notification_partenaire.pays.empty?  %>
+				<% @class = "blank"  %>
+				<% notification_partenaire.pays = "Pays" %>
+			<% end %>
+		<% else %>
+			<% @class = "blank"  %>
+			<% notification_partenaire.pays = "Pays" %>
+		<% end %>
+
+		<%= text_field 'notification_partenaire[]', 'pays',
+			{ :class => 'four_cell '+@class,
+				:value => @value,
+				:onblur => "if (this.value == '') { $(this).addClassName('blank'); this.value='Pays' };",
+				:onfocus =>"if (this.value == 'Pays') { $(this).removeClassName('blank'); this.value=''; };"
+			} %>
+
+		<% unless controller.action_name == 'show' %>
+			<%= sub_list_remove_link notification_partenaire, 'notificationPartenaire' %>
+		<% end %>
+</p>
+</div>

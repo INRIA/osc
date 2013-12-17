@@ -1,0 +1,13 @@
+<p>
+  <b>Parent:</b>
+  <%=h @contrat_type.parent_id %>
+</p>
+
+<p>
+  <b>Nom:</b>
+  <%=h @contrat_type.nom %>
+</p>
+
+
+<%= link_to 'Edit', edit_contrat_type_path(@contrat_type) %> |
+<%= link_to 'Back', contrat_types_path %>

@@ -1,0 +1,10 @@
+<%- 
+  depenses_all_add = ("class='selected'").html_safe() if @type_depense == "depenses_all"
+  depenses_soldees_add = ("class='selected'").html_safe() if @type_depense == "depense_soldees"
+  depenses_non_soldees_add = ("class='selected'").html_safe() if @type_depense == "depenses_non_soldees"
+-%>
+<a href="" onClick="selectTypeDepense('depenses_all');return false;"  id="link_depenses_all" <%= depenses_all_add %> ><span class="habillage_left">&nbsp;</span>Toutes<span class="habillage_right">&nbsp;</span></a>
+<a href="" onClick="selectTypeDepense('depenses_soldees');return false;" id="link_depenses_soldees" <%= depenses_soldees_add %> ><span class="habillage_left">&nbsp;</span>Soldées<span class="habillage_right">&nbsp;</span></a>
+<a href="" onClick="selectTypeDepense('depenses_non_soldees');return false;" id="link_depenses_non_soldees" <%= depenses_non_soldees_add %> ><span class="habillage_left">&nbsp;</span>Non soldées<span class="habillage_right">&nbsp;</span></a>
+&nbsp;|&nbsp;
+<a href="" onClick="toggleFacture();return false;" id="facture_selection"  class="toggle <%= 'selected' if @show_factures == 'yes' %>"><span class="habillage_left">&nbsp;</span>Afficher les Factures<span class="habillage_right">&nbsp;</span></a>

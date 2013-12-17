@@ -1,0 +1,32 @@
+<h1>Listing clotures</h1>
+
+<table>
+  <tr>
+    <th>Date fin depenses</th>
+    <th>Depenses possible</th>
+    <th>Commentaires</th>
+    <th>Created at</th>
+    <th>Updated at</th>
+    <th>Created by</th>
+    <th>Updated by</th>
+  </tr>
+  
+<% for cloture in @clotures %>
+  <tr>
+    <td><%=h cloture.date_fin_depenses %></td>
+    <td><%=h cloture.depenses_possible %></td>
+    <td><%=h cloture.commentaires %></td>
+    <td><%=h cloture.created_at %></td>
+    <td><%=h cloture.updated_at %></td>
+    <td><%=h cloture.created_by %></td>
+    <td><%=h cloture.updated_by %></td>
+    <td><%= link_to 'Show', cloture_path(cloture) %></td>
+    <td><%= link_to 'Edit', edit_cloture_path(cloture) %></td>
+    <td><%= link_to 'Destroy', cloture_path(cloture), :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New cloture', new_cloture_path %>

@@ -1,0 +1,49 @@
+<div class="section impair">
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Date de fin des dépenses
+		</div>
+		<div class='valeur'>
+			<%=h french_date @cloture.date_fin_depenses %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Commentaires
+		</div>
+		<div class='valeur'>
+		  <%= simple_format(@cloture.commentaires) %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+</div>
+
+<div id="content_footer">
+	<div class="left">
+		Création le <%= french_datetime @cloture.created_at %> par <%= print_user_infos @cloture.created_by %>
+		<% if @cloture.created_at != @cloture.updated_at %>
+		<br />
+		Dernière modification le <%= french_datetime @cloture.updated_at %> par <%= print_user_infos @cloture.updated_by %>
+		<% end %>
+	</div>
+	<div class="right">
+		<% if @contrat.is_editable? current_user %>		
+		<%= link_to_remote_redbox "Supprimer la clôture",
+		    {	:url => ask_delete_contrat_cloture_path(@contrat, @cloture), :method => :get}, 
+				{	:class => "destroy",
+					:title => "Supprimer la clôture" }	%>
+		<% end %>
+	</div>
+	<div style="clear:both;"></div>
+</div>
+
+<% content_for :right do %>
+	<%= render :partial => 'contrats/show_entite_tree' %>
+	<div class="section">
+	  <h2>Export PDF</h2>
+	  <%= link_to 'Obtenir la clôture au format PDF', contrat_cloture_path(@contrat, @cloture, :pdf), :class => "to_pdf" %>
+  </div>
+<% end %>

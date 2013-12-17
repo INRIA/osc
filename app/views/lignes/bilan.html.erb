@@ -1,0 +1,59 @@
+<%- content_for :options do -%>
+  <%-
+	if @type_bilan.to_s == "factures" or @type_bilan.to_s == "factures_htr"
+      css_class_facture   = "selected"
+	elsif @type_bilan.to_s == "sommes_engagees" or @type_bilan.to_s == "sommes_engagees_htr"
+      css_class_engagees  = "selected"
+	end 
+	-%>
+  <div id="options">
+    <div id="affichage">
+			<a href="?type_bilan=sommes_engagees" class="filter <%= css_class_engagees %>"><span class="habillage_left">&nbsp;</span>Bilan sur dépenses soldées et sommes engagées<span class="habillage_right">&nbsp;</span></a>
+			<a href="?type_bilan=factures" class="filter <%= css_class_facture %>"><span class="habillage_left">&nbsp;</span>Bilan sur factures payées<span class="habillage_right">&nbsp;</span></a>
+      &nbsp;|&nbsp;
+			<% if @distinct=='justifiable'%>
+			  <a href="?distinct=none" id="link_justifiable" class="selected"><span class="habillage_left">&nbsp;</span>D&eacute;penses justifiables<span class="habillage_right">&nbsp;</span></a>
+			<% else %>
+			  <a href="?distinct=justifiable" id="link_justifiable" class=""><span class="habillage_left">&nbsp;</span>D&eacute;penses justifiables<span class="habillage_right">&nbsp;</span></a>
+		  <% end %>
+      <% if @ligne.contrat.come_from_inria? %>
+				<% if @distinct =='manuelle' %>
+	        <a href="?distinct=none" id="link_manuelle" class="selected"><span class="habillage_left">&nbsp;</span>D&eacute;penses manuelles<span class="habillage_right">&nbsp;</span></a>
+	      <% else %>
+	        <a href="?distinct=manuelle" id="link_manuelle" class=""><span class="habillage_left">&nbsp;</span>D&eacute;penses manuelles<span class="habillage_right">&nbsp;</span></a>
+	      <% end %>
+			<% end %>
+
+		</div>
+    <div style="clear:both;"></div>
+    <p id="export_to_csv">
+      <a href="bilan.csv?encode=utf16" id="export_budget_mso"><span class="habillage_left">&nbsp;</span>MS Office (UTF-16): Export au format csv<span class="habillage_right">&nbsp;</span></a>
+      <a href="bilan.csv?encode=utf8" id="export_budget_oo"><span class="habillage_left">&nbsp;</span>Open Office (UTF-8) : Export au format csv<span class="habillage_right">&nbsp;</span></a>
+    </p>
+  </div>
+<%- end -%>
+
+<%- content_for :right do -%>
+  <%= render :partial => 'selection_temporelle' %>
+<%- end -%>
+
+<div id="to-update">
+  <%- if @detail.blank? ||  @detail == "0" || @detail == "2" -%>
+    <%- if @ligne.contrat_dotation %>
+      <%= render :partial => 'bilan_du_commun' %>
+    <%else%>
+      <%= render :partial => 'bilan' %>
+    <%end%>
+  <%- else -%>
+    <%- if @ligne.contrat_dotation %>
+      <%= render :partial => 'bilan_detail_du_commun' %>
+    <%else%>
+      <%= render :partial => 'bilan_detail' %>
+    <%end%>
+  <%- end -%>
+</div>
+
+<script type="text/javascript">	
+	new App.Budget.ListView();
+	
+</script>

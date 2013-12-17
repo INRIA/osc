@@ -1,0 +1,154 @@
+<% if @projet.date_fin < Date.today %>
+<div class="archive">
+<% end %>
+
+<%= error_messages_for @projet %>
+
+
+<div class='section'>
+	<h2><strong>Descriptif</strong> de l'équipe</h2>
+<%= form_for(:projet, :url => projet_path(@projet), :html => { :method => :put }) do |f| %>
+<fieldset>
+	
+	
+<p>
+	<label for="projet_nom" class="required">Nom</label><br />
+	<% if @non_modifiable.include?('nom') %>
+	  <strong><%= @projet.nom %></strong>
+	<% else %>
+	  <%= f.text_field :nom %>
+	<% end %>
+</p>
+<p>
+	<label for="projet_description">Description</label><br />
+	<% if @non_modifiable.include?('description') %>
+	  <strong><%= @projet.description %></strong>
+	<% else %>
+	  <%= f.text_area :description %>
+	<% end %>
+</p>
+<p class="date_select">
+	<label for="projet_date_debut">Date de début du projet</label><br />
+	 <% if @non_modifiable.include?('date_debut') %>
+	   <strong><%= @projet.date_debut %></strong>
+	 <% else %>
+	   <%= f.date_select("date_debut", 
+						:order => [:day, :month, :year],
+						:start_year => 1980,
+						:use_month_numbers => true) %>
+	 <% end %>
+</p>
+<p class="date_select">
+	<label for="projet_date_fin">Date de fin du projet</label><br />
+	<% if @non_modifiable.include?('date_fin') %>
+	   <strong><%= @projet.date_fin %></strong>
+	 <% else %>
+	
+		<% if @projet.date_fin.to_s == "2099-12-31" %>
+		<span id="non_connue">
+		  <span style="margin-left:15px;">Date infinie</span>
+		  <span><a href="" onclick="disableDateNonConnue(); return false;" id="normal_date">Annuler</a></span>
+		  <input type='text' name='projet[date_fin]' id="projet_date_fin_infinite" value="2099-12-31" style="display:none" />
+		</span>
+		<span id="disable_non_connue" style="display:none;">
+		  <span id="dateFin">
+			<%= f.date_select("date_fin", 
+								:order => [:day, :month, :year], 
+								:start_year => @projet.date_debut.year, 
+								:use_month_numbers => true) %>
+		  </span>
+		  <span><a href="" onclick="enableDateNonConnue(); return false;" id="infinite_date">Date infinie</a></span>
+		</span>
+		<script>
+			$('projet_date_fin_3i').disable();
+			$('projet_date_fin_2i').disable();
+			$('projet_date_fin_1i').disable();
+		</script>
+		<% else %>
+		<span id="non_connue"  style="display:none;">
+		  <span style="margin-left:15px;">Date infinie</span><br />
+		  <span class="aide"><a href="" onclick="disableDateNonConnue(); return false;" id="normal_date">Annuler</a></span>
+		  <input type='text' name='projet[date_fin]' id="projet_date_fin_infinite" value="2099-12-31" style="display:none" />
+		</span>
+		<span id="disable_non_connue">
+		  <span id="dateFin">
+			<%= f.date_select("date_fin", 
+								:order => [:day, :month, :year], 
+								:start_year => @projet.date_debut.year, 
+								:use_month_numbers => true) %>
+		  </span><br />
+		  <span class="aide"><a href="" onclick="enableDateNonConnue(); return false;" id="infinite_date">Date infinie</a></span>
+		</span>
+		<script>
+			$('projet_date_fin_infinite').disable();
+		</script>
+		<% end %>
+	  <% end %>
+</p>
+</fieldset>
+<p class="submit">
+	<%= submit_tag "Mettre à jour" %>
+</p>
+
+<script>
+function disableDateNonConnue(){
+	$("disable_non_connue").show();
+	$("non_connue").hide();
+	$('projet_date_fin_3i').enable();
+	$('projet_date_fin_2i').enable();
+	$('projet_date_fin_1i').enable();
+	$('projet_date_fin_infinite').disable();
+}
+function enableDateNonConnue(){
+	$("disable_non_connue").hide();
+	$("non_connue").show();
+	$('projet_date_fin_3i').disable();
+	$('projet_date_fin_2i').disable();
+	$('projet_date_fin_1i').disable();
+	$('projet_date_fin_infinite').enable();
+}
+</script>
+
+<% end %>
+</div>
+
+<div class='section'>
+	<h2>Association à un <strong>laboratoire</strong></h2>
+	<div id="projetEditLaboratoires">
+		<%= render :partial => "list_laboratoire_subscriptions" %>	
+	</div>
+	<div id="add_laboratoire_subscription">
+		<% if @projet.laboratoire_subscriptions.empty? %>
+		<%= render :partial => 'add_laboratoire_subscription' %>
+		<% end %>
+	</div>
+	<br />
+</div>
+
+<div class='section'>
+	<h2>Association à un <strong>laboratoire</strong> via un <strong>département</strong></h2>
+	<div id="projetEditDepartements">
+	<%= render :partial => 'list_departement_subscriptions' %>
+	</div>
+	<div id="add_departement_subscription">
+	<%= render :partial => 'add_departement_subscription' %>
+	</div>
+	<br />
+</div>
+
+
+<div class='section'>
+	<h2>Associations à des <strong>tutelles</strong></h2>
+	<div id="projetEditTutelles">
+		<%= render :partial => "list_tutelle_subscriptions" %>	
+	</div>
+	
+	<div id="add_tutelle_subscription">
+		<%= render :partial => 'add_tutelle_subscription' %>
+	</div>
+	<br />
+</div>
+
+<% if @projet.date_fin < Date.today %>
+</div>
+<% end %>

@@ -1,0 +1,22 @@
+<h1>Listing organisme_gestionnaire_tauxes</h1>
+
+<table>
+  <tr>
+    <th>Taux</th>
+    <th>Annee</th>
+  </tr>
+
+<% for organisme_gestionnaire_taux in @organisme_gestionnaire_tauxes %>
+  <tr>
+    <td><%=h organisme_gestionnaire_taux.taux %></td>
+    <td><%=h organisme_gestionnaire_taux.annee %></td>
+    <td><%= link_to 'Show', organisme_gestionnaire_taux %></td>
+    <td><%= link_to 'Edit', edit_organisme_gestionnaire_taux_path(organisme_gestionnaire_taux) %></td>
+    <td><%= link_to 'Destroy', organisme_gestionnaire_taux, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New organisme_gestionnaire_taux', new_organisme_gestionnaire_taux_path %>

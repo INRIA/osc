@@ -1,0 +1,17 @@
+<%- if @organisme_gestionnaire.soumissions.size != 0 -%>
+<div class="section">
+	<h2>Utilisé dans les soumissions des contrats suivants</h2>
+	<%- for soumission in @organisme_gestionnaire.soumissions  -%>
+	<span class="contrat_soumission"><%= soumission.contrat.acronyme %></span>
+	<%- end -%>
+</div>
+<%- end -%>
+
+<%- if @organisme_gestionnaire.notifications.size != 0 -%>
+<div class="section">
+	<h2>Utilisé dans les notifications des contrats suivants</h2>
+	<%- for notification in @organisme_gestionnaire.notifications  -%>
+	<span class="contrat_notification"><%= notification.contrat.acronyme %></span>
+	<%- end -%>
+</div>
+<%- end -%>

@@ -1,0 +1,14 @@
+<p>
+  <b>Code:</b>
+  <%=h @budgetaire_reference.code %>
+</p>
+
+<p>
+  <b>Intitule:</b>
+  <%=h @budgetaire_reference.intitule %>
+</p>
+
+<p>&nbsp</p>
+
+<%= link_to 'Editer', edit_budgetaire_reference_path(@budgetaire_reference) %> |
+<%= link_to 'Retour à la liste', budgetaire_references_path %>

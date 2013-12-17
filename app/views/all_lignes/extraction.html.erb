@@ -1,0 +1,301 @@
+<%- content_for :sub_menu do -%>
+  <%= render :partial => 'extration_sub_menu' %>
+<%- end -%>
+
+<% content_for :head do %>
+  <%= render :partial => 'extraction_head' %>
+<% end %>
+
+
+<% content_for :options do %>
+  <div id="options">
+    <div id="affichage">
+      <%- if !params['data'].nil? -%>
+				<%= render :partial => 'extraction_options_for_depenses' %>
+      <%- else -%>
+				<%= render :partial => 'extraction_options_for_credits' %>
+      <%- end -%>
+      &nbsp;|&nbsp;
+      <a href="" class="selected" onclick="toggleRechercheAvancee(); return false;" id="link_recherche_avancee"><span class="habillage_left">&nbsp;</span>Afficher les crit&egrave;res de Recherche<span class="habillage_right">&nbsp;</span></a>
+      <p id="export_to_csv">
+      <%= render :partial => 'option_for_contrats_clos' %>
+      &nbsp;|&nbsp;
+			<a href="" onclick="exportToCsv('utf-16'); return false;" id="export_budget_mso"><span class="habillage_left">&nbsp;</span>MS Office (UTF-16): Export au format csv<span class="habillage_right">&nbsp;</span></a>
+			<a href="" onclick="exportToCsv('utf-8'); return false;" id="export_budget_oo"><span class="habillage_left">&nbsp;</span>Open Office (UTF-8) : Export au format csv<span class="habillage_right">&nbsp;</span></a>
+      </p>
+    </div>
+    <div id="line_per_page">
+      <span id="nb" class="infos"><%= @per_page.to_s %></span>
+      <div class="slider">
+				<div id="track" class="track"> </div>
+				<div id="handle" class="handle"> </div>
+      </div>
+      <div style="clear:both;"></div>
+    </div>
+    <div style="clear:both;"></div>
+  </div>
+  <div id="recherche_avancee">
+    <form id="form_recherche">
+      <div class="small_box">
+				<h3>S&eacute;lection sur le contrat</h3>
+				<label>Acronyme du contrat</label>
+				<input type="text" id="acronyme_research" name="acronyme_research" /><br />
+				<label>N° Contrat &eacute;tablissement</label>
+				<input type="text" id="noContrat_research" name="noContrat_research" /><br />
+				<label>Limit&eacute; &agrave; l'organisme gestionnaire :</label>
+        <input type="text" id="organisme_gestionnaire" name="organisme_gestionnaire" />
+        <input OnClick="updateResult(); return false;" id="extraction_submit" class="submit" type="submit" value="Valider les crit&egrave;res et lancer la Recherche" />
+      </div>
+      <div class="small_box">
+        <h3>Appartenance (directe ou indirecte)</h3>
+        <label>D&eacute;partement</label>
+        <input type="text" id="in_departement" name="in_departement" /><br />
+				<label>Laboratoire</label>
+				<input type="text" id="in_laboratoire" name="in_laboratoire" /><br />
+				<label>Tutelle</label>
+				<input type="text" id="in_tutelle" name="in_tutelle" />
+      </div>
+
+      <%- if params['data'] != "commun" -%>
+				<div class="small_box">
+					<h3>S&eacute;lection sur les associations directes</h3>
+					<label>Equipe (Limiter &agrave;  <a href="" onclick="alert('<%= @tool_tip_mes_equipes.html_safe() %>');return false;" %>mes &eacute;quipes</a>  
+						<%= check_box_tag "filtre_projet", "filtre_projet_active", @filtre_mes_projets_checked, :style=>'width:15px;'-%>)</label>
+					<input type="text" id="equipe_research" name="equipe_research" /><br />
+					<label>D&eacute;partement</label>
+					<input type="text" id="departement_research" name="departement_research" />
+					<label>Laboratoire</label>
+          <input type="text" id="laboratoire_research" name="laboratoire_research" />
+				</div>
+      <%- end -%>
+
+      <%- if params['data'].nil? -%>
+				<div class="small_box">
+					<h3>Autres s&eacute;lections</h3>
+					<label>Date de commande <span>(AAAA-MM-JJ)</span></label>
+					<input type="text" id="annee" name="annee" /><br />
+					<label>R&eacute;f&eacute;rence</label>
+					<input type="text" id="reference" name="reference" />
+				</div>
+				<div class="small_box">
+					<h3>Autres s&eacute;lections</h3>
+					<label>Origine</label>
+					<input type="text" id="origine" name="origine" /><br />
+					<label>Commentaire</label>
+					<input type="text" id="commentaire" name="commentaire" />
+				</div>
+      <%- end -%>
+
+		<%- if ['commun','fonctionnement', 'equipement', 'non_ventilee','toutes_depenses_hors_salaires'].include? params['data'] -%>
+			<div class="small_box">
+				<h3>Autres s&eacute;lections</h3>
+				<label>Date de commande <span>(AAAA-MM-JJ)</span></label>
+				<input type="text" id="annee" name="annee" /><br />
+				<label>Date de mill&eacute;sime <span>(AAAA-MM-JJ)</span></label>
+				<input type="text" id="millesime" name="millesime" /><br />
+				<label>N° de demande d'achat</label>
+				<input type="text" id="reference" name="reference" />
+			</div>
+			<div class="small_box">
+				<h3>Autres s&eacute;lections</h3>
+				<label>Intitul&eacute;</label>
+				<input type="text" id="intitule" name="intitule" /><br />
+				<%- if ['commun','fonctionnement', 'equipement', 'non_ventilee'].include? params['data'] -%>
+				  <label>Fournisseur</label>
+				  <input type="text" id="fournisseur" name="fournisseur" />
+				<%- end -%>
+				<label>R&eacute;f comptable (factures)</label>
+				<input type="text" id="ref_cp" name="ref_cp" />
+			</div>
+		<%- end -%>
+
+      <%- if params['data'] == "commun" -%>
+				<div class="small_box">
+					<h3>Autre s&eacute;lection</h3>
+				<label>Code R&eacute;f&eacute;rence budg&eacute;taire</label>
+				<input type="text" id="ref_bud" name="ref_bud" /><br />
+				</div>
+      <%- end -%>
+
+      <%- if params['data'] == "mission" -%>
+			<div class="small_box">
+				<h3>Autres s&eacute;lections</h3>
+				<label>Date de commande <span>(AAAA-MM-JJ)</span></label>
+				<input type="text" id="annee" name="annee" /><br />
+				<label>Date de mill&eacute;sime <span>(AAAA-MM-JJ)</span></label>
+				<input type="text" id="millesime" name="millesime" /><br />
+				<label>Date de d&eacute;part <span>(AAAA-MM-JJ)</span></label>
+        <input type="text" id="annee2" name="annee2" /><br />
+        <label>Date de retour <span>(AAAA-MM-JJ)</span></label>
+        <input type="text" id="annee3" name="annee3" /><br />
+			</div>
+			<div class="small_box">
+				<label>N° d'OM</label>
+        <input type="text" id="reference" name="reference" /><br />
+        <label>Objet de la mission</label>
+        <input type="text" id="intitule" name="intitule" />
+        <label>Agent</label>
+        <input type="text" id="agent" name="agent" />
+				<label>Lieux</label>
+				<input type="text" id="lieux" name="lieux" />
+				<label>R&eacute;f comptable (factures)</label>
+				<input type="text" id="ref_cp" name="ref_cp" />			</div>
+      <%- end -%>
+
+      <%- if params['data'] == "salaire" -%>
+			<div class="small_box">
+				<h3>Autres s&eacute;lections</h3>
+				<label>Agent</label>
+				<input type="text" id="agent" name="agent" /><br />
+				<label>Type de contrat</label>
+				<input type="text" id="type_contrat" name="type_contrat" /><br />
+				<label>Statut</label>
+				<input type="text" id="statut" name="statut" />
+			</div>
+			<div class="small_box">
+				<h3>Autres s&eacute;lections</h3>
+				<label>Date de d&eacute;but <span>(AAAA-MM-JJ)</span></label>
+				<input type="text" id="annee" name="annee" /><br />
+				<label>Date de fin <span>(AAAA-MM-JJ)</span></label>
+				<input type="text" id="annee2" name="annee2" />
+			</div>
+      <%- end -%>
+      <div style="clear:both;"></div>     
+    </form>
+  </div>
+
+<% end %>
+
+
+
+<div id="list">
+  <%- if @index=true -%>
+    <%= render :partial => 'saved_param' %>
+    <p>Merci de s&eacute;lectionner ci-dessus vos crit&egrave;res et de lancer la recherche.</p>
+  <%- elsif params['data'].nil? -%>
+    <%= render :partial => 'list_credits' %>
+  <%- elsif params['data'] == "toutes_depenses_hors_salaires" -%>
+    <%= render :partial => 'list_toutes_depenses_hors_salaires' %>
+  <%- elsif ['fonctionnement', 'equipement', 'non_ventilee'].include? params['data'] -%>
+    <%= render :partial => 'list_depenses_default' %>
+  <%- elsif params['data'] == "mission" -%>
+    <%= render :partial => 'list_depenses_missions' %>
+  <%- elsif params['data'] == "salaire" -%>
+    <%= render :partial => 'list_depenses_salaires' %>
+  <%- elsif params['data'] == "commun" -%>
+    <%= render :partial => 'list_depenses_communs' %>
+  <%- end -%>
+</div>
+
+
+
+<script type="text/javascript" language="javascript">
+
+function tableOrderBy(order_value){
+	new Ajax.Updater('list', '/all_lignes/list',
+		{asynchronous:true, evalScripts:true, method:'get',
+		parameters:Form.serialize('saved_params')+'&'+Form.serialize('form_recherche')+"&action_for_update=order&value="+order_value}
+	);
+}
+
+function selectTypeDepense(type){
+	addClassName_for_recherche_avancee = false;
+	if ($('link_recherche_avancee').hasClassName('selected')){
+		addClassName_for_recherche_avancee = true;
+	}
+
+	$$("#options a.selected").each(function(element){
+    element.removeClassName('selected')
+  })
+
+	if (addClassName_for_recherche_avancee){
+		$('link_recherche_avancee').addClassName('selected');
+	}
+
+
+	$('link_'+type).addClassName('selected');
+	$('type_depense').value = type;
+	new Ajax.Updater('list', '/all_lignes/list',
+		{asynchronous:true, evalScripts:true, method:'get',
+		parameters:Form.serialize('saved_params')+'&'+Form.serialize('form_recherche')}
+	);
+}
+
+function toggleFacture(){
+  if($('facture_selection').hasClassName('selected')){
+    $('facture_selection').removeClassName('selected');
+    $('show_factures').value = "no";
+  }else{
+    $('facture_selection').addClassName('selected');
+    $('show_factures').value = "yes";
+  }  
+}
+
+function selectContratClos(valeur){
+	$('contrat_clos').value = valeur;
+	new Ajax.Updater('list', '/all_lignes/list',
+		{asynchronous:true, evalScripts:true, method:'get',
+		parameters:Form.serialize('saved_params')+'&'+Form.serialize('form_recherche')}
+	);
+}
+
+function addSliderForNumberPerPage(depenses_per_page){
+	new Control.Slider('handle','track',{
+		range:$R(5,100),
+		values: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100],
+		sliderValue:depenses_per_page,
+	    onSlide:function(v){$('nb').innerHTML=parseInt(v)},
+	    onChange:function(v){
+		$('per_page').value = parseInt(v);
+		new Ajax.Updater('list', '/all_lignes/list',
+			{asynchronous:true, evalScripts:true, method:'get',
+			parameters:Form.serialize('saved_params')+'&'+Form.serialize('form_recherche')}
+		);
+
+	}});
+}
+
+function toggleRechercheAvancee(){
+	$('link_recherche_avancee').toggleClassName('selected');
+	// $('recherche_avancee').toggle();
+	new Effect.toggle('recherche_avancee','slide', {duration: 0.3});
+}
+
+function updateResult(page_number){
+  // Si fin de choix d'une référence comptable et que le tri précédent portait sur un chanp de la facture
+  // alors on remet la valeur de tri sur les dépenses par défaut
+  if(typeof(page_number)==='undefined') page_number = 1; 
+  if ($('ref_cp')) {
+  if ($('ref_cp').value == '') {
+    if (['date','date_mandatement','numero_facture','numero_mandat','numero_rubrique'].indexOf($('saved_order_value').value) > 0) {
+      $('saved_order_value').value = "date_commande"
+      $('saved_order_type').value = "desc"
+    }
+  }}
+	new Ajax.Updater('list', '/all_lignes/list',
+		{asynchronous:true, evalScripts:true, method:'get',
+		parameters:Form.serialize('saved_params')+
+		           '&'+Form.serialize('form_recherche')+
+		           '&page='+page_number});
+}
+
+function exportToCsv(encoding){
+	if (encoding == 'utf-8') {
+		window.location = "/all_lignes/export_csv?encode=utf8&" + Form.serialize('saved_params') + '&' + Form.serialize('form_recherche')
+	}else if (encoding == 'utf-16'){
+		window.location = "/all_lignes/export_csv?encode=utf16&" + Form.serialize('saved_params') + '&' + Form.serialize('form_recherche')
+	}
+}
+
+function ComputeTotaux(){
+  new Ajax.Updater('list_totaux_globaux', '/all_lignes/compute_totaux',
+    {asynchronous:true, evalScripts:true, method:'get',
+    parameters:Form.serialize('saved_params')+'&'+Form.serialize('form_recherche')});
+}
+
+Event.observe(window, 'load', function() {
+	addSliderForNumberPerPage(<%= @per_page %>);
+});
+  
+
+</script>

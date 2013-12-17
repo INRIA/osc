@@ -1,0 +1,68 @@
+<div class="form-box parent">
+  <%= "<span class='come-from-inria'>SI INRIA</span>".html_safe() if @versement.come_from_inria? %>
+  <h3>Crédit</h3>
+  <div class="clearfix">
+    <div class="col-1-of-2"> 
+      <p class="inline">
+        <label for="date_effet" class="required">Date effet</label><br />
+        <% if @non_modifiable.include?('date_effet') %>
+          <strong><%= @versement.date_effet %></strong>
+        <% else %>
+            <%= f.unobtrusive_date_picker :date_effet , :use_month_numbers => true, :class => 'no-transparency' %>
+        <% end %>
+      </p>
+      <p>
+        <label for="reference">Référence</label><br />
+        <% if @non_modifiable.include?('reference') %>
+          <strong><%= @versement.reference %></strong>
+        <% else %>
+          <%= f.text_field :reference %>
+        <% end %>
+      </p>
+      <p>
+        <label for="montant" class="required">Montant</label><br />
+        <% if @non_modifiable.include?('montant') %>
+          <strong><%= @versement.montant %></strong>
+        <% else %>
+          <%= f.text_field :montant %>
+        <% end %>
+      </p>
+      <p>
+        <label for="ventilation" class="required">Ventilation</label><br />
+        <% if @non_modifiable.include?('ventilation') %>
+          <strong><%= @versement.ventilation %></strong>
+        <% else %>
+          <%= f.select :ventilation, ["","Fonctionnement","Equipement","Mission","Salaire","Non ventilé"] %>
+            <% end %>
+      </p>
+      <% if (@ligne.contrat.is_editable? current_user and @versement.verrou != 'SI INRIA')%>
+      <p>
+        <% if (@versement.verrou == 'Droit de modification') %>
+        <%= check_box_tag 'verrou_modification', true, true %> <label for="verrou_modification">Limiter la modification de ce versements aux gestionnaires contrat ?</label>   
+      <% else %>
+        <%= check_box_tag 'verrou_modification' %> <label for="verrou_modification">Limiter la modification de ce versements aux gestionnaires contrat ?</label>   
+      <% end %>
+      </p>
+      <% end %>
+    </div>
+  
+    <div class="col-2-of-2">
+      <p>
+        <label for="origine">Origine</label><br />
+        <% if @non_modifiable.include?('origine') %>
+          <strong><%= @versement.origine %></strong>
+        <% else %>
+                <%= f.text_field :origine %>
+        <% end %>
+      </p>
+      <p>
+        <label for="commentaire">Commentaire</label><br />
+        <% if @non_modifiable.include?('commentaire') %>
+          <strong><%= @versement.commentaire %></strong>
+        <% else %>
+          <%= f.text_area :commentaire %>
+        <% end %>
+      </p>
+    </div>
+  </div>
+</div>  

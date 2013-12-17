@@ -1,0 +1,36 @@
+<h1>Listing sous_contrat_notifications</h1>
+
+<table>
+  <tr>
+    <th>Sous contrat</th>
+    <th>Ma fonctionnement</th>
+    <th>Ma equipement</th>
+    <th>Ma salaire</th>
+    <th>Ma mission</th>
+    <th>Ma non ventile</th>
+    <th>Ma couts indirects</th>
+    <th>Ma allocation</th>
+    <th>Ma total</th>
+  </tr>
+  
+<% for sous_contrat_notification in @sous_contrat_notifications %>
+  <tr>
+    <td><%=h sous_contrat_notification.sous_contrat_id %></td>
+    <td><%=h sous_contrat_notification.ma_fonctionnement %></td>
+    <td><%=h sous_contrat_notification.ma_equipement %></td>
+    <td><%=h sous_contrat_notification.ma_salaire %></td>
+    <td><%=h sous_contrat_notification.ma_mission %></td>
+    <td><%=h sous_contrat_notification.ma_non_ventile %></td>
+    <td><%=h sous_contrat_notification.ma_couts_indirects %></td>
+    <td><%=h sous_contrat_notification.ma_allocation %></td>
+    <td><%=h sous_contrat_notification.ma_total %></td>
+    <td><%= link_to 'Show', sous_contrat_notification_path(sous_contrat_notification) %></td>
+    <td><%= link_to 'Edit', edit_sous_contrat_notification_path(sous_contrat_notification) %></td>
+    <td><%= link_to 'Destroy', sous_contrat_notification_path(sous_contrat_notification), :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New sous_contrat_notification', new_sous_contrat_notification_path %>

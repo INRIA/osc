@@ -1,0 +1,7 @@
+<h2>Association du projet <%= @laboratoire_subscription.projet.nom %> à un laboratoire</h2>
+
+<%= error_messages_for :laboratoire_subscription %>
+
+<%= render :partial => 'new' %>
+
+<%= link_to "Retour à la page d'édition du projet "+@laboratoire_subscription.projet.nom, edit_projet_path(@laboratoire_subscription.projet) %>

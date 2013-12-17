@@ -1,0 +1,330 @@
+<% content_for :right do %>
+
+<% if current_user.is_contrat_admin? or current_user.is_admin? %>
+  <%= link_to '', new_contrat_path, {:class => "addContrat"} %>
+<% end %>
+
+<h2 style="margin:0">
+  Recherche // <span id="ajax_result"><%= pluralize(@count, 'contrat trouvée', 'contrats trouvées').html_safe() %></span>  
+</h2>
+
+<div id="recherche">
+  <form name="sform" id="sform" class="search" action="search"> 
+    <div class="box">
+      <%- value     = @acronyme -%>
+      <%- css_class = ("blank" unless !value.blank? and value != "Acronyme") -%>
+      <%= text_field_tag("acronyme", "#{value}", :size => 10,
+          :onblur => "if (this.value == '') { $(this).addClassName('blank'); this.value='Acronyme' };",
+          :onfocus => "if (this.value == 'Acronyme') { $(this).removeClassName('blank'); this.value=''; };",
+          :class => css_class,
+          :tabindex => '10' ) %>
+    </div>
+    <div class="box">
+      <%- value = @noContrat -%>
+      <%- css_class = ("blank" unless !value.blank? and value != "NumContrat") -%>
+      <%= text_field_tag("noContrat", "#{value}", :size => 10,
+          :onblur => "if (this.value == '') { $(this).addClassName('blank'); this.value='NumContrat' };",
+          :onfocus => "if (this.value == 'NumContrat') { $(this).removeClassName('blank'); this.value=''; };",
+          :class => css_class,
+          :tabindex => '11' ) %>
+    </div>
+    <div class="box">
+      <%- value = @projet -%>
+      <%- css_class = ("blank" unless !value.blank? and value != "Equipe") -%>
+        <%= text_field_tag("projet", "#{value}", :size => 10,
+        :onblur => "if (this.value == '') { $(this).addClassName('blank'); this.value='Equipe' };",
+        :onfocus => "if (this.value == 'Equipe') { $(this).removeClassName('blank'); this.value=''; };",
+        :class => css_class,
+        :tabindex => '12' ) %>
+    </div>
+    <div class="box">
+      <%- value = @laboratoire -%>
+      <%- css_class = ("blank" unless !value.blank? and value != "Laboratoire") -%>
+      <%= text_field_tag("laboratoire", "#{value}", :size => 10,
+        :onblur => "if (this.value == '') { $(this).addClassName('blank'); this.value='Laboratoire' };",
+        :onfocus => "if (this.value == 'Laboratoire') { $(this).removeClassName('blank'); this.value=''; };",
+        :class => css_class,
+        :tabindex => '13' ) %>
+    </div>
+    <div style="clear:both"></div>
+    <a href="" onclick="new Effect.toggle('contrat_recherche_avancee', 'blind', {duration:0.3}); return false;" class="toggle">Recherche avancée</a>
+    <div id="contrat_recherche_avancee" style="display:none;">
+      <p class="checkbox first">
+        <%- if @selection == 'default' -%>
+          <%= radio_button_tag 'position', 'default', checked = true %>
+        <%- else -%>
+          <%= radio_button_tag 'position', 'default' %>
+        <%- end -%>
+        <label for="position_default">Tous les contrats sauf cloturés ou refusés</label>
+      </p>
+      <p class="checkbox">
+        <%- if @selection == 'tous' -%>
+          <%= radio_button_tag 'position', 'tous',checked = true %>
+        <%- else -%>
+          <%= radio_button_tag 'position', 'tous' %>
+        <%- end -%>
+        <label for="position_tous">Tous les contrats</label>
+      </p>
+      <p class="checkbox">
+        <%- if @selection == 'creation' -%>
+          <%= radio_button_tag 'position', 'creation',checked = true %>
+        <%- else -%>
+          <%= radio_button_tag 'position', 'creation' %>
+        <%- end -%>
+        <label for="position_creation">Contrats à l'état initial</label>
+      </p>
+      <p class="checkbox">
+        <%- if @selection == 'soumission' -%>
+          <%= radio_button_tag 'position', 'soumission',checked = true %>
+        <%- else -%>
+          <%= radio_button_tag 'position', 'soumission' %>
+        <%- end -%>
+        <label for="position_soumission">Contrats à l'état de soumission</label>
+      </p>
+      <p class="checkbox">
+        <%- if @selection == 'signature' -%>
+          <%= radio_button_tag 'position', 'signature',checked = true %>
+        <%- else -%>
+          <%= radio_button_tag 'position', 'signature' %>
+        <%- end -%>
+        <label for="position_signature">Contrats à l'état de signature</label>
+      </p>
+      <p class="checkbox">
+        <%- if @selection == 'refu' -%>
+          <%= radio_button_tag 'position', 'refu',checked = true %>
+        <%- else -%>
+          <%= radio_button_tag 'position', 'refu' %>
+        <%- end -%>
+        <label for="position_refu">Contrats à l'état de refus</label>
+      </p>
+      <p class="checkbox">
+        <%- if @selection == 'notification' -%>
+          <%= radio_button_tag 'position', 'notification',checked = true %>
+        <%- else -%>
+          <%= radio_button_tag 'position', 'notification' %>
+        <%- end -%>
+        <label for="position_notification">Contrats à l'état de notification</label>
+      </p>
+      <p class="checkbox last">
+        <%- if @selection == 'cloture' -%>
+          <%= radio_button_tag 'position', 'cloture',checked = true %>
+        <%- else -%>
+          <%= radio_button_tag 'position', 'cloture' %>
+        <%- end -%>
+        <label for="position_cloture">Contrats à l'état de clôture</label>
+      </p>
+    </div>
+    <input OnClick="updateResult('1'); return false;" id="extraction_submit" class="submit" type="submit" value="Lancer la Recherche" />   
+  </form>
+  
+  <script type="text/javascript" language="javascript">
+  function updateResult(page_number){
+
+    new Ajax.Request('/contrats/search',
+      {asynchronous:true, evalScripts:true, method:'get',
+      parameters:'acronyme='+escape($F('acronyme'))+
+                      '&noContrat='+escape($F('noContrat'))+
+                      '&projet='+escape($F('projet'))+
+                      '&laboratoire='+escape($F('laboratoire'))+
+                      '&def='+$F('position_default')+
+                      '&tous='+$F('position_tous')+
+                      '&creation='+$F('position_creation')+
+                      '&soumission='+$F('position_soumission')+
+                      '&signature='+$F('position_signature')+
+                      '&refu='+$F('position_refu')+
+                      '&notification='+$F('position_notification')+
+                      '&cloture='+$F('position_cloture')+
+                      '&page='+page_number
+                      });
+    }
+  </script>
+  
+
+
+  <div id='list'>
+  <%= 
+  render :partial => 'list' 
+  %>
+  </div>
+</div>
+<% end %>
+
+<div class="clearfix">
+  <div class="stats_box clearfix">
+    <div class="chiffre">
+      <%= @nb_contrats %><br />
+      <span>100%</span>
+    </div>
+    <div class="titre">Contrats</div>
+  </div>
+
+  <div class="stats_box clearfix">
+    <div class="chiffre">
+      <%= @nb_contrats_soumis %><br />
+      <span>
+      <%- if @nb_contrats == 0 -%>
+        -
+      <%- else -%>
+        <%= ((@nb_contrats_soumis.to_f/@nb_contrats.to_f)*100).to_i %>%
+      <%- end -%>
+      </span>
+    </div>
+    <div class="titre">Contrats<br />soumis</div>
+  </div>
+
+  <div class="stats_box clearfix">
+    <div class="chiffre">
+      <%= @nb_contrats_signes %><br />
+      <span>
+      <%- if @nb_contrats == 0 -%>
+        -
+      <%- else -%>
+        <%= ((@nb_contrats_signes.to_f/@nb_contrats.to_f)*100).to_i %>%
+      <%- end -%>
+      </span>
+    </div>
+    <div class="titre">Contrats<br />signés</div>
+  </div>
+
+  <div class="stats_box clearfix">
+    <div class="chiffre">
+      <%= @nb_contrats_refuses %><br />
+      <span>
+      <%- if @nb_contrats == 0 -%>
+        -
+      <%- else -%>
+        <%= ((@nb_contrats_refuses.to_f/@nb_contrats.to_f)*100).to_i %>%
+      <%- end -%>
+      </span>
+    </div>
+    <div class="titre">Contrats<br />refusés</div>
+  </div>
+
+  <div class="stats_box clearfix">
+    <div class="chiffre">
+      <%= @nb_contrats_notifies %><br />
+      <span>
+      <%- if @nb_contrats == 0 -%>
+        -
+      <%- else -%>
+        <%= ((@nb_contrats_notifies.to_f/@nb_contrats.to_f)*100).to_i %>%
+      <%- end -%> 
+      </span>
+    </div>
+    <div class="titre">Contrats<br />notifiés</div>
+  </div>
+
+  <div class="stats_box clearfix last">
+    <div class="chiffre">
+      <%= @nb_contrats_clos %><br />
+      <span>
+      <%- if @nb_contrats == 0 -%>
+        -
+      <%- else -%>
+        <%= ((@nb_contrats_clos.to_f/@nb_contrats.to_f)*100).to_i %>%
+      <%- end -%> 
+      </span>
+    </div>
+    <div class="titre">Contrats<br />clos</div>
+  </div>
+</div>
+
+
+<%- if @alertes.size > 0 -%>
+  <h2><strong>Alertes</strong> des contrats</h2>
+  <ul class="alertes">
+  <%- for todo in @alertes -%>
+    <% nb_jour = (todo.date - DateTime.now).to_i + 1 %> 
+    <li>
+      <span class="contrat">
+        <%= link_to todo.todolist.contrat.acronyme, contrat_todolists_path(todo.todolist.contrat) %> :
+      </span>
+      <span class="intitule">
+      <%= todo.intitule %>
+      </span>
+      <%- if nb_jour < 0 -%>
+        <span class="date_niveau_1">(J+<%= nb_jour * -1 %>)
+      <%- elsif nb_jour == 0 -%>
+        <span class="date_niveau_2">(Aujourd'hui)
+      <%- elsif nb_jour <= 5 -%>
+        <span class="date_niveau_3">(J-<%= nb_jour %>)
+      <%- else nb_jour <= 5 -%>
+        <span class="date_niveau_4">(J-<%= nb_jour %>)          
+      <%- end -%>
+      </span>
+    </li>
+  <%- end -%>
+  </ul>
+<%- end -%>
+
+<h2><strong>Activité récente</strong> de la section suivi des contrats</h2>
+
+<div id="recent_history">
+  <table>
+  <%-
+  temp_d = ''
+  i = 0 
+  j = 0
+  @lasts.each do |last| 
+    i = i+1 
+    if (french_datetime_with_word last[:at]) != temp_d 
+      j = j+1 
+      if i > 15 or j > 3
+        break
+      end -%>
+  <tr>
+    <td class="date"><span><%= french_datetime_with_word last[:at] %></span></td>
+  </tr>
+  <%- end -%>
+
+  <tr class="history_item">
+    <td class="contrat">
+      <% contrat_nom = Contrat.find_by_id(last[:contrat_id]).acronyme %>
+      <span title="<%= contrat_nom %>"><%= truncate(contrat_nom, :length => 28, :ommission => '...') %></span>
+    </td>
+    <td class="type">
+      <span class="<%= last[:type] %>"><%= last[:type] -%></span>
+    </td>
+    <td class="infos">
+      <%- if last[:type] == 'ToDo' -%>
+        <%- if last[:done] -%>
+          <span style="text-decoration: line-through;"><%= last[:intitule] -%></span>
+        <%- else -%>
+          <span><%= last[:intitule] -%></span>
+        <%- end -%>
+        (<%= link_to last[:todo_list], contrat_todolists_path(last[:contrat_id]), :class => "todo" -%>)
+      <%- elsif last[:type] == 'Fichier'  -%>
+        <img src='<%= get_file_img_src(File.extname(last[:file]['file'])) -%>' alt='<%= File.extname(last[:file]['file']) %>' />
+        <%= link_to last[:file]['file'], url_for_file_column(last[:file], "file"), :title => "Télécharger le fichier" -%><br />
+        <span class="file_name"><%= last[:file].description -%></span>
+      <%- elsif last[:type] == 'Contrat'  -%>
+        Création du contrat <%= link_to Contrat.find_by_id(last[:contrat_id]).acronyme, contrat_path(last[:contrat_id]) %> : <%= Contrat.find_by_id(last[:contrat_id]).nom %>
+      <%- else -%>
+        <%- case last[:type]
+           when "Soumission" %>
+            <%= link_to last[:action]+' de la soumission', contrat_soumission_path(last[:contrat_id], last[:soumission_id]) %>
+        <%- when "Signature" -%>
+            <%= link_to last[:action]+' de la signature', contrat_signature_path(last[:contrat_id], last[:signature_id]) %>
+        <%- when "Refus" -%>
+            <%= link_to last[:action]+' du refus', contrat_refu_path(last[:contrat_id], last[:refu_id]) -%>
+        <%- when "Notification" -%>
+            <%= link_to last[:action]+' de la notification', contrat_notification_path(last[:contrat_id], last[:notification_id]) -%>
+        <%- when "Cloture" -%>
+            <%= link_to last[:action]+' de la clôture', contrat_cloture_path(last[:contrat_id], last[:cloture_id]) -%>
+        <%- when "Echeancier" -%>
+          <%- if last[:id].nil? -%>
+            <%= link_to last[:action]+" de l'échéancier "+Contrat.find_by_id(last[:contrat_id]).acronyme, contrat_echeancier_path(last[:contrat_id], last[:echeancier_id]) -%>
+          <%- else -%>
+            <%= link_to last[:action]+" de l'échéancier "+Echeancier.find_by_id(last[:id]).echeanciable.nom, contrat_echeancier_path(last[:contrat_id], last[:id]) -%>
+            <%- end -%>
+        <%- end -%>
+      <%- end -%>
+    </td>
+    <td class="who">
+      <%= print_small_user_infos last[:by] -%>
+      <%- temp_d = french_datetime_with_word last[:at] -%>
+    </td>
+  </tr>
+  <%- end -%>
+  </table>
+</div>

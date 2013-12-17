@@ -1,0 +1,161 @@
+<%-
+  case @type_montant.to_s
+	when "htr" then css_class_montants_ht   = "selected"
+	when "ht" then css_class_montants_ht = "selected"
+	when "ttc" then css_class_montants_ttc  = "selected"
+  end
+-%>
+<table id="table_bilan">
+	<tr>
+    <th></th>
+      <th style="border-color:#ccc;text-align:center;" colspan="7">
+				<!-- Pour les depenses du commun, on ne considère pas de montant_htr
+				<a href="?type_montant=htr" class="type_montants <%#= css_class_montants_htr %>" >Montants HTR</a> -->
+				<a href="?type_montant=ht" class="type_montants <%= css_class_montants_ht %>" >Montants HT</a> -
+				<a href="?type_montant=ttc" class="type_montants <%= css_class_montants_ttc %>">Montants TTC</a>
+			</th>	</tr>
+  <tr>
+		<th></th>
+		<th class="total">Total</th>
+	</tr>
+	<tr>
+		<th>Montants accord&eacute;s</th>
+		<td class="total"><%= my_number_to_currency @total_a_ouvrir %></td>
+	</tr>
+	<tr>
+		<td style="height:40px;" colspan="7"></td>
+	</tr>
+	
+<%- if @detail =='1'%>
+	<%for year in @start_year..@end_year do%>
+    <tr>
+      <th>Cr&eacute;dits <%= year %></th>
+      <td class="total"><%= my_number_to_currency @total_versements_tab[year] %></td>
+    </tr>
+		<%if @distinct=='justifiable' || @distinct =='manuelle'%>
+    <tr>
+      <% if @distinct == 'justifiable'%>
+      <th>D&eacute;penses &eacute;ligibles <%= year %></th>
+      <% elsif @distinct =='manuelle' %>
+      <th>D&eacute;penses manuelles <%= year %></th>
+      <% end %>
+      <td class="total"><%= my_number_to_currency @total_depenses_distinct_tab[year] * -1  %></td>
+    </tr>
+    <tr>
+      <% if @distinct == 'justifiable'%>
+      <th>D&eacute;penses non &eacute;ligibles <%= year %></th>
+      <% elsif @distinct =='manuelle' %>
+      <th>D&eacute;penses inject&eacute;es <%= year %></th>
+			<% end %>
+      <td class="total"><%= my_number_to_currency @total_depenses_non_distinct_tab[year] * -1  %></td>
+    </tr>
+    <% else %>
+	    <tr>
+	      <th>D&eacute;penses <%= year %></th>
+	      <td class="total"><%= my_number_to_currency @total_depenses_tab[year] * -1  %></td>
+	    </tr>
+	  <%end%>
+    <tr>
+      <th>Total <%= year %></th>
+      <%if @total_tab[year] < 0 %>
+        <td class="odd total neg"><%= my_number_to_currency @total_tab[year] %></td>
+      <%else%>
+        <td class="odd total"><%= my_number_to_currency @total_tab[year] %></td>
+      <%end%>
+    </tr>
+    <% if(year != @end_year) %>
+      <tr>
+        <th></th>
+        <td style="height:20px;"></td>
+      </tr>
+    <% end %>
+  <%end%>
+<%- elsif @detail =='3' and @ligne.has_periods? -%>
+  <% @ligne.periodes.each_with_index do |period, i|  %> 
+    <tr>
+      <th>Recettes attendues P&eacute;riode <%= (i+1).to_s %></th>
+      <td class="total"><%= my_number_to_currency period.depenses_fonctionnement %></td>
+    </tr>
+    <tr>
+      <th>Cr&eacute;dits P&eacute;riode P&eacute;riode <%= (i+1).to_s%></th>
+      <td class="total"><%= my_number_to_currency @total_versements_tab[i] %></td>
+    </tr>
+		<%if @distinct=='justifiable' || @distinct =='manuelle'%>
+	    <tr>
+	    	<% if @distinct == 'justifiable'%>
+        <th>D&eacute;penses &eacute;ligibles P&eacute;riode <%= (i+1).to_s%></th>
+        <% elsif @distinct =='manuelle' %>
+        <th>D&eacute;penses manuelles P&eacute;riode <%= (i+1).to_s%></th>
+        <% end %>
+	      <td class="total"><%= my_number_to_currency @total_depenses_distinct_tab[i] * -1  %></td>
+	    </tr>
+	    <tr>
+	      <% if @distinct == 'justifiable'%>
+        <th>D&eacute;penses non &eacute;ligibles P&eacute;riode <%= (i+1).to_s %></th>
+        <% elsif @distinct =='manuelle' %>
+        <th>D&eacute;penses inject&eacute;es P&eacute;riode <%= (i+1).to_s %></th>
+				<% end %>
+	      <td class="total"><%= my_number_to_currency @total_depenses_non_distinct_tab[i] * -1  %></td>
+	    </tr>
+    <% else %>
+	    <tr>
+	      <th>D&eacute;penses P&eacute;riode <%= (i+1).to_s %></th>
+	      <td class="total"><%= my_number_to_currency @total_depenses_tab[i]  * -1  %></td>
+	    </tr>
+		<% end%>
+    <tr>
+      <th>Total P&eacute;riode <%= (i+1).to_s %></th>
+      <%if @total_tab[i]  < 0 %>
+        <td class="odd total neg"><%= my_number_to_currency @total_tab[i]  %></td>
+      <%else%>
+        <td class="odd total"><%= my_number_to_currency @total_tab[i]  %></td>
+      <%end%>
+    </tr>
+    <tr>
+      <th>Reste &agrave; d&eacute;penser attendu sur la P&eacute;riode <%= (i+1).to_s %></th>
+      <%if @reste_tab[i]  < 0 %>
+        <td class="odd total neg"><%= my_number_to_currency @reste_tab[i]  %></td>
+      <%else%>
+        <td class="odd total"><%= my_number_to_currency @reste_tab[i]  %></td>
+      <%end%>
+    </tr>
+    <% if(i != (@ligne.periodes.size-1) ) %>
+      <tr>
+        <th></th>
+        <td style="height:20px;"></td>
+      </tr>
+    <% end %>
+  <%end%>
+<%- end -%>
+
+  <tr>
+    <td style="height:40px;" colspan="7"></td>
+  </tr>
+  <tr>
+    <th>Reste à ouvrir</th>
+    <%if @reste_a_ouvrir < 0 %>
+      <td class="odd total neg">
+    <%else%>
+      <td class="odd total">
+    <% end%>
+    <%= my_number_to_currency @reste_a_ouvrir %></td>
+  </tr>
+  <tr>
+    <th></th>
+    <td style="height:20px;" colspan="7"></td>
+  </tr>
+  <tr>
+    <th>Reste à engager</th>
+    <%if @reste_a_depenser < 0 %>
+      <td class="odd total total neg">
+    <%else%>
+      <td class="odd total">
+    <% end%>
+    <%= my_number_to_currency @reste_a_depenser %></td>
+  </tr>
+
+  <tr>
+    <th></th>
+    <th class="total">Total</th>
+  </tr>
+</table>

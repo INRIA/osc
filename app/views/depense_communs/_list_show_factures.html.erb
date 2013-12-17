@@ -1,0 +1,48 @@
+<tr class="factures">
+  <th></th>
+  <th></th>
+  <th class="first">N° de facture</th>
+  <th>Date</th>
+  <th colspan="3">N° de mandat et date</th>
+  <th colspan="2">Justifiable </th>
+  <th>Rubrique</th>
+  <th class="money">Coût Projet</th>
+  <%- if @ligne.contrat.is_budget_editable? current_user -%>
+  <th class="actions">&nbsp;</th>
+  <%- end -%>
+</tr>
+<%-
+  case @type_montant.to_s
+	when "htr" then cout_facture = "cout_ht"
+	when "ht" then cout_facture = "cout_ht"
+	when "ttc" then cout_facture = "cout_ttc"
+  end
+-%>
+<% for facture in @depense_commun.depense_commun_factures %>
+     <tr class="factures">
+      <td></td>
+      <%
+      verrou_class = 'no-verrou'
+      %>
+      <td class="<%= verrou_class %> "></td>
+      <td class="first"><%= facture.numero_facture %></td>
+			<td><%= french_small_date facture.date %>
+      <% if !facture.millesime.blank? %>
+      <br/>(<%= facture.millesime.year %>)
+      <% end %>
+      </td>
+      <td><%= facture.numero_mandat %></td>
+      <td colspan="2">
+        <% if !facture.date_mandatement.blank? %>
+          <%= french_small_date facture.date_mandatement %>
+        <%end%>
+      </td>
+      <td colspan="2"><%=  facture.justifiable %></td>
+      <td><%= facture.rubrique_comptable.small_intitule %></td>
+      <td class="money"><%= my_number_to_currency facture.send(cout_facture) %></td>
+      <%- if @ligne.contrat.is_budget_editable? current_user -%>
+      <td class="actions_depenses">&nbsp;</td>
+      <%- end -%>
+    </tr>
+<% end %>
+<tr class="sep"><td colspan='9'></td></tr>

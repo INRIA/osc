@@ -1,0 +1,17 @@
+<h1>Editing laboratoire_subscription</h1>
+
+<%= error_messages_for :laboratoire_subscription %>
+
+<% form_for(:laboratoire_subscription,
+ 			:url => laboratoire_subscription_path(params[:projet_id], @laboratoire_subscription),
+ 			:html => { :method => :put }) do |f| %>
+
+  <p>
+    <b>Laboratoire</b><br />
+    <%= f.select( "laboratoire_id", Laboratoire.find_all.collect {|p| [ p.nom, p.id ] }, { :include_blank => true }) %>
+  </p>
+
+  <p>
+    <%= submit_tag "Update" %>
+  </p>
+<% end %>

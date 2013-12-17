@@ -1,0 +1,32 @@
+<h1>Editing contrat_file</h1>
+
+<%= error_messages_for :contrat_file %>
+
+<%= form_for(:contrat_file, :url => contrat_file_path(@contrat_file), :html => { :method => :put }) do |f| %>
+  <p>
+    <b>Contrat</b><br />
+    <%= f.text_field :contrat_id %>
+  </p>
+
+  <p>
+    <b>File</b><br />
+    <%= f.text_field :file %>
+  </p>
+
+  <p>
+    <b>Description</b><br />
+    <%= f.text_field :description %>
+  </p>
+
+  <p>
+    <b>Created at</b><br />
+    <%= f.datetime_select :created_at %>
+  </p>
+
+  <p>
+    <%= submit_tag "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', contrat_file_path(@contrat_file) %> |
+<%= link_to 'Back', contrat_files_path %>

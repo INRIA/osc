@@ -1,0 +1,130 @@
+<%if @roles.size > 0 %>
+  <div class='section'>
+    <h2><strong>R&ocirc;les</strong> dans l'application</h2>
+      <ul class='droits_list'>
+    	<% @roles.each do |role| -%>
+        <li class="<%= cycle("even", "odd")%>"<strong><%=  role.name %></strong>
+          <br><span style='color:#888888'><%=  role.commentaire %></span>
+        </li>
+      	<% reset_cycle %>
+      <%end%>
+      </ul>
+  </div>
+<% end %>
+
+<h2><strong>Droits sp&eacute;cifiques attribu&eacute;s &agrave; l'utilisateur sur des contrats</strong></h2>
+
+<div class="section">
+	<% if @contrats_editables.size == 0 %>
+		<h3>Aucun droit de modification </h3>sur des contrats n'a &eacute;t&eacute; attribu&eacute; &agrave; cet utilisateur.
+	<% else %>
+		<h3><strong>Droits de modification </strong> sur <%= pluralize(@contrats_editables.size, "contrat").html_safe() %></h3>
+		<ul class="droits_list">
+		<% for contrat in @contrats_editables -%>
+			<li class="<%= cycle("even", "odd") %> tree_column">
+				<%= contrat.acronyme %>
+			</li>
+		<% end -%>
+		<div style="clear:both;"></div>
+		<% reset_cycle %>
+		</ul>
+	<% end %>
+</div>
+
+<div class="section">
+	<% if @contrats_budget_editables.size == 0 %>
+        <h3>Aucun droit de modification sur les donn&eacute;es budg&eacute;taires uniquement</h3> n'a &eacute;t&eacute; attribu&eacute; &agrave; cet utilisateur.
+	<% else %>
+		<h3><strong>Droits de modification budg&eacute;taires uniquement</strong> sur <%= pluralize(@contrats_budget_editables.size, "contrat").html_safe() %></h3>
+		<ul class="droits_list">
+		<% for contrat in @contrats_budget_editables -%>
+			<li class="<%= cycle("even", "odd") %> tree_column">
+				<%= contrat.acronyme %>
+			</li>
+		<% end -%>
+		<div style="clear:both;"></div>
+		<% reset_cycle %>
+		</ul>
+	<% end %>
+</div>
+
+<div class="section">
+	<% if @contrats_consultables.size == 0 %>
+        <h3>Aucun droit de consultation</h3> n'a &eacute;t&eacute; attribu&eacute; &agrave; cet utilisateur.
+	<% else %>
+		<h3><strong>Droits de consultation </strong> sur <%=  pluralize(@contrats_consultables.size, "contrat").html_safe() %></h3>
+		<ul class="droits_list">
+		<% for contrat in @contrats_consultables -%>
+			<li class="<%= cycle("even", "odd") %> tree_column">
+				<%= contrat.acronyme %>
+			</li>
+		<% end -%>
+		<div style="clear:both;"></div>
+		</ul>
+	<% end %>
+</div>
+
+<h2><strong>Droits sur des &eacute;quipes</strong></h2>
+<div class="section">
+<% if @projets_editables.size == 0 %>
+    <p class="comment">Aucun droit de modification sur l'ensemble des contrats d'une &eacute;quipe n'a &eacute;t&eacute; attribu&eacute; &agrave; cet utilisateur.</p>
+  <% else %>
+    <h3>Droits de modification sur <%= pluralize(@projets_editables.size, "&eacute;quipe").html_safe() %></h3>
+    <ul class="droits_list">
+    <% for projet in @projets_editables -%>
+      <li class="<%= cycle("even", "odd") %> tree_column">
+        <%= projet.nom %>
+      </li>
+    <% end -%>
+    <div style="clear:both;"></div>
+    <% reset_cycle %>
+    </ul>
+  <% end %>
+</div>
+
+<div class="section">
+  <% if @projets_budget_editables.size == 0 %>
+    <p class="comment">Aucun droit de modification sur les donn&eacute;es budg&eacute;taires uniquement d'une &eacute;quipe n'a &eacute;t&eacute; attribu&eacute; &agrave; cet utilisateur.</p>
+  <% else %>
+    <h3><strong>Droits de modification budg&eacute;taires uniquement</strong> sur <%= pluralize(@projets_budget_editables.size, "&eacute;quipe").html_safe() %></h3>
+    <ul class="droits_list">
+    <% for projet in @projets_budget_editables -%>
+      <li class="<%= cycle("even", "odd") %> tree_column">
+        <%= projet.nom %>
+      </li>
+    <% end -%>
+    <div style="clear:both;"></div>
+    <% reset_cycle %>
+    </ul>
+  <% end %>
+</div>
+
+<div class="section">
+  <% if @projets_consultables.size == 0 %>
+    <p class="comment">Aucun droit de consultation sur l'ensemble des contrats d'une &eacute;quipe n'a &eacute;t&eacute; attribu&eacute; &agrave; cet utilisateur.</p>
+  <% else %>
+    <h3><strong>Droits de consultation </strong> sur <%=  pluralize(@projets_consultables.size, "&eacute;quipe").html_safe() %></h3>
+    <ul class="droits_list">
+    <% for projet in @projets_consultables -%>
+      <li class="<%= cycle("even", "odd") %> tree_column">
+        <%= projet.nom %>
+      </li>
+    <% end -%>
+    <div style="clear:both;"></div>
+    </ul>
+  <% end %>
+</div>  
+
+<% if @groups.length > 0 %>
+<div class="section">
+<h2>Droits par appartenance &agrave; des <strong>groupes</strong></h2>
+<% for group in @groups %>
+	<div class="box_2_per_line">
+		<div class="primary"  style="padding:5px 5px 0 5px;"><%= link_to group.nom, group_path(group) %></div>
+		<div class="secondary"  style="padding:0 5px 5px 5px;"><%=h group.description %></div>
+	</div>
+<% end %>
+<div style="clear:both;"></div>
+<br />
+</div>
+<% end %>

@@ -1,0 +1,52 @@
+<%= "<div class='come-from-inria-container'><span class='come-from-inria'>S.I. INRIA</span></div>".html_safe() if @signature.come_from_inria? %>
+
+<div class="section impair">
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Date de la signature
+		</div>
+		<div class='valeur'>
+			<%=h french_date @signature.date %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Commentaires
+		</div>
+		<div class='valeur'>
+		  <%= simple_format(@signature.commentaire) %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+</div>
+
+<div id="content_footer">
+	<div class="left">
+		Création le <%= french_datetime @signature.created_at %> par <%= print_user_infos @signature.created_by %>
+		<% if @signature.created_at != @signature.updated_at %>
+		<br />
+		Dernière modification le <%= french_datetime @signature.updated_at %> par <%= print_user_infos @signature.updated_by %>
+		<% end %>
+	</div>
+	<div class="right">
+		<% if @contrat.is_editable? current_user  and @contrat.notification.nil? %>		
+		<%= link_to_remote_redbox "Supprimer la signature",
+		    {	:url => ask_delete_contrat_signature_path(@contrat, @signature), :method => :get}, 
+				{	:class => "destroy",
+					:title => "Supprimer la signature" }	%>
+		<% end %>
+	</div>
+	<div style="clear:both;"></div>
+</div>
+
+<% content_for :right do %>
+	<%= render :partial => 'contrats/show_entite_tree' %>
+	<div class="section">
+		<h2>Export PDF</h2>
+	  <%= link_to 'Obtenir la signature au format PDF', contrat_signature_path(@contrat, @signature, :pdf), :class => "to_pdf" %>
+	</div>
+<% end %>

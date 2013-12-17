@@ -1,0 +1,206 @@
+<%-
+  case @type_montant.to_s
+	when "htr" then css_class_montants_ht   = "selected"
+	when "ht" then css_class_montants_ht = "selected"
+	when "ttc" then css_class_montants_ttc  = "selected"
+  end
+-%>
+<table id="table_bilan">
+	<tr>
+	  <th></th>
+      <th style="border-color:#ccc;text-align:center;" colspan="7">
+				<!-- Pour les depenses du commun, on ne considère pas de montant_htr
+				<a href="?type_montant=htr" class="type_montants <%#= css_class_montants_htr %>" >Montants HTR</a> -->
+				<a href="?type_montant=ht" class="type_montants <%= css_class_montants_ht %>" >Montants HT</a> -
+				<a href="?type_montant=ttc" class="type_montants <%= css_class_montants_ttc %>">Montants TTC</a>
+			</th>	</tr>
+  	<tr>
+		<th></th>
+		<th class="total">Total</th>
+	</tr>
+	<tr>
+		<th>Montants accord&eacute;s</th>
+		<td class="total"><%= my_number_to_currency @total_a_ouvrir %></td>
+	</tr>
+	<%- if @current_date_start != @date_start.to_s -%>
+	<tr class="title">
+		<td colspan="7"><strong>Bilan</strong> pour la période du <strong><%= french_date @date_start %></strong> au <strong><%= french_date(@current_date_start.to_date - 1) %></strong></td>
+	</tr>
+	
+	<tr>
+		<th>Cr&eacute;dits</th>
+		<td class="total"><%= my_number_to_currency @total_versements_pre %></td>
+	</tr>
+	<%if @distinct=='justifiable' || @distinct =='manuelle'%>
+		<tr>
+	    <% if @distinct == 'justifiable'%>
+	    <th>D&eacute;penses &eacute;ligibles</th>
+	    <% elsif @distinct =='manuelle' %>
+	    <th>D&eacute;penses manuelles</th>
+	    <% end %>
+	    <td class="total"><%= my_number_to_currency @total_depenses_distinct_pre * -1  %></td>
+	  </tr>
+		<tr>
+	    <% if @distinct == 'justifiable'%>
+      <th>D&eacute;penses non &eacute;ligibles</th>
+      <% elsif @distinct =='manuelle' %>
+      <th>D&eacute;penses inject&eacute;es</th>
+      <%end%>
+	    <td class="total"><%= my_number_to_currency @total_depenses_non_distinct_pre * -1  %></td>
+	  </tr>
+	<% else %>
+		<tr>
+			<th>D&eacute;penses</th>
+			<td class="total"><%= my_number_to_currency @total_depenses_pre * -1  %></td>
+		</tr>
+	<%end%>
+	<tr>
+		<th>Total</th>
+        <%if @total_pre < 0 %>
+            <td class="odd total neg"><%= my_number_to_currency @total_pre %></td>
+        <%else%>
+            <td class="odd total"><%= my_number_to_currency @total_pre %></td>
+        <%end%>
+	</tr>
+	<%- end -%>
+	<%- if ((@current_date_start != @date_start.to_s) || (@current_date_end != @date_end.to_s )) -%>
+	
+	<tr class="title">
+		<td colspan="7">
+			<%- if(@periode_number.blank?) -%>
+			  <strong>Bilan</strong> <%= render :partial => 'lignes/info_selection_temporelle' %>
+		  <%- else -%>
+			  <strong>Bilan</strong>  pour la p&eacute;riode <strong> <%=@periode_number %> </strong>
+			<%- end -%>
+		</td>
+	</tr>
+	<%- else -%>
+	<tr>
+		<td style="height:40px;" colspan="7"></td>
+	</tr>
+	<%- end -%>
+
+
+		<%- if(@detail == '2') -%>
+		<tr>
+		  <th>Recettes attendues</th>
+      <td class="total"><%= my_number_to_currency(@total_recettes_attendues_commun) %></td>
+		</tr>
+		<%- elsif !( @detail =='0' and @periode.blank?) -%>
+		<tr>
+		  <th>Recettes attendues</th>
+      <td class="total"><%= my_number_to_currency(@periode.depenses_fonctionnement) %></td>
+		</tr>
+		<%- end -%>	
+	<tr>
+		<th>Cr&eacute;dits</th>
+      <td class="total"><%= my_number_to_currency @total_versements %></td>
+	</tr>
+	<%if @distinct=='justifiable' || @distinct =='manuelle'%>
+    <tr>
+      <% if @distinct == 'justifiable'%>
+	    <th>D&eacute;penses &eacute;ligibles</th>
+	    <% elsif @distinct =='manuelle' %>
+	    <th>D&eacute;penses manuelles</th>
+	    <% end %>
+      <td class="total"><%= my_number_to_currency @total_depenses_distinct * -1  %></td>
+    </tr>
+    <tr>
+      <% if @distinct == 'justifiable'%>
+      <th>D&eacute;penses non &eacute;ligibles</th>
+      <% elsif @distinct =='manuelle' %>
+      <th>D&eacute;penses inject&eacute;es</th>
+      <%end%>
+      <td class="total"><%= my_number_to_currency @total_depenses_non_distinct * -1  %></td>
+    </tr>
+  <% else %>
+		<tr>
+			<th>D&eacute;penses</th>
+			<td class="total"><%= my_number_to_currency @total_depenses * -1  %></td>
+		</tr>
+  <% end %>
+	<tr>
+        <th>Total</th>
+        <%if @total < 0 %>
+            <td class="odd total neg"><%= my_number_to_currency @total %></td>
+        <%else%>
+            <td class="odd total"><%= my_number_to_currency @total %></td>
+        <%end%>
+	</tr>
+	<%- if ( @detail =='0' and !@periode.blank?) -%>
+    <tr>
+      <th>Reste &agrave; d&eacute;penser attendu sur la p&eacute;riode</th>
+      <td class="odd total <%= ' neg' if @total_depenses > @periode.depenses_fonctionnement %>"><%= my_number_to_currency(@periode.depenses_fonctionnement - @total_depenses) %></td>
+    </tr>
+  <%- end -%> 
+	
+	<%- if @current_date_end != @date_end.to_s -%>
+	
+	<tr class="title">
+		<td colspan="7"><strong>Bilan</strong> pour la période du <strong><%= french_date(@current_date_end.to_date + 1) %></strong> au <strong><%= french_date(@date_end) %></strong></td>
+	</tr>
+	<tr>
+		<th>Cr&eacute;dits</th>
+		<td class="total"><%= my_number_to_currency @total_versements_post %></td>
+	</tr>
+	<%if @distinct=='justifiable' || @distinct =='manuelle'%>
+    <tr>
+      <% if @distinct == 'justifiable'%>
+	    <th>D&eacute;penses &eacute;ligibles</th>
+	    <% elsif @distinct =='manuelle' %>
+	    <th>D&eacute;penses manuelles</th>
+	    <% end %>
+      <td class="total"><%= my_number_to_currency @total_depenses_distinct_post * -1  %></td>
+    </tr>
+    <tr>
+      <% if @distinct == 'justifiable'%>
+	    <th>D&eacute;penses non &eacute;ligibles</th>
+	    <% elsif @distinct =='manuelle' %>
+	    <th>D&eacute;penses inject&eacute;es</th>
+			<%end%>
+      <td class="total"><%= my_number_to_currency @total_depenses_non_distinct_post * -1  %></td>
+    </tr>
+  <% else %>
+		<tr>
+			<th>D&eacute;penses</th>
+			<td class="total"><%= my_number_to_currency @total_depenses_post * -1 %></td>
+		</tr>
+  <% end %>
+	
+	<tr>
+		<th>Total</th>
+        <%if @total_post < 0 %>
+            <td class="odd total neg"><%= my_number_to_currency @total_post %></td>
+        <%else%>
+            <td class="odd total"><%= my_number_to_currency @total_post %></td>
+        <%end%>		
+	</tr>
+	<%- end -%>
+	<tr>
+		<td style="height:40px;" colspan="7"></td>
+	</tr>
+<tr>
+	<th>Reste &agrave; ouvrir</th>
+	<%if @reste_a_ouvrir < 0 %>
+	<td class="odd total neg">
+    <%else%>
+	<td class="odd total">
+	<% end%> <%= my_number_to_currency @reste_a_ouvrir %></td>
+  </tr>
+  <tr>
+  	<th></th>
+	<td style="height:20px;" colspan="7"></td>
+  </tr>
+  <tr>
+	<th>Reste &agrave; engager</th>
+	<%if @reste_a_depenser < 0 %>
+	<td class="odd total total neg">
+    <%else%>
+	<td class="odd total">
+	<% end%> <%= my_number_to_currency @reste_a_depenser %></td>	
+  </tr>
+  <tr>
+	<th></th>
+	<th class="total">Total</th>
+  </tr>
+</table>

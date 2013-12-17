@@ -1,0 +1,10 @@
+<%= form_for(:descriptif, :url => contrat_descriptifs_path, :remote => true) do |f| %>
+        Choisissez une langue : <br />
+        <%= f.select :langue_id, Langue.find(:all, :order=>"langue_id").collect {|p| [ p.nom_langue, p.langue_id ] } %>
+        Saisissez votre descriptif : <br />
+    <%= f.text_area :descriptif, :value => "", :class => "textareafield" %>
+		<div id="error_new_descriptif" class="error"> </div>
+    <%= submit_tag "Créer", :class => "descriptif_submit"  %> ou
+		<%= link_to_function "Annuler", "Effect.toggle('new_descriptif','blind', {duration:0.5}); ;Effect.toggle('link_to_add','appear', {duration:0.5}); " %>
+<% end %>
+<%= javascript_tag "Effect.BlindDown('new_descriptif', {duration:0.5});" %>

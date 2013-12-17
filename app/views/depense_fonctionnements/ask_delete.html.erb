@@ -1,0 +1,8 @@
+<div class="content">
+	<p>
+	Etes-vous certain de vouloir supprimer cette dépense en fonctionnement ?<br />
+	</p>
+	<%= link_to_close_redbox "Non", :class => 'annuler' %>
+	<%= link_to "Oui", ligne_depense_fonctionnement_path(@ligne, @depense_fonctionnement), :method => :delete %>
+	<div style="clear:both;"></div>
+</div>

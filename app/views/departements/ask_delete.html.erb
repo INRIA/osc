@@ -1,0 +1,8 @@
+<div class="content">
+	<p>
+	Etes-vous certain de vouloir supprimer le département <strong>"<%= @departement.nom %>"</strong> ?
+	</p>
+	<%= link_to_close_redbox "Non", :class => 'annuler' %>
+	<%= link_to "Oui", departement_path(@departement), :method => :delete %>
+	<div style="clear:both;"></div>
+</div>

@@ -1,0 +1,57 @@
+<%= error_messages_nested_resources_for @depense_salaire %>
+
+<%= form_for([@ligne, @depense_salaire]) do |f| %>
+  <%- if (@depense_salaire.verrou == "Aucun") -%>
+    <p class="change-line" id="build-migration-form-link-container">
+      <%= link_to 'Déplacer ce salaire sur une autre ligne', 
+                  build_migration_form_ligne_depense_salaire_path(@ligne, @depense_salaire), 
+                  :id => "build-migration-form-link" %>
+    </p>
+    <div class="form-box parent" id="migration-form" style="display:none;"></div>
+    <script type="text/javascript">
+      new App.Budget.LigneMigration();
+    </script>
+  <% end %>
+  
+  <%= render :partial => 'form', :locals => { :f => f} %>
+  
+  <div class="form-box submit" id="submit">
+    <%= f.submit "Enregistrer les modifications" %> ou <%= link_to 'Annuler', ligne_depense_salaire_path(@ligne, @depense_salaire) %>
+    <%- if (@ligne.contrat.is_budget_editable? current_user) and (@depense_salaire.verrou == "Aucun") -%>
+    <span class="delete_depense">
+    <%= link_to_remote_redbox "Supprimer le salaire",
+        { :url => ask_delete_ligne_depense_salaire_path(@ligne, @depense_salaire), :method => :get},
+        { :class => "destroy",
+          :title => "Supprimer la d&eacute;pense en salaire"}  %>
+    </span>
+    <%- end -%>
+  </div>
+  
+  <script type="text/javascript">
+    update_paye_legende();
+    new App.Budget.SalaireForm();
+  </script>
+<% end %>
+
+<% content_for :right do %>
+  <div id="navigation">
+    <h2>Aide à la navigation dans le formulaire</h2>
+    <ul>
+      <li><a href="#entete">Haut de page</a></li>
+      <li><a href="#salaire">Salaire</a></li>
+      <span id="link_to_replace">
+      <% i = 1 %>
+      <% for facture in @depense_salaire.depense_salaire_factures %>
+      <li>
+        <a href="#depense_salaire_facture_<%= facture.id %>" ><%= to_ieme(i) %> Paye</a>
+      </li>
+      <% i += 1 %>
+      <% end %>
+      </span>
+      <li class="last"><a href="#submit">Enregistrement des modifications</a></li>
+    </ul>
+  </div>
+  <script type="text/javascript">
+    new App.NavigatorHelper();
+  </script>
+<% end %>

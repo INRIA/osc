@@ -1,0 +1,16 @@
+<%= javascript_tag "
+$('edit_description_#{@contrat_file.id.to_s}').show();
+$('file_description_#{@contrat_file.id.to_s}').hide();
+" %>
+
+<% form_remote_for(:contrat_file, :url => update_description_contrat_contrat_file_path(@contrat_file.contrat, @contrat_file), :html => {:method => :put }) do |f| %>
+    <%= f.text_field :description, :value => @contrat_file.description, :class => "textfield" %>
+		<div id="error_edit_file_<%= @contrat_file.id.to_s %>" class="error"></div>
+    <%= submit_tag "Mettre à jour", :class => "submit" %> ou 
+		<%= link_to_function "Annuler", "$('edit_description_#{@contrat_file.id.to_s}').hide();$('file_description_#{@contrat_file.id.to_s}').show();" %>
+<% end %>
+
+
+<%= javascript_tag "Try.these(function(){
+$$('#edit_description_#{@contrat_file.id.to_s} #contrat_file_description').first().focus();
+})" %>

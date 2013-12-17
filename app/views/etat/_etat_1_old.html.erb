@@ -1,0 +1,329 @@
+
+<h2><strong>Nb de soumissions</strong> vs <strong>Nb de notifications</strong></h2>
+
+<table class="etat_type_contrat">
+	<thead>
+		<tr id="thead_avec_pourcentage">
+			<th></th>
+			<th colspan='2'>Soumission</th>
+			<th colspan='2'>Notification</th>
+			<th>Conversion</th>
+		</tr>
+		<tr style="display:none;" id="thead_sans_pourcentage">
+			<th></th>
+			<th>Soumission</th>
+			<th>Notification</th>
+			<th>Conversion</th>
+		</tr>
+	</thead>
+
+<% global_total_soumission = 0 %>
+<% global_total_notification = 0 %>
+<% global_total_moyens = 0 %>
+
+<%- for type in @niveau_1_types-%>
+	<% total_soumission = Soumission.count(:conditions => [ "contrat_id in (?) AND contrat_type_id in (?)", @ids_contrats, type.id]) || 0 %>
+	<% total_notification = Notification.count(:conditions => [ "contrat_id in (?) AND contrat_type_id in (?)", @ids_contrats, type.id]) || 0 %>
+	
+	<% @css_class = cycle("even","odd") %>
+  <tr class="niveau_2 <%= @css_class %>">
+		<td class="intitule"><%= type.nom  %></td>
+		<td class="entier"><%= total_soumission %></td>
+		<td class="pourcentage">
+		<%= ((total_soumission.to_f/@nb_contrats_soumis.to_f)*100).round(1) %>%</td>
+		<td class="entier"><%= total_notification %></td>
+		<td class="pourcentage">
+		<%- if @nb_contrats_notifies == 0 -%>
+			0.0%
+		<%- else -%>
+			<%= ((total_notification.to_f/@nb_contrats_notifies.to_f)*100).round(1) %>%
+		<%- end -%>
+		</td>
+		<td class="conversion">
+			<%- if total_soumission != 0 -%>
+				<%= ((total_notification.to_f/total_soumission.to_f)*100).round(1) %>%
+			<% else %>
+			-
+			<%- end -%>
+		</td>
+	</tr>
+
+  <%- for child in type.children -%>
+		<%- count_soumission = Soumission.count(:conditions => [ "contrat_id in (?) AND contrat_type_id in (?)", @ids_contrats, child.all_children << child.id]) || 0 -%>
+		<%- count_notification = Notification.count(:conditions => [ "contrat_id in (?) AND contrat_type_id in (?)", @ids_contrats, child.all_children << child.id]) || 0 -%>
+																						
+		<%- total_soumission += count_soumission -%>
+		<%- total_notification += count_notification -%>
+	
+		<tr class="niveau_2 <%= @css_class %>">
+			<td class="intitule">&nbsp;&nbsp;&nbsp;<%= child.nom %></td>
+			<td class="entier"><%= count_soumission %></td>
+			<td class="pourcentage"><%= ((count_soumission.to_f/@nb_contrats_soumis.to_f)*100).round(1) %>%</td>
+			<td class="entier"><%= count_notification %></td>
+			<td class="pourcentage">
+			<%- if @nb_contrats_notifies == 0 -%>
+			0.0%
+			<%- else -%>
+				<%= ((count_soumission.to_f/@nb_contrats_notifies.to_f)*100).round(1) %>%</td>
+			<%- end -%>
+			<td class="conversion">
+				<%- if count_soumission != 0 -%>
+					<%= ((count_notification.to_f/count_soumission.to_f)*100).round(1) %>%
+				<% else %>
+				-
+				<%- end -%>
+			</td>
+		</tr>
+  <%- end -%>
+
+	<tr class="total <%= @css_class %>">
+		<td class="intitule"><%= type.nom  %> <span>(Total)</span></td>
+		<td class="entier"><%= total_soumission %></td>
+		<td class="pourcentage"><%= ((total_soumission.to_f/@nb_contrats_soumis.to_f)*100).round(1) %>%</td>
+		<td class="entier"><%= total_notification %></td>
+		<td class="pourcentage">
+		<%- if @nb_contrats_notifies == 0 -%>
+		0.0%
+		<%- else -%>
+			<%= ((total_notification.to_f/@nb_contrats_notifies.to_f)*100).round(1) %>%</td>
+		<%- end -%>
+		<td class="conversion">
+			<%- if total_soumission != 0 -%>
+				<%= ((total_notification.to_f/total_soumission.to_f)*100).round(1) %>%
+			<% else %>
+			-
+			<%- end -%>
+		</td>
+	</tr>
+<% global_total_soumission = (global_total_soumission + total_soumission) || 0 %>
+<% global_total_notification = (global_total_notification + total_notification) || 0 %>
+<%- end -%>
+	<tr class="big_total">
+		<td class="intitule">Totaux</td>
+		<td class="entier"><%= global_total_soumission %></td>
+		<td class="pourcentage"><%= ((global_total_soumission.to_f/@nb_contrats_soumis.to_f)*100).round(1) %>%</td>
+		<td class="entier"><%= global_total_notification %></td>
+		<td class="pourcentage">
+		<%- if @nb_contrats_notifies == 0 -%>
+		0.0%
+		<%- else -%>
+			<%= ((global_total_notification.to_f/@nb_contrats_notifies.to_f)*100).round(1) %>%</td>
+		<%- end -%>
+		<td class="conversion">
+			<%- if global_total_soumission != 0 -%>
+				<%= ((global_total_notification.to_f/global_total_soumission.to_f)*100).round(1) %>%
+			<% else %>
+			-
+			<%- end -%>
+		</td>
+	</tr>
+</table>
+
+
+
+
+<br />
+
+<h2><strong>Moyens demandés</strong> vs <strong>Moyens accordés</strong></h2>
+<table class="etat_type_contrat">
+	<thead>
+		<tr id="thead_avec_pourcentage">
+			<th></th>
+			<th colspan='2'>Moyens demandés</th>
+			<th colspan='2'>Moyens accordés</th>
+			<th>Conversion</th>
+			
+		</tr>
+		<tr style="display:none;" id="thead_sans_pourcentage">
+			<th></th>
+			<th>Moyens demandés</th>
+			<th>Moyens accordés</th>
+			<th>Conversion</th>
+		</tr>
+	</thead>
+
+<% global_total_soumission = 0 %>
+<% global_total_notification = 0 %>
+<% global_total_moyens = 0 %>
+
+<%- for type in @niveau_1_types-%>
+
+	<% total_moyens_demandes = Soumission.sum(	:md_total,
+																		:conditions => [ "contrat_id in (?) AND contrat_type_id in (?)", @ids_contrats, type.id]) || 0 %>
+	<% total_moyens_accordes = Notification.sum(	:ma_total,
+																			:conditions => [ "contrat_id in (?) AND contrat_type_id in (?)", @ids_contrats, type.id]) || 0 %>
+																			
+	<% @css_class = cycle("even","odd") %>
+  <tr class="niveau_2 <%= @css_class %>">
+		<td class="intitule"><%= type.nom  %></td>
+		<td class="numbers"><%= my_number_to_currency total_moyens_demandes %></td>
+		<td class="pourcentage">
+			<% if @md_total != 0 %>
+				<%= ((total_moyens_demandes.to_f/@md_total.to_f)*100).round(1) %>%
+			<%- else -%>
+				-
+			<%- end -%>
+		</td>
+		<td class="numbers"><%= my_number_to_currency total_moyens_accordes %></td>
+		<td class="pourcentage">
+			<%- if @ma_total != 0 -%>
+				<%= ((total_moyens_accordes.to_f/@ma_total.to_f)*100).round(1) %>%
+			<%- else -%>
+				-
+			<%- end -%>
+		</td>
+		<td class="conversion">
+			<%- if total_moyens_demandes != 0 -%>
+				<%= ((total_moyens_accordes.to_f/total_moyens_demandes.to_f)*100).round(1) %>%
+			<% else %>
+			-
+			<%- end -%>
+		</td>
+	</tr>
+
+  <%- for child in type.children -%>
+		<%- sub_total_moyens_demandes = Soumission.sum(:md_total,
+																						:conditions => [ "contrat_id in (?) AND contrat_type_id in (?)", 
+																														@ids_contrats, 
+																														child.all_children << child.id]) || 0 -%>
+
+
+		<%- sub_total_moyens_accordes = Notification.sum(:ma_total,
+																						:conditions => [ "contrat_id in (?) AND contrat_type_id in (?)", 
+																														@ids_contrats, 
+																														child.all_children << child.id]) || 0 -%>
+																						
+		<%- total_moyens_demandes = total_moyens_demandes.to_f+sub_total_moyens_demandes.to_f -%>
+		<%- total_moyens_accordes = total_moyens_accordes.to_f+sub_total_moyens_accordes.to_f -%>
+		
+	
+		<tr class="niveau_2 <%= @css_class %>">
+			<td class="intitule">&nbsp;&nbsp;&nbsp;<%= child.nom %></td>
+			<td class="numbers"><%= my_number_to_currency sub_total_moyens_demandes %></td>
+			<td class="pourcentage">
+				<%- if @md_total != 0 -%>
+					<%= ((sub_total_moyens_demandes.to_f/@md_total.to_f)*100).round(1) %>%
+				<%- else -%>
+					-
+				<%- end -%>
+			</td>
+			<td class="numbers"><%= my_number_to_currency sub_total_moyens_accordes %></td>
+			<td class="pourcentage">
+				<%- if @ma_total != 0 -%>
+					<%= ((sub_total_moyens_accordes.to_f/@ma_total.to_f)*100).round(1) %>%
+				<%- else -%>
+					-
+				<%- end -%>
+			</td>
+			<td class="conversion">
+				<%- if sub_total_moyens_demandes != 0 -%>
+					<%= ((sub_total_moyens_accordes.to_f/sub_total_moyens_demandes.to_f)*100).round(1) %>%
+				<% else %>
+				-
+				<%- end -%>
+			</td>
+		</tr>
+  <%- end -%>
+
+	<tr class="total <%= @css_class %>">
+		<td class="intitule"><%= type.nom  %> <span>(Total)</span></td>
+		<td class="numbers"><%= my_number_to_currency total_moyens_demandes %></td>
+		<td class="pourcentage">
+		<%- if @md_total != 0 -%>
+			<%= ((total_moyens_demandes.to_f/@md_total.to_f)*100).round(1) %>%
+		<%- else -%>
+			-
+		<%- end -%>
+		</td>
+		<td class="numbers"><%= my_number_to_currency total_moyens_accordes %></td>
+		<td class="pourcentage">
+		<%- if @ma_total != 0 -%>
+			<%= ((total_moyens_accordes.to_f/@ma_total.to_f)*100).round(1) %>%</td>
+		<%- else -%>
+			-
+		<%- end -%>
+		<td class="conversion">
+			<%- if total_moyens_demandes != 0 -%>
+				<%= ((total_moyens_accordes.to_f/total_moyens_demandes.to_f)*100).round(1) %>%
+			<% else %>
+			-
+			<%- end -%>
+		</td>
+	</tr>
+
+<% global_total_moyens_demandes = global_total_moyens_demandes.to_f + total_moyens_demandes %>
+<% global_total_moyens_accordes = global_total_moyens_accordes.to_f + total_moyens_accordes %>
+
+<%- end -%>
+	<tr class="big_total">
+		<td class="intitule">Totaux</td>
+		<td class="numbers"><%= my_number_to_currency global_total_moyens_demandes %></td>
+		<td class="pourcentage">
+		<%- if @md_total != 0 -%>
+			<%= ((global_total_moyens_demandes.to_f/@md_total.to_f)*100).round(1) %>%
+		<%- else -%>
+			-
+		<%- end -%>
+		</td>
+		<td class="numbers"><%= my_number_to_currency global_total_moyens_accordes %></td>
+		<td class="pourcentage">
+		<%- if @ma_total != 0 -%>
+			<%= ((global_total_moyens_accordes.to_f/@ma_total.to_f)*100).round(1) %>%</td>
+		<%- else -%>
+			-
+		<%- end -%>
+		<td class="conversion">
+			<%- if global_total_moyens_demandes != 0 -%>
+				<%= ((global_total_moyens_accordes.to_f/global_total_moyens_demandes.to_f)*100).round(1) %>%
+			<% else %>
+			-
+			<%- end -%>
+		</td>
+	</tr>
+</table>
+
+
+# @contrats = Contrat.find( :all,
+#                           :select => "contrats.id, contrats.acronyme, contrats.etat, soumissions.id AS sid, soumissions.date_depot, soumissions.md_total, notifications.ma_total",
+#                           :joins => "LEFT OUTER JOIN `soumissions` ON soumissions.contrat_id = contrats.id 
+#                           LEFT OUTER JOIN `notifications` ON notifications.contrat_id = contrats.id",
+#                           # :include => [:soumission, :notification, :projets, :departements, :laboratoires],
+#                           :conditions => [ "soumissions.contrat_id != 'NULL' AND contrats.id in (?)", @ids_contrats],
+#                           :order => 'soumissions.date_depot DESC')
+
+
+
+<br />
+<h2>Contrats <strong>soumis</strong></h2>
+<div id="etat">
+<table class="etat">
+	<thead>
+		<tr>
+			<th>Acronyme</th>
+			<th>Association</th>
+			<th>Date de depot</th>
+			<th>Moyens demandés</th>
+			<th>Moyens accordés</th>		
+		</tr>
+	</thead>
+	<% for contrat in @contrats %>
+	<tr class=<%= cycle("even", "odd") %>>
+		<td><%= link_to contrat['acronyme'], contrat_soumission_path(contrat['id'], contrat['sid']) %></td>
+		<td>
+			<%- for sc in contrat.sous_contrats -%>
+				<%= h sc.entite.nom %><br />
+			<%- end -%>
+		</td>
+		<td><%= french_date contrat['date_depot'].to_date %></td>
+		<td class="numbers"><%= my_number_to_currency contrat['md_total'] %></td>
+		<td class="numbers">
+			<%- if  ['soumission', 'refus', 'signature'].include? contrat.etat-%>
+			non notifié
+			<%- else -%>
+			<%= my_number_to_currency (contrat['ma_total']) %>
+			<%- end -%>
+		</td>
+	</tr>
+	<% end %>
+</table>
+</div>

@@ -1,0 +1,31 @@
+
+<div class="section" id="todo">
+	
+	<h2><strong>ToDo Lists</strong> : Listes de tâches à effectuer</h2>
+		<p class="init" id="init_todo"
+		<% if !@todolists.empty? %>
+			style="display:none"
+		<% end %>
+		>Aucune liste de tâches n'est associée au contrat.</p>
+	<div id="new_todolist" style="display:none;"></div>
+	
+	
+	<div id="todo_container">
+		<%- for @todolist in @todolists -%>
+			<%= render :partial => 'list', :local => @todolist %>
+		<%- end -%>
+		
+		<%=	
+			sortable_element('todo_container',
+												:url => { :action => "update_positions"},
+												# :url => update_positions_todolist_path(@contrat),
+												:handle => 'draglist',
+												:scroll => 'window',
+												:constraint => "vertical",
+												:overlap => "vertical",
+												:tag => "div"
+											)	%>
+	</div>
+	
+	
+</div>

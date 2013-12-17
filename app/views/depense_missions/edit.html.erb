@@ -1,0 +1,33 @@
+<%= error_messages_nested_resources_for @depense_mission %>
+
+<%= form_for([@ligne, @depense_mission]) do |f| %>
+  
+  <%- if (@depense_mission.verrou == "Aucun") -%>
+    <p class="change-line" id="build-migration-form-link-container">
+      <%= link_to 'Déplacer cette mission sur une autre ligne', 
+                  build_migration_form_ligne_depense_mission_path(@ligne, @depense_mission), 
+                  :id => "build-migration-form-link" %>
+    </p>
+    <div class="form-box parent" id="migration-form" style="display:none;"></div>
+    <script type="text/javascript">
+      new App.Budget.LigneMigration();
+    </script>
+  <% end %>
+
+  <%= render :partial => 'form', :locals => { :f => f} %>
+
+  <div class="form-box submit">
+    <%= f.submit "Enregistrer les modifications" %> ou <%= link_to 'Annuler', ligne_depense_mission_path(@ligne, @depense_mission) %>
+    
+    <%- if (@ligne.contrat.is_budget_editable? current_user) and (@depense_mission.verrou == "Aucun") -%>
+    <span class="delete_depense">
+    <%= link_to_remote_redbox "Supprimer la mission",
+        { :url => ask_delete_ligne_depense_mission_path(@ligne, @depense_mission), :method => :get},
+        { :class => "destroy",
+          :title => "Supprimer la mission" }  %>
+    </span>
+    <%- end -%>
+    
+  </div>
+
+<% end %>

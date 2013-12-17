@@ -1,0 +1,160 @@
+<% content_for :right do %>
+	<% if @contrat.sous_contrats.size > 1 %>
+		<h2>Choix de l'échéancier</h2>
+		<ul class="echeancier">
+			<% if @contrat.echeancier.nil? %>
+			<li>
+				<%= link_to @contrat.acronyme+" (à créer)", new_contrat_echeancier_path(@contrat) %>
+			</li>
+			<% else %>
+			<li>
+				<% if params[:id] == @contrat.echeancier.id.to_s %>
+					<%= link_to @contrat.acronyme, contrat_echeancier_path(@contrat, @contrat.echeancier.id), :class => 'current' %>
+				<% else %>
+					<%= link_to @contrat.acronyme, contrat_echeancier_path(@contrat, @contrat.echeancier.id) %>
+				<% end %>
+			</li>
+			<% end %>
+			
+		<% for sc in @contrat.sous_contrats %>
+			<li>
+				<% if sc.echeancier.nil? %>
+					<%= link_to sc.nom+" (à créer)", new_contrat_echeancier_path( :echeanciable_type => 'SousContrat', :echeanciable_id => sc.id) %> 
+				<% else %>
+					<% if params[:id] == sc.echeancier.id.to_s %>
+						<%= link_to sc.nom, contrat_echeancier_path(@contrat, sc.echeancier.id), :class => 'current' %>
+					<% else %>
+						<%= link_to sc.nom, contrat_echeancier_path(@contrat, sc.echeancier.id) %>
+					<% end %>
+				<% end %>
+			</li>
+		<% end %>
+		</ul>
+	<% end %>
+
+<% end %>
+
+<h2><strong>Echéancier</strong> du contrat <strong>
+<% if @echeancier.echeanciable_type == "SousContrat" %>	
+	<%=	@echeancier.echeanciable.nom %>
+<% else %>
+	<%= @contrat.acronyme %>
+<% end %>
+</strong>
+</h2>
+<div class="echeancier-labels" >
+<%= render :partial => 'show_global' %>
+</div>
+
+<div class="echeancier-scroll-container" >
+	<div class="echeancier-sections clearfix" style="width:<%= ((@echeancier.echeancier_periodes.size)+1) * 96 %>px;">
+<% i = 0 %>
+<% for periode in @echeancier.echeancier_periodes %>
+
+<% i = i + 1 %>
+<table class="echeancier periode">
+
+	<tr class="odd">
+		<th class="middle">Période <%= i.to_s %> </th>
+	</tr>
+	
+	<tr>
+		<td><%= french_day_datetime periode.date_debut %></td>
+	</tr>
+	
+	<tr class="odd">
+		<td><%= french_day_datetime periode.date_fin %></td>
+	</tr>
+	
+	<tr>
+		<td>
+		<% if periode.reference_financeur == "" || periode.reference_financeur.nil? %>
+			&nbsp;
+		<% else %>
+		  <abbr title="<%= periode.reference_financeur %>"><%= truncate(periode.reference_financeur,:length => 13, :ommission => '...') %>
+		<% end %>
+  	</td>
+	</tr>
+	
+	<tr class="odd">
+  	<td>
+			<% if periode.numero_contrat_etablissement_gestionnaire == "" || periode.numero_contrat_etablissement_gestionnaire.nil? %>
+			&nbsp;
+			<% else %>
+				<%= periode.numero_contrat_etablissement_gestionnaire %></td>
+			<% end %>
+	</tr>
+	
+	<tr>
+		<td><%= my_number_to_currency periode.depenses_fonctionnement %></td>
+	</tr>
+	
+	<tr class="odd">
+		<td><%= my_number_to_currency periode.depenses_equipement %></td>
+	</tr>
+	
+	<tr>
+		<td><%= my_number_to_currency periode.depenses_salaires %></td>
+	</tr>
+	
+	<tr class="odd">
+		<td><%= my_number_to_currency periode.depenses_missions %></td>
+	</tr>
+	
+	<tr>
+		<td><%= my_number_to_currency periode.depenses_non_ventile %></td>
+	</tr>
+	
+	<tr class="odd">
+		<td class="double_ligne"><%= my_number_to_currency periode.depenses_couts_indirects %></td>
+	</tr>
+	
+	<tr>
+    <td class="double_ligne"><%= my_number_to_currency periode.depenses_frais_gestion_mut_local %></td>
+  </tr>
+	
+	<tr class="odd">
+		<td class="double_ligne"><%= my_number_to_currency periode.depenses_frais_gestion_mut %></td>
+	</tr>
+	
+	<tr>
+		<td class="double_ligne"><%= my_number_to_currency periode.depenses_frais_gestion %></td>
+	</tr>
+	
+	<tr class="odd">
+		<td><%= periode.allocations %> <span class='unite'>mois<span></td>
+	</tr>
+	
+	<tr>
+		<td><%= my_number_to_currency periode.credit %></td>
+	</tr>
+</table>
+
+
+<% end %>
+<%= render :partial => 'show_solde' %>
+</div>
+</div>
+
+
+<div style="clear:both;"></div>
+<div id="content_footer">
+	<div class="left">
+		Création le <%= french_datetime @echeancier.created_at %> par <%= print_user_infos @echeancier.created_by %>
+		<% if @echeancier.created_at != @echeancier.updated_at %>
+		<br />
+		Dernière modification le <%= french_datetime @echeancier.updated_at %> par <%= print_user_infos @echeancier.updated_by %>
+		<% end %>
+	</div>
+	<div class="right">
+		<% if @contrat.is_editable? current_user %>
+			<% if @echeancier.echeanciable_type == "Contrat" %>
+				<%= link_to_remote_redbox "Supprimer l'échéancier",
+		    	{	:url => ask_delete_contrat_echeancier_path(@contrat, @echeancier), :method => :get}, 
+					{	:class => "destroy",
+						:title => "Supprimer l'échéancier" }	%>
+			<% end %>
+		<% end %>
+	</div>
+	<div style="clear:both;"></div>
+</div>

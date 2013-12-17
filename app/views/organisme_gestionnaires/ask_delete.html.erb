@@ -1,0 +1,10 @@
+<div class="content">
+	<p>
+	Etes-vous certain de vouloir supprimer l'établissement gestionnaire <strong>"<%= @organisme_gestionnaire.nom %>"</strong> ?
+	</p>
+	<%= link_to_close_redbox "Non", :class => 'annuler' %>
+	<%= link_to_remote "Oui",
+ 									{ :url =>organisme_gestionnaire_path,
+										:method => :delete } %>
+	<div style="clear:both;"></div>
+</div>

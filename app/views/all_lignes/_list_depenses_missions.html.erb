@@ -1,0 +1,161 @@
+<%= render :partial => 'saved_param' %>
+
+<div id="result_paginate">
+  <div class="count">
+    <% add = '' %>
+    <% add = 's' if @depenses.total_entries > 1  %>
+    <%= @depenses.total_entries %> dépense<%= add %> en mission trouvée<%= add %>
+  </div>
+  <%= will_paginate @depenses,
+      :renderer => "PaginationLinkRenderer",
+      :params => {:action => "list"},
+      :remote => {:with => "Form.serialize('saved_params')+'&'+Form.serialize('form_recherche')", :update => "list"},
+      :options =>{:div => "list"} %>
+  <div style="clear:both;"></div>
+</div>
+
+<table class="depenses">
+  <thead>
+    <tr>
+      <th style="border:none;" colspan="10"></th>
+      <th style="border-color:#ccc;text-align:center;" colspan="4">Montant</th>
+    </tr>
+    <tr>
+      <th class="soldee"></th>
+      <th class="verrou"></th>
+      <th>Ligne</th>
+      <th>
+      	<a href="" onclick="tableOrderBy('date_commande');return false;"
+      	   <% if @order_value == 'date_commande' %> <%= "class='"+@order_type+"'" %><% end %>>
+      	    Date <br/> (millésime)
+      	</a>
+      </th>
+      <th>
+	<a href="" onclick="tableOrderBy('reference');return false;"
+	   <% if @order_value == 'reference' %> <%= "class='"+@order_type+"'" %><% end %>>
+	  N° d'OM
+	</a>
+      </th>
+      <th>
+	<a href="" onclick="tableOrderBy('agent');return false;"
+	   <% if @order_value == 'agent' %> <%= "class='"+@order_type+"'" %><% end %>>
+	  Agent
+	</a>
+      </th>
+
+      <th>
+	<a href="" onclick="tableOrderBy('date_depart');return false;"
+	   <% if @order_value == 'date_depart' %> <%= "class='"+@order_type+"'" %><% end %>>
+	  Départ
+	</a>
+      </th>
+      <th>
+	<a href="" onclick="tableOrderBy('date_retour');return false;"
+	   <% if @order_value == 'date_retour' %> <%= "class='"+@order_type+"'" %><% end %>>
+	  Retour
+	</a>
+      </th>
+      <th>
+	<a href="" onclick="tableOrderBy('lieux');return false;"
+	   <% if @order_value == 'lieux' %> <%= "class='"+@order_type+"'" %><% end %>>
+	  Lieux
+	</a>
+      </th>
+      <th>
+	<a href="" onclick="tableOrderBy('intitule');return false;"
+	   <% if @order_value == 'intitule' %> <%= "class='"+@order_type+"'" %><% end %>>
+	  Objet de la mission
+	</a>
+      </th>
+      <th class="money">
+	<a href="" onclick="tableOrderBy('montant_engage');return false;"
+	   <% if @order_value == 'montant_engage' %> <%= "class='"+@order_type+"'" %><% end %>>
+	  Engagé
+	</a>
+      </th>
+      <th class="money">
+	<a href="" onclick="tableOrderBy('montant_factures_htr');return false;"
+	   <% if @order_value == 'montant_factures_htr' %> <%= "class='"+@order_type+"'" %><% end %>>
+	  Payé HTR
+	</a>
+      </th>
+      <th class="money">
+	<a href="" onclick="tableOrderBy('montant_factures_ht');return false;"
+	   <% if @order_value == 'montant_factures_ht' %> <%= "class='"+@order_type+"'" %><% end %>>
+	  Payé HT
+	</a>
+      </th>
+      <th class="money">
+	<a href="" onclick="tableOrderBy('montant_factures_ttc');return false;"
+	   <% if @order_value == 'montant_factures_ttc' %> <%= "class='"+@order_type+"'" %><% end %>>
+	  Payé TTC
+	</a>
+      </th>
+			<th class="actions"></th>
+    </tr>
+  </thead>
+  <tbody id="depense_list">
+    <%
+    @subtotal_montant_engages = 0 
+    @subtotal_montant_paye_htr = 0
+    @subtotal_montant_paye_ht =  0
+    @subtotal_montant_paye_ttc = 0
+    for depense in @depenses 
+      montant_engage =  depense.montant_engage
+      montant_facture_htr = depense.montant_factures('htr')
+      montant_facture_ht = depense.montant_factures('ht')
+      montant_facture_ttc =  depense.montant_factures('ttc')%>
+      <% @tr_class =  cycle('odd', 'even') %>
+      <tr class="depense <%= @tr_class %>">
+	    <%
+        soldee_class = 'non_soldee'
+        soldee_class = 'soldee' if depense.commande_solde
+      %>
+	    <td class="<%= soldee_class %> "></td>
+	      <%
+        verrou_class = 'no-verrou'
+        verrou_class = 'verrou' if depense.come_from_inria?
+        %>
+      <td class="<%= verrou_class %> "></td>
+      <td><%= link_to depense.ligne.nom, ligne_path(depense.ligne) %></td>
+    	 <td><%= french_small_date depense.date_commande %>
+        <% if !depense.millesime.blank? %><br/><%= display_millesime depense %><% end %>
+	    </td>
+	    <td><%= depense.reference %></td>
+      <td><%= link_to depense.agent, ligne_depense_mission_path(depense.ligne, depense) %></td>
+      <td><%= french_small_date depense.date_depart %></td>
+      <td><%= french_small_date depense.date_retour %></td>
+    	<td><%=h depense.lieux %></td>
+    	<td><%= simple_format depense.intitule %></td>
+    
+    	<td class="money"
+	    <%- if depense.commande_solde? -%>
+	      style="font-weight: bold;text-decoration : underline;"
+	    <%- end -%>
+	    ><%= my_number_to_currency montant_engage %></td>
+    	<td class="money"><%= my_number_to_currency montant_facture_htr %></td>
+    	<td class="money"><%= my_number_to_currency montant_facture_ht %></td>
+    	<td class="money"><%= my_number_to_currency montant_facture_ttc %></td>
+    	<td class="actions_depenses" id=<%= "depense_toggle_verif_id_"+depense.id.to_s %>>
+        <%- if depense.ligne.contrat.is_budget_editable? current_user -%>
+          <% if depense.verif %>
+            <a href="" onClick="toggle_verif_depense('mission','<%=depense.id%>',0);return false;" title="Cette d&eacute;pense est v&eacute;rifi&eacute;e ! (Cliquez-moi pour annuler)"><%= image_tag "verif.jpg" %></a>
+          <% else %>
+            <a href="" onClick="toggle_verif_depense('mission','<%=depense.id%>',1);return false;" title="Cette d&eacute;pense n'est pas v&eacute;rifi&eacute;e. (Cliquez-moi pour valider la v&eacute;rification)"><%= image_tag "question_mark.png" %></a> 
+          <% end %>
+    <%- end -%>
+  </td>
+  </tr>
+  <% @factures= depense.depense_mission_factures %>
+  <%- if @show_factures == 'yes' && @factures.count > 0 -%>
+    <%= render :partial => 'list_show_mission_factures', :object => @factures %>
+  <%- end -%>
+    <% @subtotal_montant_engages =  @subtotal_montant_engages + montant_engage
+       @subtotal_montant_paye_htr = @subtotal_montant_paye_htr + montant_facture_htr
+       @subtotal_montant_paye_ht =  @subtotal_montant_paye_ht + montant_facture_ht
+       @subtotal_montant_paye_ttc = @subtotal_montant_paye_ttc + montant_facture_ttc
+    end -%>
+  <% @colspan_totals = 9 %>
+	<%= render :partial => 'list_totals_default' %>
+  </tbody>
+</table>

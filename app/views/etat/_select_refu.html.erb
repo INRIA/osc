@@ -1,0 +1,9 @@
+	<div class="select_refu">
+		<h4 class="solo"><a href="" onclick="toggle_select('refu_select');return false;">Refus</a></h4>
+		<div class="select" id="refu_select" style="display:none;">
+			<%= my_check_box("refus.date", "Date").html_safe() %>
+			<%= my_check_box("refus.liste_attente", "Est sur une liste d'attente ?").html_safe() %>
+			<%= my_check_box("refus.labelise", "Est labellisé ?").html_safe() %>
+			<%= my_check_box("refus.commentaire", "Commentaire", "last").html_safe() %>
+		</div>
+	</div>

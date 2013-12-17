@@ -1,0 +1,7 @@
+	<div class="select_cloture">
+		<h4 class="solo"><a href="" onclick="toggle_select('cloture_select');return false;">Clôture</a></h4>
+		<div class="select" id="cloture_select" style="display:none;">
+			<%= my_check_box("clotures.date_fin_depenses", "Date de fin des dépenses").html_safe() %>
+			<%= my_check_box("clotures.commentaires", "Commentaire").html_safe() %>
+		</div>
+	</div>

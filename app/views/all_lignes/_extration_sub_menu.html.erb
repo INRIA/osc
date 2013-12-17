@@ -1,0 +1,90 @@
+<div id="tab_control">
+  <%- if params['data'].nil? && controller.action_name.to_s != 'bilans' -%>
+    <a href="extraction" class="first_active" >Crédits</a>
+  <%- else -%>
+    <%- if params['data'] == "toutes_depenses_hors_salaires" -%>
+      <a href="extraction" class="first_before_active" >Crédits</a>
+    <%- else -%>
+      <a href="extraction" class="first" >Crédits</a>
+    <%- end -%>
+  <%- end -%>
+
+  <%- if params['data'] == "toutes_depenses_hors_salaires" -%>
+    <a href="extraction?data=toutes_depenses_hors_salaires" class="first_active">Fonctionnement + Equipement + Mission + Non Ventilé</a>
+  <%- else -%>
+    <%- if params['data'] == "fonctionnement" -%>
+      <a href="extraction?data=toutes_depenses_hors_salaires" class="first_before_active">Fonctionnement + Equipement + Mission + Non Ventilé</a>
+    <%- else -%>
+      <a href="extraction?data=toutes_depenses_hors_salaires" class="first">Fonctionnement + Equipement + Mission + Non Ventilé</a>
+    <%- end -%>
+  <%- end -%>
+
+  <%- if params['data'] == "fonctionnement" -%>
+    <a href="extraction?data=fonctionnement" class="first_active">Fonctionnement</a>
+  <%- else -%>
+    <%- if params['data'] == "equipement" -%>
+      <a href="extraction?data=fonctionnement" class="first_before_active">Fonctionnement</a>
+    <%- else -%>
+      <a href="extraction?data=fonctionnement" class="first">Fonctionnement</a>
+    <%- end -%>
+  <%- end -%>
+
+  <%- if params['data'] == "equipement" -%>
+    <a href="extraction?data=equipement" class="first_active">Equipement</a>
+  <%- else -%>
+    <%- if params['data'] == "mission" -%>
+      <a href="extraction?data=equipement" class="first_before_active">Equipement</a>
+    <%- else -%>
+      <a href="extraction?data=equipement" class="first">Equipement</a>
+    <%- end -%>
+  <%- end -%>
+
+  <%- if params['data'] == "mission" -%>
+    <a href="extraction?data=mission" class="first_active">Mission</a>
+  <%- else -%>
+    <%- if params['data'] == "salaire" -%>
+      <a href="extraction?data=mission" class="first_before_active">Mission</a>
+    <%- else -%>
+      <a href="extraction?data=mission" class="first">Mission</a>
+    <%- end -%>
+  <%- end -%>
+
+  <%- if params['data'] == "salaire" -%>
+    <a href="extraction?data=salaire" class="first_active">Salaires</a>
+  <%- else -%>
+    <%- if params['data'] == "non_ventilee" -%>
+      <a href="extraction?data=salaire" class="first_before_active">Salaires</a>
+    <%- else -%>
+      <a href="extraction?data=salaire" class="first">Salaires</a>
+    <%- end -%>
+  <%- end -%>
+
+
+  <%- if params['data'] == "non_ventilee" -%>
+    <a href="extraction?data=non_ventilee" class="first_active">Non Ventilé</a>
+  <%- else -%>
+    <%- if controller.action_name.to_s == 'bilans' -%>
+      <a href="extraction?data=non_ventilee" class="first_before_active">Non Ventilé</a>
+    <%- else -%>
+      <a href="extraction?data=non_ventilee" class="first">Non Ventilé</a>
+    <%- end -%>
+  <%- end -%>
+
+  <%- if params['data'] == "commun" -%>
+    <a href="extraction?data=commun" class="first_active">Commun</a>
+  <%- else -%>
+    <%- if controller.action_name.to_s == 'bilans' -%>
+      <a href="extraction?data=commun" class="first_before_active">Commun</a>
+    <%- else -%>
+      <a href="extraction?data=commun" class="first">Commun</a>
+    <%- end -%>
+  <%- end -%>
+
+
+  <%- if controller.action_name.to_s == 'bilans' -%>
+    <a href="bilans" class="first_active">Bilans</a>
+  <%- else -%>
+    <a href="bilans" class="first">Bilans</a>
+  <%- end -%>
+  <div style="clear:both;"></div>
+</div>

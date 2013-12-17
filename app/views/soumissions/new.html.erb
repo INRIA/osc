@@ -1,0 +1,32 @@
+<h2>Soumission de contrat</h2>
+
+<%= my_soumission_error_messages_for @soumission %>
+
+
+<%= form_for(:soumission, :url => contrat_soumissions_path) do |f| %>
+  <%= render :partial => 'form', :locals => { :f => f } %>
+  <div class="form-box submit" id="submit">
+    <%= submit_tag "Créer la soumission" %>
+    ou
+    <%= link_to "Annuler", contrat_path(@contrat) %>
+  </div>
+<% end %>
+
+<% content_for :right do %>
+<div id="navigation">
+  <h2>Aide à la navigation dans le formulaire</h2>
+  <ul>
+    <li><a href="#indicator">Haut de page</a></li>
+    <li><a href="#TypeContrat">Type de contrat</a></li>
+    <li><a href="#InformationsGenerales">Informations générales - Porteur et coordinateur</a></li>
+    <li><a href="#MotsCles">Mots clés et thématiques</a></li>
+    <li><a href="#Partenaires">Partenaires</a></li>
+    <li><a href="#MoyensDemandes">Moyens demandés - Personnel demandé</a></li>
+    <li><a href="#PersonnelImplique">Personnel impliqué</a></li>
+    <li class="last"><a href="#submit">Enregistrement de la soumission</a></li>
+  </ul>
+  <script type="text/javascript">
+    new App.NavigatorHelper();
+  </script>
+</div>
+<% end %>

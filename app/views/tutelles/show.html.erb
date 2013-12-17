@@ -1,0 +1,13 @@
+<div class="section">
+	<h2><strong>Equipe(s)</strong> associés à la tutelles</h2>
+	<% if @projets.size == 0 %>
+	<p class="comment">Aucune équipe n'est associée à la tutelle <%= @tutelle.nom %>.</p>
+	<% end %>
+	<% for projet in @projets %>
+	<div class="list_infos">
+		<div class="name"><%= link_to projet.nom, projet_path(projet) %></div>
+		<div class="description"><%=h projet.description %></div>
+	</div>
+	<% end %>
+	<br />
+</div>

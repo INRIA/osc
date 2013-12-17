@@ -1,0 +1,219 @@
+<% content_for :right do %>
+  <%- if @ligne.contrat.is_budget_editable? current_user -%>
+    <%= link_to 'Ajouter une dépense en fonctionnement', new_ligne_depense_fonctionnement_path(@ligne), {:class => "add-depense-fonctionnement"} %>
+    <%= link_to 'Dupliquer cette dépense',  duplicate_ligne_depense_fonctionnement_path(@ligne, @depense_fonctionnement),  {:method => :post, :class => "duplicate-depense"} %>
+  <%- end -%>
+<%- end -%>
+
+<%- if @ref_exist -%>
+  <div id="errorExplanation" class="errorExplanation"><h2>Attention, la référence a déjà été saisie pour une autre dépense. </h2></div>
+<%- end -%>
+
+<div class="box parent">
+  <%= "<span class='come-from-inria'>S.I. INRIA</span>".html_safe() if @depense_fonctionnement.come_from_inria? %>
+  <h2>Demande d'achat</h2>
+  <div class="clearfix">
+    <div class="large-col">
+      <div class='line clearfix'>
+        <span class="attribute">Date de demande d'achat</span>
+        <span class="value"><%= french_date @depense_fonctionnement.date_commande %></span>
+      </div>
+			<% if !@depense_fonctionnement.millesime.blank? %>
+        <div class='line clearfix'>
+          <span class="attribute">Date de millesime</span>
+          <span class="value"><%= french_date @depense_fonctionnement.millesime  %></span>
+        </div>
+      <% end %>
+      <div class='line clearfix'>
+        <span class="attribute">Référence</span>
+        <span class="value"><%=  @depense_fonctionnement.reference %></span>
+      </div>
+      <div class='line clearfix'>
+        <span class="attribute">Fournisseur</span>
+        <span class="value"><%=h @depense_fonctionnement.fournisseur %></span>
+      </div>
+      <div class='line clearfix'>
+        <span class="attribute">Intitulé</span>
+        <div class="value"><%= simple_format @depense_fonctionnement.intitule %></div>
+      </div>
+      <div class='line clearfix'>
+        <span class="attribute">Structure</span>
+        <span class="value"><%= @depense_fonctionnement.structure %></span>
+      </div>
+	    <div class='line last clearfix'>
+        <span class="attribute">Commentaire</span>
+        <div class="value"><%= simple_format @depense_fonctionnement.commentaire %></div>
+      </div>
+    </div>
+    <div class="small-col">
+      <div class='line last clearfix'>
+        <span class="attribute">Montant engagé</span>
+        <span class="value <%= "soldee" if @depense_fonctionnement.commande_solde %>">
+          <strong><%= my_number_to_currency @depense_fonctionnement.montant_engage %></strong>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="justification-data" <%= 'style="display:none;"'.html_safe() if @user_preferences_show_justifacation_data == 'no' %>>
+  <div class="box sub-parent">
+    <h2>Justification</h2>
+    <div class="clearfix">
+      <div class="large-col">
+        <div class='line clearfix'>
+          <span class="attribute">Nom de la tâche imputée</span>
+          <span class="value"><%= @depense_fonctionnement.tache %></span>
+        </div>
+        <div class='line clearfix'>
+          <span class="attribute">Commande éligible ?</span>
+          <span class="value"><% if @depense_fonctionnement.eligible %>Oui<% else %>Non<% end %></span>
+        </div>
+        <div class='line clearfix'>
+          <span class="attribute">Prestation de service ?</span>
+          <span class="value"><% if @depense_fonctionnement.prestation_service %>Oui<% else %>Non<% end %></span>
+        </div>
+        <div class='line last clearfix'>
+          <span class="attribute">Type d'activité</span>
+          <span class="value"><%= @depense_fonctionnement.type_activite %></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="sub-parent-toggle-container">
+  <a href="#" id="toggle-justification">
+    <%- if @user_preferences_show_justifacation_data == 'no' -%>
+      Afficher les données de justification
+    <%- else -%>
+      Masquer les données de justification
+    <%- end -%>
+  </a>
+</div>
+
+
+<% i = 1 %>
+<% for facture in @depense_fonctionnement.depense_fonctionnement_factures %>
+  <%- if i == @depense_fonctionnement.depense_fonctionnement_factures.size -%>
+    <div class="child-container last">
+  <%- else -%>
+    <div class="child-container default">
+  <%- end -%>
+  <div class="box child">
+    <%= "<span class='come-from-inria'>S.I. INRIA</span>".html_safe() if facture.come_from_inria? %>
+    <h2>Facture</h2>
+    <div class="clearfix">
+      <div class="large-col">
+        <div class='line clearfix'>
+          <span class="attribute">Date de la facture</span>
+          <span class="value"><%= french_date facture.date %></span>
+        </div>
+				<% if !facture.millesime.blank? %>
+          <div class='line clearfix'>
+            <span class="attribute">Date de service fait (millésime)</span>
+            <span class="value"><%= french_date facture.millesime  %></span>
+          </div>
+        <% end %>
+        <div class='line clearfix'>
+          <span class="attribute">N° de la facture</span>
+          <span class="value"><%= facture.numero_facture %> <%= facture.id %></span>
+        </div>
+        <div class='line clearfix'>
+          <span class="attribute">Rubrique comptable</span>
+          <span class="value"><%= facture.rubrique_comptable.intitule %></span>
+        </div>
+        <div class='line clearfix'>
+          <span class="attribute">Commentaire</span>
+          <div class="value"><%= simple_format facture.commentaire %></div>
+        </div>
+        <div class='line clearfix'>
+          <span class="attribute">Justification</span>
+          <span class="value"><%= facture.justifiable %></span>
+        </div>
+        <div class='line clearfix'>
+          <span class="attribute">N° de mandat</span>
+          <span class="value"><%= facture.numero_mandat %></span>
+        </div>
+        <div class='line last clearfix'>
+          <span class="attribute">Date de mandatement</span>
+          <span class="value"><%= french_date facture.date_mandatement if !facture.date_mandatement.blank? %></span>
+        </div>
+      </div>
+      <div class="small-col">
+        <div class='line clearfix'>
+          <span class="attribute">Montant Payé (HT)</span>
+          <span class="value"><%= my_number_to_currency facture.cout_ht %></span>
+        </div>
+        <div class='line clearfix'>
+          <span class="attribute">Taux de TVA</span>
+          <span class="value"><%= facture.taux_tva %>%
+        </div>
+        <div class='line clearfix'>
+          <span class="attribute">Montant Payé (TTC)</span>
+          <span class="value"><%= my_number_to_currency facture.cout_ttc %></span>
+        </div>
+        <div class='line last clearfix'>
+          <span class="attribute">Montant Payé (HTR)</span>
+          <span class="value"><%= my_number_to_currency facture.montant_htr %></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% i += 1 %>
+<% end %>
+
+<div class="box dashboard">
+  <div class="clearfix">
+    <div class="large-col">
+      <%- if @depense_fonctionnement.commande_solde -%>
+        La commande est soldée.
+      <%- else -%>
+        La commande n'est pas soldée.
+      <%- end -%>
+    </div>
+    <div class="small-col">
+      <div class='line clearfix'>
+        <span class="attribute">Coût Total HT</span>
+        <span class="value">
+          <%= my_number_to_currency @depense_fonctionnement.montant_factures('ht') %>
+        </span>
+      </div>
+      <div class='line clearfix'>
+        <span class="attribute">Coût Total TTC</span>
+        <span class="value">
+          <%= my_number_to_currency @depense_fonctionnement.montant_factures('ttc') %>
+        </span>
+      </div>
+      <div class='line clearfix'>
+        <span class="attribute">Coût Total HTR</span>
+        <span class="value">
+          <%= my_number_to_currency @depense_fonctionnement.montant_factures('htr') %>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="content_footer">
+  <div class="left">
+    Création le <%= french_datetime @depense_fonctionnement.created_at %> par <%= print_user_infos @depense_fonctionnement.created_by %>
+    <% if @depense_fonctionnement.created_at != @depense_fonctionnement.updated_at %>
+    <br />
+    Dernière modification le <%= french_datetime @depense_fonctionnement.updated_at %> par <%= print_user_infos @depense_fonctionnement.updated_by %>
+    <% end %>
+  </div>
+  <div class="right">
+    <%- if (@ligne.contrat.is_budget_editable? current_user) and (@depense_fonctionnement.verrou == "Aucun") -%>
+    <%= link_to_remote_redbox "Supprimer la dépense",
+        { :url => ask_delete_ligne_depense_fonctionnement_path(@ligne, @depense_fonctionnement), :method => :get},
+        { :class => "destroy",
+          :title => "Supprimer la dépense" }  %>
+    <%- end -%>
+  </div>
+  <div style="clear:both;"></div>
+</div>
+
+<script type="text/javascript">
+  new App.Budget.ToggleJustificationData();
+</script>

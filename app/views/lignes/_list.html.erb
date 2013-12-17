@@ -1,0 +1,33 @@
+<div class="content" style="padding:0;">
+
+
+  <%= will_paginate @lignes,  :previous_label => "&nbsp;&laquo;&nbsp;",
+                              :next_label => "&nbsp;&raquo;&nbsp;",
+                              :inner_window => "2",
+                              :outer_window => "1",
+                              :renderer => "PaginationLinkRenderer",
+                              :params => {:action => "search"},
+                              :remote => {:with => "'nom='+escape($F('nom'))+
+                                      '&projet='+escape($F('projet'))+
+                                      '&def='+$F('position_default')+
+                                      '&clos='+$F('position_clos')+
+                                      '&tous='+$F('position_tous')"}%>
+
+
+	
+  <% for ligne in @lignes %>
+	<div class="contrat">
+	  <div class="infos_contrat">
+		<div class="acronyme">
+		  <% if @ids_lignes_editables.include? ligne.id %>
+			  <%= image_tag 'bullet_green.png', :alt => 'modification' %>
+		  <% else %>
+			  <%= image_tag 'bullet_yellow.png', :alt => 'consultation' %>
+		  <% end %>
+			<%= link_to h(ligne.nom), ligne_path(ligne) %>
+		  </div>
+		</div>
+	  </div>
+  <% end %>
+</div>
+	

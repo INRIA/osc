@@ -1,0 +1,592 @@
+<table>
+	<thead id="thead">
+	<tr class="entete">
+		<% @select.each{|s| %>
+			<%= my_th(s).html_safe() %>
+		<% } %>
+	</tr>
+	</thead>
+	<tbody>
+	<%- for contrat in @contrats -%>
+		<tr class="<%= cycle("odd","even") %>">
+			<td>
+				<%= link_to contrat.acronyme, contrat_path(contrat.id) %>
+			</td>
+			<%- if params['contrats.associations'] -%>
+				<td>
+					<% contrat.projets.each do |projet| %>
+					    <%= (projet.nom+"<br/>").html_safe() %> 
+					<% end %>
+					<% contrat.departements.each do |departement| %>
+              <%= (departement.nom+"<br/>").html_safe() %> 
+          <% end %>
+          <% contrat.laboratoires.each do |laboratoire| %>
+              <%= (laboratoire.nom+"<br/>").html_safe() %> 
+          <% end %>
+				</td>
+			<%- end -%>
+			
+			<%- if params['contrats.etat'] -%>
+				<td><%= contrat.etat %></td>
+			<%- end -%>
+			
+			<%- if params['contrats.nom'] -%>
+				<td><%= contrat.nom %></td>
+			<%- end -%>
+			<%- if params['contrats.num_contrat_etab'] -%>
+				<td><%= contrat.num_contrat_etab %></td>
+			<%- end -%>
+			
+			<%- if ['soumission', 'refu', 'signature', 'notification', 'cloture'].include? params[:type] -%>
+			
+				<!-- Soumission - Informations générales -->
+				<%- if params['soumissions.contrat_type.nom'] -%>
+					<td><%= contrat.soumission.contrat_type.nom %><br /><span style="color:#888;"><%= contrat.soumission.contrat_type.nom_complet %><span></td>
+				<%- end -%>
+				<%- if params['soumissions.date_depot'] -%>
+					<td><%= french_date contrat.soumission.date_depot %></td>
+				<%- end -%>
+				<%- if params['soumissions.nombre_mois'] -%>
+					<td class="numbers"><%= contrat.soumission.nombre_mois %></td>
+				<%- end -%>
+				<%- if params['soumissions.organisme_gestionnaire.nom'] -%>
+					<td><%= contrat.soumission.organisme_gestionnaire.nom %></td>
+				<%- end -%>
+				<%- if params['soumissions.organisme_financeur'] -%>
+					<td><%= contrat.soumission.organisme_financeur %></td>
+				<%- end -%>
+			
+				<!-- Soumission - Porteur et coordinateur -->	
+				<%- if params['soumissions.porteur'] -%>
+					<td><%= contrat.soumission.porteur %></td>
+				<%- end -%>
+				<%- if params['soumissions.etablissement_rattachement_porteur'] -%>
+					<td><%= contrat.soumission.etablissement_rattachement_porteur %></td>
+				<%- end -%>
+				<%- if params['soumissions.est_porteur'] -%>
+					<td><%= show_boolean contrat.soumission.est_porteur %></td>
+				<%- end -%>
+				<%- if params['soumissions.coordinateur'] -%>
+					<td><%= contrat.soumission.coordinateur %></td>
+				<%- end -%>
+				<%- if params['soumissions.etablissement_gestionnaire_du_coordinateur'] -%>
+					<td><%= contrat.soumission.etablissement_gestionnaire_du_coordinateur %></td>
+				<%- end -%>
+			
+				<!-- Soumission - Mots clés -->
+				<%- if params['soumissions.mots_cles'] -%>
+				<td><ol>
+				  <% contrat.soumission.key_words.each do |word| %>
+              <%= ( "<li>"+word.intitule+"</li>").html_safe() %> 
+          <% end %>
+        </ol></td>
+				<%- end -%>
+				<%- if params['soumissions.mots_cles_libres'] -%>
+				<td><ol>
+				  <% contrat.soumission.mots_cles_libres.split(',').each do |word| %>
+              <%= ( "<li>"+word+"</li>").html_safe() %> 
+          <% end %>     
+        </ol></td>
+				<%- end -%>
+				<%- if params['soumissions.thematiques'] -%>
+				<td><ol>
+				  <% contrat.soumission.thematiques.split(',').each do |word| %>
+              <%= ( "<li>"+word+"</li>").html_safe() %> 
+          <% end %> 
+        </ol></td>
+				<%- end -%>
+				<%- if params['soumissions.poles_competivites'] -%>
+				<td><ol>
+          <% contrat.soumission.poles_competivites.split(',').each do |word| %>
+              <%= ( "<li>"+word+"</li>").html_safe() %> 
+          <% end %> 
+        </ol></td>
+				<%- end -%>
+			
+				<!-- Soumission - Partenaires -->
+				<%- if params['soumission_france_partenaires.nom'] -%>
+  				<td><ol>
+            <% contrat.soumission.soumission_france_partenaires.each do |partenaire| %>
+                <%= ( "<li>"+partenaire.nom+"</li>").html_safe() %> 
+            <% end %>
+          </ol></td>
+				<%- end -%>
+				<%- if params['soumission_france_partenaires.laboratoire'] -%>
+				  <td><ol>
+            <% contrat.soumission.soumission_france_partenaires.each do |partenaire| %>
+                <%= ( "<li>"+partenaire.laboratoire+"</li>").html_safe() %> 
+            <% end %>
+          </ol></td>
+				<%- end -%>
+				<%- if params['soumission_france_partenaires.etablissement_gestionnaire'] -%>
+				  <td><ol>
+            <% contrat.soumission.soumission_france_partenaires.each do |partenaire| %>
+                <%= ( "<li>"+partenaire.etablissement_gestionnaire+"</li>").html_safe() %> 
+            <% end %>
+          </ol></td>					
+				<%- end -%>
+				<%- if params['soumission_france_partenaires.ville'] -%>
+  				<td><ol>
+            <% contrat.soumission.soumission_france_partenaires.each do |partenaire| %>
+                <%= ( "<li>"+partenaire.ville+"</li>").html_safe() %> 
+            <% end %>
+          </ol></td>			
+				<%- end -%>
+			
+				<%- if params['soumission_europe_partenaires.nom'] -%>
+				  <td><ol>
+            <% contrat.soumission.soumission_europe_partenaires.each do |partenaire| %>
+                <%= ( "<li>"+partenaire.nom+"</li>").html_safe() %> 
+            <% end %>
+          </ol></td>  
+				<%- end -%>
+				<%- if params['soumission_europe_partenaires.etablissement_gestionnaire'] -%>
+				  <td><ol>
+            <% contrat.soumission.soumission_europe_partenaires.each do |partenaire| %>
+                <%= ( "<li>"+partenaire.etablissement_gestionnaire+"</li>").html_safe() %> 
+            <% end %>
+          </ol></td> 
+				<%- end -%>
+				<%- if params['soumission_europe_partenaires.ville'] -%>
+				  <td><ol>
+            <% contrat.soumission.soumission_europe_partenaires.each do |partenaire| %>
+                <%= ( "<li>"+partenaire.ville+"</li>").html_safe() %> 
+            <% end %>
+          </ol></td> 
+				<%- end -%>
+				<%- if params['soumission_europe_partenaires.pays'] -%>
+				  <td><ol>
+            <% contrat.soumission.soumission_europe_partenaires.each do |partenaire| %>
+                <%= ( "<li>"+partenaire.pays+"</li>").html_safe() %> 
+            <% end %>
+          </ol></td>
+				<%- end -%>
+			
+				<%- if params['soumission_partenaires.nom'] -%>
+				  <td><ol>
+            <% contrat.soumission.soumission_partenaires.each do |partenaire| %>
+                <%= ( "<li>"+partenaire.nom+"</li>").html_safe() %> 
+            <% end %>
+          </ol></td>
+				<%- end -%>
+				<%- if params['soumission_partenaires.etablissement_gestionnaire'] -%>
+				  <td><ol>
+            <% contrat.soumission.soumission_partenaires.each do |partenaire| %>
+                <%= ( "<li>"+partenaire.etablissement_gestionnaire+"</li>").html_safe() %> 
+            <% end %>
+          </ol></td>
+				<%- end -%>
+				<%- if params['soumission_partenaires.ville'] -%>
+				  <td><ol>
+            <% contrat.soumission.soumission_partenaires.each do |partenaire| %>
+                <%= ( "<li>"+partenaire.ville+"</li>").html_safe() %> 
+            <% end %>
+          </ol></td>					
+				<%- end -%>
+				<%- if params['soumission_partenaires.pays'] -%>
+				  <td><ol>
+            <% contrat.soumission.soumission_partenaires.each do |partenaire| %>
+                <%= ( "<li>"+partenaire.pays+"</li>").html_safe() %> 
+            <% end %>
+          </ol></td>
+				<%- end -%>
+						
+				<!-- Soumission - Moyens demandés -->
+				<%- if params['soumissions.md_type_montant'] -%>
+					<td class="numbers"><%= contrat.soumission.md_type_montant %></td>
+				<%- end -%>
+				<%- if params['soumissions.md_fonctionnement'] -%>
+					<td class="numbers"><%= my_number_to_currency contrat.soumission.md_fonctionnement %></td>
+				<%- end -%>
+				<%- if params['soumissions.md_equipement'] -%>
+					<td class="numbers"><%= my_number_to_currency contrat.soumission.md_equipement %></td>
+				<%- end -%>
+				<%- if params['soumissions.md_salaire'] -%>
+					<td class="numbers"><%= my_number_to_currency contrat.soumission.md_salaire %></td>
+				<%- end -%>
+				<%- if params['soumissions.md_mission'] -%>
+					<td class="numbers"><%= my_number_to_currency contrat.soumission.md_mission %></td>
+				<%- end -%>
+				<%- if params['soumissions.md_non_ventile'] -%>
+					<td class="numbers"><%= my_number_to_currency contrat.soumission.md_non_ventile %></td>
+				<%- end -%>
+				<%- if params['soumissions.md_couts_indirects'] -%>
+					<td class="numbers"><%= my_number_to_currency contrat.soumission.md_couts_indirects %></td>
+				<%- end -%>
+				<%- if params['soumissions.md_allocation'] -%>
+					<td class="numbers"><%= contrat.soumission.md_allocation %></td>
+				<%- end -%>
+				<%- if params['soumissions.md_total'] -%>
+					<td class="numbers"><%= my_number_to_currency contrat.soumission.md_total %></td>
+				<%- end -%>
+				<%- if params['soumissions.taux_subvention'] -%>
+					<td class="numbers"><%= contrat.soumission.taux_subvention %></td>
+				<%- end -%>
+				<%- if params['soumissions.total_subvention'] -%>
+					<td class="numbers"><%= my_number_to_currency contrat.soumission.total_subvention %></td>
+				<%- end -%>
+			
+				<!-- Soumission - Personnel demandé -->
+				<%- if params['soumissions.pd_doctorant'] -%>
+					<td class="numbers"><%= contrat.soumission.pd_doctorant %></td>
+				<%- end -%>
+				<%- if params['soumissions.pd_post_doc'] -%>
+					<td class="numbers"><%= contrat.soumission.pd_post_doc %></td>
+				<%- end -%>
+				<%- if params['soumissions.pd_ingenieur'] -%>
+					<td class="numbers"><%= contrat.soumission.pd_ingenieur %></td>
+				<%- end -%>
+				<%- if params['soumissions.pd_autre'] -%>
+					<td class="numbers"><%= contrat.soumission.pd_autre %></td>
+				<%- end -%>
+				<%- if params['soumissions.pd_equivalent_temps_plein'] -%>
+					<td class="numbers"><%= contrat.soumission.pd_equivalent_temps_plein %></td>
+				<%- end -%>
+			
+				<!-- Soumission - Personnel impliqué -->
+				<%- if params['soumission_personnels.nom'] -%>
+				  <td><ol>
+            <% contrat.soumission.soumission_personnels.each do |personnel| %>
+                <%= ( "<li>"+personnel.nom+"</li>").html_safe() %> 
+            <% end %>
+          </ol></td>
+				<%- end -%>
+				<%- if params['soumission_personnels.prenom'] -%>
+				  <td><ol>
+            <% contrat.soumission.soumission_personnels.each do |personnel| %>
+                <%= ( "<li>"+personnel.prenom+"</li>").html_safe() %> 
+            <% end %>
+          </ol></td>
+				<%- end -%>
+				<%- if params['soumission_personnels.statut'] -%>
+				  <td><ol>
+            <% contrat.soumission.soumission_personnels.each do |personnel| %>
+                <%= ( "<li>"+personnel.statut+"</li>").html_safe() %> 
+            <% end %>
+          </ol></td>
+				<%- end -%>
+				<%- if params['soumission_personnels.tutelle'] -%>
+				  <td><ol>
+            <% contrat.soumission.soumission_personnels.each do |personnel| %>
+                <%= ( "<li>"+personnel.tutelle+"</li>").html_safe() %> 
+            <% end %>
+          </ol></td>
+				<%- end -%>
+				<%- if params['soumission_personnels.pourcentage'] -%>
+				  <td><ol>
+            <% contrat.soumission.soumission_personnels.each do |personnel| %>
+                <%= ( "<li>"+personnel.pourcentage.to_s+"</li>").html_safe() %> 
+            <% end %>
+          </ol></td>
+				<%- end -%>
+
+			<%- end -%>
+			
+			
+			<%- if ['refu'].include? params[:type] -%>
+				<%- if params['refus.date'] -%>
+				<td><%= french_date contrat.refu.date %></td>
+				<%- end -%>
+				<%- if params['refus.liste_attente'] -%>
+				<td><%= show_boolean contrat.refu.liste_attente %></td>
+				<%- end -%>
+				<%- if params['refus.labelise'] -%>
+				<td><%= show_boolean contrat.refu.labelise %></td>
+				<%- end -%>
+				<%- if params['refus.commentaire'] -%>
+				<td><%= contrat.refu.commentaire %></td>
+				<%- end -%>
+			<%- end -%>
+			
+			<%- if ['signature', 'notification', 'cloture'].include? params[:type] -%>
+				<%- if params['signatures.date'] -%>
+				<td><%= french_date contrat.signature.date %></td>
+				<%- end -%>
+				<%- if params['signatures.commentaire'] -%>
+				<td><%= contrat.signature.commentaire %></td>
+				<%- end -%>
+			<%- end -%>
+			
+			<%- if ['notification', 'cloture'].include? params[:type] -%>
+			
+				<!-- Notification - Informations générales -->
+				<%- if params['notifications.contrat_type.nom'] -%>
+					<td><%= contrat.notification.contrat_type.nom %><br /><span style="color:#888;"><%= contrat.notification.contrat_type.nom_complet %><span></td>
+				<%- end -%>
+				<%- if params['notifications.date_notification'] -%>
+					<td><%= french_date contrat.notification.date_notification %></td>
+				<%- end -%>
+				<%- if params['notifications.date_debut'] -%>
+					<td><%= french_date contrat.notification.date_debut %></td>
+				<%- end -%>
+				<%- if params['notifications.date_fin'] -%>
+					<td><%= french_date contrat.notification.date_fin %></td>
+				<%- end -%>
+				<%- if params['notifications.nombre_mois'] -%>
+					<td class="numbers"><%= contrat.notification.nombre_mois %></td>
+				<%- end -%>
+				<%- if params['notifications.organisme_gestionnaire.nom'] -%>
+					<td><%= contrat.notification.organisme_gestionnaire.nom %></td>
+				<%- end -%>
+				<%- if params['notifications.organisme_financeur'] -%>
+					<td><%= contrat.notification.organisme_financeur %></td>
+				<%- end -%>
+				<%- if params['notifications.organisme_payeur'] -%>
+					<td><%= contrat.notification.organisme_payeur %></td>
+				<%- end -%>	
+				<%- if params['notifications.numero_ligne_budgetaire'] -%>
+					<td><%= contrat.notification.numero_ligne_budgetaire %></td>
+				<%- end -%>
+				<%- if params['notifications.numero_contrat'] -%>
+					<td><%= contrat.notification.numero_contrat %></td>
+				<%- end -%>
+				<%- if params['notifications.a_justifier'] -%>
+					<td><%= show_boolean contrat.notification.a_justifier %></td>
+				<%- end -%>
+				<%- if params['notifications.url'] -%>
+					<td><%= contrat.notification.url %></td>
+				<%- end -%>	
+				
+				<!-- Notification - Porteur et coordinateur -->	
+				<%- if params['notifications.porteur'] -%>
+					<td><%= contrat.notification.porteur %></td>
+				<%- end -%>
+				<%- if params['notifications.etablissement_rattachement_porteur'] -%>
+					<td><%= contrat.notification.etablissement_rattachement_porteur %></td>
+				<%- end -%>
+				<%- if params['notifications.est_porteur'] -%>
+					<td><%= show_boolean contrat.notification.est_porteur %></td>
+				<%- end -%>
+				<%- if params['notifications.coordinateur'] -%>
+					<td><%= contrat.notification.coordinateur %></td>
+				<%- end -%>
+				<%- if params['notifications.etablissement_gestionnaire_du_coordinateur'] -%>
+					<td><%= contrat.notification.etablissement_gestionnaire_du_coordinateur %></td>
+				<%- end -%>
+				
+				<!-- Notification - Mots clés -->
+        <%- if params['notifications.mots_cles'] -%>
+        <td><ol>
+          <% contrat.notification.key_words.each do |word| %>
+              <%= ( "<li>"+word.intitule+"</li>").html_safe() %> 
+          <% end %>
+        </ol></td>
+        <%- end -%>
+        <%- if params['notifications.mots_cles_libres'] -%>
+        <td><ol>
+          <% contrat.notification.mots_cles_libres.split(',').each do |word| %>
+              <%= ( "<li>"+word+"</li>").html_safe() %> 
+          <% end %>     
+        </ol></td>
+        <%- end -%>
+        <%- if params['notifications.thematiques'] -%>
+        <td><ol>
+          <% contrat.notification.thematiques.split(',').each do |word| %>
+              <%= ( "<li>"+word+"</li>").html_safe() %> 
+          <% end %> 
+        </ol></td>
+        <%- end -%>
+        <%- if params['notifications.poles_competivites'] -%>
+        <td><ol>
+          <% contrat.notification.poles_competivites.split(',').each do |word| %>
+              <%= ( "<li>"+word+"</li>").html_safe() %> 
+          <% end %> 
+        </ol></td>
+        <%- end -%>
+      
+        <!-- Notification - Partenaires -->
+        <%- if params['notification_france_partenaires.nom'] -%>
+          <td><ol>
+            <% contrat.notification_france_partenaires.each do |partenaire| %>
+                <%= ( "<li>"+partenaire.nom+"</li>").html_safe() %> 
+            <% end %>
+          </ol></td>
+        <%- end -%>
+        <%- if params['notification_france_partenaires.laboratoire'] -%>
+          <td><ol>
+            <% contrat.notification_france_partenaires.each do |partenaire| %>
+                <%= ( "<li>"+partenaire.laboratoire+"</li>").html_safe() %> 
+            <% end %>
+          </ol></td>
+        <%- end -%>
+        <%- if params['notification_france_partenaires.etablissement_gestionnaire'] -%>
+          <td><ol>
+            <% contrat.notification_france_partenaires.each do |partenaire| %>
+                <%= ( "<li>"+partenaire.etablissement_gestionnaire+"</li>").html_safe() %> 
+            <% end %>
+          </ol></td>          
+        <%- end -%>
+        <%- if params['notification_france_partenaires.ville'] -%>
+          <td><ol>
+            <% contrat.notification_france_partenaires.each do |partenaire| %>
+                <%= ( "<li>"+partenaire.ville+"</li>").html_safe() %> 
+            <% end %>
+          </ol></td>      
+        <%- end -%>
+      
+        <%- if params['notification_europe_partenaires.nom'] -%>
+          <td><ol>
+            <% contrat.notification_europe_partenaires.each do |partenaire| %>
+                <%= ( "<li>"+partenaire.nom+"</li>").html_safe() %> 
+            <% end %>
+          </ol></td>  
+        <%- end -%>
+        <%- if params['notification_europe_partenaires.etablissement_gestionnaire'] -%>
+          <td><ol>
+            <% contrat.notification_europe_partenaires.each do |partenaire| %>
+                <%= ( "<li>"+partenaire.etablissement_gestionnaire+"</li>").html_safe() %> 
+            <% end %>
+          </ol></td> 
+        <%- end -%>
+        <%- if params['notification_europe_partenaires.ville'] -%>
+          <td><ol>
+            <% contrat.notification_europe_partenaires.each do |partenaire| %>
+                <%= ( "<li>"+partenaire.ville+"</li>").html_safe() %> 
+            <% end %>
+          </ol></td> 
+        <%- end -%>
+        <%- if params['notification_europe_partenaires.pays'] -%>
+          <td><ol>
+            <% contrat.notification_europe_partenaires.each do |partenaire| %>
+                <%= ( "<li>"+partenaire.pays+"</li>").html_safe() %> 
+            <% end %>
+          </ol></td>
+        <%- end -%>
+      
+        <%- if params['notification_partenaires.nom'] -%>
+          <td><ol>
+            <% contrat.notification_partenaires.each do |partenaire| %>
+                <%= ( "<li>"+partenaire.nom+"</li>").html_safe() %> 
+            <% end %>
+          </ol></td>
+        <%- end -%>
+        <%- if params['notification_partenaires.etablissement_gestionnaire'] -%>
+          <td><ol>
+            <% contrat.notification_partenaires.each do |partenaire| %>
+                <%= ( "<li>"+partenaire.etablissement_gestionnaire+"</li>").html_safe() %> 
+            <% end %>
+          </ol></td>
+        <%- end -%>
+        <%- if params['notification_partenaires.ville'] -%>
+          <td><ol>
+            <% contrat.notification_partenaires.each do |partenaire| %>
+                <%= ( "<li>"+partenaire.ville+"</li>").html_safe() %> 
+            <% end %>
+          </ol></td>          
+        <%- end -%>
+        <%- if params['notification_partenaires.pays'] -%>
+          <td><ol>
+            <% contrat.notification_partenaires.each do |partenaire| %>
+                <%= ( "<li>"+partenaire.pays+"</li>").html_safe() %> 
+            <% end %>
+          </ol></td>
+        <%- end -%>
+            
+
+				<!-- Notification - Moyens accordés -->
+				<%- if params['notifications.ma_type_montant'] -%>
+					<td class="numbers"><%= contrat.notification.ma_type_montant %></td>
+				<%- end -%>
+				<%- if params['notifications.ma_fonctionnement'] -%>
+					<td class="numbers"><%= my_number_to_currency contrat.notification.ma_fonctionnement %></td>
+				<%- end -%>
+				<%- if params['notifications.ma_equipement'] -%>
+					<td class="numbers"><%= my_number_to_currency contrat.notification.ma_equipement %></td>
+				<%- end -%>
+				<%- if params['notifications.ma_salaire'] -%>
+					<td class="numbers"><%= my_number_to_currency contrat.notification.ma_salaire %></td>
+				<%- end -%>
+				<%- if params['notifications.ma_mission'] -%>
+					<td class="numbers"><%= my_number_to_currency contrat.notification.ma_mission %></td>
+				<%- end -%>
+				<%- if params['notifications.ma_non_ventile'] -%>
+					<td class="numbers"><%= my_number_to_currency contrat.notification.ma_non_ventile %></td>
+				<%- end -%>
+				<%- if params['notifications.ma_couts_indirects'] -%>
+					<td class="numbers"><%= my_number_to_currency contrat.notification.ma_couts_indirects %></td>
+				<%- end -%>
+				<%- if params['notifications.ma_frais_gestion_mutualises_local'] -%>
+          <td class="numbers"><%= my_number_to_currency contrat.notification.ma_frais_gestion_mutualises_local %></td>
+        <%- end -%>
+				<%- if params['notifications.ma_frais_gestion_mutualises'] -%>
+          <td class="numbers"><%= my_number_to_currency contrat.notification.ma_frais_gestion_mutualises %></td>
+        <%- end -%>
+				<%- if params['notifications.ma_allocation'] -%>
+					<td class="numbers"><%= contrat.notification.ma_allocation %></td>
+				<%- end -%>
+				<%- if params['notifications.ma_total'] -%>
+					<td class="numbers"><%= my_number_to_currency contrat.notification.ma_total %></td>
+				<%- end -%>
+
+				<!-- Notification - Personnel demandé -->
+				<%- if params['notifications.pa_doctorant'] -%>
+					<td class="numbers"><%= contrat.notification.pa_doctorant %></td>
+				<%- end -%>
+				<%- if params['notifications.pa_post_doc'] -%>
+					<td class="numbers"><%= contrat.notification.pa_post_doc %></td>
+				<%- end -%>
+				<%- if params['notifications.pa_ingenieur'] -%>
+					<td class="numbers"><%= contrat.notification.pa_ingenieur %></td>
+				<%- end -%>
+				<%- if params['notifications.pa_autre'] -%>
+					<td class="numbers"><%= contrat.notification.pa_autre %></td>
+				<%- end -%>
+				<%- if params['notifications.pa_equivalent_temps_plein'] -%>
+					<td class="numbers"><%= contrat.notification.pa_equivalent_temps_plein %></td>
+				<%- end -%>
+				
+				<!-- Notification - Personnel impliqué -->
+				<%- if params['notification_personnels.nom'] -%>
+				  <td><ol>
+            <% contrat.notification.notification_personnels.each do |personnel| %>
+                <%= ( "<li>"+personnel.nom+"</li>").html_safe() %> 
+            <% end %>
+          </ol></td>
+				<%- end -%>
+				<%- if params['notification_personnels.prenom'] -%>
+				  <td><ol>
+            <% contrat.notification.notification_personnels.each do |personnel| %>
+                <%= ( "<li>"+personnel.prenom+"</li>").html_safe() %> 
+            <% end %>
+          </ol></td>
+				<%- end -%>
+				<%- if params['notification_personnels.statut'] -%>
+				  <td><ol>
+            <% contrat.notification.notification_personnels.each do |personnel| %>
+                <%= ( "<li>"+personnel.statut+"</li>").html_safe() %> 
+            <% end %>
+          </ol></td>
+				<%- end -%>
+				<%- if params['notification_personnels.tutelle'] -%>
+				  <td><ol>
+            <% contrat.notification.notification_personnels.each do |personnel| %>
+                <%= ( "<li>"+personnel.tutelle+"</li>").html_safe() %> 
+            <% end %>
+          </ol></td>
+				<%- end -%>
+				<%- if params['notification_personnels.pourcentage'] -%>
+				  <td><ol>
+            <% contrat.notification.notification_personnels.each do |personnel| %>
+                <%= ( "<li>"+personnel.pourcentage.to_s+"</li>").html_safe() %> 
+            <% end %>
+          </ol></td>
+				<%- end -%>
+				
+			<%- end -%>
+			<%- if ['cloture'].include? params[:type] -%>
+				<%- if params['clotures.date_fin_depenses'] -%>
+					<td><%= french_date contrat.cloture.date_fin_depenses %></td>
+				<%- end -%>
+				<%- if params['clotures.commentaires'] -%>
+					<td><%= contrat.cloture.commentaires %></td>
+				<%- end -%>
+			<%- end -%>
+			
+		</tr>
+	<%- end -%>
+	</tbody>
+</table>
+
+<script>
+	adjust_height();
+</script>

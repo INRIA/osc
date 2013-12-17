@@ -1,0 +1,57 @@
+<% if controller.action_name.to_s == 'ask_delete' %>
+  <%= yield  %>
+<% else %>
+  <%- content_for :head do -%>
+  	<%- if controller.action_name.to_s == 'index' -%>
+  		<div class='header_title'>
+  			<strong>Liste des établissement gestionnaires</strong>
+  		</div>
+  		<div class='header_link'>
+  		</div>
+  		<div style='clear:both;'></div>
+  	<%- end -%>
+  	
+  	<%- if ['edit', 'update'].include? controller.action_name.to_s -%>
+  		<div class='header_title'>
+  			<strong><%= @organisme_gestionnaire.nom %></strong>
+  			// Edition
+  		</div>
+  		<div class='header_link'>
+  		</div>
+  		<div style='clear:both;'></div>
+  	<%- end -%>
+  	
+  	<%- if ['new', 'create'].include? controller.action_name.to_s -%>
+  		<div class='header_title'>
+  			<strong>Création d'un organisme gestionnaire</strong>
+  		</div>
+  		<div class='header_link'>
+  		</div>
+  		<div style='clear:both;'></div>
+  	<%- end -%>
+  	
+  	<%- if controller.action_name.to_s == 'show' -%>
+  		<div class='header_title'>
+  			<strong><%= @organisme_gestionnaire.nom %></strong>
+  		</div>
+  		<div class='header_link'>
+  			<%= link_to "Editer", edit_organisme_gestionnaire_path(@organisme_gestionnaire) %>
+  		</div>
+  		<div style='clear:both;'></div>
+  	<%- end -%>
+  	
+  <%- end -%>
+  
+  <%- content_for :right do -%>
+  
+  <%- if controller.action_name.to_s == 'index' -%>
+  	<%= link_to '', new_organisme_gestionnaire_path, {:class => "addOrganismeGestionnaire"} %>
+  	<div class="aide">
+  		<p>Vous avez la possibilité de supprimer uniquement les établissements gestionnaires qui ne sont pas utilisés dans une soumission ou une notification.</p>
+  	</div>
+  <%- end -%>
+  
+  
+  <%- end -%>
+  <%= render :file => 'layouts/application_admin' %>
+<% end %>

@@ -1,0 +1,477 @@
+<% disable = "class='disabled'".html_safe() %>
+<div class="form-box parent" id="TypeContrat">
+  <h3>Type de contrat</h3>
+  <p <%= disable if @non_modifiables.include?('contrat_type_id')%>>
+  <% if @non_modifiables.include?('contrat_type_id') %>	  
+    <%= f.select :contrat_type_id, [[display_contrat_type(@soumission.contrat_type), @soumission.contrat_type_id]], :disable => true  %>
+  </p>
+  <% else %>
+    <%= f.select :contrat_type_id, options_for_contrat_types(ContratType.find(:all)) %>
+  </p>
+  <% end %>
+  <div id="selected_contrat" style="color:#777; font-size:12px;">
+    <% if !@contrat.soumission.nil? %>
+      <%= display_contrat_type(@soumission.contrat_type) %>
+    <% end %>
+  </div>
+  <%= observe_field("soumission_contrat_type_id", 
+      :frequency => 0.25, 
+      :update => "selected_contrat",
+      :url => update_type_contrat_contrat_soumissions_path(@contrat),
+      :method => :get,
+      :with => 'type') %>
+</div>
+
+<div class="clearfix">
+  
+  <div class="col-1-of-2">
+    <div class="form-box parent" id="InformationsGenerales">
+      <h3>Informations générales</h3>
+      <% if @non_modifiables.include?('date_depot') %>
+        <p class="inline disabled" >
+      <% else %>
+        <p class="inline">
+      <% end %>
+        <label for="soumission_date_depot_3i">Date de dépot</label>
+        <a id="date_depot_help" class="help"></a><br />
+        <% if @non_modifiables.include?('date_depot') %>
+              <%= f.date_select :date_depot,
+                              :use_month_numbers => true, 
+                              :order => [:day, :month, :year],
+                              :disabled => true %>
+        <% else %>
+          <%= f.unobtrusive_date_picker :date_depot , :use_month_numbers => true, :class => 'no-transparency' %>
+        <% end %>
+      </p>
+      
+      <p <%= disable if @non_modifiables.include?('nombre_mois')%>>
+        <label for="soumission_nombre_mois">Nombre mois</label><br />
+        <% if @non_modifiables.include?('nombre_mois') %>
+          <%= f.text_field :nombre_mois, :disable => true %>
+        <% else %>
+          <%= f.select :nombre_mois, 1..96 %>
+        <% end %>
+      </p>
+      
+      <p <%= disable if @non_modifiables.include?('organisme_gestionnaire_id')%>>
+        <label for="soumission_organisme_gestionnaire_id" class="required">Etablissement gestionnaire</label>
+        <a id="etablissement_gestionnaire_help" class="help"></a><br />
+        <% if @non_modifiables.include?('organisme_gestionnaire_id') %>
+          <%= f.select :organisme_gestionnaire_id, [[@soumission.organisme_gestionnaire.nom, @soumission.organisme_gestionnaire_id]], :disable => true  %>
+        <% else %>
+          <%= f.select :organisme_gestionnaire_id, OrganismeGestionnaire.find(:all).collect {|p| [ p.nom, p.id ] }, { :include_blank => true } %>
+        <% end %>
+      </p>
+
+      <p <%= disable if @non_modifiables.include?('organisme_financeur')%>>
+        <label for="soumission_organisme_financeur" class="required">Organisme financeur</label>
+        <a id="organisme_financeur_help" class="help"></a><br />
+        <% if @non_modifiables.include?('organisme_financeur') %>
+          <%= f.text_field :organisme_financeur, :disable => true %>
+        <% else %>
+          <%= text_field_with_auto_complete :soumission,
+                                            :organisme_financeur, {:class => "textfield"},
+                                            {
+                                              :frequency => 0.1,
+                                              :partialSearch => true,
+                                              :skip_style => true
+                                            } %>
+        <% end %>
+      </p>
+      
+    </div>
+  </div>
+  
+  <div class="col-2-of-2">
+    <div class="form-box parent">
+      <h3>Porteur et coordinateur</h3>
+      
+      <p <%= disable if @non_modifiables.include?('porteur')%>>
+        <label for="soumission_porteur" class="required">Porteur</label><a id="porteur_help" class="help"></a><br />
+        <% if @non_modifiables.include?('porteur') %>
+            <%= f.text_field :porteur, :disable => true %>
+        <% else %>
+            <%= f.text_field :porteur, :class => "textfield" %>
+        <% end %>
+      </p>
+      
+      <p <%= disable if @non_modifiables.include?('etablissement_rattachement_porteur')%>>
+        <label for="soumission_etablissement_rattachement" class="required">Etablissement de rattachement du porteur</label><br />
+        <% if @non_modifiables.include?('etablissement_rattachement_porteur') %>
+            <%= f.text_field :etablissement_rattachement_porteur, :disable => true %>
+        <% else %>
+          <%= text_field_with_auto_complete :soumission, 
+                                            :etablissement_rattachement_porteur,
+                                            {:class => "textfield"},
+                                            {
+                                              :frequency => 0.1, 
+                                              :partialSearch => true, 
+                                              :skip_style => true
+                                            } %>
+        <% end %>
+      </p>
+      
+      <p <%= disable if @non_modifiables.include?('est_porteur')%>>
+        <% if @non_modifiables.include?('est_porteur') %>
+          <%= f.check_box :est_porteur, :disabled => 'disabled' %>
+        <% else %>
+          <%= f.check_box :est_porteur, :class => "checkbox" %>
+        <% end %>
+        <label for="soumission_est_porteur">Le porteur est coordinateur</label>
+      </p>
+      
+      <% if  @soumission.est_porteur %>
+      <p id="p_soumission_coordinateur" style="display:none;">
+      <% else %>
+      <p id="p_soumission_coordinateur" <%= disable if @non_modifiables.include?('coordinateur')%>>
+      <% end %>
+        <label for="soumission_coordinateur" class="required">Coordinateur</label><br />
+        <% if @non_modifiables.include?('coordinateur') %>
+            <%= f.text_field :coordinateur, :disable => true %>
+        <% else %>
+          <%= f.text_field :coordinateur %>
+        <% end %>
+      </p>
+      
+      <p <%= disable if @non_modifiables.include?('etablissement_gestionnaire_du_coordinateur')%>>
+        <label for="soumission_etablissement_gestionnaire_du_coordinateur" class="required">Etablissement gestionnaire du coordinateur</label><br />
+        <% if @non_modifiables.include?('etablissement_gestionnaire_du_coordinateur') %>
+            <%= f.text_field :etablissement_gestionnaire_du_coordinateur, :disable => true %>
+        <% else %>
+          <%= text_field_with_auto_complete :soumission, 
+                                          :etablissement_gestionnaire_du_coordinateur, {:class => "textfield"}, 
+                                          {
+                                            :frequency => 0.1,
+                                            :partialSearch => true,
+                                            :skip_style => true
+                                          } %>
+        <% end %>
+      </p>
+      
+    </div>
+  </div>
+  
+</div>
+
+<div class="form-box parent" id="MotsCles">
+  <h3>Mots clés et thématiques</h3>
+  <p>
+    <% for labo in Laboratoire.find(:all) %>
+      <% if @contrat.is_in_laboratoire? labo %>
+        <b>Mots clés du laboratoires <%= labo.nom %></b><br />
+        <% @keywords = KeyWord.find(  :all,
+                                      :include => [:laboratoire],
+                                      :conditions => ["laboratoires.nom = ?", labo.nom],
+                                      :order => "laboratoires.nom, key_words.section, key_words.intitule") %>
+        <% if @keywords.size > 0 %>
+				  <% @current_section = @keywords.first.section %>
+          <span class='keyword_section'><%=  @keywords.first.section %></span><br />
+        
+          <% for r in @keywords %>
+	          <% if @current_section != r.section %>
+	          <span class='keyword_section'><%= r.section %></span><br />
+	          <% end %>
+	          <% @current_section = r.section %>
+	          
+	          <span class="key_word">
+	
+	          <%= check_box_tag('soumission[key_word_ids][]', r.id, @soumission.key_words.include?(r), :id => r.id, :class => "checkbox") %>
+	          
+	          <label for="<%= r.id %>"><%= r.intitule %></label>
+            </span>
+          <% end %>
+          <div style="clear:both;"></div><br />
+				<% else %>
+         Aucun mot clef d&eacute;fini pour le laboratoire.
+        <% end %>	
+      <% end %>
+    <% end %>
+  </p>
+  <p>
+    <label for="soumission_mots_cles_libres">Mots clés libres<a id="mots_cles_libres_help" class="help"></a></label><br />
+    <%= f.text_area :mots_cles_libres, :class => "textareafield" %>
+  </p>
+  <p>
+    <label for="soumission_thematiques">Thématiques<a id="thematiques_help" class="help"></a></label><br />
+    <%= f.text_area :thematiques, :class => "textareafield" %>
+  </p>
+  <p>
+    <label for="soumission_poles_competivites">Pôle compétivité<a id="poles_competivites_help" class="help"></a></label><br />
+    <%= text_field_with_auto_complete :soumission, 
+                                      :poles_competivites, {:class => "textfield"}, 
+                                      {
+                                        :frequency => 0.1,
+                                        :partialSearch => true,
+                                        :skip_style => true
+                                      } %>
+    
+  </p>
+</div>
+
+<div class="form-box parent" id="Partenaires">
+  <h3>Partenaires</h3>
+  <p>
+    <label>Partenaires en France</label><a id="partenaire_france_help" class="help"></a>
+    <%= sub_list_content 'SoumissionFrancePartenaire', 'soumission' %>
+    <% unless controller.action_name == 'show' %>
+      <%= sub_list_add_link 'soumission_france_partenaire', 'Ajouter un autre partenaire en France' %>
+    <% end %>
+    <div style="clear:both;"></div>
+  </p>
+  <p>
+    <label>Partenaires en Europe</label><a id="partenaire_europe_help" class="help"></a>
+    <%= sub_list_content 'SoumissionEuropePartenaire', 'soumission' %>
+    <% unless controller.action_name == 'show' %>
+      <%= sub_list_add_link 'soumission_europe_partenaire', 'Ajouter un autre partenaire en Europe' %>
+    <% end %>
+    <div style="clear:both;"></div>
+  </p>
+  <p>
+    <label>Partenaires hors Europe</label><a id="partenaire_help" class="help"></a>
+    <%= sub_list_content 'SoumissionPartenaire', 'soumission' %>
+    <% unless controller.action_name == 'show' %>
+      <%= sub_list_add_link 'soumission_partenaire', 'Ajouter un autre partenaire hors Europe' %>
+    <% end %>
+    <div style="clear:both;"></div>
+  </p>
+</div>
+
+<div class="clearfix">
+  <div class="col-1-of-2">
+    <div class="form-box parent" id="MoyensDemandes">
+      <h3>Moyens demandés</h3>
+      <p>
+        <label for="soumission_md_type_montant">Les montants sont </label><br />
+        <%= f.select :md_type_montant, ['HT', 'TTC'] %>
+      </p>
+      <p>
+        <label for="soumission_md_fonctionnement">Fonctionnement</label><br />
+        <%= f.text_field :md_fonctionnement, :class => "textfield" %>
+      </p>
+      <p>
+        <label for="soumission_md_equipement">Equipement</label><br />
+        <%= f.text_field :md_equipement, :class => "textfield" %>
+      </p>
+      <p>
+        <label for="soumission_md_salaire">Salaire</label><br />
+        <%= f.text_field :md_salaire, :class => "textfield" %>
+      </p>
+      <p>
+        <label for="soumission_md_mission">Mission</label><br />
+        <%= f.text_field :md_mission, :class => "textfield" %>
+      </p>
+      <p>
+        <label for="soumission_md_non_ventile">Non Ventilé</label><br />
+        <%= f.text_field :md_non_ventile, :class => "textfield" %>
+      </p>
+      <p>
+        <label for="soumission_md_couts_indirects">Frais de gestion déductibles</label><a id="md_couts_indirects_help" class="help"></a><br />
+        <%= f.text_field :md_couts_indirects, :class => "textfield" %>
+      </p>
+      <p>
+        <label for="soumission_md_allocation">Allocation</label><a id="md_allocation_help" class="help"></a><br />
+        <%= f.text_field :md_allocation, :class => "textfield" %>
+      </p>
+      <p>
+        <a href="" onclick="deverouiller('soumission_md_total'); return false;"
+           id="soumission_md_total_deverouiller" class="deverouiller" title="Laisser l'application calculer le total"></a>
+        <a href="" onclick="verouiller('soumission_md_total'); return false;"
+           id="soumission_md_total_verouiller" class="verouiller" title="Saisir le total" style="display:none;"></a>
+        <label for="soumission_md_total" class="required">Total</label>
+        <br />
+        <%= f.text_field :md_total, :class => "textfield" %>
+        <span id='soumission_md_total_cach' style="display:none;"><%= @soumission.md_total.to_s %></span>
+      </p>
+      <p>
+        <label for="soumission_taux_subvention" class="required">Taux de subvention</label><br />
+        <%= f.text_field :taux_subvention, :class => "textfield" %>
+      </p>
+      <p>
+        <a href="" onclick="deverouiller('soumission_total_subvention'); return false;"
+           id="soumission_total_subvention_deverouiller" class="deverouiller" title="Laisser l'application calculer le total"></a>
+        <a href="" onclick="verouiller('soumission_total_subvention'); return false;"
+           id="soumission_total_subvention_verouiller" class="verouiller" title="Saisir le total" style="display:none;"></a>
+        <label for="soumission_total_subvention" class="required">Total subvention</label>
+        <br />
+        <%= f.text_field :total_subvention, :class => "textfield" %>
+        <span id='soumission_total_subvention_cach' style="display:none;"><%= @soumission.total_subvention.to_s %></span>
+      </p>
+    </div>
+  </div>
+  <div class="col-2-of-2">
+    <div class="form-box parent" id="PersonnelDemande">
+      <h3>Personnel demandé</h3>
+      <p>
+        <label for="soumission_pd_doctorant">Doctorant</label><a id="pd_doctorant_help" class="help"></a><br />
+        <%= f.text_field :pd_doctorant, :class => "textfield" %>
+      </p>
+      <p>
+        <label for="soumission_pd_post_doc">Post-doc</label><a id="pd_post_doc_help" class="help"></a><br />
+        <%= f.text_field :pd_post_doc, :class => "textfield" %>
+      </p>
+      <p>
+        <label for="soumission_pd_ingenieur">Ingénieur</label><a id="pd_ingenieur_help" class="help"></a><br />
+        <%= f.text_field :pd_ingenieur, :class => "textfield" %>
+      </p>
+      <p>
+        <label for="soumission_pd_autre">Autre</label><a id="pd_autre_help" class="help"></a><br />
+        <%= f.text_field :pd_autre, :class => "textfield" %>
+      </p>
+      <p>
+        <a href="" onclick="deverouiller('soumission_pd_equivalent_temps_plein'); return false;"
+           id="soumission_pd_equivalent_temps_plein_deverouiller" class="deverouiller" title="Laisser l'application calculer le total"></a>
+        <a href="" onclick="verouiller('soumission_pd_equivalent_temps_plein'); return false;"
+           id="soumission_pd_equivalent_temps_plein_verouiller" class="verouiller" title="Saisir le total" style="display:none;"></a>
+        <label for="soumission_pd_equivalent_temps_plein" class="required">Equivalent temps plein</label>
+        <br />
+        <%= f.text_field :pd_equivalent_temps_plein, :class => "textfield" %>
+        <span id='soumission_pd_equivalent_temps_plein_cach' style="display:none;"><%= @soumission.pd_equivalent_temps_plein.to_s %></span>
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="form-box parent" id="PersonnelImplique">
+  <h3>Personnel impliqué</h3>
+  <p>
+    <%= sub_list_content 'SoumissionPersonnel', 'soumission' %>
+    <% unless controller.action_name == 'show' %>
+      <%= sub_list_add_link 'soumission_personnel', 'Ajouter un autre personnel' %>
+    <% end %>
+    <div style="clear:both;"></div>
+  </p>
+</div>
+
+<div id="help">
+  <div id='tooltip_date_depot' class="tooltip" style="display:none;">
+    Date de dépot de la proposition.
+  </div>
+  <div id='tooltip_etablissement_gestionnaire' class="tooltip" style="display:none;">
+    Etablissement gestionnaire local.
+  </div>
+  <div id='tooltip_organisme_financeur' class="tooltip" style="display:none;">
+    Correspond au nom de l'entreprise si le contrat est industriel. Sinon ANR, Région Rhône Alpes, commission européenne ...
+  </div>
+  <div id='tooltip_porteur' class="tooltip" style="display:none;">
+    Responsable scientifique local.
+  </div>  
+  <div id='tooltip_mots_cles_libres' class="tooltip" style="display:none;">
+    Séparez les mots clés par des virgules : mot clé 1, mot clé 2, mot clé 3
+  </div>
+  <div id='tooltip_thematiques' class="tooltip" style="display:none;">
+    Séparez les thématiques par des virgules : thématique 1, thématique 2, thématique 3
+  </div>
+  <div id='tooltip_poles_competivites' class="tooltip" style="display:none;">
+    A remplir si le contrat est labellisé.
+  </div>
+  <div id='tooltip_partenaire_france' class="tooltip" style="display:none;">
+    Vous avez la possibilité d'ajouter autant de partenaires en France que vous le souhaitez, seul le champ nom est obligatoire.
+  </div>
+  <div id='tooltip_partenaire_europe' class="tooltip" style="display:none;">
+    Vous avez la possibilité d'ajouter autant de partenaires en Europe que vous le souhaitez, seul le champ nom est obligatoire.
+  </div>
+  <div id='tooltip_partenaire' class="tooltip" style="display:none;">
+    Vous avez la possibilité d'ajouter autant de partenaires hors Europe que vous le souhaitez, seul le champ nom est obligatoire.
+  </div>
+  <div id='tooltip_md_couts_indirects' class="tooltip" style="display:none;">
+    Montant accordé pour couvrir au moins  les coûts de gestion. Ce montant est ajouté au montant accordé dans la ventilation <b>Fonctionnement</b> dans le suivi du budget .
+  </div>
+  <div id='tooltip_md_allocation' class="tooltip" style="display:none;">
+    en mois
+  </div>
+  <div id='tooltip_pd_doctorant' class="tooltip" style="display:none;">
+    en homme-mois
+  </div>
+  <div id='tooltip_pd_post_doc' class="tooltip" style="display:none;">
+    en homme-mois
+  </div>
+  <div id='tooltip_pd_ingenieur' class="tooltip" style="display:none;">
+    en homme-mois
+  </div>
+  <div id='tooltip_pd_autre' class="tooltip" style="display:none;">
+    en homme-mois
+  </div>
+</div>
+
+<script type="text/javascript">
+
+  //$('soumission_md_total').disable();
+  if (parseFloat($('soumission_md_total').value) == total()){
+    verouiller('soumission_md_total');
+  }else{
+    deverouiller('soumission_md_total');
+  }
+  
+  if (parseFloat($('soumission_total_subvention').value) == total_subvention()){
+    verouiller('soumission_total_subvention');
+  }else{
+    deverouiller('soumission_total_subvention');
+  }
+  
+  if (parseFloat($('soumission_pd_equivalent_temps_plein').value) == equivalent_temps_plein()){
+    verouiller('soumission_pd_equivalent_temps_plein');
+  }else{
+    deverouiller('soumission_pd_equivalent_temps_plein');
+  }
+  
+  function deverouiller(input){
+    $(input).enable();
+    $(input+'_deverouiller').hide();
+    $(input+'_verouiller').show();
+    $(input).value = $(input+'_cach').innerHTML;
+  }
+  function verouiller(input){
+    $(input).disable();
+    $(input+'_deverouiller').show();
+    $(input+'_verouiller').hide();
+    $(input).value = "Valeur calculée";
+  }
+
+  function checkIsPorteur(){
+    if ($('soumission_est_porteur').checked){
+      $('soumission_coordinateur').value = $F('soumission_porteur')
+      $('p_soumission_coordinateur').hide();
+    }else{
+      $('soumission_coordinateur').value = '';
+      $('p_soumission_coordinateur').show();
+    }
+  }
+
+  function calcul_pd_equivalent_temps_plein(){
+    $('soumission_pd_equivalent_temps_plein').value = equivalent_temps_plein();
+    
+  }
+  
+  function total(){
+    return Number($F('soumission_md_fonctionnement')) + Number($F('soumission_md_equipement')) + Number($F('soumission_md_salaire')) + Number($F('soumission_md_mission')) + Number($F('soumission_md_couts_indirects')) + Number($F('soumission_md_non_ventile'));
+  }
+  
+  function total_subvention(){
+    return total() * Number($F('soumission_taux_subvention'));
+  }
+  
+  function equivalent_temps_plein(){
+    return (Number($F('soumission_pd_doctorant')) + Number($F('soumission_pd_post_doc')) + Number($F('soumission_pd_ingenieur')) + Number($F('soumission_pd_autre'))) / Number($F('soumission_nombre_mois'));
+  }
+  
+  function calcul_total(){
+    Field.focus('soumission_md_total');
+    $('soumission_md_total').value = total();
+  }
+  
+  function calcul_total_subvention(){
+    if ((Number($F('soumission_taux_subvention')) > 1)||(Number($F('soumission_taux_subvention')) < 0)){
+      alert('Le taux de subvention doit être entre 0 et 1');
+      Field.focus('soumission_taux_subvention');
+    }else{
+      Field.focus('soumission_total_subvention');
+      $('soumission_total_subvention').value = total_subvention();
+    }
+  }
+  
+  Event.observe('soumission_est_porteur', 'change', checkIsPorteur);
+
+  $$("#help .tooltip").each(function(value) {
+    new Tip(value.id.sub('tooltip_', '')+'_help', value.innerHTML);
+  });
+</script>

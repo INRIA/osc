@@ -1,0 +1,111 @@
+<%
+# Definition des couleurs
+black = '#000'
+white = '#FFF'
+grey = '#aaa'
+
+%>
+
+
+#RB_overlay {
+  position: absolute;
+  z-index:100;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: <%= black %>;
+  opacity: .5;
+  filter: alpha(opacity=50);
+}
+
+
+
+#RB_redbox {
+  width: 100%;
+  position: absolute;
+  top: 0px;
+  z-index: 200;
+
+}
+
+
+#RB_window {
+  z-index: 102;
+  background-color: <%= white %>;
+  display: block;
+  text-align: left;
+  overflow: hidden;
+  margin: 0 auto;
+	background-color:transparent;
+	font-size:12px;
+	padding:0;
+	left:30%;
+	top:20%;
+	
+	/* Hack IE */
+  	position: fixed !important;  
+  	position: absolute;
+}
+
+
+#RB_window p{
+	display:none;
+}
+
+#RB_window .content{
+	color:<%= white %>;
+	text-align:left;
+	width:420px;
+	padding:20px 20px;
+	background-color:<%= black %>;
+	opacity: .8;
+	border:2px solid <%= white %>;
+	filter: alpha(opacity=80);
+ 	/*	-webkit-border-radius : 30px; */
+	text-shadow: 2px 2px 2px <%= black %>;
+	line-height:20px;
+}
+#RB_window .content p{
+	text-align: left;
+	display:block;
+	font-size:14px;
+	padding:15px 0 15px 75px;
+	background: <%= black %> url(<%= asset_path 'errorRed.png' %>) no-repeat left center;
+	margin:0;
+}
+
+#RB_window .content a.annuler{
+	margin-left:100px;
+}
+
+#RB_window .content a{
+	font-size:14px;
+	z-index:150;
+	display:block;
+	float:left;
+	padding:5px 20px;
+	border: 1px solid <%= grey %>;
+	margin-left:60px;
+	margin-top:15px;
+	font-weight:bold;
+	color:<%= grey %>;
+}
+#RB_window .content a:hover{
+	color:<%= white %>;
+	border: 1px solid <%= white %>;
+}
+
+
+
+
+
+
+
+
+
+
+
+

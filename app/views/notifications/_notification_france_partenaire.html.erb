@@ -1,0 +1,80 @@
+<% @notification_france_partenaire = notification_france_partenaire %>
+<div id="<%= "notification_france_partenaire_#{notification_france_partenaire.id}" %>">
+	<p>
+		<% @class = '' %>
+		<% if !notification_france_partenaire.nom.nil? %>
+			<% if notification_france_partenaire.nom.empty?  %>
+				<% @class = "blank"  %>
+				<% notification_france_partenaire.nom = "Nom" %>
+			<% end %>
+		<% else %>
+			<% @class = "blank"  %>
+			<% notification_france_partenaire.nom = "Nom" %>
+		<% end %>
+		
+		<%= text_field 'notification_france_partenaire[]', 'nom',
+			{ :class => 'four_cell required '+@class,
+				:onblur => "if (this.value == '') { $(this).addClassName('blank'); this.value='Nom' };",
+				:onfocus =>"if (this.value == 'Nom') { $(this).removeClassName('blank'); this.value=''; };"
+			} %>
+		
+			<% @class = '' %>			
+			<% if !notification_france_partenaire.laboratoire.nil? %>
+				<% if notification_france_partenaire.laboratoire.empty?  %>
+					<% @class = "blank"  %>
+					<% notification_france_partenaire.laboratoire = "Laboratoire" %>
+				<% end %>
+			<% else %>
+				<% @class = "blank"  %>
+				<% notification_france_partenaire.laboratoire = "Laboratoire" %>
+			<% end %>
+
+			<%= text_field 'notification_france_partenaire[]', 'laboratoire',
+				{ :class => 'four_cell '+@class,
+					:onblur => "if (this.value == '') { $(this).addClassName('blank'); this.value='Laboratoire' };",
+					:onfocus =>"if (this.value == 'Laboratoire') { $(this).removeClassName('blank'); this.value=''; };"
+				} %>
+		
+		<% @class = '' %>			
+		<% if !notification_france_partenaire.etablissement_gestionnaire.nil? %>
+			<% if notification_france_partenaire.etablissement_gestionnaire.empty?  %>
+				<% @class = "blank"  %>
+				<% notification_france_partenaire.etablissement_gestionnaire = "Etab. gestionnaire" %>
+			<% end %>
+		<% else %>
+			<% @class = "blank"  %>
+			<% notification_france_partenaire.etablissement_gestionnaire = "Etab. gestionnaire" %>
+		<% end %>
+		
+		<%= text_field 'notification_france_partenaire[]', 'etablissement_gestionnaire',
+			{ :class => 'four_cell '+@class,
+				:onblur => "if (this.value == '') { $(this).addClassName('blank'); this.value='Etab. gestionnaire' };",
+				:onfocus =>"if (this.value == 'Etab. gestionnaire') { $(this).removeClassName('blank'); this.value=''; };"
+			} %>
+
+		<% @class = '' %>
+		<% if !notification_france_partenaire.ville.nil? %>
+			<% if notification_france_partenaire.ville.empty?  %>
+				<% @class = "blank"  %>
+				<% notification_france_partenaire.ville = "Ville" %>
+			<% end %>
+		<% else %>
+			<% @class = "blank"  %>
+			<% notification_france_partenaire.ville = "Ville" %>
+		<% end %>
+		
+		<%= text_field 'notification_france_partenaire[]', 'ville',
+			{ :class => 'four_cell '+@class,
+				:onblur => "if (this.value == '') { $(this).addClassName('blank'); this.value='Ville' };",
+				:onfocus =>"if (this.value == 'Ville') { $(this).removeClassName('blank'); this.value=''; };"
+			} %>
+				
+		<input class="four_cell" type="hidden" value="France" id="input_<%= notification_france_partenaire.id %>" />
+
+
+				
+		<% unless controller.action_name == 'show' %>
+ 			<%= sub_list_remove_link notification_france_partenaire, 'notificationFrancePartenaire' %>
+		<% end %>
+		</p>
+</div>

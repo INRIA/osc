@@ -1,0 +1,46 @@
+<%= "<div class='come-from-inria-container'><span class='come-from-inria'>S.I. INRIA</span></div>".html_safe() if @notification.come_from_inria? %>
+
+<%= (my_notification_error_messages_for @notification).html_safe() %>
+
+<%= form_for(:notification, :url => contrat_notification_path(@contrat, @notification), :html => { :method => :put }) do |f| %>
+
+<div class="form-box parent" id="Avenants">
+  <h3>Avenants</h3> 
+  <p>
+    <%= sub_list_content 'Avenant', 'notification' %>
+    <% unless controller.action_name == 'show' %>
+      <%= sub_list_add_link 'avenant', 'Ajouter un avenant' %>
+    <% end %>
+    <div style="clear:both;"></div>
+  </p>
+</div>
+  
+  <%= render :partial => 'form', :locals => { :f => f } %>
+
+  <div class="form-box submit" id="submit">
+    <%= submit_tag "Enregistrer les modifications" %>
+    ou
+    <%= link_to "Annuler", contrat_notification_path(@contrat) %>
+  </div>
+<% end %>
+
+<% content_for :right do %>
+  <div id="navigation">
+    <h2>Aide à la navigation dans le formulaire</h2>
+    <ul>
+      <li><a href="#indicator">Haut de page</a></li>
+      <%= "<li><a href='#Avenants'>Avenants</a></li>".html_safe() if !@contrat.notification.nil? -%>
+      <li><a href="#TypeContrat">Type de contrat</a></li>
+      <li><a href="#InformationsGenerales">Informations générales - Porteur et coordinateur - Site Web</a></li>
+      <li><a href="#MotsCles">Mots clés et thématiques</a></li>
+      <li><a href="#Partenaires">Partenaires</a></li>
+      <li><a href="#MoyensAccordes">Moyens accordés</a></li>
+      <li><a href="#PersonnelAccorde">Personnel accordé</a></li>
+      <li><a href="#PersonnelImplique">Personnel impliqué</a></li>
+      <li class="last"><a href="#submit" >Enregistrement des modifications</a></li>
+    </ul>
+  </div>
+  <script type="text/javascript">
+    new App.NavigatorHelper();
+  </script>
+<% end %>

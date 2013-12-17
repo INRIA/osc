@@ -1,0 +1,12 @@
+<div class="form-box parent">
+  <h3>Informations relatives à la clôture</h3>
+	<p class="inline">
+		<label for="cloture_date_fin_depenses_3i">Date de fin des dépenses</label><br />
+		<%= f.unobtrusive_date_picker :date_fin_depenses ,	:use_month_numbers => true, :class => 'no-transparency' %>
+    <% #= f.date_select( "date_fin_depenses")	%>
+	</p>
+  <p>
+    <label for="cloture_commentaires">Commentaires</label><br />
+    <%= f.text_area :commentaires, :class => "textareafield" %>
+  </p>
+</div>

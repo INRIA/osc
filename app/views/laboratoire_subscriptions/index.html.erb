@@ -1,0 +1,23 @@
+<h1>Listing laboratoire_subscriptions</h1>
+<table>
+  <tr>
+    <th>Projet</th>
+    <th>Laboratoire</th>
+    <th>Created at</th>
+    <th>Updated at</th>
+  </tr>
+  
+<% for laboratoire_subscription in @laboratoire_subscriptions %>
+  <tr>
+    <td><%=h laboratoire_subscription.projet.nom %></td>
+    <td><%=h laboratoire_subscription.laboratoire.nom %></td>
+    <td><%=h laboratoire_subscription.created_at %></td>
+    <td><%=h laboratoire_subscription.updated_at %></td>
+    <td><%= link_to 'Show', laboratoire_subscription_path(laboratoire_subscription.projet, laboratoire_subscription) %></td>
+    <td><%= link_to 'Edit', edit_laboratoire_subscription_path(laboratoire_subscription.projet, laboratoire_subscription) %></td>
+    <td><%= link_to 'Destroy', laboratoire_subscription_path(laboratoire_subscription.projet, laboratoire_subscription), :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+<br />
+<%= link_to 'New laboratoire_subscription', new_laboratoire_subscription_path() %>

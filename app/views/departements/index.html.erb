@@ -1,0 +1,17 @@
+<% for departement in @departements %>
+<div class="box_1_per_line <%= cycle("even","odd") %>">
+	<div class="infos">
+		<div class="primary"><%= link_to truncate(departement.nom,:length =>55, :ommission =>"..."), departement_path(departement) %> (<%= link_to	departement.laboratoire.nom, laboratoire_path(departement.laboratoire) %>)</div>
+		<div class="secondary"><%=h truncate(departement.description, :length =>80, :ommission =>"...") %></div>
+	</div> 
+	<div class="actions">
+		<%= link_to 'Editer', edit_departement_path(departement) %>
+	  <%= link_to_remote_redbox "Supprimer",
+      { :url => ask_delete_departement_path(departement),
+        :method => :get},
+      { :title => "Supprimer ce département" } %>
+	
+	</div>
+	<div style="clear:both;"></div>
+</div>
+<% end %>

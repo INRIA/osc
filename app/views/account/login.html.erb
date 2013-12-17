@@ -1,0 +1,50 @@
+<div class='login'>
+  <div class='inner'>
+    <%= form_tag do %>
+      <p class="clearfix">
+        <label for="login">Login</label>
+        <%= text_field_tag 'login', @login %>
+      </p>
+      <p class="clearfix">
+        <label for="password">Mot de passe</label>
+        <%= password_field_tag 'password' %>
+      </p>
+      <p class="remember-me">
+        <%= check_box_tag 'remember_me' , nil, nil, :class => "checkbox" %>
+        <label for="remember_me">Garder ma session active</label>
+      </p>
+      <% if CHOIX_STYLE %>
+        <% if cookies[:style] && cookies[:style]!='' %>
+          <% style_bis_active = true %>
+        <% else %>
+          <% style_bis_active = nil %>
+        <% end %>
+        <p class="remember-me">
+          <%= check_box_tag 'style_bis' , nil, style_bis_active, :class => "checkbox", :onchange =>onclick="toggle_css_bis('style_bis','"+CHOIX_STYLE+"'); return false;" %>
+          <label for="style_bis"><%= STYLE_TEXT %></label>
+        </p>
+      <% end %>
+      <p class="submit">
+        <%= submit_tag 'Me connecter &raquo;'.html_safe %>
+      </p>
+      <%- if AFFICHE_MANUEL %>
+      <p>
+        <%= link_to "#{LINK_MANUEL}", "#{MANUEL}", :title => "Télécharger le fichier" %> <%=SUP_MANUEL%>
+      </p>
+      <%-end%>
+      <%- if AFFICHE_MANUEL_INRIA %>
+      <p>
+        <%= link_to "#{LINK_MANUEL_INRIA}", "#{MANUEL_INRIA}",:target =>"_blank", :title => "Accéder aux fichiers" %> <%=SUP_MANUEL_INRIA%>
+      </p>
+      <%-end%>
+    <% end -%>
+  </div>
+  
+</div>
+
+<div class='login_infos'>
+	<p>Pour utiliser l'application, vous devez activer la fonction JavaScript dans votre navigateur.</p>
+  <p>Pour plus d'informations ou pour envoyer vos remarques, merci de 
+		contacter <a href="mailto:'<%= EMAIL_SUPPORT %>'">l'équipe support d'OSC</a>.
+  </p>
+</div>

@@ -1,0 +1,30 @@
+<div class="pagination">
+  <%= will_paginate @projets, :previous_label => "&nbsp;&laquo;&nbsp;",
+                              :next_label => "&nbsp;&raquo;&nbsp;",
+                              :renderer => "PaginationLinkRenderer",
+                              :remote => {:with =>"'query='+escape($F('query'))"}%>
+</div>
+
+<% for projet in @projets %>
+	<% if projet.date_fin < Date.today %>
+		<div class="box_1_per_line <%= cycle("even","odd") %> archive" id="p_<%= projet.id %>" >
+	<% else %>
+		<div class="box_1_per_line <%= cycle("even","odd") %>" id="p_<%= projet.id %>">
+	<% end %>
+	<div class="infos">
+		<div class="primary"><%= link_to projet.nom, projet_path(projet) %></div>
+		<div class="secondary"><%=h truncate(projet.description,:length => 90, :ommission =>"...") %></div>
+	</div>
+	<div class="actions">
+		<%= link_to 'Editer', edit_projet_path(projet) %>
+		<%= link_to_remote_redbox "Supprimer",
+        { :url => ask_delete_projet_path(projet), 
+          :method => :get}, 
+        { :title => "Supprimer ce projet" } %>
+			
+	</div>
+	<div style="clear:both;"></div>
+</div>
+<% end %>
+
+

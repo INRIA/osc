@@ -1,0 +1,69 @@
+<% if controller.action_name.to_s == 'ask_delete' or controller.action_name.to_s == 'ask_desactivate'  %>
+  <%= yield  %>
+<% else %>
+
+<% content_for :head do %>
+  <% if controller.action_name.to_s == 'index' or controller.action_name.to_s == 'my_last_search' %>
+    <div class='long_header_title'>   
+      <strong>Activité récente</strong> dans la section suivi du budget   
+    </div>
+  <% end %>
+  
+  <% if controller.action_name.to_s == 'bilan' %>
+    <div class='long_header_title'>   
+      Ligne <strong><%= @ligne.nom %></strong> // Bilan
+      <%= render :partial => 'layouts/link_to_switch_ligne' %>  
+    </div>
+    <p>
+      <%- if !@ligne.contrat.notification.numero_ligne_budgetaire.blank? -%>
+        <strong>N° <%= @ligne.contrat.notification.numero_ligne_budgetaire %></strong> -
+      <%- end -%>
+      Contrat du <%= french_date @ligne.contrat.notification.date_debut %> au <%= french_date @ligne.contrat.notification.date_fin %> <br/>
+      Suivi du budget pour la période du <%= french_date @ligne.date_debut %> au <%= french_date @ligne.date_fin %>
+    </p>  
+  <% end %>
+  
+  <% if ['show'].include? controller.action_name.to_s %>
+    <div class='long_header_title'>   
+      <strong><%= @ligne.nom %></strong>
+      <%= render :partial => 'layouts/link_to_switch_ligne' %>
+    </div>
+    <p>
+      <%- if !@ligne.contrat.notification.numero_ligne_budgetaire.blank? -%>
+        <strong>N° <%= @ligne.contrat.notification.numero_ligne_budgetaire %></strong> -
+      <%- end -%>
+      Contrat du <%= french_date @ligne.contrat.notification.date_debut %> au <%= french_date @ligne.contrat.notification.date_fin %> <br/>
+      Suivi du budget pour la période du <%= french_date @ligne.date_debut %> au <%= french_date @ligne.date_fin %> 
+    </p>
+  <% end %>
+
+  <% if ['new','create'].include? controller.action_name.to_s %>
+    <div class='long_header_title'>   
+      <strong>Création de ligne</strong> // Etape 1/2
+    </div>
+  <% else %>
+    <% if controller.action_name.to_s != 'index' and  controller.action_name.to_s != 'my_last_search' %>
+      <div class="sub">
+        <table class="simple">
+          <tr>
+            <th>Montant initial total :</th>
+            <td><%= my_number_to_currency @total_a_ouvrir -%></td>
+            <th>Reste à ouvrir :</th>
+            <td><%= my_number_to_currency @reste_a_ouvrir -%></td>
+            <th>Reste à engager ( <%=@type_montant.upcase  %> ) :</th>
+            <td class="last"><%= my_number_to_currency @reste_a_depenser -%></td>
+          </tr>
+        </table>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% if 'show' == controller.action_name.to_s  %>
+  <% content_for :right do %>
+    <%= render :partial => 'contrats/show_users' %>
+  <% end %>
+<% end %>
+
+<%= render :file => 'layouts/application_suivi_budgetaire' %>
+<%- end -%>

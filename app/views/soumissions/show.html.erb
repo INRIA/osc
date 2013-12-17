@@ -1,0 +1,477 @@
+<%= "<div class='come-from-inria-container'><span class='come-from-inria'>S.I. INRIA</span></div>".html_safe() if @soumission.come_from_inria? %>
+
+<div class="section impair" id="InformationsGenerales">
+	<h2>Informations générales</h2>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Type de contrat
+		</div>
+		<div class='valeur'>
+			<%= display_contrat_type @soumission.contrat_type %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Date de dépot
+		</div>
+		<div class='valeur'>
+			<%=h french_date @soumission.date_depot %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Nombre de mois
+		</div>
+		<div class='valeur'>
+			<%=h @soumission.nombre_mois %>  <span class='unite'>mois</span>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Etablissement gestionnaire
+		</div>
+		<div class='valeur'>
+			<%=h @soumission.organisme_gestionnaire.nom %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+
+	<div class='entree'>
+		<div class='intitule'>
+			Organisme financeur
+		</div>
+		<div class='valeur'>
+			<%=h @soumission.organisme_financeur %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+
+</div>
+
+
+<div class="section pair" id="Porteur">
+	
+	<h2>Porteur et coordinateur</h2>
+
+	<div class='entree'>
+		<div class='intitule'>
+			Porteur
+		</div>
+		<div class='valeur'>
+			<%=h @soumission.porteur %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+
+	<div class='entree'>
+		<div class='intitule'>
+			Etablissement de rattachement du porteur
+		</div>
+		<div class='valeur'>
+			<%=h @soumission.etablissement_rattachement_porteur %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+<% if  @soumission.est_porteur %>
+	<div class='entree'>
+		<div class='intitule'>
+			Le porteur est-il coordinateur ?
+		</div>
+		<div class='valeur'>
+			Oui
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+<% else %>
+	<div class='entree'>
+		<div class='intitule'>
+			Coordinateur
+		</div>
+		<div class='valeur'>
+			<%=h @soumission.coordinateur %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+
+	<div class='entree'>
+		<div class='intitule'>
+			Etablissement gestionnaire du coordinateur
+		</div>
+		<div class='valeur'>
+			<%=h @soumission.etablissement_gestionnaire_du_coordinateur %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+<% 	end %>
+</div>
+
+
+
+
+<div class="section impair">
+	<h2>Mots clés et thématiques</h2>
+
+	<div class='entree'>
+		<div class='intitule'>
+			Mots clés
+		</div>
+		<div class='valeur'>
+			<% txt = "" %>
+			<% if @soumission.key_words.size > 0 %>
+				<% pre_txt = "<strong>Du laboratoire "+@soumission.key_words.find(:all, :include => [:laboratoire], :order => "laboratoires.nom, key_words.section, key_words.intitule").first.laboratoire.nom+" :</strong>" %>
+				<% current_labo = @soumission.key_words.find(:all, :include => [:laboratoire], :order => "laboratoires.nom, key_words.section, key_words.intitule").first.laboratoire.id %>
+				<% current_section = @soumission.key_words.find(:all, :include => [:laboratoire], :order => "laboratoires.nom, key_words.section, key_words.intitule").first.section %>
+			<% end %>
+			
+			<% txt += "<ul class='keyword'>" %>
+			<% txt += "<span class='keyword_section'>"+current_section.to_s+"</span>" %>
+				
+			<% for key_word in @soumission.key_words.find(:all, :include => [:laboratoire], :order => "laboratoires.nom, key_words.section, key_words.intitule") %>
+			
+				<% if current_labo != key_word.laboratoire.id %>
+					<% txt = pre_txt+txt+"<br />" %>
+					<% txt += "<strong>Du laboratoire "+key_word.laboratoire.nom+" :</strong>" %>
+					<% current_labo = key_word.laboratoire.id %>
+				<% end %>
+			
+				<% if current_section != key_word.section %>
+					<% txt += "<span class='keyword_section'>"+key_word.section.to_s+"</span>" %>
+					<% current_section = key_word.section %>
+				<% end %>
+				
+				<% txt += "<li>"+key_word.intitule+"</li>" %>
+			
+			<% end %>
+			<% txt += "</ul>" %>
+			
+			<%= txt.html_safe() %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+
+	<div class='entree'>
+		<div class='intitule'>
+			Mots clés libres	
+		</div>
+		<div class='valeur'>
+			<%=h @soumission.mots_cles_libres %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+
+	<div class='entree'>
+		<div class='intitule'>
+			Thématiques
+		</div>
+		<div class='valeur'>
+			<%=h @soumission.thematiques %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+
+	<div class='entree'>
+		<div class='intitule'>
+			Pôles de compétivites
+		</div>
+		<div class='valeur'>
+			<%=h @soumission.poles_competivites %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+</div>
+
+<div class="section pair">
+	<h2>Partenaires</h2>
+	<table class="partenaires">
+	  <caption>Partenaires en France</caption>  
+		<tr>
+			<th>Nom</th>
+			<th>Laboratoire</th>
+			<th>Etablissement gestionnaire</th>
+			<th>Ville</th>
+		</tr>
+		<% for partenaire in @soumission.soumission_france_partenaires %>
+			<tr>
+				<td><%= partenaire.nom %></td>
+				<td><%= partenaire.laboratoire %></td>
+				<td><%= partenaire.etablissement_gestionnaire %></td>
+				<td><%= partenaire.ville %></td>
+		<% end %>
+	</table>
+
+	<table class="partenaires">
+	  <caption>Partenaires en Europe</caption>  
+		<tr>
+			<th>Nom</th>
+			<th>Etablissement gestionnaire</th>
+			<th>Ville</th>
+			<th>Pays</th>
+		</tr>
+		<% for partenaire in @soumission.soumission_europe_partenaires %>
+		<tr>
+			<td><%= partenaire.nom %></td>
+			<td><%= partenaire.etablissement_gestionnaire %></td>
+			<td><%= partenaire.ville %></td>
+			<td><%= partenaire.pays %></td>
+		</tr>
+		<% end %>
+	</table>
+
+	<table class="partenaires">
+	  <caption>Partenaires hors Europe</caption>  
+		<tr>
+			<th>Nom</th>
+			<th>Etablissement gestionnaire</th>
+			<th>Ville</th>
+			<th>Pays</th>
+		</tr>
+		<% for partenaire in @soumission.soumission_partenaires %>
+		<tr>
+			<td><%= partenaire.nom %></td>
+			<td><%= partenaire.etablissement_gestionnaire %></td>
+			<td><%= partenaire.ville %></td>
+			<td><%= partenaire.pays %></td>
+		</tr>
+		<% end %>
+	</table>
+</div>
+
+<div class="section impair">
+	<h2>Moyens demandés</h2>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Les montants sont
+		</div>
+		<div class='valeur'>
+			<%=h @soumission.md_type_montant %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Fonctionnement
+		</div>
+		<div class='valeur moyens'>
+			<%= my_number_to_currency(@soumission.md_fonctionnement) %> 
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Equipement
+		</div>
+		<div class='valeur moyens'>
+			<%= my_number_to_currency(@soumission.md_equipement) %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Salaire
+		</div>
+		<div class='valeur moyens'>
+			<%= my_number_to_currency(@soumission.md_salaire) %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Mission
+		</div>
+		<div class='valeur moyens'>
+			<%= my_number_to_currency(@soumission.md_mission) %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Non Ventilé
+		</div>
+		<div class='valeur moyens'>
+			<%= my_number_to_currency(@soumission.md_non_ventile) %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Frais de gestion déductibles
+		</div>
+		<div class='valeur moyens'>
+			<%= my_number_to_currency(@soumission.md_couts_indirects) %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Allocation
+		</div>
+		<div class='valeur moyens'>
+			<%=h @soumission.md_allocation %> <span class='unite'>mois<span>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Total
+		</div>
+		<div class='valeur moyens'>
+			<%= my_number_to_currency(@soumission.md_total) %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Taux de subvention
+		</div>
+		<div class='valeur'>
+			<%=h @soumission.taux_subvention %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Total subvention
+		</div>
+		<div class='valeur moyens'>
+			<%= my_number_to_currency(@soumission.total_subvention) %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+
+</div>
+
+<div class="section pair">
+	<h2>Personnel impliqué</h2>
+	<table class="partenaires">
+	  <caption>Personnel impliqué</caption>  
+		<tr>
+			<th>Nom</th>
+			<th>Prénom</th>
+			<th>Statut</th>
+			<th>Tutelle</th>
+			<th>Pourcentage</th>
+		</tr>
+		<% for personne in @soumission.soumission_personnels %>
+		<tr>
+			<td><%= personne.nom %></td>
+			<td><%= personne.prenom %></td>
+			<td><%= personne.statut %></td>
+			<td><%= personne.tutelle %></td>
+			<td><%= personne.pourcentage %>%</td>
+		</tr>
+		<% end %>
+	</table>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Équivalent Temps plein
+		</div>
+		<div class='valeur'>
+			<%= @soumission.equivalent_temps_plein_personnel %>
+		</div>
+		<div style="clear:both;">
+		</div>
+	</div>
+</div>
+
+<div class="section pair">
+	<h2>Personnel demandé</h2>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Doctorant
+		</div>
+		<div class='valeur'>
+			<%=h @soumission.pd_doctorant %> <span class='unite'>hommes-mois<span>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Post-doc
+		</div>
+		<div class='valeur'>
+			<%=h @soumission.pd_post_doc %> <span class='unite'>hommes-mois<span>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Ingénieur
+		</div>
+		<div class='valeur'>
+			<%=h @soumission.pd_ingenieur %> <span class='unite'>hommes-mois<span>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Autre
+		</div>
+		<div class='valeur'>
+			<%=h @soumission.pd_autre %> <span class='unite'>hommes-mois<span>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Equivalent temps plein
+		</div>
+		<div class='valeur'>
+			<%=h @soumission.pd_equivalent_temps_plein %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+</div>
+
+<div id="content_footer">
+	<div class="left">
+		Création le <%= french_datetime @soumission.created_at %> par <%= print_user_infos @soumission.created_by %>
+		<% if @soumission.created_at != @soumission.updated_at %>
+		<br />
+		Dernière modification le <%= french_datetime @soumission.updated_at %> par <%= print_user_infos @soumission.updated_by %>
+		<% end %>
+	</div>
+	<div class="right">
+		<% if @contrat.is_editable? current_user and @contrat.refu.nil?  and @contrat.signature.nil?  %>
+		
+		<%= link_to_remote_redbox "Supprimer la soumission",
+		    {	:url => ask_delete_contrat_soumission_path(@contrat, @soumission), :method => :get}, 
+				{	:class => "destroy",
+					:title => "Supprimer la soumission" }	%>
+		<% end %>
+	</div>
+	<div style="clear:both;"></div>
+</div>
+
+<% content_for :right do %>
+	<%= render :partial => 'contrats/show_entite_tree' %>
+	<div class="section">
+	  <h2>Export PDF</h2>
+	  <%= link_to 'Obtenir la soumission au format PDF', contrat_soumission_path(@contrat, @soumission, :pdf), :class => "to_pdf" %>
+	</div>
+<% end %>

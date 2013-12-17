@@ -1,0 +1,8 @@
+<%= error_messages_for @organisme_gestionnaire %>
+
+<%= form_for(@organisme_gestionnaire) do |f| %>
+	<%= render :partial => 'form', :locals => { :f => f} %>
+  <p class="submit">
+    <%= f.submit "Créer l'organisme gestionnaire" %> ou <%= link_to "Annuler", organisme_gestionnaires_path %>
+  </p>
+<% end %>

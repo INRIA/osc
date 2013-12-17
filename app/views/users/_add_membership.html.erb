@@ -1,0 +1,9 @@
+<% if !@groups_restant.empty? %>
+	<p class="comment">Vous avez la possibilité d'ajouter l'utilisateur <%= @user.prenom %> <%= @user.nom %> à des groupes à l'aide du formulaire ci-dessous.</p>
+	<%= form_for(:membership, :remote => true, :url => {:controller => :memberships, :user_id => @user.id}, :html => { :class=>"inline",:method => :post} ) do |f| %>
+			<label for="membership_group_id">Groupes disponibles</label>
+		<%= select "membership", "group_id", @groups_restant.collect {|g| [ g.nom, g.id ] } %>		
+	  	<%= submit_tag "Adhérer au groupe" %>
+	<% end %>
+	<br />
+<% end %>

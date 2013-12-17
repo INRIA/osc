@@ -1,0 +1,127 @@
+<div class="form-box parent" style="margin-bottom:0;">
+  <h3>Demande d'achat</h3>
+  <div class="clearfix">
+    <div class="col-1-of-2"> 
+    
+      <p>
+        <label for="depense_commun_reference">Référence</label><br />
+        <%=  f.text_field :reference %>
+      </p>
+    
+      <p class="inline">
+        <label class="required">Date commande</label><br />
+        <%= f.unobtrusive_date_picker :date_commande , :use_month_numbers => true, :class => 'no-transparency' %>
+      </p>
+    
+      <p>
+        <label for="depense_commun_fournisseur">Fournisseur</label><br />
+        <%= text_field_with_auto_complete :depense_commun, :fournisseur, {:class => "textfield"},
+                                            {:frequency => 0.1, :partialSearch => true, :skip_style => true } %>
+      </p>
+
+      <p>
+        <label for="depense_commun_destination_budgetaire">Destination budgétaire</label><br />
+        <%= f.select :budgetaire_reference_id, @budgetaire_references  %>
+      </p>
+      
+      <p>
+        <label for="depense_commun_commentaire">Commentaire</label><br />
+        <%= f.text_area :commentaire %>
+      </p>
+    </div>
+
+    <div class="col-2-of-2"> 
+    
+      <p>
+        <label for="depense_commun_montant_engage" class="required">Montant engagé</label><br />
+        <%= f.text_field :montant_engage %>
+      </p>
+    
+      <p>
+        <label for="depense_commun_intitule" class="required">Intitulé</label><br />
+        <%= f.text_area :intitule %>
+      </p>
+    
+      <p >
+        <%= f.check_box :commande_solde %>
+        <label for="depense_commun_commande_solde">Commande soldée ?</label><br/>
+      </p>
+    
+      <p >
+        <%= check_box_tag 'ajuster_montant', "1", false %>
+        <label for="ajuster_montant">Ajuster le montant engagé en fonction des factures saisies</label>       
+      </p>
+      
+    </div>
+  </div>
+</div>
+
+<div id="justification-data" <%= 'style="display:none;"'.html_safe() if @user_preferences_show_justifacation_data == 'no' %>>
+  <div class="form-box sub-parent">
+    <h3>Justification</h3>
+    <div class="clearfix">
+      <div class="col-1-of-2">
+      
+        <p >
+          <label for="depense_commun_tache">Nom de la tâche imputée</label><br />
+          <%= f.text_field :tache %>
+        </p>
+      
+        <p >
+          <%= f.check_box :eligible %>
+          <label for="depense_commun_eligible">Commande éligible ?</label>
+        </p>
+
+        <p >
+          <%= f.check_box :prestation_service %>
+          <label for="depense_commun_prestation_service">Prestation de service ?</label>
+        </p>
+      
+      </div>
+      <div class="col-2-of-2">
+        <div style='padding-bottom:10px;'>
+          <label>Type d'activité</label><br />
+          <div class="two_col">
+            <%= f.radio_button :type_activite, "R&D" %>
+            <label for="depense_commun_type_activite_rd">R&amp;D</label><br />
+      
+            <%= f.radio_button :type_activite, "Démonstration" %>
+            <label for="depense_commun_type_activite_démonstration">Démonstration</label><br />
+      
+            <%= f.radio_button :type_activite, "Training"%>
+            <label for="depense_commun_type_activite_training">Training</label>
+          </div>
+          <div class="two_col">
+            <%= f.radio_button :type_activite, "Management" %>
+            <label for="depense_commun_type_activite_management">Management</label><br />
+      
+            <%= f.radio_button :type_activite, "Autre" %>
+            <label for="depense_commun_type_activite_autre">Autre</label>
+          </div>
+          <div style="clear:both;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="form sub-parent-toggle-container">
+  <a href="#" id="toggle-justification">
+    <%- if @user_preferences_show_justifacation_data == 'no' -%>
+      Afficher les données de justification
+    <%- else -%>
+      Masquer les données de justification
+    <%- end -%>
+  </a>
+</div>
+
+<div>
+  <% if controller.action_name != 'new' && controller.action_name != 'create' %>
+    <%= sub_list_content 'DepenseCommunFacture', 'depense_commun' %>
+    <%= sub_list_add_link 'depense_commun_facture', 'Ajouter une facture' %>
+  <% end %>
+  <div style="clear:both;"></div>
+</div>
+
+<script type="text/javascript">
+  new App.Budget.ToggleJustificationData();
+</script>

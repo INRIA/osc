@@ -1,0 +1,36 @@
+<div id="resultLdap">
+
+<% @result_search.each do |resultS| %>
+  <% BASES_LDAP.each do |ldap| 
+     if resultS["type"] == ldap["type"]
+       @type = ldap["type"]
+       @host = ldap["host"]
+       @libelle = ldap["libelle"]
+       break 
+     end 
+   end %>
+  <h3><%=  @libelle %> (<%=  @host %>)<% if resultS["flag"] %> - <%= resultS["results"].size %> résultat(s)<% end %></h3>
+  <% if resultS["flag"] 
+     results = resultS["results"] 
+	 for result in results %>
+	<div class="box_1_per_line <%= cycle('even','odd') %>">
+		<div class="infos">
+			<div class="primary"><%= result['sn'][0].to_s.titleize %> <%= result['givenName'][0] %></div>
+			<% if @type == "ildap INRIA" 
+			     result['login']=result['inriaLogin']
+			   else 
+			     result['login']=result['uid']
+			   end %>
+			<div class="secondary"><%= result['mail'][0] %> - <%= result['login'][0] %></div>
+		</div>
+		<div class="actions">
+			<a href="" onclick='select_ldap_user("<%= result['sn'][0].to_s.titleize %>", "<%= result['givenName'][0] %>", "<%= result['mail'][0] %>", "<%=  result['login'][0] %>","<%=  @type %>");return false;'>Sélectionner</a>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	<% end %>
+  <% else %>
+	Erreur : l'application ne peut pas joindre la <%= @libelle %>
+  <% end %>
+<% end %>
+<br /><br />

@@ -1,0 +1,103 @@
+<div class="echeancier-labels" >
+<table class="echeancier">
+
+	<tr class="odd">
+		<th class="first"></th>
+		<th class="middle">Global</th>
+	</tr>
+	
+	<tr>
+		<th class="first left"><span class="required">Date de d&eacute;but</span></th>
+		<td><%= french_day_datetime(@contrat.notification.date_debut) %></td>
+	</tr>
+	
+	<tr class="odd">
+		<th class="first left"><span class="required">Date de fin</span></th>
+		<td><%= french_day_datetime(@contrat.notification.date_fin) %></td>
+	</tr>
+	
+	<tr>
+		<th class="first left">R&eacute;f&eacute;rence</a></th>
+		<td></td>
+	</tr>
+	
+	<tr class="odd">
+		<th class="first left">N° de contrat</a></th>
+		<td></td>
+	</tr>
+	
+	<tr>
+		<th class="first left"><span class="required">Fonctionnement</span></th>
+		<td><%= my_number_to_currency(@echeancier.depenses_fonctionnement) %></td>
+	</tr>
+	
+	<tr class="odd">
+		<th class="first left"><span class="required">Equipement</span></th>
+		<td><%= my_number_to_currency(@echeancier.depenses_equipement) %></td>
+	</tr>
+	
+	<tr>
+		<th class="first left"><span class="required">Salaires</span></th>
+		<td><%= my_number_to_currency(@echeancier.depenses_salaires) %></td>
+	</tr>
+	
+	<tr class="odd">
+		<th class="first left"><span class="required">Missions</span></th>
+		<td><%= my_number_to_currency(@echeancier.depenses_missions) %></td>
+	</tr>
+	
+	<tr>
+		<th class="first left"><span class="required">Non ventilé</span></th>
+		<td><%= my_number_to_currency(@echeancier.depenses_non_ventile) %></td>
+	</tr>
+	
+	<tr class="odd">
+		<th class="first left double_ligne">Frais de gestion<br> <span class="required">d&eacute;ductibles</span></th>
+		<td><%= my_number_to_currency(@echeancier.depenses_couts_indirects) %></td>
+	</tr>
+	
+	<tr>
+    <th class="first left double_ligne">Frais de gestion<br> <span class="required">mutualis&eacute;s locaux</span></th>
+    <td><%= my_number_to_currency(@echeancier.depenses_frais_gestion_mut_local) %></td>
+  </tr>
+	
+	<tr class="odd">
+		<th class="first left double_ligne">Frais de gestion<br> <span class="required">mutualis&eacute;s nat.</span></th>
+		<td><%= my_number_to_currency(@echeancier.depenses_frais_gestion_mut) %></td>
+	</tr>
+	
+	<tr>
+		<th class="first left double_ligne">Autres frais<br> <span class="required">de gestion</span></th>
+		<td><%= f.text_field :global_depenses_frais_gestion, :class => "text" %></td>
+	</tr>
+	
+	<tr class="odd">
+		<th class="first left"><span class="required">Allocations</span></th>
+		<td><%=h @echeancier.allocations %> <span class='unite'>mois<span></td>
+	</tr>
+	
+	<tr>
+		<th class="first left"><span class="required">Total</span></th>
+		<td><%= my_number_to_currency(@echeancier.credit) %></td>
+	</tr>
+</table>
+</div>
+
+<div class="echeancier-scroll-container" >
+  <div id="echeancier-slider" class="echeancier-edit-sections clearfix" style="width:<%= (MAX_PERIODS_COUNT) * 190 %>px;">
+    <%= sub_list_content 'EcheancierPeriode', 'echeancier' %>
+  </div>
+</div>
+
+<div style="clear:both;"></div>
+<br />
+<% unless controller.action_name == 'show' %>
+<% if @echeancier.echeanciable_type == "Contrat" %>
+  	<%= link_to 'Ajouter une p&eacute;riode'.html_safe(), '/echeanciers/add_echeancier_periode', :class =>'sub_list_add' %>	
+	<div style="clear:both;"><br /></div>
+<% end %>
+<% end %>
+
+<script type="text/javascript">
+ var echeancier = new App.Echeancier(<%= MAX_PERIODS_COUNT %>);
+</script>

@@ -1,0 +1,48 @@
+<%= error_messages_nested_resources_for @depense_salaire %>
+
+<%= form_for([@ligne, @depense_salaire]) do |f| %>
+  <%= render :partial => 'form', :locals => { :f => f} %>
+  <div class="form-box submit" id="submit">
+    <%= f.submit "Créer la dépense en salaire" %> ou <%= link_to 'Annuler', ligne_depense_salaires_path(@ligne) %>
+  </div>
+<% end %>
+
+<% content_for :right do %>
+  <% if @ligne.sous_contrat.entite.verrou != 'SI INRIA' %>
+	  <h2>Recherche dans OSE</h2>
+	  <%= form_remote_tag(
+	      :url => {:controller => :depense_salaires, :action => :search_people_from_ose},
+	      :update => 'people_from_ose',
+	      :html => {:class => "inline"}) %>
+	      <input type="text" name="query" style="width:180px;" />
+	      <input type="submit" value="Rechercher" style="width:100px;border:1px solid #aaa; padding:1px;"/>
+	  </form>
+	  <div id="people_from_ose"></div>
+  <% end %>
+	<% if @inriaReferentielAgentResult.size > 0 %>
+		<h2>Recherche dans GEF</h2>
+	  <%= form_remote_tag(
+      :url => {:controller => :depense_salaires, :action => :search_people_from_gef},
+      :update => 'people_from_gef') %>
+	  	<label for="agent_filter">Filtrer la liste des agents sur le nom </label>
+      <%= hidden_field(:ligne, :id) %>
+			<%= text_field_tag("gef_agent_filter", params['gef_agent_filter'], :size => 5, :class => "textfield" ) %>
+      <%= observe_field 'gef_agent_filter',  :url => {:action => 'gef_filter_referentiel_agent'},                                                    
+                                        :frequency => 1,
+                                        :with => "Form.serializeElements($('gef_agent_filter', 'ligne_id'))" %>
+			<span id='gef_agent_select'>
+			  <%= render :partial => 'gef_agent_select' %>
+		  </span>
+		</form>
+	  <div id="people_from_gef"></div>
+  <% else %>
+	  <h3>
+      Aucun contrat dans GEF n'a &eacute;t&eacute; trouv&eacute; pour cette allocation.
+    </h3>
+	<% end %>
+	
+	
+  <script type="text/javascript">
+    new App.Budget.SalaireForm();
+  </script>
+<% end %>

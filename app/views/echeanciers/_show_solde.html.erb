@@ -1,0 +1,77 @@
+<table class="echeancier solde">
+	<tr class="empty">
+		<td>&nbsp;</td>
+	</tr>
+	
+	<tr class="empty">
+		<td>&nbsp;</td>
+	</tr>
+	
+	<tr class="empty">
+		<td>&nbsp;</td>
+	</tr>
+	
+	<tr class="empty">
+		<td class="last">&nbsp;</td>
+	</tr>
+	
+	<tr>
+		<th>Solde</th>
+	</tr>
+		
+	<tr>
+		<td class="<%= find_css_class @echeancier.solde_depenses_fonctionnement %>">
+			<%= my_number_to_currency @echeancier.solde_depenses_fonctionnement %>
+		</td>
+	</tr>
+	<tr class="odd">
+		<td class="<%= find_css_class @echeancier.solde_depenses_equipement %>">
+			<%= my_number_to_currency @echeancier.solde_depenses_equipement %>
+		</td>
+	</tr>
+	<tr>
+		<td class="<%= find_css_class @echeancier.solde_depenses_salaires %>">
+			<%= my_number_to_currency @echeancier.solde_depenses_salaires %>
+		</td>
+	</tr>
+	<tr class="odd">
+		<td class="<%= find_css_class @echeancier.solde_depenses_missions %>">
+			<%= my_number_to_currency @echeancier.solde_depenses_missions %>
+		</td>
+	</tr>
+	<tr>
+		<td class="<%= find_css_class @echeancier.solde_depenses_non_ventile %>">
+			<%= my_number_to_currency @echeancier.solde_depenses_non_ventile %>
+		</td>
+	</tr>
+	<tr class="odd">
+		<td class="double_ligne <%= find_css_class @echeancier.solde_depenses_couts_indirects %>">
+			<%= my_number_to_currency @echeancier.solde_depenses_couts_indirects %>
+		</td>
+	</tr>
+	<tr>
+		<td class="double_ligne <%= find_css_class @echeancier.solde_depenses_frais_gestion_mut_local %>">
+			<%= my_number_to_currency @echeancier.solde_depenses_frais_gestion_mut_local %>
+		</td>
+	</tr>
+	<tr class="odd">
+    <td class="double_ligne <%= find_css_class @echeancier.solde_depenses_frais_gestion_mut %>">
+      <%= my_number_to_currency @echeancier.solde_depenses_frais_gestion_mut %>
+    </td>
+  </tr>
+	<tr>
+		<td class="double_ligne <%= find_css_class @echeancier.solde_depenses_frais_gestion %>">
+			<%= my_number_to_currency @echeancier.solde_depenses_frais_gestion %>
+		</td>
+	</tr>
+	<tr class="odd">
+		<td class="<%= find_css_class @echeancier.solde_allocations %>">
+			<%= @echeancier.solde_allocations %> <span class='unite'>mois<span>
+		</td>
+	</tr>
+	<tr>
+			<td class="<%= find_css_class @echeancier.solde_credit %>">
+				<%= my_number_to_currency @echeancier.solde_credit %>
+			</td>
+	</tr>
+</table>

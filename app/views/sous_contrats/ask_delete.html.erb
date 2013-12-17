@@ -1,0 +1,12 @@
+<div class="content">
+	<p>
+    <%if @ligne_exist%>
+        <strong>ATTENTION</strong>, une ligne est associée à cette équipe. <br />
+    <%end%>
+		Etes-vous certain de vouloir supprimer cette association : <strong><%= @sous_contrat.contrat.acronyme %>
+		- <%= @sous_contrat.entite.nom %></strong> ?
+	</p>
+	<%= link_to_close_redbox "Non", :class => 'annuler' %>
+	<%= link_to "Oui", sous_contrat_path(@sous_contrat), :method => :delete %>
+ 	<div style="clear:both;"></div>
+</div>

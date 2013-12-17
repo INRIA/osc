@@ -1,0 +1,36 @@
+<% if @users_not_authorized.size == 0 %>
+<% else %>								
+  <div style="text-align:right;">
+    <%= will_paginate @users_not_authorized,
+                      :renderer => "UserPaginationLinkRenderer",
+                      :params => {:action => "show_not_authorized_users"},
+                      :remote => {:with =>"'&query='+$F('query')",:update => "not_authorized_users",:method => "get"}%>
+  </div>
+  <ul class="droits_list">
+  <% for user in @users_not_authorized %>
+		
+			<li class="<%= cycle("even", "odd") %>">
+				<div class="droits_infos">
+					<%= show_user_image user %><span><%= user.prenom %> <%= user.nom %></span>
+				</div>
+				<%= form_for(:contrat, :url => add_user_contrat_path) do |f| %>
+					<%= f.hidden_field :user_id, :value => user.id %>
+					<%= f.hidden_field :type_droit, :value => "consultation" %>
+		 			<%= submit_tag "Consultation", { :class => "add" } %>
+				<% end %>
+				<%= form_for(:contrat, :url => add_user_contrat_path) do |f| %>
+					<%= f.hidden_field :user_id, :value => user.id %>
+					<%= f.hidden_field :type_droit, :value => "modification_budget" %>
+					<%= submit_tag "Modification Budget", { :class => "add" } %>
+				<% end %>
+				<%= form_for(:contrat, :url => add_user_contrat_path) do |f| %>
+					<%= f.hidden_field :user_id, :value => user.id %>
+					<%= f.hidden_field :type_droit, :value => "modification" %>
+					<%= submit_tag "Modification Contrat", { :class => "add" } %>
+				<% end %>
+				
+				<div style="clear:both;"></div>
+			</li>
+		<% end %>
+	</ul>
+<% end %>

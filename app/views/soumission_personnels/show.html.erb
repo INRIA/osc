@@ -1,0 +1,33 @@
+<p>
+  <b>Soumissions:</b>
+  <%=h @soumission_personnel.soumissions_id %>
+</p>
+
+<p>
+  <b>Nom:</b>
+  <%=h @soumission_personnel.nom %>
+</p>
+
+<p>
+  <b>Prenom:</b>
+  <%=h @soumission_personnel.prenom %>
+</p>
+
+<p>
+  <b>Statut:</b>
+  <%=h @soumission_personnel.statut %>
+</p>
+
+<p>
+  <b>Tutelle:</b>
+  <%=h @soumission_personnel.tutelle %>
+</p>
+
+<p>
+  <b>Pourcentage:</b>
+  <%=h @soumission_personnel.pourcentage %>
+</p>
+
+
+<%= link_to 'Edit', edit_soumission_personnel_path(@soumission_personnel) %> |
+<%= link_to 'Back', soumission_personnels_path %>

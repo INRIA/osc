@@ -1,0 +1,8 @@
+<%= form_for(:todolist, :url => contrat_todolists_path, :remote => true) do |f| %>
+		Nom de la To-Do List<br />
+    <%= f.text_field :nom, :value => "", :class => "inputadd" %>
+		<div id="error_new_todolist" class="error"> </div>
+    <%= submit_tag "Créer", :class => "submit"  %> ou
+		<%= link_to_function "Arrêter d'ajouter des To-Do List", "Effect.toggle('new_todolist','blind', {duration:0.5}); ;Effect.toggle('link_to_add','appear', {duration:0.5}); " %>
+<% end %>
+<%= javascript_tag "Effect.BlindDown('new_todolist', {duration:0.5});" %>

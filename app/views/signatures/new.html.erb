@@ -1,0 +1,12 @@
+<h2>Signature de contrat</h2>
+
+<%= error_messages_for @signature %>
+
+<%= form_for(:signature, :url => contrat_signatures_path) do |f| %>
+  <%= render :partial => 'form', :locals => { :f => f } %>
+  <div class="form-box submit" id="submit">
+    <%= submit_tag "Créer la signature" %>
+    ou
+    <%= link_to "Annuler", contrat_path(@contrat)%>
+  </div>
+<% end %>

@@ -1,0 +1,18 @@
+<div class='head'>
+	<div class='header_title'>
+		<strong>Mots clés</strong> // Visualisation
+	</div>
+	<div class='header_link'>
+		<%= link_to 'Editer le mot clé', edit_key_word_path(@key_word) %>
+	</div>
+	<div style='clear:both;'></div>
+</div>
+<p>
+  <b>Laboratoire:</b>
+  <%=h @key_word.laboratoire.nom %>
+</p>
+
+<p>
+  <b>Intitulé :</b>
+  <%=h @key_word.intitule %>
+</p>

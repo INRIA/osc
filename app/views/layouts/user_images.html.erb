@@ -1,0 +1,20 @@
+<% content_for :head do %>
+	<% if controller.action_name.to_s == 'new' or controller.action_name.to_s == 'create' %>
+		<div class='header_title'>
+			<strong>Utilisateur <%= @user_image.user.prenom %> <%= @user_image.user.nom %></strong> // Ajout d'une photo
+		</div>
+		<div class='header_link'></div>
+		<div style='clear:both;'></div>
+	<% end %>
+	
+	<% if controller.action_name.to_s == 'edit' or controller.action_name.to_s == 'update' %>
+		<div class='header_title'>
+			<strong>Utilisateur <%= @user_image.user.prenom %> <%= @user_image.user.nom %></strong> // Modification de la photo
+		</div>
+		<div class='header_link'></div>
+		<div style='clear:both;'></div>
+	<% end %>
+	
+<% end %>
+<%= render :file => 'layouts/application_admin' %>
+

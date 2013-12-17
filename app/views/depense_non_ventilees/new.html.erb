@@ -1,0 +1,8 @@
+<%= error_messages_nested_resources_for @depense_non_ventilee %>
+
+<%= form_for([@ligne, @depense_non_ventilee]) do |f| %>
+	<%= render :partial => 'form', :locals => { :f => f} %>
+  <div class="form-box submit">
+    <%= f.submit "Créer la dépense non ventilée" %> ou <%= link_to 'Annuler', ligne_depense_non_ventilees_path(@ligne) %>
+  </div>
+<% end %>

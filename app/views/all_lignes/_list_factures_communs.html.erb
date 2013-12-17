@@ -1,0 +1,165 @@
+<%= render :partial => 'saved_param' %>
+
+<div id="result_paginate">
+  <div class="count">
+    <% add = '' %>
+    <% add = 's' if @depenses.total_entries > 1  %>
+    <%= @depenses.total_entries %> facture<%= add %> du commun trouvée<%= add %>
+  </div>
+  <%= will_paginate @depenses,
+      :renderer => "PaginationLinkRenderer",
+      :params => {:action => "list"},
+      :remote => {:with => "Form.serialize('saved_params')+'&'+Form.serialize('form_recherche')", :update => "list"},
+      :options =>{:div => "list"} %>
+  <div style="clear:both;"></div>
+</div>
+
+<table class="depenses">
+  <thead>
+    <tr>
+      <th style="border:none;" colspan="13"></th>
+      <th style="border-color:#ccc;text-align:center;" colspan="3">Montant</th>
+    </tr>
+    <tr>
+      <th class="soldee"></th>
+      <th class="verrou"></th>
+      <th>
+				Ligne
+      </th>
+      <th>
+				<a href="" onclick="tableOrderBy('date_commande');return false;"
+					<% if @order_value == 'date_commande' %> <%= "class='"+@order_type+"'" %><% end %>>
+					Date
+          <%= '(millésime)' if !@millesime.blank? %>
+				</a>
+      </th>
+      <th>
+				<a href="" onclick="tableOrderBy('reference');return false;"
+					<% if @order_value == 'reference' %> <%= "class='"+@order_type+"'" %><% end %>>
+					N° de DA
+				</a>
+      </th>
+      <th>
+				<a href="" onclick="tableOrderBy('budgetaire_reference_id');return false;"
+					<% if @order_value == 'budgetaire_reference_id' %> <%= "class='"+@order_type+"'" %><% end %>>
+					Réf.Budg.
+				</a>
+      </th>
+      <th>
+				<a href="" onclick="tableOrderBy('intitule');return false;"
+					<% if @order_value == 'intitule' %> <%= "class='"+@order_type+"'" %><% end %>>
+					Intitulé
+				</a>
+      </th>
+      <th>
+				<a href="" onclick="tableOrderBy('fournisseur');return false;"
+					<% if @order_value == 'fournisseur' %> <%= "class='"+@order_type+"'" %><% end %>>
+					Fournisseur
+				</a>
+      </th>
+			<th>
+				<a href="" onclick="tableOrderBy('date');return false;"
+					<% if @order_value == 'date' %> <%= "class='"+@order_type+"'" %><% end %>>
+					Date Fac.
+				</a>
+			</th><th>
+				<a href="" onclick="tableOrderBy('numero_facture');return false;"
+					<% if @order_value == 'numero_facture' %> <%= "class='"+@order_type+"'" %><% end %>>
+					N° Fac.
+				</a>
+			</th><th>
+				<a href="" onclick="tableOrderBy('date_mandatement');return false;"
+					<% if @order_value == 'date_mandatement' %> <%= "class='"+@order_type+"'" %><% end %>>
+					Date Mand.
+				</a>
+			</th><th>
+				<a href="" onclick="tableOrderBy('numero_mandat');return false;"
+					<% if @order_value == 'numero_mandat' %> <%= "class='"+@order_type+"'" %><% end %>>
+					N° Mand.
+				</a>
+			</th><th>
+				RC
+			</th>
+      <th class="money">
+				<a href="" onclick="tableOrderBy('montant_engage');return false;"
+					<% if @order_value == 'montant_engage' %> <%= "class='"+@order_type+"'" %><% end %>>
+					Engagé
+				</a>
+      </th>
+			<th class="money">
+				<a href="" onclick="tableOrderBy('cout_ht');return false;"
+					<% if @order_value == 'cout_ht' %> <%= "class='"+@order_type+"'" %><% end %>>
+					Payé HT
+				</a>
+      </th>
+			<th class="money">
+				<a href="" onclick="tableOrderBy('cout_ttc');return false;"
+					<% if @order_value == 'cout_ttc' %> <%= "class='"+@order_type+"'" %><% end %>>
+					Payé TTC
+				</a>
+			</th>
+    </tr>
+  </thead>
+  <tbody id="depense_list">
+     <%
+      @subtotal_montant_engages = 0 
+      @subtotal_montant_paye_ht =  0
+      @subtotal_montant_paye_ttc = 0
+      for df in @depenses 
+        montant_engage =  df.depense_commun.montant_engage || 0
+        montant_facture_ht = df.cout_ht || 0
+        montant_facture_ttc =  df.cout_ttc || 0 %>
+      <tr class="depense <%= cycle('odd', 'even') %>">
+			<%
+				soldee_class = 'non_soldee'
+				soldee_class = 'soldee' if df.depense_commun.commande_solde
+			%>
+			<td class="<%= soldee_class %> "></td>
+			<%
+          verrou_class = 'no-verrou'
+      %>
+      <td class="<%= verrou_class %> "></td>
+			<td><%= link_to df.depense_commun.ligne.nom, ligne_path(df.depense_commun.ligne) %></td>
+			<td><%= french_small_date df.depense_commun.date_commande %>
+          <% if !@millesime.blank? %><br/><%= display_millesime df.depense_commun %><% end %>
+			</td>
+			<td><%=h df.depense_commun.reference %></td>
+			<td><%=h df.depense_commun.budgetaire_reference.code %></td>
+			<td>
+				<%= link_to simple_format(truncate(df.depense_commun.intitule, :length =>25, :ommission => '...' )), ligne_depense_commun_path(df.depense_commun.ligne, df.depense_commun), {:title => df.depense_commun.intitule} %>
+			</td>
+			<td><%=h df.depense_commun.fournisseur %></td>
+			<td>
+				<%= french_small_date df.date %>
+			</td><td>
+				<%= df.numero_facture %>
+			</td><td>
+        <% if !df.date_mandatement.blank? %>
+          <%= french_small_date df.date_mandatement  %>
+        <% end %>
+      </td><td>
+        <%= df.numero_mandat %>
+      </td><td>
+				<%= df.rubrique_comptable.numero_rubrique %>
+			</td>
+			<td class="money"
+	    <%- if df.depense_commun.commande_solde? -%>
+	      style="font-weight: bold;text-decoration : underline;"
+	    <%- end -%>
+	    ><%= my_number_to_currency montant_engage %>
+			</td>
+			<td class="money">
+				<%= my_number_to_currency montant_facture_ht %>
+			</td>
+			<td class="money">
+						<%= my_number_to_currency montant_facture_ttc %>
+			</td>
+      </tr>
+    <% @subtotal_montant_engages =  @subtotal_montant_engages + montant_engage
+       @subtotal_montant_paye_ht =  @subtotal_montant_paye_ht + montant_facture_ht
+       @subtotal_montant_paye_ttc = @subtotal_montant_paye_ttc + montant_facture_ttc
+    end -%>
+	<% @colspan_totals = 12 %>
+	<%= render :partial => 'list_totals_commun' %>
+  </tbody>
+</table>

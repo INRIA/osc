@@ -1,0 +1,58 @@
+<% if controller.action_name.to_s == 'index' %>
+
+	<% content_for :head do %>
+		<div class='long_header_title'>
+			<strong><%= @contrat.long_acronyme %></strong> > Documents
+			<%= render :partial => 'layouts/link_to_switch_contrat' %>
+		</div>
+		<div id="switch_contrat" style="display:none;"></div>
+		<p><%= @contrat.nom %></p>
+	<% end %>
+	
+	<% content_for :right do %>
+	<div style="height:50px;">
+	
+		<% if flash[:warning].nil? -%>
+			<%= link_to "", contrat_contrat_files_path(@contrat) , {
+				:class => 'addContratFile',
+				:onclick => "Effect.toggle('link_to_add','appear', {duration:0.5}); Effect.toggle('form_for_add_file','blind', {duration:0.5}); return false;",
+				:id => "link_to_add"
+			}
+			%>	
+		<% else %>
+			<%= link_to "", contrat_contrat_files_path(@contrat) , {
+				:class => 'addContratFile',
+				:onclick => "Effect.toggle('link_to_add','appear', {duration:0.5}); Effect.toggle('form_for_add_file','blind', {duration:0.5}); return false;",
+				:id => "link_to_add",
+				:style => "display:none;"
+			}
+			%>
+		<% end %>
+		</div>
+
+
+		<div id="options_affichage"
+		<% if @contrat_files.empty? %>
+			style="display:none;"
+		<% end %>
+		>
+		<h2>Classer les documents</h2>
+		
+		<%= form_for(:contrat_file,:remote=>true, :url => sort_by_contrat_contrat_files_path(@contrat), :html => {:method => :post, :id => "sort_by" }) do |f| %>
+		
+			<%= radio_button_tag("classement", "date", checked = true) %>	<label for="classement_date">par date</label> <br />
+			<%= radio_button_tag("classement", "alphabetique", checked = false) %> <label for="classement_alphabetique">par ordre alphabétique</label>
+<% end %>
+			<%= observe_form 'sort_by',
+								:frequency => 0.25,
+								:on => 'changed',
+			         	:url => sort_by_contrat_contrat_files_path(@contrat),
+								:with => "'classement='+$F('classement_date')" %>
+	</div>
+	<% end %>
+	
+	<%= render :file => 'layouts/application_suivi_des_contrats' %>
+	
+<% else %>
+	<%= yield  %>
+<% end %>

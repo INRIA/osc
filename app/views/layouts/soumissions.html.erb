@@ -1,0 +1,49 @@
+<%- if controller.action_name.to_s == 'ask_delete'  -%>
+	<%= yield  %>
+<%- else -%>
+
+<%- content_for :head do -%>
+			
+	<%- if ['new','create'].include? controller.action_name.to_s -%>
+	<div class='long_header_title'>		
+		<strong><%= @contrat.long_acronyme %></strong> > Soumission // Création
+		<%= render :partial => 'layouts/link_to_switch_contrat' %>
+	</div>
+	<div id="switch_contrat" style="display:none;"></div>
+	<p><%= @contrat.nom %></p>
+	<%- end -%>
+	
+	<%- if ['edit','update'].include? controller.action_name.to_s -%>
+	<div class='long_header_title'>		
+		<strong><%= @contrat.long_acronyme %></strong> > Soumission // Edition
+		<%= render :partial => 'layouts/link_to_switch_contrat' %>
+	</div>
+	<div id="switch_contrat" style="display:none; margin-top:2px;"></div>
+	<p><%= @contrat.nom %></p>
+	<%- end -%>
+
+	<%- if ['show'].include? controller.action_name.to_s -%>
+	<div class='header_title'>		
+		<div class="showInfos">
+			<p class="visibilite">							
+				<strong><%= @contrat.long_acronyme %></strong> > Soumission
+				<%= render :partial => 'layouts/link_to_switch_contrat' %>
+			</p>
+		</div>
+		<div style='clear:both;'></div>
+	</div>
+	<div class="header_link">
+		<%- if @contrat.is_editable? current_user -%>
+ 		<%= link_to 'Editer la soumission', edit_contrat_soumission_path(@contrat, @soumission) %>
+		<%- end -%>
+	</div>
+	<div style="clear: both;"></div>
+	<div id="switch_contrat" style="display:none;	margin-top:2px;"></div>
+	<p><%= @contrat.nom %></p>
+	<%- end -%>
+			
+<%- end -%>
+
+<%= render :file => 'layouts/application_suivi_des_contrats' %>
+
+<%- end -%>

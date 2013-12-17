@@ -1,0 +1,100 @@
+<div class="entete">
+	<div class="titre">Changer de ligne</div>
+	<div class="recherche">Recherche <input type="text" id="search_in_ligne" /></div>
+	<div style="clear:both;"></div>
+</div>
+<ul>
+	
+<%- i = 0 -%>
+<%- saut = (@lignes.size.to_f / 3).ceil -%>
+
+<%- for ligne in @lignes -%>
+	<%- if i  % saut == 0 && i != 0 -%>
+		</ul>
+		<ul>
+	<%- end -%>
+	<%- if @previous_ligne_id.to_s == ligne[0]['id'].to_s -%>
+	<li class="current">
+	<%- else -%>
+	<li>
+	<%- end -%>
+	<%-
+	case @previous_controller.to_s
+	 	when 'Versements'
+			if ['new','create'].include?  @previous_action.to_s
+				path = new_ligne_versement_path(ligne[0]['id'])
+			else
+				path = ligne_versements_path(ligne[0]['id'])
+			end
+		when 'DepenseFonctionnements'
+			if ['new','create'].include?  @previous_action.to_s
+				path = new_ligne_depense_fonctionnement_path(ligne[0]['id'])
+			else
+				path = ligne_depense_fonctionnements_path(ligne[0]['id'])
+			end
+		when 'DepenseEquipements'
+			if ['new','create'].include?  @previous_action.to_s
+				path = new_ligne_depense_equipement_path(ligne[0]['id'])
+			else
+				path = ligne_depense_equipements_path(ligne[0]['id'])
+			end
+		when 'DepenseMissions'
+			if ['new','create'].include?  @previous_action.to_s
+				path = new_ligne_depense_mission_path(ligne[0]['id'])
+			else
+				path = ligne_depense_missions_path(ligne[0]['id'])
+			end
+		when 'DepenseSalaires'
+			if ['new','create'].include?  @previous_action.to_s
+				path = new_ligne_depense_salaire_path(ligne[0]['id'])
+			else
+				path = ligne_depense_salaires_path(ligne[0]['id'])
+			end
+		when 'DepenseNonVentilees'
+			if ['new','create'].include?  @previous_action.to_s
+				path = new_ligne_depense_non_ventilee_path(ligne[0]['id'])
+			else
+				path = ligne_depense_non_ventilees_path(ligne[0]['id'])
+			end
+		when 'Lignes'
+			if @previous_action.to_s == 'show'
+				path = ligne_path(ligne[0]['id'])
+			else
+				path = bilan_ligne_path(ligne[0]['id'])
+			end
+		else
+			path = ''
+	end -%>
+	<%= link_to ligne[0]['nom'],
+							path,
+							:id => "switch_"+ligne[0]['id'].to_s %>
+	
+	
+	</li>
+<%- i = i+1 -%>
+<%- end -%>
+</ul>
+<div style="clear:both;"></div>
+
+<script type="text/javascript" charset="utf-8">
+	$('link_to_remove_switch').toggle();
+	$('switch').toggle();
+	$('link_to_switch').toggle()
+	
+	$('search_in_ligne').focus();
+	new Form.Element.Observer(
+	  'search_in_ligne',
+	  0.2,  // 200 milliseconds
+	  function(el, value){
+			$$('#switch ul li a').each(function(e){
+			    $(e.id).removeClassName('reject');
+			});
+			$$('#switch ul li a').reject(function(e) {
+			   return e.innerHTML.strip().toLowerCase().include(value.strip().toLowerCase())
+			}).each(function(e){
+			    $(e.id).addClassName('reject');
+			})
+	  }
+	)
+	
+</script>

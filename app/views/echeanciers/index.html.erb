@@ -1,0 +1,30 @@
+<h1>Listing echeanciers</h1>
+
+<table>
+  <tr>
+    <th>Contrat</th>
+    <th>Global depenses frais gestion</th>
+    <th>Created at</th>
+    <th>Updated at</th>
+    <th>Created by</th>
+    <th>Updated by</th>
+  </tr>
+  
+<% for echeancier in @echeanciers %>
+  <tr>
+    <td><%=h echeancier.contrat_id %></td>
+    <td><%=h echeancier.global_depenses_frais_gestion %></td>
+    <td><%=h echeancier.created_at %></td>
+    <td><%=h echeancier.updated_at %></td>
+    <td><%=h echeancier.created_by %></td>
+    <td><%=h echeancier.updated_by %></td>
+    <td><%= link_to 'Show', echeancier_path(echeancier) %></td>
+    <td><%= link_to 'Edit', edit_echeancier_path(echeancier) %></td>
+    <td><%= link_to 'Destroy', echeancier_path(echeancier), :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New echeancier', new_echeancier_path %>

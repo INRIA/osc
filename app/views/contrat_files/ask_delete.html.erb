@@ -1,0 +1,10 @@
+<div class="content">
+	<p>
+		Etes-vous certain de vouloir supprimer le document <strong><%= @contrat_file['file'] %></strong> ?
+	</p>
+	<%= link_to_close_redbox "Non", :class => 'annuler' %>
+	<%= link_to_remote "Oui",
+ 									{ :url => contrat_contrat_file_path(@contrat_file.contrat, @contrat_file), 
+										:method => :delete} %>
+	<div style="clear:both;"></div>
+</div>

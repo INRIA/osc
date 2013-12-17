@@ -1,0 +1,32 @@
+<h1>Editing tutelle_subscription</h1>
+
+<%= error_messages_for @tutelle_subscription %>
+
+<%= form_for(:tutelle_subscription, :url => tutelle_subscription_path(@tutelle_subscription), :html => { :method => :put }) do |f| %>
+  <p>
+    <b>Projet</b><br />
+	<%= f.select( "projet_id", Projet.find_all.collect {|p| [ p.nom , p.id]}, { :include_blank => true }) %>	
+  </p>
+
+  <p>
+    <b>Tutelle</b><br />
+    <%= f.select( "tutelle_id", Tutelle.find_all.collect {|p| [ p.nom, p.id ] }, { :include_blank => true }) %>
+  </p>
+
+  <p>
+    <b>Created at</b><br />
+    <%= f.datetime_select :created_at %>
+  </p>
+
+  <p>
+    <b>Updated at</b><br />
+    <%= f.datetime_select :updated_at %>
+  </p>
+
+  <p>
+    <%= submit_tag "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', tutelle_subscription_path(@tutelle_subscription) %> |
+<%= link_to 'Back', tutelle_subscriptions_path %>

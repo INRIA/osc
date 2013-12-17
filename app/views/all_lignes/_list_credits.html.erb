@@ -1,0 +1,91 @@
+
+<div id="result_paginate">
+	<div class="count">
+		<% add = '' %>
+		<% add = 's' if @credits.total_entries > 1  %>
+		<%= @credits.total_entries %> crédit<%= add %> trouvée<%= add %>
+	</div>
+	<%= will_paginate @credits,
+            :renderer => "PaginationLinkRenderer",
+            :params => {:action => "list"},
+            :remote => {:with => "Form.serialize('saved_params')+'&'+Form.serialize('form_recherche')", :update => "list"},
+            :options =>{:div => "list"} %>
+	<div style="clear:both;"></div>
+</div>
+
+<%= render :partial => 'saved_param' %>
+
+<table class="depenses">
+  <thead>
+		<tr>
+		  <th class="verrou"></th>
+			<th>
+				Ligne
+			</th>
+			<th>
+				<a href="" onclick="tableOrderBy('date_effet');return false;" 
+						<% if @order_value == 'date_effet' %> <%= "class='"+@order_type+"'" %><% end %>>
+						Date
+				</a>
+			</th>
+			<th>
+				<a href="" onclick="tableOrderBy('reference');return false;"
+				<% if @order_value == 'reference' %> <%= "class='"+@order_type+"'" %><% end %>>
+					Référence
+				</a>
+			</th>
+    	<th>
+				<a href="" onclick="tableOrderBy('origine');return false;"
+				<% if @order_value == 'origine' %> <%= "class='"+@order_type+"'" %><% end %>>
+					Origine
+				</a>
+			</th>
+			<th>
+				<a href="" onclick="tableOrderBy('ventilation');return false;"
+				<% if @order_value == 'ventilation' %> <%= "class='"+@order_type+"'" %><% end %>>
+					Ventilation
+				</a>
+			</th>
+			<th>
+				<a href="" onclick="tableOrderBy('commentaire');return false;"
+				<% if @order_value == 'commentaire' %> <%= "class='"+@order_type+"'" %><% end %>>
+					Commentaire
+				</a>
+			</th>
+    	<th class="money">
+				<a href="" onclick="tableOrderBy('montant');return false;"
+				<% if @order_value == 'montant' %> <%= "class='"+@order_type+"'" %><% end %>>
+					Montant
+				</a>
+			</th>
+		</tr>
+	</thead>
+	<tbody id="depense_list">
+		<%
+      @subtotal_montant_credit = 0 
+      for credit in @credits
+        montant_credit =  credit.montant %>
+		<tr class="depense <%= cycle('odd', 'even') %>">
+		  <%
+      verrou_class = 'no-verrou'
+      verrou_class = 'verrou' if credit.come_from_inria?
+      %>
+      <td class="<%= verrou_class %> "></td>
+			<td><%= link_to credit.ligne.nom, ligne_path(credit.ligne) %></td>
+			<td><%= french_small_date credit.date_effet %></td>
+	    <td><%=h credit.reference %></td>
+	    <td><%=h credit.origine %></td>
+	    <td><%=h credit.ventilation %></td>
+	    <td><%= simple_format credit.commentaire %></td>
+	    <td class="money"><%= link_to my_number_to_currency(montant_credit), ligne_versement_path(credit.ligne, credit) %></td>
+  	</tr>
+		<% @subtotal_montant_credit =  @subtotal_montant_credit + montant_credit
+    end -%>
+
+  <tr>
+    <td colspan='6'></td><td class="total-header">Sous-total</td>
+    <td class="money sous-total<%= ' neg' if @subtotal_montant_credit < 0 %>"><%= my_number_to_currency @subtotal_montant_credit %></td>
+    <td></td>
+  </tr>
+	</tbody>
+</table>

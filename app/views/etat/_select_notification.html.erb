@@ -1,0 +1,86 @@
+	<div class="select_notification">
+		<h4 class="first"><a href=""  onclick="toggle_select('notification_select_1');return false;">Informations générales</a></h4>
+		<div class="select" id="notification_select_1" style="display:none;">
+			<%= my_check_box("notifications.contrat_type.nom", "Type de contrat").html_safe() %>
+			<%= my_check_box("notifications.date_notification", "Date de notification").html_safe() %>
+			<%= my_check_box("notifications.date_debut", "Date de début").html_safe() %>
+			<%= my_check_box("notifications.date_fin", "Date de fin").html_safe() %>
+			<%= my_check_box("notifications.nombre_mois", "Nombre de mois").html_safe() %>
+			<%= my_check_box("notifications.organisme_gestionnaire.nom", "Etablissement gestionnaire").html_safe() %>
+			<%= my_check_box("notifications.organisme_financeur", "Organisme financeur").html_safe() %>
+			<%= my_check_box("notifications.organisme_payeur", "Organisme payeur").html_safe() %>
+			<%= my_check_box("notifications.numero_ligne_budgetaire", "N° ligne budgétaire").html_safe() %>
+			<%= my_check_box("notifications.numero_contrat", "N° de contrat").html_safe() %>
+			<%= my_check_box("notifications.a_justifier", "Contrat à justifier ?").html_safe() %>
+			<%= my_check_box("notifications.url", "Site web (url)", "last").html_safe() %>
+		</div>
+
+		<h4><a href=""  onclick="toggle_select('notification_select_2');return false;">Porteur et coordinateur</a></h4>
+		<div class="select" id="notification_select_2" style="display:none;">
+			<%= my_check_box("notifications.porteur", "Porteur").html_safe() %>
+			<%= my_check_box("notifications.etablissement_rattachement_porteur", "Etablissement de rattachement").html_safe() %>
+			<%= my_check_box("notifications.est_porteur", "Le porteur est coordinateur ?").html_safe() %>
+			<%= my_check_box("notifications.coordinateur", "Coordinateur").html_safe() %>
+			<%= my_check_box("notifications.etablissement_gestionnaire_du_coordinateur", "Etablissement gestionnaire du coordinateur", "last").html_safe() %>
+		</div>
+
+		<h4><a href=""  onclick="toggle_select('notification_select_3');return false;">Mots clés et thématiques</a></h4>
+		<div class="select" id="notification_select_3" style="display:none;">
+			<%= my_check_box("notifications.mots_cles", "Mots clés").html_safe() %>
+			<%= my_check_box("notifications.mots_cles_libres", "Mots clés libres").html_safe() %>
+			<%= my_check_box("notifications.thematiques", "Thématiques").html_safe() %>
+			<%= my_check_box("notifications.poles", "Pôles de compétivités", "last").html_safe() %>
+		</div>
+
+		<h4><a href=""  onclick="toggle_select('notification_select_4');return false;">Partenaires</a></h4>
+		<div class="select" id="notification_select_4" style="display:none;">
+			<h5>Partenaires en France</h5>
+			<%= my_check_box("notification_france_partenaires.nom", "Nom").html_safe() %>
+			<%= my_check_box("notification_france_partenaires.laboratoire", "Laboratoire").html_safe() %>
+			<%= my_check_box("notification_france_partenaires.etablissement_gestionnaire", "Etablissement gestionnaire").html_safe() %>
+			<%= my_check_box("notification_france_partenaires.ville", "Ville").html_safe() %>
+			<h5>Partenaires en Europe</h5>
+			<%= my_check_box("notification_europe_partenaires.nom", "Nom").html_safe() %>
+			<%= my_check_box("notification_europe_partenaires.etablissement_gestionnaire", "Etablissement gestionnaire").html_safe() %>
+			<%= my_check_box("notification_europe_partenaires.ville", "Ville").html_safe() %>
+			<%= my_check_box("notification_europe_partenaires.pays", "Pays").html_safe() %>
+			<h5>Partenaires hors Europe</h5>
+			<%= my_check_box("notification_partenaires.nom", "Nom").html_safe() %>
+			<%= my_check_box("notification_partenaires.etablissement_gestionnaire", "Etablissement gestionnaire").html_safe() %>
+			<%= my_check_box("notification_partenaires.ville", "Ville").html_safe() %>
+			<%= my_check_box("notification_partenaires.pays", "Pays", "last").html_safe() %>
+		</div>
+
+		<h4><a href="" onclick="toggle_select('notification_select_5');return false;">Moyens accordés</a></h4>
+		<div class="select" id="notification_select_5" style="display:none;">
+			<%= my_check_box("notifications.ma_type_montant", "HT/TTC").html_safe() %>
+			<%= my_check_box("notifications.ma_fonctionnement", "Fonctionnement").html_safe() %>
+			<%= my_check_box("notifications.ma_equipement", "Equipement").html_safe() %>
+			<%= my_check_box("notifications.ma_salaire", "Salaire").html_safe() %>
+			<%= my_check_box("notifications.ma_mission", "Mission").html_safe() %>
+			<%= my_check_box("notifications.ma_non_ventile", "Non ventilé").html_safe() %>
+			<%= my_check_box("notifications.ma_couts_indirects", "Côuts indirects").html_safe() %>
+			<%= my_check_box("notifications.ma_frais_gestion_mutualises_local", "Frais de gestion mutualisés locaux").html_safe() %>
+			<%= my_check_box("notifications.ma_frais_gestion_mutualises", "Frais de gestion mutualisés nationaux").html_safe() %>
+			<%= my_check_box("notifications.ma_allocation", "Allocation").html_safe() %>
+			<%= my_check_box("notifications.ma_total", "Total", "last").html_safe() %>
+		</div>
+
+		<h4><a href="" onclick="toggle_select('notification_select_6');return false;">Personnel accordé</a></h4>
+		<div class="select" id="notification_select_6" style="display:none;">
+			<%= my_check_box("notifications.pa_doctorant", "Doctorant").html_safe() %>
+			<%= my_check_box("notifications.pa_post_doc", "Post-doc").html_safe() %>
+			<%= my_check_box("notifications.pa_ingenieur", "Ingénieur").html_safe() %>
+			<%= my_check_box("notifications.pa_autre", "Autre").html_safe() %>
+			<%= my_check_box("notifications.pa_equivalent_temps_plein", "Equivalent temps plein", "last").html_safe() %>
+		</div>
+
+		<h4><a href="" onclick="toggle_select('notification_select_7');return false;">Personnel impliqué</a></h4>
+		<div class="select" id="notification_select_7" style="display:none;">
+			<%= my_check_box("notification_personnels.nom", "Nom").html_safe() %>
+			<%= my_check_box("notification_personnels.prenom", "Prénom").html_safe() %>
+			<%= my_check_box("notification_personnels.statut", "Statut").html_safe() %>
+			<%= my_check_box("notification_personnels.tutelle", "Tutelle").html_safe() %>
+			<%= my_check_box("notification_personnels.pourcentage", "Pourcentage", "last").html_safe() %>
+		</div>	
+	</div>

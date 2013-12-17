@@ -1,0 +1,12 @@
+<h2>Lignes non créées</h2>
+<p class="informations">Sélectionnez ci-dessous la ligne que vous souhaitez créer.</p>
+<ul class="select_line" id="select_line">
+<%- for sc in @sous_contrats -%>
+	<li>
+  	<a id="SousContrat_<%= sc.id %>" 
+   		href="" onClick="for_ligne_select('<%= sc.id %>'); return false;">
+  		<%= sc.nom %>
+  	</a>
+	</li>
+<%- end -%>
+</ul>

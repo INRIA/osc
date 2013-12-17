@@ -1,0 +1,30 @@
+<% if controller.action_name.to_s == 'index' %>
+
+	<% content_for :head do %>
+		<div class='long_header_title'>
+			<strong><%= @contrat.long_acronyme %></strong> > Descriptifs
+			<%= render :partial => 'layouts/link_to_switch_contrat' %>
+		</div>
+		<div id="switch_contrat" style="display:none;"></div>
+		<p><%= @contrat.nom %></p>
+	<% end %>
+	
+	<% content_for :right do %>
+	
+		<div style="height:50px;">
+		<%=	link_to_remote "", { :update => "new_descriptif",
+    							 :url => new_contrat_descriptif_path(@contrat),
+ 							 	 :method => :get},
+			{ :onclick =>	"Effect.toggle('link_to_add','appear', {duration:0.5});",
+			  :class => "addDescriptif",
+			  :id => "link_to_add"
+			} %>
+		</div>
+	
+	<% end %>
+	
+	<%= render :file => 'layouts/application_suivi_des_contrats' %>
+
+<% else %>
+	<%= yield  %>
+<% end %>

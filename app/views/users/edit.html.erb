@@ -1,0 +1,146 @@
+<div id="my-glider">
+  <div class="scroller">
+  <div class="content">
+  <div id='droits' class="section">
+	  <%=  render :partial => "droits" %>  
+  </div>
+
+  <div id='identite'  class="section">
+	<div class="sect">
+	  <%= render :partial => 'edit_form' %>
+	</div>
+  </div>
+
+  <% if (@admin || @admin_fonc) %>
+
+	<div id='authentification'  class="section">
+	  <h2><strong>Authentification</strong> de l'utilisateur</h2>
+	  <%= form_for(:user, :url => user_path(@user), :html => { :method => :put }) do |f| %>
+	    <div class="fieldset">
+	      <p>
+		      <label for="login" class="required">Login</label><br />
+		      <%= f.text_field :login, :class => "textfield" %>
+	      </p>
+	      <%- add = "style='display:none;'" -%>
+	      <%- if LDAP_ACTIVE -%>
+		      <%- add ="" -%>
+	      <%- end -%>
+
+	      <p <%= add %>>
+		      <label for="ldap">Utilisation de Ldap pour l'authentification</label><br />
+      		<%= f.radio_button( :ldap, true )%> Oui &nbsp;
+      		<%= f.radio_button( :ldap, false )%> Non
+	      </p>
+	      <p id="type_ldap" <%= add %>>
+      		<label for="type_ldap">Base Ldap utilis&eacute;e</label><br />
+      		<%= f.text_field :type_ldap, :class => "textfield" %>
+	      </p>
+	      <p id='pass1'>
+      		<label for="password" class="required">Password</label><br />
+      		<%= f.password_field :password, :class => "textfield" %>
+	      </p>
+	      <p id='pass2'>
+      		<label for="password_confirmation" class="required">Confirm Password</label><br />
+      		<%= f.password_field :password_confirmation, :class => "textfield" %>
+	      </p>
+	      <p><a href="#" onclick="populateform('8');return false;">G&eacute;n&eacute;rer un mot de passe</a> <span id="generated_pwd"></span></p>
+	    </div>
+	    <br />
+	    <p class="submit">
+	      <%= submit_tag "Mettre à jour" %> ou <%= link_to "Annuler", user_path(@user) %>
+	    </p>
+
+	  </div>
+	  <% end %>
+
+	  <div id='roles' class="section">
+      <%=  render :partial => "roles" %>   
+  	</div>
+
+
+
+	<div id='groupes'  class="section">
+	  <div class="sect">
+	    <h2>Adh&eacute;sion à des <strong>groupes</strong></h2>
+	    <div id="userEditGroups">
+	      <%=  render :partial => "list_memberships" %>
+	    </div>
+	    <div id="add_membership">
+	      <%=  render :partial => 'add_membership' %>
+	    </div>
+	  </div>
+	</div>
+      <% end %>
+
+
+      <div id='photo'  class="section">
+	<div class="section2">
+	  <%= render :partial => 'edit_photo' %>
+	</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<%= error_messages_for @user %>
+<div id="error" style="display:none;"></div>
+
+<script type="text/javascript">
+<!--
+var currentpage = (document.location.href.match(/#([-_\w]+)$/) || []).last() || 'droits'
+
+$$('#onglets_tab a').each(function(a) {
+	var mypage = a.getAttribute('href').match(/[-_\w]+$/i)[0];
+	if (mypage == currentpage) {
+		$(a).addClassName('active')
+		Try.these(function(){$(a).previous('a').addClassName('before_active');});
+	}
+})
+var my_glider = new Glider('my-glider', {duration:0.25, initialSection : currentpage});
+
+<% if current_user.is_admin? %>
+	if ($('user_ldap_true').checked) {
+		select_ldap();
+	}else{
+		deselect_ldap();
+	}
+	Event.observe('user_ldap_true', 'click', select_ldap);
+	Event.observe('user_ldap_false', 'click', deselect_ldap);
+<% end %>
+
+	function select_ldap() {
+		$('user_ldap_true').checked = '1';
+		$('pass1').hide();
+		$('pass2').hide();
+		$('type_ldap').show();
+	};
+
+	function deselect_ldap() {
+		$('user_ldap_false').checked = '1';
+		$('pass1').show();
+		$('pass2').show();
+		$('type_ldap').hide();
+	};
+
+	var keylist="abcdefghijklmnopqrstuvwxyz123456789"
+	var temp=''
+
+	function generatepass(plength){
+		temp=''
+		for (i=0;i<plength;i++)
+			temp+=keylist.charAt(Math.floor(Math.random()*keylist.length))
+		return temp
+	}
+	function populateform(enterlength){
+		pass = generatepass(enterlength);
+		$('user_password').value = pass
+	 	$('user_password_confirmation').value = pass
+		$('generated_pwd').update(" - Mot de passe généré : "+pass);
+	}
+
+$('contrat_id').observe('change', function(e){$('contrat').checked = true;});
+$('projet_id').observe('change', function(e){$('projet').checked = true;});
+
+//-->
+</script>

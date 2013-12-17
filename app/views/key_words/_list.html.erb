@@ -1,0 +1,24 @@
+<% for key_word in @key_words %>
+<% total = key_word.soumissions.size + key_word.notifications.size %>
+<div class="box_1_per_line <%= cycle("even","odd") %>" id="keyword_<%= key_word.id %>">
+	<div class="infos">
+		<div class="primary"><%= key_word.intitule %> (<%= key_word.section %>)</div>
+		<div class="secondary">
+			<strong>Laboratoire <%= key_word.laboratoire.nom %></strong> - 
+			Présence dans les soumissions/notifications : <%= key_word.soumissions.size %>/<%= key_word.notifications.size %>
+		</div>
+	</div> 
+	<div class="actions">
+		<%= link_to 'Editer', edit_key_word_path(key_word) %>
+		<% if total == 0 %>		
+  		<%= link_to_remote_redbox "Supprimer",
+  		    {	:url => ask_delete_key_word_path(key_word), 
+  					:method => :get}, 
+  				{	:title => "Supprimer ce mot clé" } %>
+			
+		<% end %>
+	</div>
+	<div style="clear:both;"></div>
+</div>
+<% end %>
+<div style="clear:both;"></div>

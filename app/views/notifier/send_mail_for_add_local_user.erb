@@ -1,0 +1,14 @@
+<p>
+Bonjour <%= @user.prenom %> <%= @user.nom %>,
+</p>
+<p>
+Ci-dessous vos paramètres d'authentification vous permettant d'utiliser l'outil de suivi des effectifs disponible à l'adresse suivante : <a href="<%= APP_URL %>"><%= APP_URL %></a>.
+</p>
+<p>
+Login : <%= @user.login %><br />
+Mot de passe : <%= @password %>
+</p>
+<p style="color:#555555;">
+Cordialement,<br />
+L'équipe support de OSC (<%= EMAIL_SUPPORT %>)
+</p>

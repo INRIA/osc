@@ -1,0 +1,237 @@
+<% @depense_equipement_facture = depense_equipement_facture %>
+<% @non_modifiable_facture = @depense_equipement_facture.get_non_modifiables %>
+
+<div id="<%= "depense_equipement_facture_#{depense_equipement_facture.id}" %>">
+  
+  <div class="form-box child">
+    <%= "<span class='come-from-inria'>SI INRIA</span>".html_safe() if depense_equipement_facture.come_from_inria? %>
+    <h3>Facture</h3>
+    <div class="remove_facture">
+      <% if( @depense_equipement_facture.verrou == 'Aucun') %>
+        <%= sub_list_remove_link depense_equipement_facture, 'DepenseEquipementFacture' %>
+      <% end %>
+    </div>
+    <div class="clearfix">
+      <div class="col-1-of-2">
+        <p class="inline <%= "disabled" if @non_modifiable_facture.include?('date')%>">
+          <label class="required">Date de facture</label><br />
+          <% if @non_modifiable_facture.include?('date') %>
+            <%= date_select 'depense_equipement_facture[]', 
+                            :date,
+                            :default => nil,
+                            :include_blank => true,
+                            :order => [:day, :month, :year],
+                            :use_month_numbers => true,
+                            :disabled => true %>
+          <% else %>
+            <%= unobtrusive_date_picker 'depense_equipement_facture[]', 
+                                        :date,
+                                        :include_blank => true,
+                                        :use_month_numbers => true,
+                                        :class => 'no-transparency',
+                                        :id => "#{@depense_equipement_facture.id}" %>
+          <% end %>
+        </p>
+        
+        <p class="inline <%= "disabled" if @non_modifiable_facture.include?('millesime')%>">
+          <label>Date de service fait  (millésime)</label><br />
+          <% if @non_modifiable_facture.include?('millesime') %>
+            <%= date_select 'depense_equipement_facture[]',
+                            :millesime,
+                            :default => nil,
+                            :include_blank => true,
+                            :order => [:day, :month, :year],
+                            :use_month_numbers => true,
+                            :disabled => true %>
+          <% else %>
+            <%= unobtrusive_date_picker 'depense_equipement_facture[]',
+                                        :millesime,
+                                        :include_blank => true,
+                                        :use_month_numbers => true,
+                                        :class => 'no-transparency',
+                                        :id => "#{@depense_equipement_facture.id}" %>
+          <% end %>
+        </p>
+
+        <p <%= "class='disabled'" if @non_modifiable_facture.include?('numero_facture')%>>
+          <label>N° de facture</label><br />
+          <% options = ({:disabled => true} if @non_modifiable_facture.include?('numero_facture')) || {} %>
+          <%= text_field 'depense_equipement_facture[]', 'numero_facture', options %>
+        </p>
+        
+        <p <%= "class='disabled'" if @non_modifiable_facture.include?('commentaire')%>>
+          <label>Commentaire</label><br />
+          <% options = ({:disabled => true} if @non_modifiable_facture.include?('commentaire')) || {} %>
+          <%= text_area 'depense_equipement_facture[]', :commentaire, options %>
+        </p>
+        
+        <p <%= "class='disabled'" if @non_modifiable_facture.include?('numero_mandat')%>>
+          <label>N° de mandat</label><br />
+          <% options = ({:disabled => true} if @non_modifiable_facture.include?('numero_mandat')) || {} %>
+          <%= text_field 'depense_equipement_facture[]', :numero_mandat, options %>
+        </p>
+        
+        <p class="inline <%= "disabled" if @non_modifiable_facture.include?('date_mandatement')%>">
+          <label>Date de mandatement</label><br />
+          <% if @non_modifiable_facture.include?('date_mandatement') %>
+            <%= date_select 'depense_equipement_facture[]', 
+                            :date_mandatement,
+                            :default => nil,
+                            :include_blank => true,
+                            :order => [:day, :month, :year],
+                            :use_month_numbers => true,
+                            :disabled => true  %>
+          <% else %>
+            <%= unobtrusive_date_picker 'depense_equipement_facture[]', 
+                                        :date_mandatement,
+                                        :include_blank => true,
+                                        :use_month_numbers => true,
+                                        :class => 'no-transparency',
+                                        :id => "#{@depense_equipement_facture.id}" %>
+          <% end %>
+        </p>
+      </div>
+      <div class="col-2-of-2">
+        <p <%= "class='disabled'" if @non_modifiable_facture.include?('cout_ht')%>>
+          <label class="required">Montant Payé (HT)</label><br />
+          <% options = ({:disabled => true} if @non_modifiable_facture.include?('cout_ht')) || {} %>
+          <%= text_field 'depense_equipement_facture[]', :cout_ht, options %>
+        </p>
+        
+        <p <%= "class='disabled'" if @non_modifiable_facture.include?('taux_tva')%>>
+          <label class="required">Taux de TVA</label><br />
+          <% options = ({:disabled => true} if @non_modifiable_facture.include?('taux_tva')) || {} %>
+          <%= select 'depense_equipement_facture[]', 
+                     :taux_tva,  ["0","2.1", "5.5", "19.6"],
+                     {},
+                     options %>
+        </p>
+        
+        <p <%= "class='disabled'" if @non_modifiable_facture.include?('montant_htr')%>>
+          <label>Montant Payé (HTR)</label><br />
+          <% options = ({:disabled => true} if @non_modifiable_facture.include?('montant_htr')) || {} %>
+          <%= text_field 'depense_equipement_facture[]', :montant_htr, options %>
+        </p>
+        
+        <p <%= "class='disabled'" if @non_modifiable_facture.include?('amortissement')%>>
+          <% options = ({:disabled => true} if @non_modifiable_facture.include?('amortissement')) || {} %>
+          <label class="required">Amortissement</label><br />
+          <span class="clearfix">
+            <span class="tab" id="tab-<%= @depense_equipement_facture.id %>">
+              <%= radio_button 'depense_equipement_facture[]', :amortissement, "Calculé", options %>
+              <label for="depense_equipement_facture_<%= @depense_equipement_facture.id %>_amortissement_calculé">Calculé</label>
+            </span>
+            <span class="tab">
+              <%= radio_button 'depense_equipement_facture[]', :amortissement, "100%", options %>
+              <label for="depense_equipement_facture_<%= @depense_equipement_facture.id %>_amortissement_100">100%</label>
+            </span>
+          </span>
+        </p>
+        
+        <div class="sub-form" 
+             id="amortissement-sub-form-<%= @depense_equipement_facture.id %>" 
+             <%= 'style="display:none;"' if @depense_equipement_facture.amortissement == '100%' %>>
+          
+          <p <%= "class='disabled'" if @non_modifiable_facture.include?('duree_amortissement')%>>
+            <label for="depense_equipement_facture_<%= @depense_equipement_facture.id %>_duree_amortissement" 
+                  class="required">Durée de l'amortissement</label><br />
+            <% options = ({:disabled => true} if @non_modifiable_facture.include?('duree_amortissement')) || {} %>
+            <%= text_field 'depense_equipement_facture[]', :duree_amortissement, options %>
+          </p>
+          
+          <p class="inline <%= "disabled" if @non_modifiable_facture.include?('date_amortissement_debut')%>">
+            <label class="required">Date de mise en service</label><br />
+            <% if @non_modifiable_facture.include?('date_amortissement_debut') %>
+              <%= date_select 'depense_equipement_facture[]', 
+                              :date_amortissement_debut,
+                              :include_blank => true,
+                              :use_month_numbers => true, 
+                              :order => [:day, :month, :year],
+                              :disabled => true %>
+            <% else %>
+              <%= unobtrusive_date_picker 'depense_equipement_facture[]', 
+                                          :date_amortissement_debut,
+                                          :include_blank => true,
+                                          :use_month_numbers => true,
+                                          :class => 'no-transparency',
+                                          :id => "#{@depense_equipement_facture.id}" %>
+            <% end %>
+          </p>
+          
+          <p class="inline <%= "disabled" if @non_modifiable_facture.include?('date_amortissement_fin')%>">
+            <label class="required">Date de fin de prise en charge</label><br />
+            <% if @non_modifiable_facture.include?('date_amortissement_fin') %>
+              <%= date_select 'depense_equipement_facture[]',
+                                :date_amortissement_fin,
+                                :use_month_numbers => true, 
+                                :order => [:day, :month, :year],
+                                :disabled => true %>
+            <% else %>
+              <%= unobtrusive_date_picker 'depense_equipement_facture[]',
+                                            :date_amortissement_fin, 
+                                            :include_blank => true,
+                                            :use_month_numbers => true, 
+                                            :class => 'no-transparency',
+                                            :id => "#{@depense_equipement_facture.id}" %>
+            <% end %>
+          </p>
+          
+          <p <%= "class='disabled'" if @non_modifiable_facture.include?('amortissement_is_in_auto_mode')%>>
+            <% options = ({:disabled => true} if @non_modifiable_facture.include?('amortissement_is_in_auto_mode')) || {} %>
+            <%= check_box 'depense_equipement_facture[]', :amortissement_is_in_auto_mode, options %>
+            <label for="depense_equipement_facture_<%= @depense_equipement_facture.id %>_amortissement_is_in_auto_mode">Calculs automatiques ?</label><br/> 
+          </p>
+          
+          <div id="auto-mode-true-<%= @depense_equipement_facture.id %>" 
+               <%= 'style="display:none"' if !@depense_equipement_facture.amortissement_is_in_auto_mode %>>
+            <p class="note">
+              Avec cette option activée, le taux d'amortissement ainsi que le montant justifiable HTR sont calculés automatiquement.
+            </p>
+          </div>
+          <div id="auto-mode-false-<%= @depense_equipement_facture.id %>" 
+               <%= 'style="display:none"' if @depense_equipement_facture.amortissement_is_in_auto_mode %>>
+            <p <%= "class='disabled'" if @non_modifiable_facture.include?('taux_amortissement')%>>
+              <label for="depense_equipement_facture_<%= @depense_equipement_facture.id %>_taux_amortissement">Taux d'amortissement</label><br />
+              <% options = ({:disabled => true} if @non_modifiable_facture.include?('taux_amortissement')) || {} %>
+              <%= text_field 'depense_equipement_facture[]', :taux_amortissement, options %>
+            </p>
+
+            <p <%= "class='disabled'" if @non_modifiable_facture.include?('montant_justifiable_htr')%>>
+              <label for="depense_equipement_facture_<%= @depense_equipement_facture.id %>_montant_justifiable_htr">Montant justifiable HTR</label><br />
+              <% options = ({:disabled => true} if @non_modifiable_facture.include?('montant_justifiable_htr')) || {} %>
+              <%= text_field 'depense_equipement_facture[]', :montant_justifiable_htr, options %>
+            </p>
+          </div>
+        </div>
+        
+        <p <%= "class='disabled'" if @non_modifiable_facture.include?('justifiable')%>>
+          <label>Justifiable</label><br />
+          <% options = ({:disabled => true} if @non_modifiable_facture.include?('justifiable')) || {} %>
+          <%= select 'depense_equipement_facture[]', 
+                     :justifiable, ["","Possible","Impossible","Utilisée","Refusée"],
+                     {},
+                     options %>                 
+        </p>
+        
+        <p <%= "class='disabled'" if @non_modifiable_facture.include?('rubrique_comptable_id')%>>
+          <label>Rubrique Comptable</label><br />
+          <% options = ({'disabled' => true} if @non_modifiable_facture.include?('rubrique_comptable_id')) || {} %>
+          <%= select 'depense_equipement_facture[]', 
+                     :rubrique_comptable_id, 
+                     options_for_rubrique_comptables(RubriqueComptable.find(:all, :order => 'numero_rubrique')),
+                     {},
+                     options %>
+        </p>
+      </div>
+      
+    </div>
+    
+  </div>
+</div>
+
+<script type="text/javascript">
+  <%- if controller.action_name.to_s == "add_depense_equipement_facture" -%>
+    datePickerController.create();
+  <%- end -%>
+  new App.Budget.EquipmentFactureForm('<%= @depense_equipement_facture.id %>');
+</script>

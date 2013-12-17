@@ -1,0 +1,55 @@
+<% @sous_contrat_notification = sous_contrat_notification %>
+<div class="dispatching  size_<%= @contrat.sous_contrats.size %>" id="<%= "sous_contrat_notification_#{sous_contrat_notification.id}" %>">
+	<h4><span title="<%= SousContrat.find(sous_contrat_notification.sous_contrat_id).entite.nom %>"><%= truncate(SousContrat.find(sous_contrat_notification.sous_contrat_id).entite.nom, :length => 20, :ommission => '...') %></span></h4>
+	<% if options == "personnel" %>
+	<p>
+		<%= text_field 'sous_contrat_notification[]', 'pa_doctorant', :class => "text" %>
+	</p>
+	<p>
+		<%= text_field 'sous_contrat_notification[]', 'pa_post_doc', :class => "text" %>
+	</p>
+	<p>
+		<%= text_field 'sous_contrat_notification[]', 'pa_ingenieur', :class => "text" %>
+	</p>
+	<p>
+		<%= text_field 'sous_contrat_notification[]', 'pa_autre', :class => "text" %>
+	</p>
+	<p style="border:none;">
+		<%= text_field 'sous_contrat_notification[]', 'pa_equivalent_temps_plein', :class => "text notification_pa_equivalent_temps_plein" %>
+				<span id='sous_contrat_notification_<%= sous_contrat_notification.id %>_pa_equivalent_temps_plein_cach' style="display:none;"><%= @sous_contrat_notification.pa_equivalent_temps_plein.to_s %></span>
+	</p>
+	<% else %>
+	<p>
+		<%= text_field 'sous_contrat_notification[]', 'ma_fonctionnement', :class => "text" %>
+	</p>
+	<p>
+		<%= text_field 'sous_contrat_notification[]', 'ma_equipement', :class => "text" %>
+	</p>
+	<p>
+		<%= text_field 'sous_contrat_notification[]', 'ma_salaire', :class => "text" %>
+	</p>
+	<p>
+		<%= text_field 'sous_contrat_notification[]', 'ma_mission', :class => "text" %>
+	</p>
+	<p>
+		<%= text_field 'sous_contrat_notification[]', 'ma_non_ventile', :class => "text" %>
+	</p>
+	<p style="height:40px;">
+		<%= text_field 'sous_contrat_notification[]', 'ma_couts_indirects', :class => "text" %>
+	</p>
+	<p style="height:40px;">
+		<%= text_field 'sous_contrat_notification[]', 'ma_frais_gestion_mutualises_local', :class => "text" %>
+	</p>
+	 <p style="height:40px;">
+    <%= text_field 'sous_contrat_notification[]', 'ma_frais_gestion_mutualises', :class => "text" %>
+  </p>
+	<p>
+		<%= text_field 'sous_contrat_notification[]', 'ma_allocation', :class => "text" %>
+	</p>
+	<p style="border:none;">
+		<%= text_field 'sous_contrat_notification[]', 'ma_total', :class => "text notification_ma_total" %>
+		<span id='sous_contrat_notification_<%= sous_contrat_notification.id %>_ma_total_cach' style="display:none;"><%= @sous_contrat_notification.ma_total.to_s %></span>
+	</p>
+	<%= hidden_field 'sous_contrat_notification[]', 'sous_contrat_id', :value => sous_contrat_notification.sous_contrat_id %>
+	<% end %>
+</div>

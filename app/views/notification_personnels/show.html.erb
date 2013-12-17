@@ -1,0 +1,33 @@
+<p>
+  <b>Notification:</b>
+  <%=h @notification_personnel.notification_id %>
+</p>
+
+<p>
+  <b>Nom:</b>
+  <%=h @notification_personnel.nom %>
+</p>
+
+<p>
+  <b>Prenom:</b>
+  <%=h @notification_personnel.prenom %>
+</p>
+
+<p>
+  <b>Statut:</b>
+  <%=h @notification_personnel.statut %>
+</p>
+
+<p>
+  <b>Tutelle:</b>
+  <%=h @notification_personnel.tutelle %>
+</p>
+
+<p>
+  <b>Pourcentage:</b>
+  <%=h @notification_personnel.pourcentage %>
+</p>
+
+
+<%= link_to 'Edit', edit_notification_personnel_path(@notification_personnel) %> |
+<%= link_to 'Back', notification_personnels_path %>

@@ -1,0 +1,17 @@
+<% for laboratoire in @laboratoires %>
+<div class="box_1_per_line <%= cycle("even","odd") %>">
+	<div class="infos">
+		<div class="primary"><%= link_to laboratoire.nom, laboratoire_path(laboratoire) %></div>
+		<div class="secondary"><%=h truncate(laboratoire.description,:length =>35, :ommission =>"...") %></div>
+	</div>
+	<div class="actions">
+		<%= link_to 'Editer', edit_laboratoire_path(laboratoire) %>
+	  <%= link_to_remote_redbox "Supprimer",
+      { :url => ask_delete_laboratoire_path(laboratoire),
+        :method => :get},
+      { :title => "Supprimer ce laboratoire" } %>
+	
+	</div>
+	<div style="clear:both;"></div>
+</div>
+<% end %>

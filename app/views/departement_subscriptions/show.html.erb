@@ -1,0 +1,23 @@
+<p>
+  <b>Projet:</b>
+  <%=h @departement_subscription.projet_id %>
+</p>
+
+<p>
+  <b>Departement:</b>
+  <%=h @departement_subscription.departement_id %>
+</p>
+
+<p>
+  <b>Created at:</b>
+  <%=h @departement_subscription.created_at %>
+</p>
+
+<p>
+  <b>Updated at:</b>
+  <%=h @departement_subscription.updated_at %>
+</p>
+
+
+<%= link_to 'Edit', edit_departement_subscription_path(@departement_subscription) %> |
+<%= link_to 'Back', departement_subscriptions_path %>

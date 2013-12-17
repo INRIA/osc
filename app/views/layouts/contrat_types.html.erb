@@ -1,0 +1,49 @@
+<% if controller.action_name.to_s == 'ask_delete' %>
+  <%= yield  %>
+<% else %>
+  <% content_for :head do %>
+  	<% if controller.action_name.to_s == 'index' %>
+  	<div class='header_title'>
+  		<strong>Liste des types de contrat</strong>
+  	</div>
+  	<div class='header_link'>
+  	</div>
+  	<div style='clear:both;'></div>
+  	<% end %>
+  	
+  	<% if controller.action_name.to_s == 'edit' || controller.action_name.to_s == 'update' %>
+  		<div class='header_title'>
+  			<strong><%= @contrat_type.nom %></strong>
+  			// Edition
+  		</div>
+  		<div class='header_link'>
+  		</div>
+  		<div style='clear:both;'></div>
+  	<% end %>
+  	
+  	<% if controller.action_name.to_s == 'new' or controller.action_name.to_s == 'create' %>
+  		<div class='header_title'>
+  			<strong>Création d'un type de contrat</strong>
+  		</div>
+  		<div class='header_link'>
+  		</div>
+  		<div style='clear:both;'></div>
+  	<% end %>
+  	
+  <% end %>
+  
+  <% content_for :right do %>
+  
+  <% if controller.action_name.to_s == 'index' %>
+  	<%= link_to '', new_contrat_type_path, {:class => "addContratType"} %>
+  <% end %>
+  
+  <div class="aide">
+  	<p>Les types de contrat sont classés dans une structure d'arbre.</p>
+  	<p>Vous ne pouvez supprimer que les types de contrat non utilisés et n'ayant pas de sous-arborescence.</p>
+  </div>
+  
+  <% end %>
+  
+  <%= render :file => 'layouts/application_admin' %>
+<% end %>

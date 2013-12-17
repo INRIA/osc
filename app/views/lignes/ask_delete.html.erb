@@ -1,0 +1,10 @@
+<div class="content">
+	<p>
+	Etes-vous certain de vouloir supprimer la ligne <strong> <%= @ligne.nom %> </strong> ?<br />
+	</p>
+	Attention, cette opération est définitive et supprime toutes les informations relatives à la ligne (versements, missions, salaires, dépense en fonctionnement, équipement et les dépenses non ventilées).
+	<br />
+	<%= link_to_close_redbox "Non", :class => 'annuler' %>
+	<%= link_to "Oui", ligne_path(@ligne), :method => :delete %>
+	<div style="clear:both;"></div>
+</div>

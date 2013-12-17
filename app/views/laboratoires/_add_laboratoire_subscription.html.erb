@@ -1,0 +1,8 @@
+<% if !@projets_restants.empty? %>
+  <%= form_for(:todoitem, :url => "/laboratoire_subscriptions/create?laboratoire_id="+@laboratoire.id.to_s,:remote => true, :html => {:class => 'inline',:method => :post}) do |f| %>
+	<label for="laboratoire_subscription_projet_id">Projets disponibles</label>
+	<%= select "laboratoire_subscription", "projet_id", @projets_restants.collect {|p| [ p.nom, p.id ] } %>		
+ 	<%= submit_tag "Ajouter" %>
+  <% end %>
+<% end %>
+

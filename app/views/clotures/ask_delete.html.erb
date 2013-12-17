@@ -1,0 +1,8 @@
+<div class="content">
+	<p>
+		Etes-vous certain de vouloir supprimer la clôture du contrat <strong> <%= @contrat.acronyme %> </strong> ?
+	</p>
+	<%= link_to_close_redbox "Non", :class => 'annuler' %>
+	<%= link_to "Oui", contrat_cloture_path, :method => :delete %>
+	<div style="clear:both;"></div>
+</div>

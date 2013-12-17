@@ -1,0 +1,24 @@
+<h2>Tris <a href="" onclick="$('sort_help').toggle(); return false">(aide)</a></h2>
+<div id='sort'>
+	<div id="sort_help" style="display:none;" class="aide">
+		<p>Vous pouvez ajouter autant de tris que vous le souhaitez en cliquant sur l'icône plus. Cependant le tri n'est pas possible pour les champs contenant plusieurs entrées comme les partenaires, les mots clés, les thématiques ou le personnel impliqué. </p>
+	</div>
+	<form id="form_sort" onsubmit="submit_form();return false;">					
+		<%-  @sort_params.each{|item| -%>
+			<%= render :partial => 'add_sort_item', :locals => { :item => item }, :locals => { :item => item } %>
+		<%- } -%>
+	</form>
+</div>
+<h2>Filtres <a href="" onclick="$('filter_help').toggle(); return false">(aide)</a></h2>
+<div id='filter'>
+	<div id="filter_help" style="display:none;" class="aide">
+		<p>Vous pouvez ajouter autant de filtre que vous le souhaitez en cliquant sur l'icône plus. Les filtres sont cumulatifs (relation de type ET).</p>
+		<p>Pour chaque filtre vous pouvez spécifier plusieurs valeurs à l'aide du caractère +.<br />Par exemple, si vous souhaitez consulter les contrats des équipes alpha et beta, utilisez le filtre suivant : Association contient alpha+beta</p>
+		<p>Pour mettre en place un filtre sur une données de type date, utilisé le format AAAA-MM-JJ.<br />Par exemple, pour obtenir les contrats déposés après le 01/01/2006, utilisez le filtre suivant : Soumission : Date de dépot est supérieur à 2006-01-01</p>
+	</div>
+ 	<form id="form_filter" onsubmit="submit_form();return false;">			
+		<%-  @filter_params.each{|item| -%>
+			<%= render :partial => 'add_filter_item', :locals => { :item => item }, :locals => { :item => item } %>
+		<%- } -%>
+	</form>
+</div>

@@ -1,0 +1,22 @@
+	<ul class="done">
+	<% for todoitem in @todolist.todoitems.find(:all, :order => "updated_at", :conditions => "done = 1")  %>
+			<li id="todo_item_done_<%= todoitem.id.to_s %>">
+			
+				<%= check_box_tag 'cb_'+todoitem.id.to_s, "1", true,
+					:onclick => remote_function( :url => undone_contrat_todolist_todoitem_path(@todolist.contrat, @todolist, todoitem)),
+					:class => "checkbox"
+				 %>
+
+				<%= link_to_remote_redbox image_tag('trash.gif', :alt => 'del'),
+				    {	:url => ask_delete_contrat_todolist_todoitem_path(@todolist.contrat, @todolist, todoitem), 
+							:method => :get,
+							:with => "'type=done'"}, 
+						{	:class => "delete_item",
+							:title => "Supprimer cette tâche" } %>
+
+				<%= french_day_datetime todoitem.updated_at %> -
+				<%=h print_small_user_infos todoitem.updated_by %> - 
+				<%= todoitem.intitule %>
+			</li>
+	<% end %>
+	</ul>

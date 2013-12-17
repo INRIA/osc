@@ -1,0 +1,12 @@
+<%= form_for(:descriptif, :remote => true, :url => contrat_descriptif_path(@contrat, @descriptif), :html => { :method => :put } ) do |f| %>
+	 Modifiez la langue : <br />
+     <%= f.select :langue_id, Langue.find(:all).collect {|p| [ p.nom_langue, p.langue_id ] } %>
+     Modifiez le descriptif : <br />
+    <%= f.text_area :descriptif, :class => "textareafield" %>
+		<div id="error_edit_descriptif_<%= @descriptif.id.to_s %>" class="error"></div>
+    <%= submit_tag "Mettre à jour", :class => "descriptif_submit"  %> ou
+		<a href="" onclick="$('show_descriptif_<%= @descriptif.id.to_s %>').show();$('edit_descriptif_<%= @descriptif.id.to_s %>').hide();return false;">Annuler</a>
+<% end %>
+
+
+<%= javascript_tag "Try.these(function(){$$('#edit_descriptif_#{@descriptif.id.to_s} #descriptif_nom').first().focus();});" %>

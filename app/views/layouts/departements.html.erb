@@ -1,0 +1,66 @@
+<% if controller.action_name.to_s == 'ask_delete' %>
+  <%= yield  %>
+<% else %>
+  <% content_for :head do %>
+  
+  	<% if controller.action_name.to_s == 'index' %>
+  		<div class='header_title'>
+  			<strong>Listes des départements</strong>
+  			// <%= @departements.size %> entrées
+  		</div>
+  		<div class='header_link'></div>
+  		<div style='clear:both;'></div>
+  	<% end %>
+  	
+  	<% if controller.action_name.to_s == 'new' or controller.action_name.to_s == 'create' %>
+  		<div class='header_title'>
+  			<strong>Création de département</strong>
+  		</div>
+  		<div class='header_link'>
+  			<%= link_to 'Annuler', departements_path() %>
+  		</div>
+  		<div style='clear:both;'></div>
+  	<% end %>
+  	
+  	<% if controller.action_name.to_s == 'edit' or controller.action_name.to_s == 'update' %>
+  		<div class='header_title'>
+  			<strong><%= @departement.nom %></strong>
+  			// Edition
+  		</div>
+  		<div class='header_link'>
+  			<%= link_to 'Visualiser le département', departement_path(@departement) %>
+  		</div>
+  		<div style='clear:both;'></div>
+  	<% end %>
+  	
+  	<% if controller.action_name.to_s == 'show' %>
+  		<div class='header_title'>		
+  			<div class="showInfos">
+  				<p class="visibilite">
+  					<strong><%= @departement.nom %> (<%= @departement.laboratoire.nom %>)</strong>
+  					<a href="#" onclick="Effect.toggle('more', 'blind', {duration:0.4});return false;">(+)</a>
+  				</p>
+  				<p>
+  					Description :	<strong><%=h @departement.description %></strong>
+  				</p>
+  				<%= show_dates(@departement) %>
+  			</div>
+  			<div style='clear:both;'></div>		
+  		</div>
+  		<div class='header_link'>
+  			<%= link_to 'Editer le département', edit_departement_path(@departement) %>
+  		</div>
+  		<div style='clear:both;'></div>
+  	<% end %>	
+  
+  <% end %>
+  
+  
+  <% content_for :right do %>
+  	<% if controller.action_name.to_s == 'index' %>
+  		<%= link_to '', new_departement_path, {:class => "addDepartement"} %>
+  	<% end %>
+  <% end %>
+  
+  <%= render :file => 'layouts/application_admin' %>
+<% end %>  

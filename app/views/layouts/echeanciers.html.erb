@@ -1,0 +1,42 @@
+<%- if controller.action_name.to_s == 'ask_delete' -%>
+	<%= yield  %>
+<%- else -%>
+
+<%- content_for :head do -%>
+
+	<%- if ['new','create'].include? controller.action_name.to_s -%>
+	<div class='long_header_title'>		
+		<strong><%= @contrat.long_acronyme %></strong> > Echéancier // Création
+	</div>
+	<p><%= @contrat.nom %></p>
+	<%- end -%>
+
+	<%- if ['edit','update'].include? controller.action_name.to_s -%>
+	<div class='long_header_title'>		
+		<strong><%= @contrat.long_acronyme %></strong> > Echéancier // Edition
+	</div>
+	<p><%= @contrat.nom %></p>
+	<%- end -%>
+
+	<%- if ['show'].include? controller.action_name.to_s -%>
+	<div class='header_title'>		
+		<div class="showInfos">
+			<p class="visibilite">							
+				<strong><%= @contrat.long_acronyme %></strong> > Echéancier
+			</p>
+		</div>
+		<div style='clear:both;'></div>
+	</div>
+	<div class="header_link">
+		<%- if @contrat.is_editable? current_user -%>
+		<%= link_to "Editer l'échéancier", edit_contrat_echeancier_path(@contrat, @echeancier) %>
+		<%- end -%>
+	</div>
+	<div style="clear: both;"></div>
+	<p><%= @contrat.nom %></p>
+	<%- end -%>
+	
+<%- end -%>
+
+<%= render :file => 'layouts/application_suivi_des_contrats' %>
+<% end %>

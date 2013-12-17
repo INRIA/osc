@@ -1,0 +1,10 @@
+<div class="content">
+	<p>
+	Etes-vous certain de vouloir supprimer la référence budgétaire <strong>"<%= @budgetaire_reference.code %>"</strong> ?
+	</p>
+	<%= link_to_close_redbox "Non", :class => 'annuler' %>
+	<%= link_to_remote "Oui",
+ 									{ :url =>budgetaire_reference_path,
+										:method => :delete } %>
+	<div style="clear:both;"></div>
+</div>

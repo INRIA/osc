@@ -1,0 +1,132 @@
+<h2><strong>Activité récente</strong> de la ligne</h2>
+<div id="recent_history">
+<table>
+<%-
+temp_d = ''
+i = 0 
+j = 0
+@lasts.each do |last|	
+	i = i+1 
+	if (french_datetime_with_word last[:updated_at]) != temp_d 
+		j = j+1 
+		if i > 10 or j > 3
+			break 
+ 		end -%>
+<tr>
+	<td class="date"><span><%= french_datetime_with_word last[:updated_at] %></span></td>
+</tr>
+<%- end -%>
+
+<tr class="history_item">
+	<td class="contrat">
+		<%= french_datetime_in_day last[:updated_at] %>
+	</td>
+	<td class="type">
+			<span class="<%= last[:type] %>">
+			<% if last[:type] != "Versement" %>
+				<%= last[:type] -%>
+			<% else %>
+				Crédit
+			<% end %>
+			</span>
+			<%- if last[:type] != "Versement" && last[:type] != "Ligne" -%>
+			<%- if last[:soldee] -%>
+			<span class="soldee"></span>
+			<%- else -%>
+			<span class="non_soldee"></span>
+			<%- end -%>
+			<%- end -%>
+	</td>
+	
+	<td class="infos" style="width:370px">
+	<%- if last[:updated_at] == last[:created_at]  -%>
+		<%- temp = 'Création' -%>
+	<%- else -%>
+		<%- temp = 'Modification' -%>
+	<%- end -%>
+	<%- case last[:type]
+	 	 	when "Com" %>
+				<%= link_to temp+" de la dépense du commun", ligne_depense_commun_path(@ligne, last[:id]) %><br />
+				<%= simple_format last[:intitule] %>
+	<%- 	 	when "Fonct" %>
+				<%= link_to temp+" de la dépense en fonctionnement", ligne_depense_fonctionnement_path(@ligne, last[:id]) %><br />
+				<%= simple_format last[:intitule] %>
+	<%- when "Equipement" %>
+				<%= link_to temp+" de la dépense en équipement", ligne_depense_equipement_path(@ligne, last[:id]) %><br />
+				<%= simple_format last[:intitule] %>
+	<%- when "NonVentilee" %>
+				<%= link_to temp+" de la dépense non ventilée", ligne_depense_non_ventilee_path(@ligne, last[:id]) %><br />
+				<%= simple_format last[:intitule] %>
+	<%- when "Mission" %>
+				<%= link_to temp+" de la mission de "+last[:agent], ligne_depense_mission_path(@ligne, last[:id]) %><br />
+				Du <%= french_small_date last[:date_depart] %>
+				au <%= french_small_date last[:date_retour] %>
+	<%- when "Salaire" %>
+				<%= link_to temp+" Salaire de "+last[:agent], ligne_depense_salaire_path(@ligne, last[:id]) %><br />
+				<%= last[:statut] %> du <%= french_small_date last[:date_debut] %> au <%= french_small_date last[:date_fin] %>
+	<%- when "Versement" %>
+				<%= link_to temp+" du crédit", ligne_versement_path(@ligne, last[:id]) %><br />
+				<%= last[:origine] %> le <%= french_small_date(last[:date_effet]) %>
+	<%- when "Ligne" %>
+				<%= link_to temp+" de la ligne "+@ligne.nom, ligne_path(@ligne) %>
+	<%- end -%>
+	</td>
+	<td class="montant">
+		<%- case last[:type]
+				when "Com" %>
+					<%= my_number_to_currency last[:montant] %>
+		<%-		when "Fonct" %>
+					<%= my_number_to_currency last[:montant] %>
+		<%- when "Equipement" %>
+					<%= my_number_to_currency last[:montant] %>	
+		<%- when "NonVentilee" %>
+					<%= my_number_to_currency last[:montant] %>
+		<%- when "Mission" %>
+					<%= my_number_to_currency last[:montant] %>
+		<%- when "Salaire" %>
+					<%= my_number_to_currency last[:montant] %>
+		<%- when "Versement" %>
+					<%= my_number_to_currency last[:montant] %>
+		<%- end -%>
+	</td>
+	<td class="who">
+	<%- if last[:updated_at] == last[:created_at]  -%>
+		<%= print_small_user_infos last[:created_by] -%>
+	<%- else -%>
+		<%= print_small_user_infos last[:updated_by] -%>
+	<%- end -%>
+	<%- temp_d = french_datetime_with_word last[:updated_at] -%>
+	</td>
+
+</tr>
+<%- end -%>
+</table>
+</div>
+
+
+
+<div id="content_footer">
+	<div class="left">
+		Création le <%= french_datetime @ligne.created_at %> par <%= print_user_infos @ligne.created_by %>
+	</div>
+	<div class="right">
+	  <% if !@ligne.active %>
+	    <%= link_to 'Activer la ligne',  activate_ligne_path(@ligne),  {:method => :post} %>
+	    <br/>
+	  <% end %>
+	  <% if @bilan_total_ligne == 0 and @ligne.active %>
+	  <%= link_to_remote_redbox "Désactiver la ligne",
+        { :url => ask_desactivate_ligne_path(@ligne), :method => :get}, 
+        { :title => "Désactiver la ligne" }  %>
+      <br/>
+    <% end %>
+	  <% if @ligne.sous_contrat.contrat.is_editable?(current_user) %>
+		  <%= link_to_remote_redbox "Supprimer la ligne",
+		    {	:url => ask_delete_ligne_path(@ligne), :method => :get}, 
+				{	:class => "destroy",
+					:title => "Supprimer la ligne" }	%>
+	  <% end %>
+	</div>
+	<div style="clear:both;"></div>
+</div>
+

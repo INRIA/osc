@@ -1,0 +1,141 @@
+<% @echeancier_periode = echeancier_periode %>
+<div id="<%= "echeancier_periode_#{echeancier_periode.id}" %>">
+<table class="echeancier periode" id="periode_<%= echeancier_periode.id %>">
+
+	<tr class="odd">
+		<th class="middle" id="periode_<%= echeancier_periode.id %>_txt">
+			P&eacute;riode
+		</th>
+	</tr>
+	
+	<tr>
+		<td>
+			<% if controller.action_name == 'add_echeancier_periode' %>
+				<%= date_select 'echeancier_periode[]', 'date_debut',
+				:order => [:day, :month, :year],
+				:use_month_numbers => true %>
+			<% else %>
+				<% if @echeancier.echeanciable_type == "Contrat" %>
+					<%= date_select 'echeancier_periode[]', 'date_debut',
+					:order => [:day, :month, :year],
+					:use_month_numbers => true %>
+				<% else %>
+					<%= french_day_datetime(@echeancier_periode.date_debut) %>
+				<% end %>
+			<% end %>
+		</td>
+	</tr>
+	
+	<tr class="odd">
+		<td>
+			<% if controller.action_name == 'add_echeancier_periode' %>
+				<%= date_select 'echeancier_periode[]', 'date_fin',
+				:order => [:day, :month, :year],
+				:use_month_numbers => true %>
+			<% else %>
+				<% if @echeancier.echeanciable_type == "Contrat" %>
+					<%= date_select 'echeancier_periode[]', 'date_fin',
+					:order => [:day, :month, :year],
+					:use_month_numbers => true %>
+				<% else %>
+					<%= french_day_datetime(@echeancier_periode.date_fin) %>
+				<% end %>
+			<% end %>
+		</td>
+	</tr>
+	
+	<tr>
+  	<td>
+    	<%= text_field 'echeancier_periode[]', 'reference_financeur', :class => "text" %>
+  	</td>
+	</tr>
+	
+	<tr class="odd">
+  	<td>
+    	<%= text_field 'echeancier_periode[]', 'numero_contrat_etablissement_gestionnaire', :class => "text" %>
+  	</td>
+	</tr>
+	
+	<tr>
+		<td>
+			<%= text_field 'echeancier_periode[]', 'depenses_fonctionnement', :class => "text" %>
+		</td>
+	</tr>
+	
+	<tr class="odd">
+		<td>
+			<%= text_field 'echeancier_periode[]', 'depenses_equipement', :class => "text" %>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			<%= text_field 'echeancier_periode[]', 'depenses_salaires', :class => "text" %>
+		</td>
+	</tr>
+	
+	<tr class="odd">
+		<td>
+			<%= text_field 'echeancier_periode[]', 'depenses_missions', :class => "text" %>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			<%= text_field 'echeancier_periode[]', 'depenses_non_ventile', :class => "text" %>
+		</td>
+	</tr>
+	
+	<tr class="odd">
+		<td class="double_ligne">
+			<%= text_field 'echeancier_periode[]', 'depenses_couts_indirects', :class => "text" %>
+		</td>
+	</tr>
+	
+	<tr>
+		<td class="double_ligne">
+			<%= text_field 'echeancier_periode[]', 'depenses_frais_gestion_mut_local', :class => "text" %>
+		</td>
+	</tr>
+	
+	<tr class="odd">
+    <td class="double_ligne">
+      <%= text_field 'echeancier_periode[]', 'depenses_frais_gestion_mut', :class => "text" %>
+    </td>
+  </tr>
+	
+	<tr>
+		<td class="double_ligne">
+			<%= text_field 'echeancier_periode[]', 'depenses_frais_gestion', :class => "text" %>
+		</td>
+	</tr>
+	
+	<tr class="odd">
+		<td>
+			<%= text_field 'echeancier_periode[]', 'allocations', :class => "text" %>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			<%= text_field 'echeancier_periode[]', 'credit', :class => "text" %>
+		</td>
+	</tr>
+	<% if controller.action_name == 'add_echeancier_periode' %>
+		<tr class="odd">
+			<td>
+				<%= sub_list_remove_link echeancier_periode, 'echeancier_periode' %>
+			</td>
+		</tr>
+	<% else %>
+		<% if @echeancier.echeanciable_type == "Contrat" %>
+			<tr class="odd">
+				<td>
+					<%= sub_list_remove_link echeancier_periode, 'echeancier_periode' %>
+				</td>
+			</tr>
+		<% else %>
+	<% end %>
+<% end %>
+</table>
+</div>

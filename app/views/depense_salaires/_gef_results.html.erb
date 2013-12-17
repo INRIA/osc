@@ -1,0 +1,38 @@
+<div id='error' style="display:none" onclick="fadeInfobox('error');">
+  <% if flash[:error] -%>
+    <p id='notice_content'><%= flash[:error] -%></p>
+    <%= javascript_tag "error();" %>
+  <% end -%>
+  </div>
+<ul class='people'>
+	<% if @contratAgentsResult.empty? %>
+	  <h3>
+	  	Aucun contrat dans GEF n'a &eacute;t&eacute; trouv&eacute; pour cet agent sur cette allocation !
+		</h3>
+	<% else %>
+	  <h3>Cliquer sur l'agent pour ajouter les salaires correspondant au contrat affich&eacute;.</h3>
+	<% end %>
+
+	<% for contrat_agent in @contratAgentsResult %>
+	  	  <% href = "create_salaires_from_gef?contrat_agent_id="+contrat_agent['id'].to_s+"&ligne_id="+@ligne.id.to_s+"&cout_mensuel="+@cout_mensuel.to_s %>
+	  <li>
+		  <a href='<%= href %>' class="clearfix" title="Ajouter les salaires correspondant ?">
+		    <span class='data'>
+			    <span class='strong'>
+			      <span class='nom'><%= contrat_agent['nom'] %></span>
+			      <span class='prenom'><%= contrat_agent['prenom'] %></span>
+			    </span>
+			    <br />
+			    <span class='statut'><%= contrat_agent['statut'] %></span>
+					<br />
+			    <span class='equipe'><%= contrat_agent['libelle_structure'] %></span>
+			    <br />
+			    <span class='cout'><%= @cout_mensuel %> &euro; / mois</span>
+          <br />
+			    <span class='date_start'><%= french_date contrat_agent['date_debut'].to_date %></span> -
+		      <span class='date_end'><%= french_date contrat_agent['date_fin'].to_date %></span>
+		    </span>
+			</a>
+		</li>
+  <% end %>
+</ul>

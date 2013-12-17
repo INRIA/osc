@@ -1,0 +1,93 @@
+<div id="show_etat">
+  <%- if @ids_contrats.size != 0 -%>
+    <%= render :partial => 'etat_1' %>
+  <%- else -%>
+    Aucun contrat ne correspond au critères de recherche.
+  <%- end -%>
+</div>
+
+<%- content_for :head do -%>
+  <div class="long_header_title">
+    <strong>Récapitulatif</strong> du suivi de contrats
+  </div>
+<%- end -%>
+
+<%- if @ids_viewables.size != 0 -%>
+  <%- content_for :right do -%>
+    <form name="form" id="form" class="search_in_etat" action="">
+      <h2>Recherche</h2>
+      <h3>Sélection sur l'acronyme</h3>
+      <p>
+      	<label for="acronyme">Acronyme</label>
+      	<%= text_field_tag(:acronyme, @acronyme, :size => 10, :tabindex => '10' ) %>
+      	<div style="clear:both;"></div>
+      </p>
+      <h3>Sélection sur les associations</h3>
+      <p>
+      	<label for="equipe">Equipe</label>
+      	<%= text_field_tag(:equipe, @equipe, :size => 10,	:tabindex => '11' ) %>
+      	<div style="clear:both;"></div>
+      </p>
+      <p>
+        <label for="departement">Département</label>
+        <%= text_field_tag(:departement, @departement, :size => 10, :tabindex => '12' ) %>
+        <div style="clear:both;"></div>
+      </p>
+      <p>
+      	<label for="laboratoire">Laboratoire</label>
+      	<%= text_field_tag(:laboratoire, @laboratoire, :size => 10, :tabindex => '12' ) %>
+      	<div style="clear:both;"></div>
+      </p>
+      
+      <h3>Appartenance</h3>
+      <p>
+        <label for="app_departement">Département</label>
+        <%= text_field_tag("app_departement", @app_departement, :size => 10, :tabindex => '14' ) %>
+        <div style="clear:both;"></div>
+      </p>
+      <p>
+      	<label for="app_laboratoire">Laboratoire</label>
+      	<%= text_field_tag("app_laboratoire", @app_laboratoire, :size => 10,	:tabindex => '14' ) %>
+      	<div style="clear:both;"></div>
+      </p>
+      <p>
+      	<label for="app_tutelle">Tutelle</label>
+      	<%= text_field_tag("app_tutelle", @app_tutelle, :size => 10,	:tabindex => '15' ) %>
+      	<div style="clear:both;"></div>
+      </p>
+
+
+      <h3>Sélection temporelle</h3>
+      <p>Date de dépot en :	</p>
+      <p class="inline">
+        du <%= unobtrusive_date_picker 'depot_period', :start,
+               :start_year => @date_depot_first.year,
+               :end_year   => @date_depot_last.year,
+               :use_month_numbers => true, :class => 'no-transparency' %>
+      </p>
+      <br/>
+      <p class="inline">
+        au <%= unobtrusive_date_picker 'depot_period', :end,
+               :start_year => @date_depot_first.year,
+               :end_year   => @date_depot_last.year,
+               :use_month_numbers => true, :class => 'no-transparency' %>
+      </p>
+
+      <div style="clear:both;"></div>
+      <h3>Validation</h3>
+      <p>
+	<%= submit_tag "Rechercher" %>
+	<div style="clear:both;"></div>
+      </p>
+    </form>
+  <%- end -%>
+
+<script type="text/javascript">
+new Event.observe(window, 'load', function(){
+    new App.PeriodHelper('depot_period');
+});
+</script>
+
+<%- else -%>
+  Vous n'avez de droits sur aucun contrats.
+<%- end -%>

@@ -1,0 +1,200 @@
+  <div class="sect">
+    <% if @contrats_not_authorized.size != 0 %>
+      <h2><strong>Ajout</strong> de droits &agrave; l'utilisateur</h2>
+      <%= form_for(:user, :url => "/users/add_droit", :html => { :method => :post }) do |f| %>
+        <%= hidden_field_tag :user_id, @user.id, {:style => "display:none;"} %>
+        <div class="fieldset" style="width:45%; float:left;">
+          <strong>1. Quel type de droits ?</strong><br />
+          <input type="radio" name="type_droit" value="consultation" id="consultation" />
+          <label for="consultation">Consultation</label><br />
+          <input type="radio" name="type_droit" value="modification" id="modification" checked="checked" />
+          <label for="modification">Modification sur les donn&eacute;es contrats</label><br />
+          <input type="radio" name="type_droit" value="modification_budget" id="modification_budget" />
+          <label for="modification_budget">Modification sur le budget uniquement</label><br />
+        </div>
+        <div class="fieldset" style="width:45%; float:right;">
+          <strong>2. Quel type d'ajout ?</strong><br />
+          <input type="radio" name="type_ajout" value="contrat" id="contrat" checked="checked" />
+          <label for="contrat">Contrat par contrat</label><br />
+          <%= select "contrat", "id", @contrats_not_authorized.collect {|c| [ c.acronyme, c.id ] } %>
+          <% if @projet_with_contrat_editable_to_add.size != 0 %>
+            <input type="radio" name="type_ajout" value="projet" id="projet" />
+            <label for="projet">Attribuer les droits sur l'&eacute;quipe</label><br />
+            <%= select "projet", "id", @projet_with_contrat_editable_to_add.collect {|p| [ p.nom, p.id ] } %>
+          <% end %>
+        </div>
+        <div style="clear:both;"></div>
+        <br />
+        <p class="submit">
+          <%= submit_tag 'Ajouter le droit' %>
+        </p>
+      <% end %>
+      <br />
+    <% end %>
+
+    <% if @projet_with_contrat_editable_to_delete.size != 0 %>
+      <h2><strong>Suppression</strong> de droits à l'utilisateur</h2>
+      <%= form_for(:user, :url => "/users/add_droit", :html => { :method => :post }) do |f| %>
+        <p><b>Sur l'ensemble des contrats d'une &eacute;quipe</b></p>
+        <%= hidden_field_tag :type_ajout, "suppression", {:style => "display:none;"} %>
+        <%= hidden_field_tag :user_id, @user.id, {:style => "display:none;"} %>
+        <div class="fieldset" style="width:96%; ">
+          Supprimer tous les droits sur <strong>tous</strong> les contrats de quelle &eacute;quipe ?<br />
+          <%= select "suppression_projet", "id", @projet_with_contrat_editable_to_delete.collect {|p| [ p.nom, p.id ] } %>
+        </div>
+        <br />
+        <p class="submit">
+          <%= submit_tag 'Supprimer les droits' %>
+        </p>
+      <% end %>
+      <br />
+    <% end %>
+    <h2><strong>Droits sur des contrats</strong></h2>
+    <% if @contrats_editables.size == 0 %>
+      <p class='comment'>Aucun droits de modification sur un contrat n'a &eacute;t&eacute; attribu&eacute;.</p>
+    <% else %>
+      <strong>Droits de modification</strong> sur <%=  pluralize(@contrats_editables.size, "contrat").html_safe() %>
+      <ul class="droits_list">
+        <% for contrat in @contrats_editables %>
+          <li id="dc_<%= contrat.id.to_s %>" class="<%= cycle("even", "odd") %> tree_column">
+            <div class="droits_infos">
+              <%= contrat.acronyme %>
+            </div>
+            <div class="droits_actions">
+              <%= link_to_remote "",
+                  {:url => 'delete_droit', :with =>  "'authorizable_type=Contrat"+"&contrat_id="+contrat.id.to_s+"&type_droit=modification'" },
+                  :class => 'delete', :title=> 'Supprimer ce droit' %>
+            </div>
+            <div style="clear:both;"></div>
+          </li>
+        <% end %>
+        <% reset_cycle %>
+        <div style="clear:both;"> </div>
+      </ul>
+    <% end %>
+    <div style="clear:both;"> </div>
+
+    <% if @contrats_budget_editables.size == 0 %>
+      <p class='comment'>Aucun droits de modification sur le budget d'un contrat n'a &eacute;t&eacute; attribu&eacute;.</p>
+    <% else %>
+      <strong>Droits de modification du budget</strong> sur <%=  pluralize(@contrats_budget_editables.size, "contrat").html_safe() %>
+      <ul class="droits_list">
+        <% for contrat in @contrats_budget_editables %>
+          <li id="dc_<%= contrat.id.to_s %>" class="<%= cycle("even", "odd") %> tree_column">
+            <div class="droits_infos">
+              <%= contrat.acronyme %>
+            </div>
+            <div class="droits_actions">
+              <%= link_to_remote "",
+                  {:url => 'delete_droit', :with =>  "'authorizable_type=Contrat"+"&contrat_id="+contrat.id.to_s+"&type_droit=modification_budget'" },
+                  :class => 'delete', :title=> 'Supprimer ce droit' %>
+            </div>
+            <div style="clear:both;"></div>
+         </li>
+       <% end %>
+       <% reset_cycle %>
+       <div style="clear:both;"> </div>
+
+     </ul>
+   <% end %>
+   <div style="clear:both;"> </div>
+
+   <% if @contrats_consultables.size == 0 %>
+    <br /><p class='comment'>Aucun droits de consultation sur un contrat n'a &eacute;t&eacute; attribu&eacute;.</p>
+    <% else %>
+      <strong>Droits de consultation</strong> sur <%= pluralize(@contrats_consultables.size, "contrat").html_safe() %>
+      <ul class="droits_list">
+        <% for contrat in @contrats_consultables %>
+          <li id="dc_<%= contrat.id.to_s %>" class="<%= cycle("even", "odd") %> tree_column">
+           <div class="droits_infos">
+             <%= contrat.acronyme %>
+           </div>
+           <div class="droits_actions">
+             <%= link_to_remote "",
+                  {:url => 'delete_droit', :with =>  "'authorizable_type=Contrat"+"&contrat_id="+contrat.id.to_s+"&type_droit=consultation'" },
+                  :class => 'delete', :title=> 'Supprimer ce droit' %>
+           </div>
+           <div style="clear:both;"></div>
+         </li>
+       <% end %>
+       <div style="clear:both;"></div>
+     </ul>
+   <% end %>
+   <h2><strong>Droits sur des &eacute;quipes</strong></h2>
+   <% if @projets_editables.size == 0 %>
+     <p class='comment'>Aucun droit de modification sur l'ensemble des contrats d'une &eacute;quipe n'a &eacute;t&eacute; attribu&eacute;.</p>
+   <% else %>
+     <strong>Droits de modification</strong> sur <%=  pluralize(@projets_editables.size, "&eacute;quipe").html_safe() %>
+     <ul class="droits_list">
+       <% for projet in @projets_editables %>
+         <li id="dp_<%= projet.id.to_s %>" class="<%= cycle("even", "odd") %> tree_column">
+           <div class="droits_infos">
+             <%= projet.nom %>
+           </div>
+           <div class="droits_actions">
+             <%= link_to_remote "",
+                        {:url => 'delete_droit', :with =>  "'authorizable_type=Projet"+"&projet_id="+projet.id.to_s+"&type_droit=modification'" },
+                        :class => 'delete', :title=> 'Supprimer ce droit' %>
+                    
+             
+           </div>
+           <div style="clear:both;"></div>
+         </li>
+       <% end %>
+       <% reset_cycle %>
+       <div style="clear:both;"> </div>
+
+      </ul>
+    <% end %>
+    <div style="clear:both;"> </div>
+
+    <% if @projets_budget_editables.size == 0 %>
+      <p class='comment'>Aucun droit de modification sur les donn&eacute;es budg&eacute;taires uniquement d'une &eacute;quipe n'a &eacute;t&eacute; attribu&eacute; &agrave; ce groupe.</p>
+    <% else %>
+      <strong>Droits de modification du budget</strong> sur <%=  pluralize(@projets_budget_editables.size, "&eacute;quipe").html_safe() %>
+      <ul class="droits_list">
+        <% for projet in @projets_budget_editables %>
+          <li id="dp_<%= projet.id.to_s %>" class="<%= cycle("even", "odd") %> tree_column">
+            <div class="droits_infos">
+              <%=  projet.nom %>
+            </div>
+            <div class="droits_actions">
+  
+              <%= link_to_remote "",
+                  {:url => 'delete_droit', :with =>  "'authorizable_type=Projet"+"&projet_id="+projet.id.to_s+"&type_droit=modification_budget'" },
+                  :class => 'delete', :title=> 'Supprimer ce droit' %>
+                  
+            </div>
+            <div style="clear:both;"></div>
+          </li>
+        <% end %>
+        <% reset_cycle %>
+        <div style="clear:both;"> </div>
+      </ul>
+    <% end %>
+    <div style="clear:both;"> </div>
+
+    <% if @projets_consultables.size == 0 %>
+      <br /><p class='comment'>Aucun droit de consultation sur l'ensemble des contrats d'une &eacute;quipe n'a &eacute;t&eacute; attribu&eacute; &agrave; ce groupe.</p>
+    <% else %>
+      <strong>Droits de consultation</strong> sur <%= pluralize(@projets_consultables.size, "&eacute;quipe").html_safe() %>
+      <ul class="droits_list">
+        <% for projet in @projets_consultables %>
+          <li id="dp_<%= projet.id.to_s %>" class="<%= cycle("even", "odd") %> tree_column">
+            <div class="droits_infos">
+              <%= projet.nom %>
+            </div>
+            <div class="droits_actions">
+              <%= link_to_remote "",
+                  {:url => 'delete_droit', :with =>  "'authorizable_type=Projet"+"&projet_id="+projet.id.to_s+"&type_droit=consultation'" },
+                  :class => 'delete', :title=> 'Supprimer ce droit' %>
+              
+            </div>
+            <div style="clear:both;"></div>
+          </li>
+        <% end %>
+        <div style="clear:both;"></div>
+      </ul>
+    <% end %>
+
+  </div>

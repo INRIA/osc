@@ -1,0 +1,17 @@
+<% for tutelle in @tutelles %>
+<div class="box_1_per_line <%= cycle("even","odd") %>">
+	<div class="infos">
+		<div class="primary"><%= link_to tutelle.nom, tutelle_path(tutelle) %></div>
+		<div class="secondary"><%=h truncate(tutelle.description,:length => 35, :ommission =>"...") %></div>
+	</div>
+	<div class="actions">
+		<%= link_to 'Editer', edit_tutelle_path(tutelle) %>
+	  <%= link_to_remote_redbox "Supprimer",
+      { :url => ask_delete_tutelle_path(tutelle),
+        :method => :get},
+      { :title => "Supprimer cette tutelle" } %>
+	
+	</div>
+	<div style="clear:both;"></div>
+</div>
+<% end %>

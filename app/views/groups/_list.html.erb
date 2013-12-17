@@ -1,0 +1,51 @@
+<div class="pagination">
+  <%= will_paginate @groups,  :previous_label => "&nbsp;&laquo;&nbsp;",
+                              :next_label => "&nbsp;&raquo;&nbsp;",
+                              :renderer => "PaginationLinkRenderer",
+                              :remote => {:with =>"'query='+escape($F('query'))"}%>
+</div>
+
+<% style_clear=0 %>
+<% for group in @groups %>
+	<div class="box_2_per_line">
+		<div class="infos">
+			<div class="primary"><%= link_to group.nom, group_path(group) %> (<%= group.users.size %>)
+				<br />
+				<% if group.has_role? "Administrateur" %>
+					<span>&nbsp;Administrateur&nbsp;</span>
+				<% end %>
+				<% if group.has_role? "Administrateur de contrat" %>
+					<span>&nbsp;Admin Contrat&nbsp;</span>
+				<% end %>
+				<% if group.has_role? "Administrateur fonctionnel" %>
+					<span>&nbsp;Admin Fonctionnel&nbsp;</span>
+				<% end %>
+			&nbsp;
+			</div>
+			<div class="secondary"><%=h truncate(group.description,:length => 35,:ommission =>  "...")  %></div>
+		</div>
+		<div class="actions">
+			<% if (@admin) %>
+   		  <%= link_to 'Editer', edit_group_path(group) %>
+   			<%= link_to_remote_redbox "Supprimer",
+          { :url => ask_delete_group_path(group),
+            :method => :get},
+          { :title => "Supprimer ce groupe" } %>
+          	
+			<% elsif (@admin_fonc) %>
+				<%= link_to 'Editer', edit_group_path(group) %>
+			<% else %>
+				<%= link_to 'Editer les droits', edit_group_path(group) %>		
+			<% end %>
+		</div>
+		<div style="clear:right;"></div>
+	</div>
+	<% if style_clear==0%>
+	<% style_clear=1 %>
+	<% else %>
+	<div style="clear:both;"></div>
+	<% style_clear=0 %>
+	<% end %>
+	
+<% end %>
+<div style="clear:both;"></div>

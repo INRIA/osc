@@ -1,0 +1,339 @@
+<% content_for :colLeftUserGroup do %>
+<h1>Utilisateurs et groupes</h1>
+<% if (	controller.class.to_s == "UsersController" ||
+		controller.class.to_s == "UserImagesController") %>
+<%= link_to "Utilisateurs", users_path, {:class =>'current'} %>
+<% else %>
+<%= link_to "Utilisateurs", users_path %>
+<% end %>
+
+<% if controller.class.to_s == "GroupsController" %>
+<%= link_to "Groupes", groups_path, {:class =>'current'} %>
+<% else %>
+<%= link_to "Groupes", groups_path %>
+<% end %>
+<p class="aide">
+	Chaque utilisateur peut être associé à un ou plusieurs groupes.
+</p>
+<p class="aide">
+	Deux système d'autentification sont disponibles, le premier utilise des login et mots de passe stockés dans l'application et le second permet une authentification via les bases LDAP INRIA et LIG.
+</p>
+<p class="aide">
+	L'image associée à un utilisateur peut être définie par upload de photo dans l'application ou en utilisant la photo disponible dans l'application OSE. Lorsque deux photos existent la photo uploadée est prioritaire.
+</p>
+<% end %>
+
+<% content_for :colLeftContratTypes do %>
+<p class="aide">
+Les types de contrats se comportent comme un arbre
+</p>
+<% end %>
+
+<% content_for :footer do %>
+	Outil de Suivi des Contrats - Assistance : <%= SUPPORT_INFOS.html_safe() %>
+<% end %>
+
+<% content_for :admin_menu do -%>
+	<% if controller.class.to_s == "ProjetsController" || 
+		controller.class.to_s == "DepartementsController" ||
+		controller.class.to_s == "LaboratoiresController" ||
+		controller.class.to_s == "TutellesController" ||
+		controller.class.to_s == "TutelleLogosController"	-%>
+	<%= link_to "Structures", projets_path, {:class =>'current-with-sub-menu'} -%>
+	<% @inStructure = true %>
+	<% else -%>
+	<%= link_to "Structures", projets_path -%>
+	<% end %>
+
+	<% if (	controller.class.to_s == "UsersController" ||
+		 	controller.class.to_s == "UserImagesController") %>
+	<%= link_to "Utilisateurs", users_path, {:class =>'current'} -%>
+	<% else -%>
+	<%= link_to "Utilisateurs", users_path -%>
+	<% end %>
+	
+	<% if controller.class.to_s == "GroupsController" -%>
+	<%= link_to "Groupes", groups_path, {:class =>'current'} -%>
+	<% else -%>
+	<%= link_to "Groupes", groups_path -%>
+	<% end %>
+	
+	<% if controller.class.to_s == "KeyWordsController" -%>
+	<%= link_to "Mots Clés", key_words_path, {:class =>'current'} -%>
+	<% else -%>
+	<%= link_to "Mots Clés", key_words_path -%>
+	<% end -%>
+	
+	<% if controller.class.to_s == "ContratTypesController" -%>
+	<%= link_to "Types de contrat", contrat_types_path, {:class =>'current'} -%>
+	<% else -%>
+	<%= link_to "Types de contrat", contrat_types_path -%>
+	<% end -%>
+	
+	<% if controller.class.to_s == "OrganismeGestionnairesController" -%>
+	<%= link_to "Etablissements gestionnaires", organisme_gestionnaires_path, {:class =>'current'} -%>
+	<% else -%>
+	<%= link_to "Etablissements gestionnaires", organisme_gestionnaires_path -%>
+	<% end -%>
+	
+	<% if controller.class.to_s == "RubriqueComptablesController" -%>
+	<%= link_to "Rubriques comptables", rubrique_comptables_path, {:class =>'current'} -%>
+	<% else -%>
+	<%= link_to "Rubriques comptables", rubrique_comptables_path -%>
+	<% end -%>
+
+	<% if controller.class.to_s == "BudgetaireReferencesController" -%>
+	<%= link_to "References Budgetaires", budgetaire_references_path, {:class =>'current'} -%>
+	<% else -%>
+	<%= link_to "References Budgetaires", budgetaire_references_path -%>
+	<% end -%>
+	
+<% end -%>
+
+<% content_for :admin_fonc_menu do %>
+    <% if controller.class.to_s == "ProjetsController" || 
+		controller.class.to_s == "DepartementsController" ||
+		controller.class.to_s == "LaboratoiresController" ||
+		controller.class.to_s == "TutellesController" ||
+		controller.class.to_s == "TutelleLogosController"	-%>
+	<%= link_to "Structures", projets_path, {:class =>'current-with-sub-menu'} -%>
+	<% @inStructure = true %>
+	<% else -%>
+	<%= link_to "Structures", projets_path -%>
+	<% end %>
+	
+	<% if (	controller.class.to_s == "UsersController" ||
+		 	controller.class.to_s == "UserImagesController") %>
+	<%= link_to "Utilisateurs", users_path, {:class =>'current'} -%>
+	<% else -%>
+	<%= link_to "Utilisateurs", users_path -%>
+	<% end %>
+	
+	<% if controller.class.to_s == "GroupsController" -%>
+	<%= link_to "Groupes", groups_path, {:class =>'admin_contrat current'} %>
+	<% else -%>
+	<%= link_to "Groupes", groups_path, {:class =>'admin_contrat'} %>
+	<% end %>
+	
+	<% if controller.class.to_s == "KeyWordsController" -%>
+	<%= link_to "Mots Clés", key_words_path, {:class =>'current'} -%>
+	<% else -%>
+	<%= link_to "Mots Clés", key_words_path -%>
+	<% end -%>
+	
+	<% if controller.class.to_s == "ContratTypesController" -%>
+	<%= link_to "Types de contrat", contrat_types_path, {:class =>'current'} -%>
+	<% else -%>
+	<%= link_to "Types de contrat", contrat_types_path -%>
+	<% end -%>
+	
+	<% if controller.class.to_s == "OrganismeGestionnairesController" -%>
+	<%= link_to "Etablissements gestionnaires", organisme_gestionnaires_path, {:class =>'current'} -%>
+	<% else -%>
+	<%= link_to "Etablissements gestionnaires", organisme_gestionnaires_path -%>
+	<% end -%>
+	
+	<% if controller.class.to_s == "RubriqueComptablesController" -%>
+	<%= link_to "Rubriques comptables", rubrique_comptables_path, {:class =>'current'} -%>
+	<% else -%>
+	<%= link_to "Rubriques comptables", rubrique_comptables_path -%>
+	<% end -%>
+
+	<% if controller.class.to_s == "BudgetaireReferencesController" -%>
+	<%= link_to "References Budgetaires", budgetaire_references_path, {:class =>'current'} -%>
+	<% else -%>
+	<%= link_to "References Budgetaires", budgetaire_references_path -%>
+	<% end -%>
+<% end %>
+
+<% content_for :admin_sub_menu do -%>
+<% if @inStructure %>
+<div id="sub-menu">
+	<div class="wrapper">
+	
+	<% if controller.class.to_s == "ProjetsController" -%>
+	<%= link_to "Equipes", projets_path, {:class =>'current'} -%>
+	<% else -%>
+	<%= link_to "Equipes", projets_path -%>
+	<% end %>
+	<% if controller.class.to_s == "DepartementsController" -%>
+	<%= link_to "Départements", departements_path, {:class =>'current'} -%>
+	<% else -%>
+	<%= link_to "Départements", departements_path -%>
+	<% end %>
+	<% if controller.class.to_s == "LaboratoiresController" -%>
+	<%= link_to "Laboratoires", laboratoires_path, {:class =>'current'} -%>
+	<% else -%>
+	<%= link_to "Laboratoires", laboratoires_path -%>
+	<% end %>
+	<% if (	controller.class.to_s == "TutellesController" ||
+			controller.class.to_s == "TutelleLogosController" ) %>
+	<%= link_to "Tutelles", tutelles_path, {:class =>'current'} -%>
+	<% else -%>
+	<%= link_to "Tutelles", tutelles_path -%>
+	<% end %>
+	<div style="clear:both;"></div>
+	</div>
+</div>
+<% end %>
+<% end %>
+
+<% content_for :admin_contrat_menu do %>
+	<% if controller.class.to_s == "UsersController"%>	
+		<%= link_to "Utilisateurs", users_path, {:class =>'admin_contrat current'} %>
+	<% else %>
+		<%= link_to "Utilisateurs", users_path, {:class =>'admin_contrat'} %>
+	<% end %>
+	
+	<% if controller.class.to_s == "GroupsController" -%>
+	<%= link_to "Groupes", groups_path, {:class =>'admin_contrat current'} %>
+	<% else -%>
+	<%= link_to "Groupes", groups_path, {:class =>'admin_contrat'} %>
+	<% end %>
+	
+	<% if controller.class.to_s == "KeyWordsController" -%>
+	<%= link_to "Mots Clés", key_words_path, {:class =>'current'} -%>
+	<% else -%>
+	<%= link_to "Mots Clés", key_words_path -%>
+	<% end -%>
+	
+	<% if controller.class.to_s == "ContratTypesController" -%>
+	<%= link_to "Types de contrat", contrat_types_path, {:class =>'current'} -%>
+	<% else -%>
+	<%= link_to "Types de contrat", contrat_types_path -%>
+	<% end -%>
+	
+	<% if controller.class.to_s == "OrganismeGestionnairesController" -%>
+	<%= link_to "Etablissements gestionnaires", organisme_gestionnaires_path, {:class =>'current'} -%>
+	<% else -%>
+	<%= link_to "Etablissements gestionnaires", organisme_gestionnaires_path -%>
+	<% end -%>
+	
+	<% if controller.class.to_s == "RubriqueComptablesController" -%>
+	<%= link_to "Rubriques comptables", rubrique_comptables_path, {:class =>'current'} -%>
+	<% else -%>
+	<%= link_to "Rubriques comptables", rubrique_comptables_path -%>
+	<% end -%>
+
+	<% if controller.class.to_s == "BudgetaireReferencesController" -%>
+	<%= link_to "References Budgetaires", budgetaire_references_path, {:class =>'current'} -%>
+	<% else -%>
+	<%= link_to "References Budgetaires", budgetaire_references_path -%>
+	<% end -%>
+<% end %>
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <%= csrf_meta_tag %>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  <title>OSC - Admin - <%= controller.class %> : <%= controller.action_name %></title>
+  <link rel="shortcut icon" href="<%= asset_path 'favicon.ico' %>" />
+	<%= javascript_include_tag 'application' %>
+  <%= stylesheet_link_tag 'admin'  %>
+ 
+  
+</head>
+<body>
+	<span id='indicator' style='display:none;'>Chargement en cours... Merci de patienter !</span>
+	<% if flash[:notice] -%>
+	  <div id='notice' style="display:none" onclick="fadeInfobox('notice');">
+		  <p id='notice_content'><%= flash[:notice] -%></p>
+		  <%= javascript_tag "notice();" %>
+	  </div>
+	<% end -%>
+
+	<div id="entete">
+		<h1><strong>OSC</strong> Outil de Suivi des Contrats - Administration</h1>
+		<% if logged_in? -%>
+			<div id="deconnection">
+					<%= link_to "Se déconnecter", :controller => "account", :action => "logout" %>
+			</div>
+			<% if (current_user.is_admin?) || (current_user.is_contrat_admin?) || (current_user.is_fonc_admin?) %>
+				<div id="admin">
+					<%= link_to "Quitter l'interface d'administration", contrats_path %> &nbsp;
+				</div>
+			<% end %>
+			<% if AFFICHE_MANUEL_INRIA and session[:current_user_ldap]=="ildap INRIA" %>
+        <div id="manuel">
+          <%= link_to "#{LINK_MANUEL_INRIA}", "#{MANUEL_INRIA}",:target =>"_blank", :title => "Accéder aux fichiers" %> <%=SUP_MANUEL_INRIA%>
+        </div>
+      <% elsif AFFICHE_MANUEL %>
+        <div id="manuel">
+          <%= link_to "#{LINK_MANUEL}", "#{MANUEL}", :title => "Télécharger le fichier" %> <%=SUP_MANUEL%>
+        </div>
+      <% end %>
+			<div id="current_user">
+				<%= current_user.prenom %> <%= current_user.nom %>
+			</div>
+		<% end -%>
+		<div style="clear:both;"></div>
+	</div>
+
+	<% if controller.class.to_s == "AccountController" -%>
+		<%= yield %>
+	<% else -%>
+	
+	<div id="menu">
+		
+	<% if is_in_admin_menu? %>
+		<div class="wrapper">
+		<% if current_user.is_admin? -%>
+			<%= yield :admin_menu -%>
+	    <% elsif current_user.is_fonc_admin? -%>
+			<%= yield :admin_fonc_menu -%>
+		<% elsif current_user.is_contrat_admin? -%>
+			<%= yield :admin_contrat_menu -%>
+		<% end -%>
+		</div>
+	<% end %>
+
+	<% if controller.class.to_s == "ProjetsController" ||
+		controller.class.to_s == "DepartementsController" ||
+		controller.class.to_s == "LaboratoiresController" ||
+		controller.class.to_s == "TutellesController" -%>	
+		<div style="clear:both;"></div>
+	<%  else  %>
+		<div style="clear:both;border-top:1px solid #e5e5e5;"></div>
+	<%  end  %>
+	</div>
+
+	<%= yield :admin_sub_menu -%>		
+	
+	<div id="wrapper">
+	<div id="container">
+		<div id="left">
+			<div class='innercol'>
+				<div class='head'>
+					<%= yield :head %>					
+				</div>
+				<%= yield :sub_menu %>
+				<div class='content'>
+					<%= yield %>
+				</div>
+			</div>
+			
+			<div id="footer">
+	      <%= yield :footer %>
+			</div>
+		</div>
+
+		<div id="right">
+			<div class='innercol'>
+				<%= yield :right %>
+			</div>
+		</div>
+		<div style="clear: both;"/>
+		<br style="clear: both;"/>
+		</div>
+	</div>	
+	
+	<div style="clear:both;"></div>
+	<% end %>
+
+</body>
+</html>
+

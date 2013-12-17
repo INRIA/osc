@@ -1,0 +1,9 @@
+<% if !@contrats.nil? %>
+<%= will_paginate @contrats,
+            :previous_label => "&nbsp;&laquo;&nbsp;",
+            :next_label => "&nbsp;&raquo;&nbsp;",
+            :renderer => "PaginationLinkRenderer",
+            :inner_window => 2,
+            :params => {:action => "show_result"},
+            :remote => {:with => "Form.serialize('form1')+'&'+Form.serialize('form2')+'&'+Form.serialize('form_sort')+'&'+Form.serialize('form_filter')"}%>
+<% end %>

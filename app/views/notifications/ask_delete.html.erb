@@ -1,0 +1,10 @@
+<div class="content">
+	<p>
+		Etes-vous certain de vouloir supprimer la notification du contrat <strong> <%= @contrat.long_acronyme %> </strong> ?
+	</p>
+	Cette suppression entraîne également la suppression de l'échéancier.
+	
+	<%= link_to_close_redbox "Non", :class => 'annuler' %>
+	<%= link_to "Oui", contrat_notification_path(@contrat, @notification), :method => :delete %>
+	<div style="clear:both;"></div>
+</div>

@@ -1,0 +1,25 @@
+<p>
+	Bonjour <%= @user.prenom %> <%= @user.nom %>,
+</p>
+<p>
+<%= @current_user.prenom %> <%= @current_user.nom %> vous a donné des droits de <%= @type_droit %> sur le contrat <%= @contrat.long_acronyme %> dans l'outil de suivi des contrats.<br />
+L'outil de suivi des contrats (OSC) est disponible à l'adresse suivante : <a href="<%= APP_URL %>"><%= APP_URL %></a>.
+</p>
+<p>
+<%- if @user.ldap? -%>
+  <% BASES_LDAP.each do | ldap | %>>
+    <%- if @user.type_ldap == ldap["type"] -%>
+      L'authentification à l'application utilise la <%= ldap["libelle"] %>.<br />
+    <%- end -%>
+  <%- end -%>
+Pour vous authentifier utilisez votre login '<%= @user.login %>' et votre mot de passe LDAP.<br />
+Si vous ne connaissez pas votre mot de passe, merci de contacter votre administrateur système.
+<%- else -%>
+Pour vous authentifier utilisez votre login '<%= @user.login %>' et votre mot de passe propre à l'application et communiqué par les administrateurs de l'application.<br />
+Si vous ne connaissez pas votre mot de passe, merci de contacter l'équipe support de l'application OSC à l'adresse suivante : <%= EMAIL_SUPPORT %>.
+<%- end -%>
+</p>
+<p style="color:#555555;">
+Cordialement,<br />
+L'équipe support de OSC (<%= EMAIL_SUPPORT %>)
+</p>

@@ -1,0 +1,61 @@
+	<h2><strong>Photo</strong> de l'utilisateur</h2>	
+	<% if @user.user_image.nil? && ( @user.photose == '' || @user.photose.nil? )%>
+	
+		<p>Aucune photo n'est associée à cet utilisateur.</p>
+		<p>Vous pouvez associer une photo à cet utilisateur en :
+			<ul>
+				<li>
+					<%= link_to "important une photo depuis votre disque dur", new_user_user_image_path(@user) %>
+				</li>
+				<%- if PHOTO_OSE_ACTIVE -%>
+				<li> 
+					<%= link_to "récupérer automatiquement la photo disponible dans l'application OSE", { :action => "update_photo_with_ose", :id => @user.id  } %>
+				</li>
+				<%- end -%>
+			</ul>
+	<% elsif !@user.user_image.nil? %>
+		
+		<%= form_for(:user, :url => user_user_image_path(@user, @user.user_image), :html => { :method => :delete }) do |f| %>
+		  <div class="fieldset">
+				<img alt="OsePhoto" src="<%= url_for_file_column(@user.user_image, "image") %>" />
+				<img alt="OsePhoto" src="<%= url_for_file_column(@user.user_image, "image") %>" style="height:65px" />
+				<img alt="OsePhoto" src="<%= url_for_file_column(@user.user_image, "image") %>" style="height:60px" />
+				<img alt="OsePhoto" src="<%= url_for_file_column(@user.user_image, "image") %>" style="height:55px" />
+				<img alt="OsePhoto" src="<%= url_for_file_column(@user.user_image, "image") %>" style="height:50px" />
+				<img alt="OsePhoto" src="<%= url_for_file_column(@user.user_image, "image") %>" style="height:45px" />
+				<img alt="OsePhoto" src="<%= url_for_file_column(@user.user_image, "image") %>" style="height:40px" />
+				<img alt="OsePhoto" src="<%= url_for_file_column(@user.user_image, "image") %>" style="height:35px" />
+				<img alt="OsePhoto" src="<%= url_for_file_column(@user.user_image, "image") %>" style="height:30px" />
+				<img alt="OsePhoto" src="<%= url_for_file_column(@user.user_image, "image") %>" style="height:25px" />
+				<img alt="OsePhoto" src="<%= url_for_file_column(@user.user_image, "image") %>" style="height:20px" />
+		  </div>
+			<br />
+			<p class="submit">
+				<%= submit_tag "Supprimer la photo" %> ou
+				<%= link_to 'modifier la', edit_user_user_image_path(@user, @user.user_image) %>
+			</p>
+		<% end %>		
+		
+	<% else %>
+		<%= form_for(:user, :url => user_path(@user), :html => { :method => :put }) do |f| %>
+	  <div class="fieldset">
+				<img alt="OsePhoto" src="<%= @user.photose %>" />
+				<img alt="OsePhoto" src="<%= @user.photose %>" style="height:65px" />
+				<img alt="OsePhoto" src="<%= @user.photose %>" style="height:60px" />
+				<img alt="OsePhoto" src="<%= @user.photose %>" style="height:55px" />
+				<img alt="OsePhoto" src="<%= @user.photose %>" style="height:50px" />
+				<img alt="OsePhoto" src="<%= @user.photose %>" style="height:45px" />
+				<img alt="OsePhoto" src="<%= @user.photose %>" style="height:40px" />
+				<img alt="OsePhoto" src="<%= @user.photose %>" style="height:35px" />
+				<img alt="OsePhoto" src="<%= @user.photose %>" style="height:30px" />
+				<img alt="OsePhoto" src="<%= @user.photose %>" style="height:25px" />
+				<img alt="OsePhoto" src="<%= @user.photose %>" style="height:20px" />
+		  </div>
+			<%= f.text_field :photose , {:value => "", :style => "display:none;"}%>
+			<input type="hidden" value="photo" name="myaction" />
+			<br />
+			<p class="submit">
+				<%= submit_tag "Supprimer la photo" %>
+			</p>
+		<% end %>
+	<% end %>

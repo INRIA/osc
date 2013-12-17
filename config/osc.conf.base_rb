@@ -1,0 +1,115 @@
+#!/bin/env ruby
+# encoding: utf-8
+##
+## Configuration de l'application
+##
+
+
+## Variables nécessaires pour l'envoi d'email
+
+# URL de l'application
+# ex : APP_URL = "https://osc.mondomaine.fr"
+APP_URL = "http://127.0.0.1:3000"
+
+# Email du support de l'application
+# ex EMAIL_SUPPORT = "support-osc@mondomaine.fr"
+EMAIL_SUPPORT = "support-osc@yourdomain.fr"
+SUPPORT_INFOS = "indiquez ici votre procédure pour les demandes de support"
+
+## Recherche de photo dans OSE pour les utilisateur 
+# 
+#  OSC peut être couplé avec l'API de l'outil de suivi des effectifs
+#  pour récupérer automatiquement les photos des utilisateurs et des informations
+#  relatives au personnes enregistrées dans OSE (formulaire des salaires dans la 
+#  section suivi de budget de OSC)
+
+# Activation ou non de la recherche de photo dans OSE pour les utilisateurs (nécessite l'utilisation de OSE pour la gestion de vos effectifs)
+PHOTO_OSE_ACTIVE = false
+
+# URL de l'application OSE
+OSE_URL = ""
+
+# Port de conexion à OSE
+OSE_PORT = 443
+
+# Chemin de la methode get/dossiers de l'API de OSE
+OSE_API_GET_DOSSIER_PATH = ""
+
+# Clé d'authentification à l'API de OSE à utiliser
+OSE_API_KEY = ""
+# clé d'authentification pour les requestes REST
+API_KEY = ""
+
+## Utilisation de ldap pour l'authentification
+#
+#  L'authentification par défaut est réalisée à l'aide d'un login et
+#  mot de passe spécifique à l'application et sauvegardé dans la base de données.
+#
+#  Cependant l'authentification via Ldap est possible dans l'application
+#  Si vous souhaitez activer cette option, vous devez initialiser
+#  la variable LDAP_ACTIVE à true, adapter la variable BASES_LDAP et les fichiers suivants (configurés par défaut pour
+#  les ldap d'INRIA, et des laboratoires LIG et le LJK) :
+#  - Fichier models/users.rb : modifier la méthode authenticated_ldap? 
+#  - Fichier controllers/users_controller.rb : modifier l'action search
+
+LDAP_ACTIVE = false
+
+BASES_LDAP = [
+   { "type" => "ldap-ng.imag.fr", 
+    "host" => "ldap-ng.imag.fr", 
+    "port" => 636, 
+    "base" => "ou=people,dc=imag,dc=fr",
+    "libelle" => "Base Ldap du LIG"
+  },
+  { "type" => "ildap INRIA",
+    "host" => "ildap.inria.fr",
+    "port" => 636,
+    "base" => "ou=people,dc=inria,dc=fr",
+    "libelle" => "Base iLdap de l'INRIA"
+  },
+  { "type" => "ldap-ljk.imag.fr",
+    "host" => "ldap-ljk.imag.fr",
+    "port" => 636,
+    "base" => "ou=People,dc=ljk,dc=fr",
+    "libelle" => "Base Ldap du LJK"
+  }
+]
+
+
+## Limitation du nombre de période associées aux écheanciers
+# ex : MAX_PERIODE_COUNT = 5
+
+MAX_PERIODS_COUNT = 8
+
+
+## Critère de différenciation des contrats européen basé sur l'identifiant du type de contrat défini dans la notification
+ID_CONTRAT_TYPE_EUROPEEN = 2
+
+## Critére de différenciation des contrats de type dotation permettant de gerer les depenses du commun
+ID_CONTRAT_DOTATION = 1
+
+## Affichage ou non d'un lien vers un manuel d'aide personnalisé sur la page de login
+AFFICHE_MANUEL = false
+## nom/path du fichier d'aide à afficher, non fourni avec le code source
+MANUEL = APP_URL+"/aide/votre_manuel.pdf"
+## nom du lien
+LINK_MANUEL = "Manuel d'utilisation"
+## texte supplémentaire à afficher après le lien
+SUP_MANUEL = ""
+## Affichage ou non d'un lien vers un manuel d'aide personnalisé sur la page de login
+AFFICHE_MANUEL_INRIA = false
+## nom du fichier d'aide à afficher
+MANUEL_INRIA = ""
+## nom du lien
+LINK_MANUEL_INRIA = "Accès aux modes opératoires INRIA"
+## texte supplémentaire à afficher après le lien
+SUP_MANUEL_INRIA = ""
+## Remplacer le style par defaut
+DEFAULT_STYLE = "application_inria" #false = style marron/vert, application_inria = style inria
+## Laisser le choix d'une autre feuille de style à la connexion
+CHOIX_STYLE = false #si vous voulez utilisez un style alternatif, preciser ici le nom de la feuille de style
+## texte supplémentaire à afficher
+STYLE_TEXT = ""
+
+# clef d'authentification pour les requestes REST
+API_KEY = "123456789"

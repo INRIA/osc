@@ -1,0 +1,8 @@
+<div class="content">
+	<p>
+	Etes-vous certain de vouloir désactiver la ligne <strong> <%= @ligne.nom %> </strong> ?<br />
+	</p>
+	<%= link_to_close_redbox "Non", :class => 'annuler' %>
+	 <%= link_to 'Oui',  desactivate_ligne_path(@ligne),  {:method => :post} %>
+	<div style="clear:both;"></div>
+</div>

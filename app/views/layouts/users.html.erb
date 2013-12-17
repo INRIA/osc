@@ -1,0 +1,154 @@
+<% if controller.action_name.to_s == 'ask_delete' %>
+  <%= yield  %>
+<% else %>
+  <% content_for :head do %>
+  	<% if controller.action_name.to_s == 'index' %>
+  		<div class='header_title'>
+  			<strong>Listes des utilisateurs</strong>
+  			// <span id="ajax_result"><%= @count %> utilisateurs référencés</span>	
+  		</div>
+  		<div class='header_link'></div>
+  		<div style='clear:both;'></div>
+  	<% end %>
+  	
+  	<% if controller.action_name.to_s == 'new' or controller.action_name.to_s == 'create' %>
+  		<div class='header_title'>
+  			<strong>Création d'un utilisateur</strong>
+  		</div>
+  		<div class='header_link'></div>
+  		<div style='clear:both;'></div>
+  	<% end %>
+  	
+  	<% if controller.action_name.to_s == 'show' %>
+  	
+  	<div class='header_title'>		
+  		<div class="showImage">
+  			<%= show_user_image @user %>
+  		</div>
+  		<div class="showInfos">
+  			<p class="visibilite">
+  				<strong><%= @user.prenom %> <%= @user.nom %></strong>
+  				<a href="#" onclick="Effect.toggle('more', 'blind', {duration:0.4});return false;">(+)</a>
+  			</p>
+  			<p>
+  				Email :	<strong><%=h @user.email %></strong>
+  			</p>
+  			<p>
+  				Commentaire : <strong><%=h @user.commentaire %></strong>
+  			</p>
+  			<%= show_dates(@user) %>
+  		</div>
+  		<div style='clear:both;'></div>		
+  	</div>
+  	<div class='header_link'>
+  		<%= link_to "Editer l'utilisateur", edit_user_path(@user) %>
+  	</div>
+  	<div style='clear:both;'></div>
+  	<% end %>
+  	
+  	<% if controller.action_name.to_s == 'edit'  or controller.action_name.to_s == 'update' %>
+  	
+  	<div class='header_title'>
+  		<% if @admin || @admin_fonc %>
+  			<strong><%= @user.prenom %> <%= @user.nom %></strong>
+  			// Edition
+  		<% else %>
+  			<div class="showImage">
+  				<%= show_user_image @user %>
+  			</div>
+  			<div class="showInfos">
+  				<p class="visibilite">
+  					<strong><%= @user.prenom %> <%= @user.nom %></strong>
+  					<a href="#" onclick="Effect.toggle('more', 'blind', {duration:0.4});return false;">(+)</a>
+  				</p>
+  				<p>
+  					Email :	<strong><%=h @user.email %></strong>
+  				</p>
+  				<p>
+  					Commentaire : <strong><%=h @user.commentaire %></strong>
+  				</p>
+  				<%= show_dates(@user) %>
+  			</div>
+  			<div style='clear:both;'></div>
+  		<% end %>
+  	</div>
+  	<div class='header_link'>
+  		<%= link_to "Visualiser l'utilisateur", user_path(@user) %>
+  	</div>
+  	<div style='clear:both;'></div>
+  	<% end %>
+  
+  	
+  <% end %>
+  
+  <% if controller.action_name.to_s == 'edit'  or controller.action_name.to_s == 'update' %>
+  	<% content_for :sub_menu do %>
+  	<div id="onglets_tab">		
+  		<% if @admin %>
+  			<a href="#droits">Droits sur les contrats</a>
+  			<a href="#identite">Identité</a>
+  			<a href="#authentification">Authentification</a>
+  			<a href="#roles">Rôles</a>
+  			<a href="#groupes">Groupes</a>
+  			<a href="#photo">Photo</a>
+  		<% elsif @admin_fonc %>
+  			<a href="#droits">Droits sur les contrats</a>
+  			<a href="#identite">Identité</a>
+  			<a href="#authentification">Authentification</a>
+  			<a href="#groupes">Groupes</a>
+  			<a href="#photo">Photo</a>
+  		<% else %>
+  		    <a href="#droits">Droits sur les contrats</a>
+  			<a href="#identite">Identité</a>
+  			<a href="#photo">Photo</a>
+  		<% end %>
+  		<div style="clear:both;"></div>
+  	</div>
+  	<% end %>
+  	
+  <% end %>
+  
+  <% content_for :right do %>
+  
+  <% if controller.action_name.to_s == 'index' %>
+  	<% if @admin || @admin_fonc %>
+  	
+  		<%= link_to '', new_user_path, {:class => "addUser"} %>
+  	<% end %>
+  	<h2>Rechercher sur le nom</h2>
+  	
+  	<form name="sform" action="">
+  		<p>
+  			<%= text_field_tag("query", params['query'], :size => 10, :class => "textfield" ) %>
+  		</p>
+  	</form>
+  	
+  	<%= observe_field 'query',  :frequency => 0.5,
+         :url => {:action => 'search_by_name'},
+         :with => 'query' %>
+  	
+  	<%- if PHOTO_OSE_ACTIVE -%>
+  	<h2>Options</h2>
+  		<%= link_to_remote "Mettre à jour des photos à partie de OSE", :url => {:controller => :users, :action => :update_photos_with_ose } %>
+  	<%- end -%>
+  	
+  	
+  	</form>
+  <% end %>
+  
+  	<% if controller.action_name.to_s == 'new' or controller.action_name.to_s == 'create' %>
+  	<%- if LDAP_ACTIVE -%>
+  	
+  	<div class="aide">
+  	
+  		<p>Vous la possibilité de choisir entre une authentification de type LDAP ou un système d'authentification utilisant un login et mot de passe propre à l'application.</p>
+  		<p>Si vous souhaitez utiliser une authentification de type LDAP, utilisez le formulaire de recherche LDAP afin de vérifier la validité de ce choix.</p>
+  	</div>
+  	<%- end -%>
+  	<% end %>
+  
+  
+  <% end %>
+  
+  <%= render :file => 'layouts/application_admin' %>
+<% end %>

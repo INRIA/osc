@@ -1,0 +1,174 @@
+<% content_for :footer do %>
+  Outil de Suivi des Contrats - Assistance : <%= SUPPORT_INFOS.html_safe() %>
+<% end %>
+
+<%- content_for :menu do -%>
+<div class="wrapper">
+	<%= link_to "Suivi de contrats", contrats_path, :class => "current-with-sub-menu" -%>	
+	<%= link_to "Suivi du budget", lignes_path -%>
+	<div style="clear:both;"></div>
+</div>
+<%- end -%>
+
+
+<%- content_for :sub_menu do -%>
+<div id="tab_control">
+
+	<div style="clear:both;"></div>
+</div>
+<%- end -%>
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <%= csrf_meta_tag %>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  <title>OSC <%= controller.class.to_s.gsub("Controller", '') %> :: <%= controller.action_name %></title>
+	<%= javascript_include_tag 'application' %>
+	<%= stylesheet_link_tag "application" %>
+  <% if cookies[:style] && cookies[:style]!='' %>
+    <%= stylesheet_link_tag cookies[:style],:id =>'style_bis_css' %>
+    <link id='favicon' rel="shortcut icon" href="<%= asset_path 'Inria/favicon.ico' %>" />
+  <% else %>
+    <% if DEFAULT_STYLE %>
+      <%= stylesheet_link_tag DEFAULT_STYLE,:id =>'style_bis_css' %>
+      <link id='favicon' rel="shortcut icon" href="<%= asset_path 'Inria/favicon.ico' %>" />
+    <% else %>
+      <link id='favicon' rel="shortcut icon" href="<%= asset_path 'favicon.ico' %>" />
+    <% end %>
+  <% end %>
+</head>
+<body>
+	<div id='indicator' style='display:none;'>Chargement en cours... Merci de patienter !</div>
+	<div id='notice' style="display:none" onclick="fadeInfobox('notice');">
+	<% if flash[:notice] -%>
+		<p id='notice_content'><%= flash[:notice].html_safe() -%></p>
+		<%=  javascript_tag "notice();" %>
+	<% end -%>
+	</div>
+	
+	<div id='error' style="display:none" onclick="fadeInfobox('error');">
+	<% if flash[:error] -%>
+		<p id='notice_content'><%= flash[:error].html_safe() -%></p>
+		<%= javascript_tag "error();" %>
+	<% end -%>
+	</div>
+		
+	<div id="entete">
+		<h1><strong>OSC</strong> Outil de Suivi des Contrats</h1>
+		<% if logged_in? -%>
+		  <% if CHOIX_STYLE %>
+        <% if cookies[:style] && cookies[:style]!='' %>
+          <% style_bis_active = true %>
+        <% else %>
+          <% style_bis_active = nil %>
+        <% end %>
+        <div id="style_choice">
+          <%= check_box_tag 'style_bis' , nil, style_bis_active, :class => "checkbox", :onchange =>onclick="toggle_css_bis('style_bis','"+CHOIX_STYLE+"'); return false;" %>
+          <%= STYLE_TEXT %>
+        </div>
+      <% end %>
+			<div id="deconnection">
+					<%= link_to "Se déconnecter", :controller => "account", :action => "logout" %>
+			</div>
+			<% if (current_user.is_admin?) || (current_user.is_contrat_admin?) || (current_user.is_fonc_admin?) %>
+				<div id="admin">
+					<%= link_to "Administration", users_path %> &nbsp;
+				</div>
+			<% end %>
+			<% if AFFICHE_MANUEL_INRIA and session[:current_user_ldap]=="ildap INRIA" %>
+        <div id="manuel">
+          <%= link_to "#{LINK_MANUEL_INRIA}", "#{MANUEL_INRIA}",:target =>"_blank", :title => "Accéder aux fichiers" %> <%=SUP_MANUEL_INRIA%>
+        </div>
+      <% elsif AFFICHE_MANUEL %>
+        <div id="manuel">
+          <%= link_to "#{LINK_MANUEL}", "#{MANUEL}", :title => "Télécharger le fichier" %> <%=SUP_MANUEL%>
+        </div>
+      <% end %>
+			<div id="current_user">
+				<%= current_user.prenom %> <%= current_user.nom %>
+			</div>
+		<% end -%>
+		<div style="clear:both;"></div>
+	</div>
+
+
+	<div id="menu">
+		<%= yield :menu -%>
+		<div style="clear:both;"></div>
+	</div>
+	
+	<div id="sub-menu">
+		<div class="wrapper">
+			<%= link_to "Tableau de bord", contrats_path -%>
+			<%- if controller.action_name.to_s == "extraction"-%>
+				<%= link_to "Extraction de données", {:controller => "Etat", :action => "extraction"}, {:class =>'current'} -%>			
+			<%- else -%>
+				<%= link_to "Extraction de données", {:controller => "Etat", :action => "extraction"} -%>			
+			<%- end -%>
+			<%- if controller.action_name.to_s == "soumission_vs_notification"-%>
+				<%= link_to "Récapitulatif Soumissions vs Notifications", {:controller => "Etat", :action => "soumission_vs_notification"}, {:class =>'current'} -%>
+			<%- else -%>
+				<%= link_to "Récapitulatif Soumissions vs Notifications", {:controller => "Etat", :action => "soumission_vs_notification"} -%>
+			<%- end -%>
+			<%- if controller.action_name.to_s == "notification"-%>
+				<%= link_to "Récapitulatif Notifications", {:controller => "Etat", :action => "notification"}, {:class =>'current'} -%>			
+			<%- else -%>
+				<%= link_to "Récapitulatif Notifications", {:controller => "Etat", :action => "notification"} -%>			
+			<%- end -%>
+		<div style="clear:both;"></div>
+		</div>
+	</div>
+	
+			
+			
+	<%- if controller.action_name.to_s == "extraction" -%>
+	<div id="extraction_wrapper">
+			<div id="left_extraction">
+				<%= yield :right %>
+			</div>
+			<div id="right_extraction">
+				<div class='innercol'>
+					<div class='content'>
+						<%= yield %>
+					</div>
+				</div>
+				<div id="footer">
+				</div>
+			</div>
+	</div>
+			
+	<%- else -%>
+	<div id="wrapper">
+		<div id="container">
+			<div id="left">
+				<div class='innercol'>
+					<div class='head'>
+						<%= yield :head %>					
+					</div>
+					<div class='content'>
+						<%= yield %>
+					</div>
+				</div>
+				<div id="footer">
+		      <%= yield :footer %>
+				</div>
+			</div>
+			<div id="right">
+				<div class='innercol'>
+					<%= yield :right %>
+				</div>
+			</div>
+			<div style="clear: both;"/>
+		</div>
+	</div>
+	<%- end -%>
+	
+	<div style="clear:both;"></div>
+
+</body>
+</html>

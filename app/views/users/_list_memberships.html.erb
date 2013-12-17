@@ -1,0 +1,17 @@
+<% if @memberships.empty? %>
+<p class="comment">L'utilisateur <%= @user.prenom %> <%= @user.nom %> n'est dans aucun groupe.</p>
+<% else %>
+<% for membership in @memberships %>
+<div class="box_2_per_line" id="membership_<%= membership.id %>">
+		<div class="infos">
+			<div class="primary"><%= link_to membership.group.nom, group_path(membership.group) %></div>
+			<div class="secondary"><%=h truncate(membership.group.description,:length => 35, :ommission =>"...") %></div>
+		</div>
+		<div class="actions">
+			<%= link_to_remote "Supprimer", { :url => membership_path(membership),  :method => :delete } %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+<% end %>
+<div style="clear:both;"></div>
+<% end %>

@@ -1,0 +1,28 @@
+<%= error_messages_for @key_word %>
+
+<%= form_for(:key_word, :url => key_words_path) do |f| %>
+<fieldset>
+  <p>
+    <label for="departement_intitule">Intitulé</label><br />
+    <%= f.text_field :intitule, :class => "textfield" %>
+  </p>
+	<p>
+	  <label for='section_id'>Section</label><br />
+		<%= text_field_with_auto_complete :key_word,
+																			:section, {:class => "textfield"},
+																			{
+																				:frequency => 0.1,
+																				:partialSearch => true,
+																				:skip_style => true
+																			} %>
+	</p>
+	<p>
+	  <label for='departement_laboratoire_id'>Appartient au laboratoire</label><br />
+	  <%= f.select :laboratoire_id, Laboratoire.find(:all).collect {|p| [ p.nom, p.id ] } %>
+	</p>
+</fieldset>
+  <p class="submit">
+    <%= submit_tag "Créer le mot clé" %> ou <%= link_to "Annuler", key_words_path %>
+  </p>
+<% end %>
+

@@ -1,0 +1,23 @@
+<%= form_for(:todoitem, :url => contrat_todolist_todoitems_path(@todolist.contrat, @todolist),:remote => true ) do |f| %>
+    Ajouter une tâche<br />
+    <%= f.text_area :intitule, :value => "", :class => "inputadd" %>
+		<div id="error_add_todoitem_<%= @todolist.id.to_s %>" class="error"></div>
+		
+		<input 	type="checkbox" value="1"
+						name="todoitem[has_alerte]"
+						id="todoitem_has_alerte_new_<%= @todolist.id %>"
+						onChange="$('date_new_<%= @todolist.id %>').toggle();"/>
+		<label for="todoitem_has_alerte_new_<%= @todolist.id %>">
+			Mettre en place une alerte ?
+		</label><br />
+		
+		<p class="inline" id="date_new_<%= @todolist.id %>" style="display:none;">
+			<span class="comments">Date à laquelle la tâche devra être réalisée :</span>
+			<%= f.date_select :date, :order => [:day, :month, :year],	:use_month_numbers => true %>
+		</p>
+		
+		<hr />
+    <%= submit_tag "Valider", :class => "submit"  %> ou
+		<a href=""
+			onclick="$('add_todoitem_<%= @todolist.id.to_s %>').hide();$('link_to_add_todoitem_<%= @todolist.id.to_s %>').show();return false;">Arrêter d'ajouter des tâches</a>
+<% end %>

@@ -1,0 +1,335 @@
+<%= "<div class='come-from-inria-container'><span class='come-from-inria'>S.I. INRIA</span></div>".html_safe() if @contrat.come_from_inria? %>
+
+<%= error_messages_for @contrat %>
+
+<% if @contrat.sous_contrats.size == 0 %>
+<div class="alert">
+	Le contrat <strong><%= @contrat.acronyme %></strong> n'est pas rattaché à une entité (laboratoire, département ou équipe de recherche), merci de corriger cela à l'aide des formulaires ci-dessous.
+</div>
+<% end %>
+
+<div id="my-glider">	
+	<div class="scroller">
+		<div class="content">
+			
+			<div class="section" id="associations">
+				<%= list_association(@sous_contrats_projet, 'équipes') %>
+				<% if @projets.size != 0 %>
+					<p class="comment">Vous pouvez ajouter des associations à des équipes à l'aide du formulaire ci-dessous.</p>
+					<%= form_for(:sous_contrat, :url => sous_contrats_path, :html => {:class => 'inline'}) do |f| %>
+						<%= select("sous_contrat", "entite_id", @projets.sort!{|a,b| a.nom <=> b.nom}.collect {|p| [ p.nom, p.id ] }) %>
+						<%= f.hidden_field :entite_type, :value => 'Projet' %>
+						<%= f.hidden_field :contrat_id, :value => @contrat.id %>
+			  		<%= submit_tag "Créer l'association" %>
+					<% end %>
+				<% end %>
+				<br />
+				<%= list_association(@sous_contrats_departement, 'départements') %>
+				<% if @departements.size != 0 %>
+				<p class="comment">Vous pouvez ajouter des associations à des départements à l'aide du formulaire ci-dessous.</p>
+					<%= form_for(:sous_contrat, :url => sous_contrats_path, :html => {:class => 'inline'}) do |f| %>
+						<%= select("sous_contrat", "entite_id", @departements.collect {|p| [ p.nom, p.id ] }) %>
+						<%= f.hidden_field :entite_type, :value => 'Departement' %>
+						<%= f.hidden_field :contrat_id, :value => @contrat.id %>
+			  		<%= submit_tag "Créer l'association" %>
+					<% end %>
+				<% end %>
+				<br />
+				<%= list_association(@sous_contrats_laboratoire, 'laboratoires') %>
+				<% if @laboratoires.size != 0 %>
+				<p class="comment">Vous pouvez ajouter des associations à des laboratoires à l'aide du formulaire ci-dessous.</p>
+					<%= form_for(:sous_contrat, :url => sous_contrats_path, :html => {:class => 'inline'}) do |f| %>
+						<%= select("sous_contrat", "entite_id", @laboratoires.collect {|p| [ p.nom, p.id ] }) %>
+						<%= f.hidden_field :entite_type, :value => 'Laboratoire' %>
+						<%= f.hidden_field :contrat_id, :value => @contrat.id %>
+			  		<%= submit_tag "Créer l'association" %>
+					<% end %>					
+				<% end %>
+				<br />
+			</div>
+						
+			<div class="section" id="utilisateurs">
+				<h2>Utilisateurs <strong>sans droits</strong></h2>
+				
+				<form id="search_and_paginate">
+					<p>Recherche par nom d'un utilisateur : 
+						<%= text_field_tag("query", params['query'], :size => 10, :style => "width:150px;", :class => "text" ) %>
+					</p>
+				</form>
+				
+				<%= observe_form 'search_and_paginate',
+							:frequency => 0.5,
+							:on => 'changed',
+              :url => { :action => "show_not_authorized_users", :params => {:page => '1' } },
+							:with => "'&query='+$F('query')",
+							:method => :get,
+							:update => "not_authorized_users" %>
+				
+				<div id="not_authorized_users">
+					<%= render :partial => 'show_not_authorized_users' %>
+				</div>
+				<br />
+				<h2>Utilisateurs ayant des droits de <strong>modification sur les donn&eacute;es contrats</strong></h2>
+				<% if @modification_users.size == 0 %>
+				<% else %>
+				<ul class="droits_list">
+				<% for user in @modification_users %>
+						<li class="<%= cycle("even", "odd") %>">
+							<div class="droits_infos">
+								<%= show_user_image user %><span><%= user.prenom %> <%= user.nom %></span>
+							</div>
+							<div class="droits_actions">
+							<%= link_to "", { :action => "delete_user", 
+																						:id => @contrat.id, 
+																						:user_id => user.id, 
+																						:type_droit => "modification" },
+															{ :method => :post,
+															  :class => "delete",
+																:title => "Supprimer"} %>
+							
+							</div>
+							<div style="clear:both;"></div>	
+						</li>
+				<% end %>
+				</ul>
+				<% end %>
+				<br />
+				
+				<h2>Utilisateurs ayant des droits de <strong>modification sur les donn&eacute;es budg&eacute;taires</strong></h2>
+				<% if @modification_budget_users.size == 0 %>
+				<% else %>
+					<ul class="droits_list">
+					<% for user in @modification_budget_users %>
+						<% if !@modification_users.member? user %>	
+							<li class="<%= cycle("even", "odd") %>">
+								<div class="droits_infos">
+									<%= show_user_image user %><span><%= user.prenom %> <%= user.nom %></span>
+								</div>
+								<div class="droits_actions">
+								<%= link_to "", { :action => "delete_user", 
+																							:id => @contrat.id, 
+																							:user_id => user.id, 
+																							:type_droit => "modification_budget" },
+																{ :method => :post,
+																  :class => "delete",
+																	:title => "Supprimer"} %>
+								
+								</div>
+								<div style="clear:both;"></div>	
+							</li>
+						<% end %>
+					<% end %>
+					</ul>
+				<% end %>
+				<br />
+				
+				<h2>Utilisateurs ayant des droits de <strong>consultation</strong></h2>
+				<% if @consultation_users.size == 0 %>
+				<% else %>
+					<ul class="droits_list">
+					<% for user in @consultation_users %>
+						<% if (!@modification_users.member? user ) and (!@modification_budget_users.member? user )%>		
+							<li class="<%= cycle("even", "odd") %>">
+								<div class="droits_infos">
+									<%= show_user_image user %><span><%= user.prenom %> <%= user.nom %></span>
+								</div>
+								<div class="droits_actions">
+								<%= link_to "", { :action => "delete_user", 
+																		:id => @contrat.id, 
+																		:user_id => user.id, 
+																		:type_droit => "consultation"},
+																{	:method => :post,
+																  :class => "delete",
+																	:title => "Supprimer"} %>
+								
+								</div>
+								
+								<div style="clear:both;"></div>
+							</li>
+						<% end %>
+					<% end %>
+					</ul>
+				<% end %>
+			</div>
+
+
+			<div class="section" id="groupes">
+				<h2>Groupes <strong>sans droits</strong></h2>
+						
+				<form id="search_and_paginate_group">
+					<p>Recherche par nom de groupe :
+						<%= text_field_tag("query_group", params['query_group'], :size => 10, :style => "width:150px;", :class => "text" ) %>
+					</p>
+				</form>
+
+				<%= observe_form 'search_and_paginate_group',
+							:frequency => 0.5,
+							:on => 'changed',
+              :url => { :action => "show_not_authorized_groups", :params => {:page => '1' } },
+							:with => "'&query_group='+$F('query_group')",
+							:method => :get,
+							:update => "not_authorized_groups" %>
+
+										
+				<div id="not_authorized_groups">
+					<%= render :partial => 'show_not_authorized_groups' %>
+				</div>
+				<br />
+				<h2>Groupes ayant des droits de <strong>modification sur les donn&eacute;es contrats</strong></h2>
+				<% if @modification_groups.size == 0 %>
+				<% else %>
+				<ul class="droits_list">
+				<% for group in @modification_groups %>
+						<li class="<%= cycle("even", "odd") %>">
+							<div class="droits_infos">
+								<span><%= group.nom %></span>
+							</div>
+							<div class="droits_actions">
+							<%= link_to "", { :action => "delete_group", 
+											  :id => @contrat.id,
+											  :group_id => group.id,
+											  :type_droit => "modification" },
+											{ :method => :post,
+											  :class => "delete",
+											  :title => "Supprimer"} %>
+							</div>
+							<div style="clear:both;"></div>	
+						</li>
+				<% end %>
+				</ul>
+				<% end %>
+				<br />
+
+				<h2>Groupes ayant des droits de <strong>modification sur les donn&eacute;es budg&eacute;taires</strong></h2>
+				<% if @modification_budget_groups.size == 0 %>
+				<% else %>
+					<ul class="droits_list">
+					<% for group in @modification_budget_groups %>
+						<% if !@modification_groups.member? user %>
+							<li class="<%= cycle("even", "odd") %>">
+								<div class="droits_infos">
+									<span><%= group.nom %></span>
+								</div>
+								<div class="droits_actions">
+								<%= link_to "", { :action => "delete_group", 
+												  :id => @contrat.id,
+												  :group_id => group.id,
+												  :type_droit => "modification_budget" },
+												{ :method => :post,
+												  :class => "delete",
+												  :title => "Supprimer"} %>
+								</div>
+								<div style="clear:both;"></div>	
+							</li>
+						<% end %>
+					<% end %>
+					</ul>
+				<% end %>
+				<br />
+
+				<h2>Groupes ayant des droits de <strong>consultation</strong></h2>
+				<% if @consultation_groups.size == 0 %>
+				<% else %>
+					<ul class="droits_list">
+					<% for group in @consultation_groups %>
+						<% if (!@modification_groups.member? user ) and (!@modification_budget_groups.member? user )%>		
+							<li class="<%= cycle("even", "odd") %>">
+								<div class="droits_infos">
+									<span><%= group.nom %></span>
+								</div>
+								<div class="droits_actions">
+								<%= link_to "", { :action => "delete_group", 
+								  				  :id => @contrat.id,
+												  :group_id => group.id,
+												  :type_droit => "consultation"},
+												{ :method => :post,
+												  :class => "delete",
+												  :title => "Supprimer"} %>
+								</div>								
+								<div style="clear:both;"></div>
+							</li>
+						<% end %>
+					<% end %>
+					</ul>
+				<% end %>
+			</div>
+
+			<div class="section" id="generalites">
+                <h2><strong>Nom</strong> et <strong>acronyme</strong> du contrat</h2>
+				<%= form_for(:contrat, :url => contrat_path(@contrat), :html => { :method => :put }) do |f| %>
+				<div class="fieldset">
+					<p <%= "class='disabled'" if @non_modifiables.include?('nom')%>>
+				    <b>Nom</b><br />
+					<% if @non_modifiables.include?('nom') %>
+      		    	  <%= f.text_field :nom, :disable => true %>
+				    <% else %>
+					  <%= f.text_field :nom, :class => "textfield" %>
+					<% end %>
+				  </p>
+                  <p <%= "class='disabled'" if @non_modifiables.include?('acronyme')%>>
+					  <b>Acronyme</b><br />
+					  <% if @non_modifiables.include?('acronyme') %>
+					    <%= f.text_field :acronyme, :disable => true %>
+					  <% else %>
+					    <%= f.text_field :acronyme, :class => "textfield" %>
+					  <% end %>
+                  </p>
+                  <p <%= "class='disabled'" if @non_modifiables.include?('num_contrat_etab')%>>
+					  <b>Numéro contrat établissement</b><br />
+					  <% if @non_modifiables.include?('num_contrat_etab') %>
+					    <%= f.text_field :num_contrat_etab, :disable => true %>
+					  <% else %>
+					    <%= f.text_field :num_contrat_etab, :class => "textfield_num_contrat" %>
+					  <% end %>
+					  
+                  </p>
+                </div>
+                <h2><strong>Publicité</strong></h2>
+                <div class="fieldset">
+                  <p>
+                      <b>Autoriser ou non l'affichage public</b><br />
+                      <%= f.radio_button(:publicite,true) %> autoriser
+                      <%= f.radio_button(:publicite,false) %> non autoriser
+                  </p>
+				</div>
+				<br />
+			 	<p class="submit">
+			    <%= submit_tag "Enregistrer les modifications" %>
+			  </p>
+              <% end %>
+			</div>
+
+      </div>
+	</div>
+</div>
+
+
+<script type="text/javascript">
+<!--
+var currentpage = (document.location.href.match(/#([-_\w]+)$/) || []).last() || 'associations'
+$$('#onglets_tab a').each(function(a) {
+	var mypage = a.getAttribute('href').match(/[-_\w]+$/i)[0];	
+	if (mypage == currentpage) { 
+		$(a).addClassName('active');
+		Try.these(function(){$(a).previous().addClassName('before_active');});
+	}
+})
+var my_glider = new Glider('my-glider', {duration:0.25, initialSection : currentpage});
+
+function updateUserResult(page_number){
+    new Ajax.Updater('not_authorized_users', '/contrats/<%= @contrat.id.to_s %>/show_not_authorized_users?page='+page_number,
+                    {asynchronous:true, evalScripts:true, method:'get', 
+                    parameters:'&query='+$F('query')});
+
+
+    }
+function updateGroupResult(page_number){
+    new Ajax.Updater('not_authorized_groups', '/contrats/<%= @contrat.id.to_s %>/show_not_authorized_groups?page='+page_number,
+                    {asynchronous:true, evalScripts:true, method:'get', 
+                    parameters:'&query_group='+$F('query_group')
+                               +'&show_groups=true'});
+
+
+    }
+//-->
+</script>

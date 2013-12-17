@@ -1,0 +1,23 @@
+<%= error_messages_for @departement %>
+
+<%= form_for(:departement, :url => departements_path) do |f| %>
+<fieldset>
+	<p>
+    <label for='departement_nom' class="required">Nom</label><br />
+    <%= f.text_field :nom %>
+  </p>
+	<p>
+	  <label for='departement_laboratoire_id'>Appartient au laboratoire</label><br />
+	  <%= f.select :laboratoire_id, Laboratoire.find(:all).collect {|p| [ p.nom, p.id ] } %>
+	</p>
+  <p>
+    <label for='departement_description'>Description</label><br />
+    <%= f.text_area :description %>
+  </p>	
+</fieldset>
+
+  <p class="submit">
+    <%= submit_tag "Créer le département" %> ou <%= link_to "Annuler", departements_path %>
+  </p>
+<% end %>
+

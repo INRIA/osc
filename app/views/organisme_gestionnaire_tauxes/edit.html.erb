@@ -1,0 +1,22 @@
+<h1>Editing organisme_gestionnaire_taux</h1>
+
+<%= error_messages_for :organisme_gestionnaire_taux %>
+
+<% form_for(@organisme_gestionnaire_taux) do |f| %>
+  <p>
+    <b>Taux</b><br />
+    <%= f.text_field :taux %>
+  </p>
+
+  <p>
+    <b>Annee</b><br />
+    <%= f.text_field :annee %>
+  </p>
+
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @organisme_gestionnaire_taux %> |
+<%= link_to 'Back', organisme_gestionnaire_tauxes_path %>

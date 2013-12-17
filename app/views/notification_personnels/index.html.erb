@@ -1,0 +1,30 @@
+<h1>Listing notification_personnels</h1>
+
+<table>
+  <tr>
+    <th>Notification</th>
+    <th>Nom</th>
+    <th>Prenom</th>
+    <th>Statut</th>
+    <th>Tutelle</th>
+    <th>Pourcentage</th>
+  </tr>
+  
+<% for notification_personnel in @notification_personnels %>
+  <tr>
+    <td><%=h notification_personnel.notification_id %></td>
+    <td><%=h notification_personnel.nom %></td>
+    <td><%=h notification_personnel.prenom %></td>
+    <td><%=h notification_personnel.statut %></td>
+    <td><%=h notification_personnel.tutelle %></td>
+    <td><%=h notification_personnel.pourcentage %></td>
+    <td><%= link_to 'Show', notification_personnel_path(notification_personnel) %></td>
+    <td><%= link_to 'Edit', edit_notification_personnel_path(notification_personnel) %></td>
+    <td><%= link_to 'Destroy', notification_personnel_path(notification_personnel), :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New notification_personnel', new_notification_personnel_path %>

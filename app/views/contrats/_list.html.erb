@@ -1,0 +1,54 @@
+<div id="paginate_index_contrats" style="border-bottom:1px solid #ccc;">
+
+<% if !@contrats.nil? %>
+<%= will_paginate @contrats,  :previous_label => "&nbsp;&laquo;&nbsp;",
+                              :next_label => "&nbsp;&raquo;&nbsp;",
+                              :renderer => "PaginationLinkRenderer",
+                              :params => {:action => "search"},
+                              :inner_window => "2",
+                              :outer_window => "1",
+                              :remote => {:with =>"'acronyme='+escape($F('acronyme'))+
+                        '&noContrat='+escape($F('nocontrat'))+
+                                            '&projet='+escape($F('projet'))+
+                        '&laboratoire='+escape($F('laboratoire'))+
+                        '&def='+$F('position_default')+
+                                            '&tous='+$F('position_tous')+
+                                            '&creation='+$F('position_creation')+
+                        '&soumission='+$F('position_soumission')+
+                        '&signature='+$F('position_signature')+
+                        '&refu='+$F('position_refu')+
+                        '&notification='+$F('position_notification')+
+                        '&cloture='+$F('position_cloture')"}
+                              %>
+
+<% end %>
+</div>
+<div class="content" style="padding:0;">
+<% for contrat in @contrats %>
+	<div class="contrat">
+		<div class="infos_contrat <%= contrat.etat %>">
+			<div class="acronyme">
+				<% if  @ids_editables.include? contrat.id %>
+					<%= image_tag 'bullet_green.png', :alt => 'modification du contrat' %>
+				<% elsif @ids_budget_editables.include? contrat.id %>
+				  <%= image_tag 'bullet_black.png', :alt => 'modification du budget' %>
+				<% else %>
+				  <%= image_tag 'bullet_yellow.png', :alt => 'consultation' %>
+				<% end %>
+				<%= link_to h(contrat.long_acronyme), contrat_path(contrat) %>
+				<%- for projet_nom in contrat.projets_small_list -%>
+					<span class="projet_name"><%= h projet_nom %></span>
+				<%- end -%>
+				<%- for departement_nom in contrat.departements_small_list -%>
+					<span class="departement_name"><%= h departement_nom %></span>
+				<%- end -%>
+				<%- for laboratoire_nom in contrat.laboratoires_small_list -%>
+					<span class="laboratoire2_name"><%= h laboratoire_nom %></span>
+				<%- end -%>
+			</div>
+		</div>
+	</div>
+	<% end %>
+</div>
+
+

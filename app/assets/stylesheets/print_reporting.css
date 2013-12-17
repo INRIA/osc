@@ -1,0 +1,42 @@
+body, html{
+	background-color:#fff;
+	padding:0;
+	border:none;
+	width:auto;
+}
+#entete, #menu, #right, #footer, #tab_control{
+	display:none;
+}
+#wrapper, #left{
+	width:100%;
+	padding:0;
+	background-image:none;
+}
+#left .head{
+	background-color:#fff;
+	padding-left: 5px;
+	border-bottom:1px solid #888;
+}
+#left .content {
+	padding:0;
+	padding-left: 5px;
+}
+.reporting-scroll-container{
+	width:auto;
+}
+.reporting table.marge,
+.reporting table.europe{
+	width:900px;
+}
+.reporting{
+	margin:5px;
+}
+#left #reporting_marge{
+	margin-top:30px;
+}
+.width-2{ width:1250px; }
+.width-3{ width:1775px; }
+.width-4{ width:2350px; }
+.width-5{ width:2875px; }
+.width-6{ width:3450px; }
+.width-7{ width:3975px; }

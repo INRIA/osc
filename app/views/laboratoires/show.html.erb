@@ -1,0 +1,41 @@
+<div class='section'>
+	<h2><strong>Equipe(s)</strong> associée(s) au laboratoire via des <strong>départements</strong></h2>
+	<% if @departements.size == 0 %>
+		<p class="comment">Aucune équipe n'est associée au laboratoire <%= @laboratoire.nom %> via un département.</p>
+	<% end %>
+	<% for departement in @departements %>
+	<div class="list_infos" style="margin-bottom:10px;border-left:4px solid #bbb; padding-left:5px;">
+		<div class="name"><strong><%= link_to departement.nom, departement_path(departement) %></strong></div>
+		<div class="description"><%=h truncate(departement.description,:length =>95,:ommission =>"...") %></div>
+	</div>
+		<% for projet in departement.projets %>
+			<% add ="" %>
+			<% if projet.date_fin < Date.today %>
+				<% add = " archive" %>
+			<% end %>
+			<div class="list_infos<%= add %>" style="margin-left:20px;">
+				<div class="name"><%= link_to projet.nom, projet_path(projet) %></div>
+				<div class="description"><%=h truncate(projet.description,:length =>95,:ommission =>"...") %></div>
+			</div>		
+		<% end %>
+		<br />
+	<% end %>
+</div>
+
+<div class='section'>
+	<h2><strong>Equipe(s)</strong> directement associée(s) au laboratoire</h2>
+	<% if @projets.size == 0 %>
+		<p class="comment">Aucune équipe n'est directement associée au laboratoire <%= @laboratoire.nom %>.</p>
+	<% end %>
+	
+	<% for projet in @projets %>
+	<% add ="" %>
+	<% if projet.date_fin < Date.today %>
+		<% add = " archive" %>
+	<% end %>	
+	<div class="list_infos<%= add %>">
+		<div class="name"><%= link_to projet.nom, projet_path(projet) %></div>
+		<div class="description"><%=h projet.description %></div>
+	</div>
+	<% end %>
+</div>

@@ -1,0 +1,20 @@
+<% if @departement_subscriptions.empty? %>
+	<p class="comment">Aucune équipe n'est associée au département.</p>
+<% else %>
+	<% for departement_subscription in @departement_subscriptions %>
+		<%= add = "" %>
+		<% if departement_subscription.projet.date_fin < Date.today %>
+			<% add = " archive" %>
+		<% end %>
+		<div class="small_infos_actions<%= add %>" id="departement_subscription_<%= departement_subscription.id %>">
+			<div class="infos">
+				<div class="name"><%= link_to departement_subscription.projet.nom, projet_path(departement_subscription.projet) %></div>
+				<div class="description"><%=h truncate(departement_subscription.projet.description,:length => 80, :ommission =>"...") %></div>
+			</div>
+			<div class="actions">
+				<%= link_to_remote "Supprimer", { :url => departement_subscription_path(departement_subscription),  :method => :delete } %>			
+			</div>
+			<div style="clear:both;"></div>
+		</div>
+	<% end %>
+<% end %>

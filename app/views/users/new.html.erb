@@ -1,0 +1,115 @@
+<%- if LDAP_ACTIVE -%>
+<div class="section">	
+	<h2>Recherche <strong>LDAP</strong></h2>
+	<%= form_tag("user/search",:class => "inline", :onsubmit => "new Ajax.Request('/users/search', {asynchronous:true, evalScripts:true, parameters:Form.serialize(this)}); return false;") do %>
+			<label for="user_nom">Nom</label>
+	  	<%= text_field "research", "nom", :class => "text" %>
+	    <%= submit_tag "Rechercher" %>
+	<% end %>
+	<div id="results"></div>
+	<br />
+</div>
+<%- end -%>
+
+<div class="section">
+<h2> <strong>Formulaire de création</strong> de l'utilisateur</h2>
+<%= error_messages_for @user %>
+
+<%= form_for(:user, :url => users_path ) do |f| %>
+	<fieldset>
+		<legend>Description</legend>
+  	<p>
+			<label for="user_nom" class="required">Nom</label><br />
+    	<%= f.text_field :nom, :class => "textfield" %>
+  	</p>
+  	<p>
+			<label for="user_prenom" class="required">Prénom</label><br />
+    	<%= f.text_field :prenom, :class => "textfield" %>
+  	</p>
+  	<p>
+			<label for="user_email" class="required">Email</label><br />
+    	<%= f.text_field :email, :class => "textfield" %>
+  	</p>
+  	<p>
+			<label for="user_commentaire">Commentaire</label><br />
+    	<%= f.text_field :commentaire, :class => "textfield" %>
+  	</p>
+	</fieldset>
+	<fieldset>
+		<legend>Authentification</legend>
+  	<p>
+			<label for="login" class="required">Login</label><br />
+			<%= f.text_field :login, :class => "textfield" %>
+  	</p>
+		<%- add = "style='display:none;'" -%>
+		<%- if LDAP_ACTIVE -%>
+		<%- add ="" -%>
+		<%- end -%>
+  	<p <%= add %>>
+			<label for="ldap">Utilisation de Ldap</label>
+			<%= f.radio_button( :ldap, true )%> Oui &nbsp;
+    	<%= f.radio_button( :ldap, false )%> Non
+  	</p>
+		<%= f.hidden_field :type_ldap, :value => "" %>
+		
+  	<p id='pass1'>
+			<label for="password" class="required">Password</label><br />
+			<%= f.password_field :password, :class => "textfield" %>
+  	</p>
+  	<p id='pass2'>
+			<label for="password_confirmation" class="required">Confirm Password</label><br />
+			<%= f.password_field :password_confirmation, :class => "textfield" %>
+  	</p>
+		<p><a href="#" onclick="populateform('8');return false;">Générer un mot de passe</a> <span id="generated_pwd"></span></p>
+	</fieldset>
+  <p class="submit">
+    <%= submit_tag "Créer l'utilisateur" %> ou <%= link_to "Annuler", users_path %>
+  </p>
+<% end %>
+</div>
+<script type="text/javascript">
+<!--
+	Event.observe('user_ldap_true', 'click', select_ldap);
+	Event.observe('user_ldap_false', 'click', deselect_ldap);
+	
+	function select_ldap() {
+		$('user_ldap_true').checked = '1';
+		$('pass1').hide();
+		$('pass2').hide();
+	};
+	
+	function deselect_ldap() {
+		$('user_ldap_false').checked = '1';
+		$('pass1').show();
+		$('pass2').show();
+	};
+	
+	function select_ldap_user(nom, prenom, email, login, type_ldap){
+		$('user_nom').value = nom;
+		$('user_prenom').value = prenom;
+		$('user_email').value = email;
+		$('user_login').value = login;
+		$('user_ldap_true').checked = '1';
+		$('user_type_ldap').value = type_ldap;
+		$('pass1').hide();
+		$('pass2').hide();
+	}
+	
+	var keylist="abcdefghijklmnopqrstuvwxyz123456789"
+	var temp=''
+
+	function generatepass(plength){
+		temp=''
+		for (i=0;i<plength;i++)
+			temp+=keylist.charAt(Math.floor(Math.random()*keylist.length))
+		return temp
+	}
+	function populateform(enterlength){
+		pass = generatepass(enterlength);
+		$('user_password').value = pass
+	 	$('user_password_confirmation').value = pass
+		$('generated_pwd').update(" - Mot de passe généré : "+pass);
+	}
+//-->
+</script>
+

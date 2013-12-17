@@ -1,0 +1,17 @@
+<div class="content">
+	<p>
+	Etes-vous certain de vouloir supprimer le contrat <strong> <%= @contrat.acronyme %> </strong> ?<br />
+	</p>
+	Cette opération est définitive et supprime toutes les informations relatives au contrat (soumission, signature, notification, documents associés ...), ainsi que les lignes associées.
+	<p>
+    <% @contrat.sous_contrats.each {|sc|
+        if !sc.ligne.nil? %>
+          ATTENTION, une ou plusieurs lignes sont associées à ce contrat.
+     <%   break
+        end
+       }  %>
+    </p>
+    <%= link_to_close_redbox "Non", :class => 'annuler' %>
+	<%= link_to "Oui", contrat_path(@contrat), :method => :delete %>
+	<div style="clear:both;"></div>
+</div>

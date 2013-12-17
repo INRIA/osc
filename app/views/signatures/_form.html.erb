@@ -1,0 +1,27 @@
+<div class="form-box parent">
+  <h3>Informations relatives à la signature</h3>
+  <% if @non_modifiables.include?('date') %>
+    <p class="inline disabled" >
+    <% else %>
+    <p class="inline">
+  <% end %>
+    <label for="signature_date_3i">Date de la signature</label><br />
+    <% if @non_modifiables.include?('date') %>
+      <%= f.date_select :date,
+                        :use_month_numbers => true, 
+                        :order => [:day, :month, :year],
+                        :disabled => true %>
+    <% else %>
+      <%= f.unobtrusive_date_picker :date , :use_month_numbers => true, :class => 'no-transparency' %>
+    <% end %>
+  </p>
+
+  <p <%= "class='disabled'" if @non_modifiables.include?('commentaire')%>>
+    <label for="signature_commentaire">Commentaire</label><br />
+    <% if @non_modifiables.include?('commentaire') %>
+      <%= f.text_area :commentaire, :disable => true %>
+    <% else %>
+      <%= f.text_area :commentaire, :class => "textareafield" %>
+    <% end %>
+  </p>
+</div>

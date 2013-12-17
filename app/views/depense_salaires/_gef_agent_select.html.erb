@@ -1,0 +1,16 @@
+<br />
+<%= select "gef","agent", @inriaReferentielAgentCollection %>
+<% if @inriaReferentielAgentCollection.size > 0%>
+
+  <P>Co&ucirc;t mensuel:
+    <input type="number" name="cout_mensuel" value="0.0" onchange="submit_form();">
+  </P>
+  <input type="submit" value="Rechercher / Modifier le co&ucirc;t mensuel" style="border:1px solid #aaa; padding:1px;margin-top: 5px;"/>
+<% else %>
+  <h3>
+    Aucun agent trouv&eacute; avec ce crit&egrave;re de filtrage !
+  </h3>
+
+<% end %>
+
+			

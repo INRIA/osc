@@ -1,0 +1,116 @@
+<% if controller.action_name.to_s == 'ask_delete' %>
+  <%= yield  %>
+<% else %>
+  <%- content_for :head do -%>
+  
+  	<%- if controller.action_name.to_s == 'index' -%>
+  		<div class='header_title'>
+  			<strong>Listes des groupes</strong>
+  			// <span id="ajax_result"><%= @count %> groupes référencés</span>
+  		</div>
+  		<div class='header_link'>
+  		</div>
+  		<div style='clear:both;'></div>
+  	<%- end -%>
+  
+  
+  	<%- if controller.action_name.to_s == 'new' or controller.action_name.to_s == 'create' -%>
+  		<div class='header_title'>
+  			<strong>Création de groupe</strong>
+  		</div>
+  		<div class='header_link'>
+  		</div>
+  		<div style='clear:both;'></div>
+  	<%- end -%>
+  
+  
+  	<%- if controller.action_name.to_s == 'show' -%>
+  	<div class='header_title'>		
+  		<div class="showInfos">
+  			<p class="visibilite">
+  				<strong><%= @group.nom %></strong>
+  				<a href="#" onclick="Effect.toggle('more', 'blind', {duration:0.4});return false;">(+)</a>
+  			</p>
+  			<p>
+  				Description :	<strong><%=h @group.description %></strong>
+  			</p>
+  			<%= show_dates(@group) %>
+  		</div>
+  		<div style='clear:both;'></div>		
+  	</div>
+  	<div class='header_link'>
+  		<%= link_to 'Editer le groupe', edit_group_path(@group) %>
+  	</div>
+  	<div style='clear:both;'></div>
+  	<%- end -%>
+  	
+  	<%- if controller.action_name.to_s == 'edit'  || controller.action_name.to_s == 'update' -%>
+  		<div class='header_title'>
+  			<div class="showInfos">
+  				<p class="visibilite">
+  					<strong><%= @group.nom %></strong>
+  					// Edition
+  				</p>
+  			</div>
+  		</div>
+  		
+  		<div class='header_link'>
+  			<%= link_to 'Visualiser le groupe', group_path(@group) %>
+  		</div>
+  		<div style='clear:both;'></div>
+  	<%- end -%>
+  
+  <%- end -%>
+  
+  <% if controller.action_name.to_s == 'edit'  or controller.action_name.to_s == 'update' %>
+  	<% content_for :sub_menu do %>
+  	<div id="onglets_tab">		
+  		<% if @admin %>
+  			<a href="#droits">Droits sur les contrats</a>
+  			<a href="#roles">Rôles</a>
+  			<a href="#description">Description</a>
+  			<a href="#membres">Composition</a>			
+  		<% elsif @admin_fonc %>
+  			<a href="#droits">Droits sur les contrats</a>
+  			<a href="#description">Description</a>
+  			<a href="#membres">Composition</a>			
+  		<% else %>
+  			<a href="#droits">Droits sur les contrats</a>
+  		<% end %>
+  		<div style="clear:both;"></div>
+  	</div>
+  	<% end %>
+  	
+  <% end %>
+  
+  
+  <%- content_for :right do -%>
+  <%- if controller.action_name.to_s == 'index' -%>
+    <% if (@admin || @admin_fonc) %>
+  	<%= link_to '', new_group_path, {:class => "addGroup"} %>
+  	<% end %>
+  	<h2>Rechercher sur le nom</h2>
+  	
+  	<form name="sform" action="">
+  	  <p>
+  		<%= text_field_tag("query", params['query'], :size => 10, :class => "textfield" ) %>
+  	  </p>
+  	</form>
+  	
+  	<%= observe_field 'query',  :frequency => 0.5,
+        :url => {:action => 'search_by_name'},
+        :with => 'query' %>
+  	   
+  <%- end -%>
+  
+  <%- if controller.action_name.to_s != 'show' && controller.action_name.to_s != 'index' -%>
+  	<%- if controller.action_name.to_s == 'new' -%>
+  		<div class="aide">
+  			<p>Le champ Nom du groupe est un champ obligatoire.</p>	
+  		</div>
+  	<%- end -%>
+  <%- end -%>
+  <%- end -%>
+  
+  <%= render :file => 'layouts/application_admin' %>
+<% end %>

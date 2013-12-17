@@ -1,0 +1,18 @@
+<% if @tutelle_subscriptions.empty? %>
+<% else %>
+<% for tutelle_subscription in @tutelle_subscriptions %>
+<div class="small_photo_infos_actions <%= cycle('one', 'two') %>"  id="tutelle_subscription_<%= tutelle_subscription.id %>">
+		<div class="photo">
+			<%= show_tutelle_logo_small tutelle_subscription.tutelle.tutelle_logo %>
+		</div>	
+		<div class="infos">
+			<div class="name"><%= link_to tutelle_subscription.tutelle.nom, tutelle_path(tutelle_subscription.tutelle) %></div>
+			<div class="description"><%=h tutelle_subscription.tutelle.description %></div>
+		</div>
+		<div class="actions">
+			<%= link_to_remote "", { :url => tutelle_subscription_path(tutelle_subscription),  :method => :delete }, :class => 'delete' %>			
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+<% end %>
+<% end %>

@@ -1,0 +1,8 @@
+<div class="content">
+	<p>
+	Etes-vous certain de vouloir supprimer la tutelle <strong>"<%= @tutelle.nom %>"</strong> ?
+	</p>
+	<%= link_to_close_redbox "Non", :class => 'annuler' %>
+	<%= link_to "Oui", tutelle_path(@tutelle), :method => :delete %>
+	<div style="clear:both;"></div>
+</div>

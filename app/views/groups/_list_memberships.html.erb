@@ -1,0 +1,19 @@
+<% if @group.users.empty? %>
+	<p>Aucun utilisateur dans le groupe.</p>
+<% else %>
+	<% for membership in @group.memberships %>
+		<div class="small_photo_infos_actions <%= cycle('one', 'two') %>" id="membership_<%= membership.id %>">
+			<div class="photo">
+				<%= show_user_image_small membership.user %>
+			</div>
+			<div class="infos">
+				<div class="name"><%= membership.user.nom %> <%= membership.user.prenom %></div>
+				<div class="commentaire"><%= membership.user.commentaire %></div>
+			</div>
+			<div class="actions">
+				<%= link_to_remote "Supprimer", { :url => membership_path(membership),  :method => :delete } %>
+			</div>
+			<div style="clear:both;"></div>
+		</div>
+	<% end %>
+<% end %>

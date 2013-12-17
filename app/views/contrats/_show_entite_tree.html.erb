@@ -1,0 +1,130 @@
+<div class="section">
+	<h2 class="tree-header">
+		Entités associées au contrat
+		<a href="#" class="toggle toggle-tree">+</a>
+	</h2>
+	<%
+	entite_id_in_labo = []
+	txt = ""
+	for labo in Laboratoire.find(:all)
+		txt_n1 = ""
+		txt_deps = ""
+		txt_projets = ""
+		show_labo = false
+		one_is_current_in_labo = false
+		
+		# labo
+		for sc in @contrat.sous_contrats
+			if sc.entite == labo
+				txt_n1 = "<li class='current'>"+h(labo.nom)+" <span>Laboratoire</span></li>\n"
+				entite_id_in_labo << [ sc.entite_type.to_s+";"+sc.entite.id.to_s ]
+				show_labo = true
+			end
+		end
+		
+		# les départements du labo
+		for dep in labo.departements
+			one_projet_is_current = false
+			show_dep = false
+			txt_n2 = ""
+			txt_n3 = ""
+			
+			# département
+			for sc in @contrat.sous_contrats
+				if sc.entite == dep
+					txt_n2 = "<li class='current n2'>"+h(dep.nom)+" <span>Département</span></li>\n"
+					entite_id_in_labo << [ sc.entite_type.to_s+";"+sc.entite.id.to_s ]
+					show_dep = true
+					show_labo = true
+					one_is_current_in_labo = true
+				end
+			end
+			
+			# Projets du département
+			for projet in dep.projets
+				projet_is_current = false
+				for sc in @contrat.sous_contrats
+					if sc.entite == projet
+						txt_n3 += "<li class='current n3'>"+h(projet.nom)+" <span>Equipe</span></li>\n"
+						entite_id_in_labo << [ sc.entite_type.to_s+";"+sc.entite.id.to_s ]
+						show_dep = true
+						show_labo = true
+						projet_is_current = true
+						one_projet_is_current = true
+						one_is_current_in_labo = true
+					end
+				end
+				if !projet_is_current
+					txt_n3 += "<li id='p_"+projet.id.to_s+"' class='n3 not_in_contrat' style='display:none'>"+h(projet.nom)+" <span>Equipe</span></li>\n"
+				end
+			end
+			
+			if txt_n2 == ""
+				if one_projet_is_current
+					txt_n2 = "<li class='n2'>"+dep.nom+" <span>Département</span></li>\n"
+				else
+					txt_n2 = "<li id='d_"+dep.id.to_s+"' class='n2 not_in_contrat' style='display:none'>"+h(dep.nom)+" <span>Département</span></li>\n"
+				end
+			end
+
+			txt_deps += txt_n2+txt_n3
+			
+		end
+		
+		# les projets directement rattachés au labo
+		for projet in labo.projets
+			projet_is_current = false
+			for sc in @contrat.sous_contrats
+				if sc.entite == projet
+					txt_projets += "<li class='current n2'>"+h(projet.nom)+" <span>Equipe</span></li>\n"
+					entite_id_in_labo << [ sc.entite_type.to_s+";"+sc.entite.id.to_s ]
+					show_labo = true
+					projet_is_current = true
+					one_is_current_in_labo = true
+				end
+			end
+			if !projet_is_current
+				txt_projets += "<li id='p_"+projet.id.to_s+"' class='n2 not_in_contrat' style='display:none'>"+h(projet.nom)+" <span>Equipe</span></li>\n"
+			end
+		end
+		
+		if txt_n1 ==""
+			if one_is_current_in_labo
+				txt_n1 = "<li>"+labo.nom+" <span>Laboratoire</span></li>\n"
+			else
+				txt_n1 = "<li id='l_"+labo.id.to_s+"' class='not_in_contrat' style='display:none'>"+h(labo.nom)+" <span>Laboratoire</span></li>\n"
+			end
+		end
+
+		txt += txt_n1+txt_deps+txt_projets
+		
+	end
+	%>
+	<div class="content">
+		<ul class="hierarchie">
+			<%= txt.html_safe() %>
+		<% all_entite = [] %>		
+		<% for sc in @contrat.sous_contrats %>
+			<% all_entite << [sc.entite_type+";"+sc.entite.id.to_s] %>		
+		<% end %>
+
+		<% entite_restante = all_entite.sort - entite_id_in_labo.sort %>
+		<% if entite_restante.size > 0 %>
+			Equipe(s) non rattachée(s) à un laboratoire
+		<% end %>
+		<% entite_restante.each { |a| %>
+			<% if  a.to_s.split(";")[0] == "Projet" %>
+				<li class="current"><%= h(Projet.find_by_id(a.to_s.split(";")[1]).nom) %> <span>Equipe</span></li>
+			<% end %>
+			<% if  a.to_s.split(";")[0] == "Departement" %>
+				<li class="current"><%= h(Departement.find_by_id(a.to_s.split(";")[1]).nom) %> <span>Département</span></li>
+			<% end %>
+		<% } %>
+		</ul>
+		
+	</div>
+</div>
+
+<script type="text/javascript">
+  new App.ContratTreeDisplay();
+</script>

@@ -1,0 +1,57 @@
+<%- content_for :right do -%>
+	<%- if @ligne.contrat.is_budget_editable? current_user -%>
+		<%= link_to 'Ajouter un crédit', new_ligne_versement_path(@ligne), {:class => "add-versement"} %>
+	<%- end -%>
+	<%= render :partial => 'lignes/selection_temporelle' %>
+<%- end -%>
+
+<% content_for :options do %>
+	<%-
+		case @filter.to_s
+			when "all"              then css_class_all            = "selected"
+			when "fonctionnement"   then css_class_fonctionnement = "selected"
+			when "equipement"       then css_class_equipement     = "selected"
+			when "mission"          then css_class_mission        = "selected"
+			when "salaire"          then css_class_salaire        = "selected"
+			when "non_ventile"      then css_class_non_ventile    = "selected"
+		end
+	-%>
+	<div id="options">
+		<div id="affichage">
+			<a href="?filter=all" class="filter <%= css_class_all %>"><span class="habillage_left">&nbsp;</span>Tous<span class="habillage_right">&nbsp;</span></a>
+			<%if !@contrat_dotation%>
+			<a href="?filter=fonctionnement" class="filter <%= css_class_fonctionnement %>"><span class="habillage_left">&nbsp;</span>Fonctionnement<span class="habillage_right">&nbsp;</span></a>
+			<a href="?filter=equipement" class="filter <%= css_class_equipement %>"><span class="habillage_left">&nbsp;</span>Equipement<span class="habillage_right">&nbsp;</span></a>
+			<a href="?filter=mission" class="filter <%= css_class_mission %>"><span class="habillage_left">&nbsp;</span>Mission<span class="habillage_right">&nbsp;</span></a>
+			<a href="?filter=salaire" class="filter <%= css_class_salaire %>"><span class="habillage_left">&nbsp;</span>Salaire<span class="habillage_right">&nbsp;</span></a>
+			<a href="?filter=non_ventile" class="filter <%= css_class_non_ventile %>"><span class="habillage_left">&nbsp;</span>Non ventilé<span class="habillage_right">&nbsp;</span></a>
+			<%end%>
+	   <p id="export_to_csv">
+      <a href="versements.csv?encode=utf16" id="export_budget_mso"><span class="habillage_left">&nbsp;</span>MS Office (UTF-16): Export au format csv<span class="habillage_right">&nbsp;</span></a>
+      <a href="versements.csv?encode=utf8" id="export_budget_oo"><span class="habillage_left">&nbsp;</span>Open Office (UTF-8) : Export au format csv<span class="habillage_right">&nbsp;</span></a>
+     </p>
+		</div>
+		<div id="line_per_page">
+			<span id="nb" class="infos"><%= @items_per_page.to_s %></span>
+			<div class="slider">
+		  	<div id="track" class="track"> </div>
+				<div id="handle" class="handle"> </div>
+			</div>
+			<div style="clear:both;"></div>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+<% end %>
+
+<div id="to-update">
+	<%= render :partial => 'list' %>
+</div>
+
+<script type="text/javascript">
+	new App.Budget.ItemsParPageSlider(<%= @items_per_page.to_s %>);
+	new App.Budget.ListView();
+	function updateResult(page_number){
+    new Ajax.Updater('to-update', '/lignes/<%= @ligne.id.to_s %>/versements?page='+page_number,
+                    {asynchronous:true, evalScripts:true, method:'get'});
+  }
+</script>

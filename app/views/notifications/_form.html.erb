@@ -1,0 +1,1031 @@
+<% disable = "class='disabled'".html_safe() %>
+<div class="form-box parent" id="TypeContrat">
+  <h3>Type de contrat</h3>
+  <p <%= disable if @non_modifiables.include?('contrat_type_id')%>>
+    <%- if @non_modifiables.include?('contrat_type_id') -%>
+	  <%= f.select :contrat_type_id, [[display_contrat_type(@notification.contrat_type), @notification.contrat_type_id]], :disable => true  %>
+  </p>
+  <%- else -%>
+    <%= f.select :contrat_type_id, options_for_contrat_types(ContratType.find(:all)) %>
+  </p>
+  <%- end -%>
+  <div id="selected_contrat" style="color:#777; font-size:12px;">
+    <%= display_contrat_type(@notification.contrat_type) if !@contrat.notification.nil? %>
+  </div>
+  <%= observe_field("notification_contrat_type_id", 
+      :frequency => 0.25, 
+      :update => "selected_contrat",
+      :url => update_type_contrat_contrat_notifications_path(@contrat),
+      :method => :get,
+      :with => 'type') %>
+</div>
+
+<div class="clearfix">
+  <div class="col-1-of-2">
+    <div class="form-box parent" id="InformationsGenerales">
+      <h3>Informations générales</h3>
+      
+      <%- if @non_modifiables.include?('date_notification') -%>
+        <p class="inline disabled" >
+      <%- else -%>
+        <p class="inline">
+      <%- end -%>
+        <label for="notification_date_notification_3i" class="required">Date de notification</label><br />
+        <%- if @non_modifiables.include?('date_notification') -%>
+              <%= f.date_select :date_notification,
+                              :use_month_numbers => true, 
+                              :order => [:day, :month, :year],
+                              :disabled => true %>
+        <%- else -%>
+          <%= f.unobtrusive_date_picker :date_notification ,  :use_month_numbers => true, :class => 'no-transparency' %>
+        <%- end -%>
+      </p>
+      
+      <%- if @non_modifiables.include?('date_debut') -%>
+        <p class="inline disabled" >
+      <%- else -%>
+        <p class="inline">
+      <%- end -%>
+        <label for="notification_date_debut_3i" class="required">Date de début</label><br />
+        <%- if @non_modifiables.include?('date_debut') -%>
+              <%= f.date_select :date_debut,
+                              :use_month_numbers => true, 
+                              :order => [:day, :month, :year],
+                              :disabled => true %>
+        <%- else -%>
+          <%= f.unobtrusive_date_picker :date_debut , :use_month_numbers => true, :class => 'no-transparency' %>
+        <%- end -%>
+      </p>
+      
+      <p <%= disable if @non_modifiables.include?('nombre_mois')%>>
+        <label for="notification_nombre_mois" class="required">Nombre mois</label><br />
+        <%- if @non_modifiables.include?('nombre_mois') -%>
+          <%= f.text_field :nombre_mois, :disable => true %>
+        <%- else -%>
+          <%= f.select :nombre_mois, 1..96 %>
+        <%- end -%>
+      </p>
+      
+      <%- if @non_modifiables.include?('date_fin') -%>
+        <p class="inline disabled" >
+      <%- else -%>
+        <p class="inline">
+      <%- end -%>
+        <label for="notification_date_fin_3i" class="required">Date de fin</label><br />
+        <%- if @non_modifiables.include?('date_fin') -%>
+          <%= f.date_select :date_fin,
+                            :use_month_numbers => true, 
+                            :order => [:day, :month, :year],
+                            :disabled => true %>
+        <%- else -%>
+          <%= f.unobtrusive_date_picker :date_fin , :use_month_numbers => true, :class => 'no-transparency' %>
+        <%- end -%>
+      </p>
+      
+      <p <%= disable if @non_modifiables.include?('organisme_gestionnaire_id')%>>
+        <label for="notification_organisme_gestionnaire_id" class="required">Etablissement gestionnaire</label>
+        <a id="etablissement_gestionnaire_help" class="help"></a><br />
+        <%- if @non_modifiables.include?('organisme_gestionnaire_id') -%>
+          <%= f.select :organisme_gestionnaire_id, [[@notification.organisme_gestionnaire.nom, @notification.organisme_gestionnaire_id]], :disable => true  %>
+        <%- else -%>
+          <%= f.select :organisme_gestionnaire_id, OrganismeGestionnaire.find(:all).collect {|p| [ p.nom, p.id ] }, { :include_blank => true } %>
+        <%- end -%>
+      </p> 
+       
+      <p <%= disable if @non_modifiables.include?('organisme_financeur')%>>
+        <label for="notification_organisme_financeur" class="required">Organisme financeur</label>
+        <a id="organisme_financeur_help" class="help"></a><br />
+        <%- if @non_modifiables.include?('organisme_financeur') -%>
+          <%= f.text_field :organisme_financeur, :disable => true %>
+        <%- else -%>
+          <%= text_field_with_auto_complete :notification,
+                                            :organisme_financeur, {:class => "textfield"},
+                                            {
+                                              :frequency => 0.1,
+                                              :partialSearch => true,
+                                              :skip_style => true
+                                            } %>
+        <%- end -%>
+      </p>
+      
+      <p <%= disable if @non_modifiables.include?('organisme_payeur')%>>
+        <label for="notification_organisme_payeur" class="required">Organisme payeur</label>
+        <a id="organisme_payeur_help" class="help"></a><br />
+        <%- if @non_modifiables.include?('organisme_payeur') -%>
+          <%= f.text_field :organisme_payeur, :disable => true %>
+        <%- else -%>
+          <%= text_field_with_auto_complete :notification,
+                                            :organisme_payeur, {:class => "textfield"},
+                                            {
+                                              :frequency => 0.1,
+                                              :partialSearch => true,
+                                              :skip_style => true
+                                            } %>
+                                      
+        <%- end -%>
+      </p>
+      
+      <p <%= disable if @non_modifiables.include?('numero_ligne_budgetaire')%>>
+        <label for="notification_numero_ligne_budgetaire">N° de ligne budgétaire</label>
+        <a id="numero_ligne_budgetaire_help" class="help"></a><br />
+        <%- if @non_modifiables.include?('numero_ligne_budgetaire') -%>
+          <%= f.text_field :numero_ligne_budgetaire, :disable => true %>
+        <%- else -%>
+          <%= f.text_field :numero_ligne_budgetaire, :class => "textfield" %>
+        <%- end -%>
+      </p>
+      
+      <p <%= disable if @non_modifiables.include?('numero_contrat')%>>
+        <label for="notification_numero_contrat">N° de contrat</label><a id="numero_contrat_help" class="help"></a><br />
+        <%- if @non_modifiables.include?('numero_contrat') -%>
+          <%= f.text_field :numero_contrat, :disable => true %>
+        <%- else -%>
+          <%= f.text_field :numero_contrat, :class => "textfield" %>
+        <%- end -%>
+      </p>
+      
+      <p <%= disable if @non_modifiables.include?('a_justifier')%>>
+        <%- if @non_modifiables.include?('a_justifier') -%>
+          <%= f.check_box :a_justifier, :disabled => 'disabled' %>
+        <%- else -%>
+          <%= f.check_box :a_justifier, :class => "checkbox" %>
+        <%- end -%>
+        <label for="notification_a_justifier">Le contrat est à justifier</label>
+      </p>
+    </div>
+  </div>
+  
+  <div class="col-2-of-2">
+    <div class="form-box parent">
+      <h3>Porteur et coordinateur</h3>
+      
+      <p <%= disable if @non_modifiables.include?('porteur')%>>
+        <label for="notification_porteur" class="required">Porteur</label>
+        <a id="porteur_help" class="help"></a><br />
+        <%- if @non_modifiables.include?('porteur') -%>
+          <%= f.text_field :porteur, :disable => true %>
+        <%- else -%>
+          <%= f.text_field :porteur, :class => "textfield" %>
+        <%- end -%>
+      </p>
+      
+      <p <%= disable if @non_modifiables.include?('etablissement_rattachement_porteur')%>>
+        <label for="notification_etablissement_rattachement" class="required">Etablissement de rattachement du porteur</label><br />
+        <%- if @non_modifiables.include?('etablissement_rattachement_porteur') -%>
+          <%= f.text_field :etablissement_rattachement_porteur, :disable => true %>
+        <%- else -%>
+          <%= text_field_with_auto_complete :notification, 
+                                            :etablissement_rattachement_porteur, {:class => "textfield"},
+                                            {
+                                              :frequency => 0.1, 
+                                              :partialSearch => true, 
+                                              :skip_style => true
+                                            } %>
+        <%- end -%>                                 
+      </p>
+      
+      <p <%= disable if @non_modifiables.include?('est_porteur')%>>
+        <%- if @non_modifiables.include?('est_porteur') -%>
+            <%= f.check_box :est_porteur, :disabled => 'disabled' %>
+        <%- else -%>
+            <%= f.check_box :est_porteur, :class => "checkbox" %>
+        <%- end -%>
+        <label for="notification_est_porteur">Le porteur est coordinateur</label>
+      </p>
+
+      <%- if  @notification.est_porteur -%>
+        <p id="p_notification_coordinateur" style="display:none;">
+      <%- else -%>
+        <p id="p_notification_coordinateur" <%= disable if @non_modifiables.include?('coordinateur')%>>
+      <%- end -%>
+        <label for="notification_coordinateur" class="required">Coordinateur</label><br />
+        <%- if @non_modifiables.include?('coordinateur') -%>
+          <%= f.text_field :coordinateur, :disable => true %>
+        <%- else -%>
+          <%= f.text_field :coordinateur, :class => "textfield" %>
+        <%- end -%> 
+      </p>
+      <p <%= disable if @non_modifiables.include?('etablissement_gestionnaire_du_coordinateur')%>>
+        <label for="notification_etablissement_gestionnaire_du_coordinateur" class="required">Etablissement gestionnaire du coordinateur</label><br />
+        <%- if @non_modifiables.include?('etablissement_gestionnaire_du_coordinateur') -%>
+          <%= f.text_field :etablissement_gestionnaire_du_coordinateur, :disable => true %>
+        <%- else -%>
+          <%= text_field_with_auto_complete :notification, 
+                                            :etablissement_gestionnaire_du_coordinateur, {:class => "textfield"}, 
+                                            {
+                                              :frequency => 0.1,
+                                              :partialSearch => true,
+                                              :skip_style => true
+                                            } %>
+        <%- end -%>                               
+      </p>
+    </div>
+    
+    <div class="form-box parent">
+      <h3>Site web</h3>
+      <p>
+        <label for="notification_url">URL</label><a id="url_help" class="help"></a><br />
+        <%= f.text_field :url, :class => "textfield" %>
+      </p>
+    </div>
+  </div>
+  
+</div>
+
+<div class="form-box parent" id="MotsCles">
+  <h3>Mots clés et thématiques</h3>
+  <p>
+    <% for labo in Laboratoire.find(:all) %>
+      <% if @contrat.is_in_laboratoire? labo %>
+        <b>Mots clés du laboratoires <%= labo.nom %></b><br />
+        <% @keywords = KeyWord.find(  :all,
+                                      :include => [:laboratoire],
+                                      :conditions => ["laboratoires.nom = ?", labo.nom],
+                                      :order => "laboratoires.nom, key_words.section, key_words.intitule") %>
+        <% if @keywords.size > 0 %>
+					<% @current_section = @keywords.first.section %>
+	        <span class='keyword_section'><%=  @keywords.first.section %></span><br />
+	        
+	        <% for r in @keywords %>
+	          <% if @current_section != r.section %>
+	          <span class='keyword_section'><%= r.section %></span><br />
+	          <% end %>
+	          <% @current_section = r.section %>
+	          <span class="key_word">
+	            <%= check_box_tag('notification[key_word_ids][]', r.id, @notification.key_words.include?(r), :id => r.id, :class => "checkbox") %>
+	            <label for="<%= r.id %>"><%= r.intitule %></label>
+	          </span>       
+          <% end %>
+				  <div style="clear:both;"></div><br />
+        <% else %>
+          Aucun mot clef d&eacute;fini pour le laboratoire.
+        <% end %>
+			<% end %> 
+    <% end %>
+  </p>
+  
+  <p>
+    <label for="notification_mots_cles_libres">Mots clés libres<a id="mots_cles_libres_help" class="help"></a></label><br />
+    <%= f.text_area :mots_cles_libres, :class => "textareafield" %>
+  </p>
+  
+  <p>
+    <label for="notification_thematiques">Thématiques<a id="thematiques_help" class="help"></a></label><br />
+    <%= f.text_area :thematiques, :class => "textareafield" %>
+  </p>
+  
+  <p>
+    <label for="notification_poles_competivites">Pôle compétivité<a id="poles_competivites_help" class="help"></a></label><br />
+    <%= text_field_with_auto_complete :notification, 
+                                      :poles_competivites, {:class => "textfield"}, 
+                                      {
+                                        :frequency => 0.1,
+                                        :partialSearch => true,
+                                        :skip_style => true
+                                      } %>
+    
+  </p>
+</div>
+
+<div class="form-box parent" id="Partenaires">
+  <h3>Partenaires</h3>
+  
+  <p>
+    <label>Partenaires en France</label><a id="partenaire_france_help" class="help"></a>
+    <%= sub_list_content 'NotificationFrancePartenaire', 'notification' %>
+    <% unless controller.action_name == 'show' %>
+      <%= sub_list_add_link 'notification_france_partenaire', 'Ajouter un autre partenaire en France' %>
+    <% end %>
+    <div style="clear:both;"></div>
+  </p>
+  
+  <p>
+    <label>Partenaires en Europe</label><a id="partenaire_europe_help" class="help"></a>
+    <%= sub_list_content 'NotificationEuropePartenaire', 'notification' %>
+    <% unless controller.action_name == 'show' %>
+      <%= sub_list_add_link 'notification_europe_partenaire', 'Ajouter un autre partenaire en Europe' %>
+    <% end %>
+    <div style="clear:both;"></div>
+  </p>
+  
+  <p>
+    <label>Partenaires hors Europe</label><a id="partenaire_help" class="help"></a>
+    <%= sub_list_content 'NotificationPartenaire', 'notification' %>
+    <% unless controller.action_name == 'show' %>
+      <%= sub_list_add_link 'notification_partenaire', 'Ajouter un autre partenaire hors Europe' %>
+    <% end %>
+    <div style="clear:both;"></div>
+  </p>
+</div>
+
+<% if @contrat.sous_contrats.size > 1 %>
+<div class="form-box parent" id="MoyensAccordes">
+  <h3>Moyens accord&eacute;s</h3>
+  <p <%= disable if @non_modifiables.include?('ma_type_montant')%>>
+    <label for="notification_ma_type_montant">Les montants sont </label><br />
+		<%- if @non_modifiables.include?('ma_type_montant') -%>
+        <%= f.text_field :ma_type_montant, :disabled => 'disabled' %>
+    <%- else -%>
+        <%= f.select :ma_type_montant, ['HT', 'TTC'] %>
+    <%- end -%>
+  </p>
+  
+  <div class="dispatching">
+    <h4>&nbsp;</h4>
+    <p <%= disable if @non_modifiables.include?('ma_fonctionnement')%>>
+    <label for="notification_ma_fonctionnement">Fonctionnement</label><br />
+    </p>
+    <p <%= disable if @non_modifiables.include?('ma_equipement')%>>
+    <label for="notification_ma_equipement">Equipement</label><br />  
+    </p>
+    <p <%= disable if @non_modifiables.include?('ma_salaire')%>>
+    <label for="notification_ma_salaire">Salaire</label><br />  
+    </p>
+    <p <%= disable if @non_modifiables.include?('ma_mission')%>>
+    <label for="notification_ma_mission">Mission</label><br />  
+    </p>
+    <p <%= disable if @non_modifiables.include?('ma_non_ventile')%>>
+    <label for="notification_ma_non_ventile">Non ventil&eacute;</label><br />  
+    </p>
+    <p style="height:40px;" <%= disable if @non_modifiables.include?('ma_couts_indirects')%>>
+    <label for="notification_ma_couts_indirects">Frais de gestion d&eacute;ductibles</label><a id="ma_couts_indirects_help" class="help"></a><br />  
+    </p>
+    <p style="height:40px;" <%= disable if @non_modifiables.include?('ma_frais_gestion_mutualises_local')%>>
+    <label for="notification_ma_frais_gestion_mutualises_local">Frais de gestion mut. loc. ou non justif&eacute;s</label><a id="ma_frais_gestion_mutualises_local_help" class="help"></a><br /> 
+    </p>
+		<p style="height:40px;" <%= disable if @non_modifiables.include?('ma_frais_gestion_mutualises')%>>
+    <label for="notification_ma_frais_gestion_mutualises">Frais de gestion mut. nat.</label><a id="ma_frais_gestion_mutualises_help" class="help"></a><br /> 
+    </p>
+    <p <%= disable if @non_modifiables.include?('ma_allocation')%>>
+    <label for="notification_ma_allocation">Allocation</label><a id="ma_allocation_help" class="help"></a><br />  
+    </p>
+    <p style="border:none;" <%= disable if @non_modifiables.include?('ma_total')%>>
+      <%- if !@non_modifiables.include?('ma_total') -%>
+			  <a href="" onclick="deverouiller('notification_ma_total'); return false;" 
+           id="notification_ma_total_deverouiller" class="deverouiller" title="Laisser l'application calculer le total"></a>
+        <a href="" onclick="verouiller('notification_ma_total'); return false;" 
+           id="notification_ma_total_verouiller" class="verouiller" title="Saisir le total" style="display:none;"></a>
+      <%- end -%>
+			<label for="notification_ma_total" class="required">Total</label>
+      <span id='notification_ma_total_cach' style="display:none;"><%= @notification.ma_total.to_s %></span>
+    </p>
+  </div>
+
+  <div class="dispatching size_<%= @contrat.sous_contrats.size %>" >
+    <h4><span title="<%= @contrat.long_acronyme %>"><%= truncate(@contrat.long_acronyme, :length => 20, :ommission => '...') %></span></h4>
+    <p>
+    	<%- if @non_modifiables.include?('ma_fonctionnement') -%>
+			  <%= f.text_field :ma_fonctionnement, :disabled => 'disabled' %>
+			<%- else -%>
+			  <%= f.text_field :ma_fonctionnement, :class => "text" %>
+			<%- end -%>	
+		</p>
+    <p>
+    	<%- if @non_modifiables.include?('ma_equipement') -%>
+        <%= f.text_field :ma_equipement, :disabled => 'disabled' %>
+      <%- else -%>
+        <%= f.text_field :ma_equipement, :class => "text" %>
+      <%- end -%>
+		</p>
+    <p>
+    	<%- if @non_modifiables.include?('ma_salaire') -%>
+        <%= f.text_field :ma_salaire, :disabled => 'disabled' %>
+      <%- else -%>
+        <%= f.text_field :ma_salaire, :class => "text" %>
+      <%- end -%>
+		</p>
+    <p>
+    	<%- if @non_modifiables.include?('ma_mission') -%>
+        <%= f.text_field :ma_mission, :disabled => 'disabled' %>
+      <%- else -%>
+        <%= f.text_field :ma_mission, :class => "text" %>
+      <%- end -%>
+		</p>
+    <p>
+    	<%- if @non_modifiables.include?('ma_non_ventile') -%>
+        <%= f.text_field :ma_non_ventile, :disabled => 'disabled' %>
+      <%- else -%>
+        <%= f.text_field :ma_non_ventile, :class => "text" %>
+      <%- end -%>
+		</p>
+    <p style="height:40px;">
+		  <%- if @non_modifiables.include?('ma_couts_indirects') -%>
+        <%= f.text_field :ma_couts_indirects, :disabled => 'disabled' %>
+      <%- else -%>
+        <%= f.text_field :ma_couts_indirects, :class => "text" %>
+      <%- end -%>		
+		</p>
+    <p style="height:40px;">
+		  <%- if @non_modifiables.include?('ma_frais_gestion_mutualises_local') -%>
+        <%= f.text_field :ma_frais_gestion_mutualises_local, :disabled => 'disabled' %>
+      <%- else -%>
+        <%= f.text_field :ma_frais_gestion_mutualises_local, :class => "text" %>
+      <%- end -%>			
+		</p>
+		<p style="height:40px;">
+      <%- if @non_modifiables.include?('ma_frais_gestion_mutualises') -%>
+        <%= f.text_field :ma_frais_gestion_mutualises, :disabled => 'disabled' %>
+      <%- else -%>
+        <%= f.text_field :ma_frais_gestion_mutualises, :class => "text" %>
+      <%- end -%>     
+    </p>
+    <p>
+    	<%- if @non_modifiables.include?('ma_allocation') -%>
+        <%= f.text_field :ma_allocation, :disabled => 'disabled' %>
+      <%- else -%>
+        <%= f.text_field :ma_allocation, :class => "text" %>
+      <%- end -%>		
+		</p>
+    <p style="border:none;">
+		  <%- if @non_modifiables.include?('ma_total') -%>
+        <%= f.text_field :ma_total, :disabled => 'disabled' %>
+				<%= f.hidden_field :ma_total %>
+      <%- else -%>
+        <%= f.text_field :ma_total, :class => "text" %>
+      <%- end -%>		
+		</p>
+  </div>
+  
+	<% i = 1 %>
+	<% for sous_contrat_notification in @notification.sous_contrat_notifications %>
+
+	  <% if (i % 3 == 0) %>
+		<div style="clear:both;"></div>
+		<div class="dispatching">
+	    <h4>&nbsp;</h4>
+	    <p <%= disable if @non_modifiables.include?('ma_fonctionnement')%>>
+	    <label for="notification_ma_fonctionnement">Fonctionnement</label><br />
+	    </p>
+	    <p <%= disable if @non_modifiables.include?('ma_equipement')%>>
+	    <label for="notification_ma_equipement">Equipement</label><br />  
+	    </p>
+	    <p <%= disable if @non_modifiables.include?('ma_salaire')%>>
+	    <label for="notification_ma_salaire">Salaire</label><br />  
+	    </p>
+	    <p <%= disable if @non_modifiables.include?('ma_mission')%>>
+	    <label for="notification_ma_mission">Mission</label><br />  
+	    </p>
+	    <p <%= disable if @non_modifiables.include?('ma_non_ventile')%>>
+	    <label for="notification_ma_non_ventile">Non ventilé</label><br />  
+	    </p>
+	    <p style="height:40px;" <%= disable if @non_modifiables.include?('ma_couts_indirects')%>>
+	    <label for="notification_ma_couts_indirects">Frais de gestion déductibles</label><br />  
+	    </p>
+			<p style="height:40px;" <%= disable if @non_modifiables.include?('ma_frais_gestion_mutualises_local')%>>
+      <label for="notification_ma_frais_gestion_mutualises_local">Frais de gestion mut. loc. ou non justif&eacute;s</label><br /> 
+      </p>
+	    <p style="height:40px;" <%= disable if @non_modifiables.include?('ma_frais_gestion_mutualises')%>>
+	    <label for="notification_ma_frais_gestion_mutualises">Frais de gestion mut. nat.</label><br /> 
+	    </p>
+	    <p <%= disable if @non_modifiables.include?('ma_allocation')%>>
+	    <label for="notification_ma_allocation">Allocation</label><br />  
+	    </p>
+	    <p style="border:none;" <%= disable if @non_modifiables.include?('ma_total')%>>
+	    <label for="notification_ma_total" class="required">Total</label>
+	    </p>
+    </div>
+		<% end %>   
+    <% i = i + 1 %>
+
+		<% @sous_contrat_notification = sous_contrat_notification %>
+    <div class="dispatching  size_<%= @contrat.sous_contrats.size %>" id="<%= "sous_contrat_notification_#{sous_contrat_notification.id}" %>">
+      <h4><span title="<%= SousContrat.find(sous_contrat_notification.sous_contrat_id).entite.nom %>"><%= truncate(SousContrat.find(sous_contrat_notification.sous_contrat_id).entite.nom,:length =>  20, :ommission => '...') %></span></h4>
+		  <p>
+		  	<%- if @non_modifiables.include?('ma_fonctionnement') -%>
+          <%= text_field 'sous_contrat_notification[]', 'ma_fonctionnement', :disabled => 'disabled' %>
+        <%- else -%>
+          <%= text_field 'sous_contrat_notification[]', 'ma_fonctionnement', :class => "text" %>
+        <%- end -%>    
+		  </p>
+		  <p>
+		  	<%- if @non_modifiables.include?('ma_equipement') -%>
+          <%= text_field 'sous_contrat_notification[]', 'ma_equipement', :disabled => 'disabled' %>
+        <%- else -%>
+          <%= text_field 'sous_contrat_notification[]', 'ma_equipement', :class => "text" %>
+        <%- end -%>	    
+		  </p>
+		  <p>
+		  	<%- if @non_modifiables.include?('ma_salaire') -%>
+            <%= text_field 'sous_contrat_notification[]', 'ma_salaire', :disabled => 'disabled' %>
+        <%- else -%>
+		        <%= text_field 'sous_contrat_notification[]', 'ma_salaire', :class => "text" %>
+				<%- end -%>
+		  </p>
+		  <p>
+		  	<%- if @non_modifiables.include?('ma_mission') -%>
+          <%= text_field 'sous_contrat_notification[]', 'ma_mission', :disabled => 'disabled' %>
+        <%- else -%>
+          <%= text_field 'sous_contrat_notification[]', 'ma_mission', :class => "text" %>
+        <%- end -%>
+		    
+		  </p>
+		  <p>
+		  	<%- if @non_modifiables.include?('ma_non_ventile') -%>
+          <%= text_field 'sous_contrat_notification[]', 'ma_non_ventile', :disabled => 'disabled' %>
+        <%- else -%>
+          <%= text_field 'sous_contrat_notification[]', 'ma_non_ventile', :class => "text" %>
+        <%- end -%>
+		    
+		  </p>
+		  <p style="height:40px;">
+			  <%- if @non_modifiables.include?('ma_couts_indirects') -%>
+          <%= text_field 'sous_contrat_notification[]', 'ma_couts_indirects', :disabled => 'disabled' %>
+        <%- else -%>
+          <%= text_field 'sous_contrat_notification[]', 'ma_couts_indirects', :class => "text" %>
+        <%- end -%> 	    
+		  </p>
+		  <p style="height:40px;">
+			  <%- if @non_modifiables.include?('ma_frais_gestion_mutualises_local') -%>
+          <%= text_field 'sous_contrat_notification[]', 'ma_frais_gestion_mutualises_local', :disabled => 'disabled' %>
+        <%- else -%>
+          <%= text_field 'sous_contrat_notification[]', 'ma_frais_gestion_mutualises_local', :class => "text" %>
+        <%- end -%>   		    
+		  </p>
+			<p style="height:40px;">
+        <%- if @non_modifiables.include?('ma_frais_gestion_mutualises') -%>
+          <%= text_field 'sous_contrat_notification[]', 'ma_frais_gestion_mutualises', :disabled => 'disabled' %>
+        <%- else -%>
+          <%= text_field 'sous_contrat_notification[]', 'ma_frais_gestion_mutualises', :class => "text" %>
+        <%- end -%>           
+      </p>
+		  <p>
+		  	<%- if @non_modifiables.include?('ma_allocation') -%>
+          <%= text_field 'sous_contrat_notification[]', 'ma_allocation', :disabled => 'disabled' %>
+        <%- else -%>
+          <%= text_field 'sous_contrat_notification[]', 'ma_allocation', :class => "text" %>
+        <%- end -%>   
+		    
+		  </p>
+		  <p style="border:none;">
+			  <%- if @non_modifiables.include?('ma_total') -%>
+          <%= text_field 'sous_contrat_notification[]', 'ma_total', :disabled => 'disabled' %>
+					<%= hidden_field 'sous_contrat_notification[]', 'ma_total' %>
+        <%- else -%>
+          <%= text_field 'sous_contrat_notification[]', 'ma_total', :class => "text notification_ma_total" %>
+        <%- end -%> 					    
+		    <span id='sous_contrat_notification_<%= sous_contrat_notification.id %>_ma_total_cach' style="display:none;"><%= @sous_contrat_notification.ma_total.to_s %></span>
+		  </p>
+		  <%= hidden_field 'sous_contrat_notification[]', 'sous_contrat_id', :value => sous_contrat_notification.sous_contrat_id %>
+		</div>
+  <% end %>
+
+
+  <div style="clear:both"></div>
+</div>
+
+
+<div class="form-box parent" id="PersonnelAccorde">
+  <h3>Personnel accord&eacute;</h3>
+  
+  <div class="dispatching">
+    <h4>&nbsp;</h4>
+    <p><label for="notification_pa_doctorant">Doctorant</label><a id="pa_doctorant_help" class="help"></a></p>
+    <p><label for="notification_pa_post_doc">Post-doc</label><a id="pa_post_doc_help" class="help"></a></p>
+    <p><label for="notification_pa_ingenieur">Ing&eacute;nieur</label><a id="pa_ingenieur_help" class="help"></a></p>
+    <p><label for="notification_pa_autre">Autre</label><a id="pa_autre_help" class="help"></a></p>
+    <p style="border:none;">
+      <a href="" onclick="deverouiller('notification_pa_equivalent_temps_plein'); return false;" 
+         id="notification_pa_equivalent_temps_plein_deverouiller" class="deverouiller" title="Laisser l'application effectuer le calcul"></a>
+      <a href="" onclick="verouiller('notification_pa_equivalent_temps_plein'); return false;" 
+         id="notification_pa_equivalent_temps_plein_verouiller" class="verouiller" title="Saisir l'équivalent temps plein" style="display:none;"></a>
+      <label for="notification_pa_equivalent_temps_plein" class="required">Eq. temps plein</label>
+      <span id='notification_pa_equivalent_temps_plein_cach' style="display:none;"><%= @notification.pa_equivalent_temps_plein.to_s %></span>
+    </p>
+  </div>
+  
+  <div class="dispatching size_<%= @contrat.sous_contrats.size %>" >
+    <h4><span title="<%= @contrat.long_acronyme %>"><%= truncate(@contrat.long_acronyme, :length => 20, :ommission => '...') %></span></h4>
+    <p><%= f.text_field :pa_doctorant, :class => "text" %></p>
+    <p><%= f.text_field :pa_post_doc, :class => "text" %></p>
+    <p><%= f.text_field :pa_ingenieur, :class => "text" %></p>
+    <p><%= f.text_field :pa_autre, :class => "text" %></p>
+    <p style="border:none;"><%= f.text_field :pa_equivalent_temps_plein, :class => "text" %></p>
+  </div>
+  
+	<% i = 1 %>
+
+	<% for sous_contrat_notification in @notification.sous_contrat_notifications %>
+    <% if (i % 3 == 0) %>
+		<div style="clear:both;"></div>
+    <div class="dispatching">
+      <h4>&nbsp;</h4>
+      <p><label for="notification_pa_doctorant">Doctorant</label></p>
+	    <p><label for="notification_pa_post_doc">Post-doc</label></p>
+	    <p><label for="notification_pa_ingenieur">Ingénieur</label></p>
+	    <p><label for="notification_pa_autre">Autre</label></p>
+	    <p style="border:none;">
+	      <label for="notification_pa_equivalent_temps_plein" class="required">Eq. temps plein</label>
+	    </p>
+    </div>
+    <% end %>   
+    <% i = i + 1 %>
+    <% @sous_contrat_notification = sous_contrat_notification %>
+    <div class="dispatching  size_<%= @contrat.sous_contrats.size %>" id="<%= "sous_contrat_notification_#{sous_contrat_notification.id}" %>">
+      <h4><span title="<%= SousContrat.find(sous_contrat_notification.sous_contrat_id).entite.nom %>"><%= truncate(SousContrat.find(sous_contrat_notification.sous_contrat_id).entite.nom, :length => 20, :ommission => '...') %></span></h4>
+      <p>
+		    <%= text_field 'sous_contrat_notification[]', 'pa_doctorant', :class => "text" %>
+		  </p>
+		  <p>
+		    <%= text_field 'sous_contrat_notification[]', 'pa_post_doc', :class => "text" %>
+		  </p>
+		  <p>
+		    <%= text_field 'sous_contrat_notification[]', 'pa_ingenieur', :class => "text" %>
+		  </p>
+		  <p>
+		    <%= text_field 'sous_contrat_notification[]', 'pa_autre', :class => "text" %>
+		  </p>
+		  <p style="border:none;">
+		    <%= text_field 'sous_contrat_notification[]', 'pa_equivalent_temps_plein', :class => "text notification_pa_equivalent_temps_plein" %>
+		      <span id='sous_contrat_notification_<%= sous_contrat_notification.id %>_pa_equivalent_temps_plein_cach' style="display:none;"><%= @sous_contrat_notification.pa_equivalent_temps_plein.to_s %></span>
+		  </p>
+    </div>
+  <% end %>
+	
+  <div style="clear:both"></div>
+</div>
+
+<% else %>
+
+<div class="clearfix">
+  <div class="col-1-of-2">
+    <div class="form-box parent" id="MoyensAccordes">
+      <h3>Moyens accord&eacute;s</h3>
+
+      <p <%= disable if @non_modifiables.include?('ma_type_montant')%>>
+        <label for="notification_ma_type_montant">Les montants sont </label><br />
+				<%- if @non_modifiables.include?('ma_type_montant') -%>
+          <%= f.text_field :ma_type_montant, :disabled => 'disabled' %>
+        <%- else -%>
+          <%= f.select :ma_type_montant, ['HT', 'TTC'] %>
+				<%- end -%>
+      </p>
+  
+      <p <%= disable if @non_modifiables.include?('ma_fonctionnement')%>>
+        <label for="notification_ma_fonctionnement">Fonctionnement</label><br />
+				<%- if @non_modifiables.include?('ma_fonctionnement') -%>
+          <%= f.text_field :ma_fonctionnement, :disabled => 'disabled' %>
+				<%- else -%>
+				  <%= f.text_field :ma_fonctionnement, :class => "text" %>
+				<%- end -%>
+      </p>
+  
+      <p <%= disable if @non_modifiables.include?('ma_equipement')%>>
+        <label for="notification_ma_equipement">Equipement</label><br />
+				<%- if @non_modifiables.include?('ma_equipement') -%>
+          <%= f.text_field :ma_equipement, :disabled => 'disabled' %>
+				<%- else -%>
+				  <%= f.text_field :ma_equipement, :class => "text" %>
+				<%- end -%>
+      </p>
+  
+      <p <%= disable if @non_modifiables.include?('ma_salaire')%>>
+        <label for="notification_ma_salaire">Salaire</label><br />
+				<%- if @non_modifiables.include?('ma_salaire') -%>
+          <%= f.text_field :ma_salaire, :disabled => 'disabled' %>
+				<%- else -%>
+				  <%= f.text_field :ma_salaire, :class => "text" %>
+				<%- end -%>
+      </p>
+  
+      <p <%= disable if @non_modifiables.include?('ma_mission')%>>
+        <label for="notification_ma_mission">Mission</label><br />
+				<%- if @non_modifiables.include?('ma_mission') -%>
+          <%= f.text_field :ma_mission, :disabled => 'disabled' %>
+				<%- else -%>
+				  <%= f.text_field :ma_mission, :class => "text" %>
+				<%- end -%>
+      </p>
+  
+      <p <%= disable if @non_modifiables.include?('ma_non_ventile')%>>
+        <label for="notification_ma_non_ventile">Non ventil&eacute;</label><br />
+        <%- if @non_modifiables.include?('ma_non_ventile') -%>
+				  <%= f.text_field :ma_non_ventile, :disabled => 'disabled' %>
+				<%- else -%>
+				  <%= f.text_field :ma_non_ventile, :class => "text" %>
+				<%- end -%>
+      </p>
+  
+      <p style="height:40px;" <%= disable if @non_modifiables.include?('ma_couts_indirects')%>>
+        <label for="notification_ma_couts_indirects">Frais de gestion d&eacute;ductibles</label><a id="ma_couts_indirects_help" class="help"></a><br />
+        <%- if @non_modifiables.include?('ma_couts_indirects') -%>
+				  <%= f.text_field :ma_couts_indirects, :disabled => 'disabled' %>
+				<%- else -%>
+				  <%= f.text_field :ma_couts_indirects, :class => "text" %>
+				<%- end -%>		
+      </p>
+  
+	    <p style="height:40px;" <%= disable if @non_modifiables.include?('ma_frais_gestion_mutualises_local')%>>
+        <label for="notification_ma_frais_gestion_mutualises_local">Frais de gestion mut. loc. ou non justifi&eacute;s</label><a id="ma_frais_gestion_mutualises_local_help" class="help"></a><br /> 
+        <%- if @non_modifiables.include?('ma_frais_gestion_mutualises_local') -%>
+          <%= f.text_field :ma_frais_gestion_mutualises_local, :disabled => 'disabled' %>
+        <%- else -%>
+          <%= f.text_field :ma_frais_gestion_mutualises_local, :class => "text" %>
+        <%- end -%>
+      </p>
+			
+      <p style="height:40px;" <%= disable if @non_modifiables.include?('ma_frais_gestion_mutualises')%>>
+        <label for="notification_ma_frais_gestion_mutualises">Frais de gestion mutualis&eacute;s nationaux</label><a id="ma_frais_gestion_mutualises_help" class="help"></a><br /> 
+        <%- if @non_modifiables.include?('ma_frais_gestion_mutualises') -%>
+				  <%= f.text_field :ma_frais_gestion_mutualises, :disabled => 'disabled' %>
+				<%- else -%>
+				  <%= f.text_field :ma_frais_gestion_mutualises, :class => "text" %>
+				<%- end -%>
+      </p>
+  
+      <p <%= disable if @non_modifiables.include?('ma_allocation')%>>
+        <label for="notification_ma_allocation">Allocation</label><a id="ma_allocation_help" class="help"></a><br />
+        <%- if @non_modifiables.include?('ma_allocation') -%>
+          <%= f.text_field :ma_allocation, :disabled => 'disabled' %>
+        <%- else -%>
+          <%= f.text_field :ma_allocation, :class => "text" %>
+        <%- end -%>
+				
+      </p>
+  
+      <p style="border:none;" <%= disable if @non_modifiables.include?('ma_total')%>>
+			  <%- if !@non_modifiables.include?('ma_total') -%>
+          <a href="" onclick="deverouiller('notification_ma_total'); return false;" 
+             id="notification_ma_total_deverouiller" class="deverouiller" title="Laisser l'application calculer le total"></a>
+          <a href="" onclick="verouiller('notification_ma_total'); return false;" 
+             id="notification_ma_total_verouiller" class="verouiller" title="Saisir le total" style="display:none;"></a>
+        <%- end -%>
+				<label for="notification_ma_total" class="required">Total</label>
+        <br />
+				<%- if @non_modifiables.include?('ma_total') -%>
+          <%= f.text_field :ma_total, :disabled => 'disabled' %>
+					<%= f.hidden_field :ma_total %>
+				<%- else -%>
+				  <%= f.text_field :ma_total, :class => "text" %>
+				<%- end -%>		
+        <span id='notification_ma_total_cach' style="display:none;"><%= @notification.ma_total.to_s %></span>
+      </p>  
+  
+    </div>
+  </div>
+  <div class="col-2-of-2">
+    <div class="form-box parent" id="PersonnelAccorde">
+      <h3>Personnel accord&eacute;</h3>
+      <p>
+        <label for="notification_pa_doctorant">Doctorant</label><a id="pa_doctorant_help" class="help"></a><br />
+        <%= f.text_field :pa_doctorant %>
+      </p>
+      <p>
+        <label for="notification_pa_post_doc">Post-doc</label><a id="pa_post_doc_help" class="help"></a><br />
+        <%= f.text_field :pa_post_doc %>
+      </p>
+      <p>
+        <label for="notification_pa_ingenieur">Ing&eacute;nieur</label><a id="pa_ingenieur_help" class="help"></a><br />
+        <%= f.text_field :pa_ingenieur %>
+      </p>
+      <p>
+        <label for="notification_pa_autre">Autre</label><a id="pa_autre_help" class="help"></a><br />
+        <%= f.text_field :pa_autre %>
+      </p>
+      <p style="border:none;">
+        <a href="" onclick="deverouiller('notification_pa_equivalent_temps_plein'); return false;"
+           id="notification_pa_equivalent_temps_plein_deverouiller" class="deverouiller" title="Laisser l'application effectuer le calcul"></a>
+        <a href="" onclick="verouiller('notification_pa_equivalent_temps_plein'); return false;"
+           id="notification_pa_equivalent_temps_plein_verouiller" class="verouiller" title="Saisir l'équivalent temps plein" style="display:none;"></a>
+        <label for="notification_pa_equivalent_temps_plein" class="required">Equivalent temps plein</label>
+        <br />
+        <%= f.text_field :pa_equivalent_temps_plein %>
+        <span id='notification_pa_equivalent_temps_plein_cach' style="display:none;"><%= @notification.pa_equivalent_temps_plein.to_s %></span>
+      </p>
+    </div>
+  </div>
+</div>
+<% end %>
+
+<div class="form-box parent" id="PersonnelImplique">
+  <h3>Personnel impliqu&eacute;</h3>
+  <p>
+    <%= sub_list_content 'NotificationPersonnel', 'notification' %>
+    <% unless controller.action_name == 'show' %>
+      <%= sub_list_add_link 'notification_personnel', 'Ajouter un autre personnel' %>
+    <% end %>
+    <div style="clear:both;"></div>
+  </p>
+</div>
+
+<div id="help">
+  <div id='tooltip_etablissement_gestionnaire' class="tooltip" style="display:none;">
+    Etablissement gestionnaire local
+  </div>
+  <div id='tooltip_organisme_financeur' class="tooltip" style="display:none;">
+    Correspond au nom de l'entreprise si le contrat est industriel. Sinon ANR, R&eacute;gion Rhône Alpes, commission europ&eacute;enne ...
+  </div>
+  <div id='tooltip_organisme_payeur' class="tooltip" style="display:none;">
+    Si on est coordinateur du contrat il s'agit de l'organisme financeur, sinon c'est l'&eacute;tablissement gestionnaire du coordinateur.
+  </div>
+  <div id='tooltip_numero_ligne_budgetaire' class="tooltip" style="display:none;">
+    Il est attribu&eacute;s par l'&eacute;tablissement gestionnaire
+  </div>
+  <div id='tooltip_numero_contrat' class="tooltip" style="display:none;">
+    Attribu&eacute;s par l'&eacute;tablissement gestionnaire. Il peut changer chaque ann&eacute;e, par cons&eacute;quent renseignez le premier ici et saisissez les suivant dans l'&eacute;ch&eacute;ancier.
+  </div>
+  <div id='tooltip_porteur' class="tooltip" style="display:none;">
+    Responsable scientifique local.
+  </div>  
+  <div id='tooltip_mots_cles_libres' class="tooltip" style="display:none;">
+    Séparez les mots clés par des virgules : mot clé 1, mot clé 2, mot clé 3
+  </div>
+  <div id='tooltip_thematiques' class="tooltip" style="display:none;">
+    Séparez les thématiques par des virgules : thématique 1, thématique 2, thématique 3
+  </div>
+  <div id='tooltip_poles_competivites' class="tooltip" style="display:none;">
+    A remplir si le contrat est labellisé.
+  </div>
+  <div id='tooltip_partenaire_france' class="tooltip" style="display:none;">
+    Vous avez la possibilité d'ajouter autant de partenaires en France que vous le souhaitez, seul le champ établissement gestionnaire est obligatoire.
+  </div>
+  <div id='tooltip_partenaire_europe' class="tooltip" style="display:none;">
+    Vous avez la possibilité d'ajouter autant de partenaires en Europe que vous le souhaitez, seul le champ établissement gestionnaire est obligatoire.
+  </div>
+  <div id='tooltip_partenaire' class="tooltip" style="display:none;">
+    Vous avez la possibilité d'ajouter autant de partenaires hors Europe que vous le souhaitez, seul le champ établissement gestionnaire est obligatoire.
+  </div>
+  <div id='tooltip_ma_couts_indirects' class="tooltip" style="display:none;">
+    Montant accordé pour couvrir au moins  les coûts de gestion. Ce montant est ajouté au montant accordé dans la ventilation <b>Fonctionnement</b> dans le suivi du budget .
+  </div>
+  <div id='tooltip_ma_frais_gestion_mutualises_local' class="tooltip" style="display:none;">
+    Montant r&eacute;serv&eacute; &agrave; la mutualisation locale des frais de gestion (<b>INRIA</b> ). Ce montant n'est pas report&eacute; dans le suivi du budget.
+  </div>
+	<div id='tooltip_ma_frais_gestion_mutualises' class="tooltip" style="display:none;">
+    Montant r&eacute;serv&eacute; &agrave; la mutualisation nationale des frais de gestion (<b>INRIA</b> ). Ce montant n'est pas report&eacute; dans le suivi du budget.
+  </div>
+  <div id='tooltip_ma_allocation' class="tooltip" style="display:none;">
+    en mois
+  </div>
+  <div id='tooltip_pa_doctorant' class="tooltip" style="display:none;">
+    en homme-mois
+  </div>
+  <div id='tooltip_pa_post_doc' class="tooltip" style="display:none;">
+    en homme-mois
+  </div>
+  <div id='tooltip_pa_ingenieur' class="tooltip" style="display:none;">
+    en homme-mois
+  </div>
+  <div id='tooltip_pa_autre' class="tooltip" style="display:none;">
+    en homme-mois
+  </div>
+  <div id='tooltip_url' class="tooltip" style="display:none;">
+    www.google.fr par exemple
+  </div>
+</div>
+
+<script type="text/javascript">
+  $$("#help .tooltip").each(function(value) {
+    new Tip(value.id.sub('tooltip_', '')+'_help', value.innerHTML);
+  }); 
+  erreur_total = 0;
+  
+  <% if !@non_modifiables.include?('ma_total') %>
+	  <% if @notification.sous_contrat_notifications.size > 1 %>
+	    <% for sc in @notification.sous_contrat_notifications %>
+	      if (parseFloat($('sous_contrat_notification_<%= sc.id.to_s %>_ma_total').value) != total(<%= sc.id.to_s %>)){
+	        erreur_total += 1;
+	      }
+	    <% end %>
+	  <% end %>
+	  if (parseFloat($('notification_ma_total').value) != total('null')){
+	    erreur_total += 10;
+	  }
+  
+	  if (erreur_total == 0){
+	    verouiller('notification_ma_total');
+	  }else{
+	    deverouiller('notification_ma_total');
+	  }
+  <% end %>
+  
+  erreur_temps_plein = 0;
+
+  <% if @notification.sous_contrat_notifications.size > 1 %>
+    <% for sc in @notification.sous_contrat_notifications %>
+      if (parseFloat($('sous_contrat_notification_<%= sc.id.to_s %>_pa_equivalent_temps_plein').value) != temps_plein(<%= sc.id.to_s %>)){
+        erreur_temps_plein += 1;
+      }
+    <% end %>
+  <% end %>
+  if (parseFloat($('notification_pa_equivalent_temps_plein').value) != temps_plein('null')){
+    erreur_temps_plein += 10;
+  }
+  
+  if (erreur_temps_plein == 0){
+    verouiller('notification_pa_equivalent_temps_plein');
+  }else{
+    deverouiller('notification_pa_equivalent_temps_plein');
+  }
+  
+
+  
+  function deverouiller(input){
+    <% if  @notification.sous_contrat_notifications.size > 1 %>
+      $$('input.'+input).each(function(e){
+        $(e).enable();
+        $(e).value = $(e.id+'_cach').innerHTML;
+      })
+    <% end %>
+    $(input).enable();
+    $(input+'_deverouiller').hide();
+    $(input+'_verouiller').show();
+    $(input).value = $(input+'_cach').innerHTML;
+  }
+  
+  
+  
+  function verouiller(input){
+    <% if @notification.sous_contrat_notifications.size > 1 %>
+    $$('input.'+input).each(function(e){
+      $(e).disable();
+      $(e).value = "Calculée";
+    })
+    <% end %>
+    $(input).disable();
+    $(input+'_deverouiller').show();
+    $(input+'_verouiller').hide();
+    $(input).value = "Calculée";
+  }
+  
+  
+
+  function checkIsPorteur(){
+    if ($('notification_est_porteur').checked){
+      $('notification_coordinateur').value = $F('notification_porteur')
+      $('p_notification_coordinateur').hide();
+    }else{
+      $('notification_coordinateur').value = '';
+      $('p_notification_coordinateur').show();
+    }
+  }
+  
+  
+  
+  Event.observe('notification_est_porteur', 'change', checkIsPorteur);
+
+  
+  
+  function total(id){
+    if (id != 'null'){
+      return  Number($F('sous_contrat_notification_'+id+'_ma_fonctionnement')) + 
+              Number($F('sous_contrat_notification_'+id+'_ma_equipement')) + 
+              Number($F('sous_contrat_notification_'+id+'_ma_salaire')) + 
+              Number($F('sous_contrat_notification_'+id+'_ma_mission')) + 
+              Number($F('sous_contrat_notification_'+id+'_ma_non_ventile')) +
+              Number($F('sous_contrat_notification_'+id+'_ma_couts_indirects'))+
+              Number($F('sous_contrat_notification_'+id+'_ma_frais_gestion_mutualises'))+
+							Number($F('sous_contrat_notification_'+id+'_ma_frais_gestion_mutualises_local'));
+    }else{
+      return  Number($F('notification_ma_fonctionnement')) + 
+              Number($F('notification_ma_equipement')) + 
+              Number($F('notification_ma_salaire')) + 
+              Number($F('notification_ma_mission')) + 
+              Number($F('notification_ma_non_ventile')) + 
+              Number($F('notification_ma_couts_indirects')) +
+              Number($F('notification_ma_frais_gestion_mutualises'))+
+							Number($F('notification_ma_frais_gestion_mutualises_local'));
+    }
+  }
+
+  
+  
+  function calcul_total(){
+    <% if  @notification.sous_contrat_notifications.size > 1 %>
+      <% for sc in @notification.sous_contrat_notifications %>
+        $('sous_contrat_notification_<%= sc.id.to_s %>_ma_total').value = total(<%= sc.id.to_s %>);
+      <% end %>
+    <% end %>
+    $('notification_ma_total').value =total('null');
+  }
+
+  
+  
+  
+  function temps_plein(id){
+    if (id != 'null'){
+      return (  Number($F('sous_contrat_notification_'+id+'_pa_doctorant')) + 
+                Number($F('sous_contrat_notification_'+id+'_pa_post_doc')) +
+                Number($F('sous_contrat_notification_'+id+'_pa_ingenieur')) +
+                Number($F('sous_contrat_notification_'+id+'_pa_autre')) ) / Number($F('notification_nombre_mois'));
+
+    }else{
+      return  ( Number($F('notification_pa_doctorant')) + 
+                Number($F('notification_pa_post_doc')) + 
+                Number($F('notification_pa_ingenieur')) + 
+                Number($F('notification_pa_autre')) ) / Number($F('notification_nombre_mois'));
+    }
+  }
+
+  
+  function calcul_pa_equivalent_temps_plein(){
+    <% if  @notification.sous_contrat_notifications.size > 1 %>
+      <% for sc in @notification.sous_contrat_notifications %>
+        $('sous_contrat_notification_<%= sc.id.to_s %>_pa_equivalent_temps_plein').value = temps_plein(<%= sc.id.to_s %>);
+      <% end %>
+    <% end %>
+    $('notification_pa_equivalent_temps_plein').value = temps_plein('null');
+  }
+
+
+ 
+</script>

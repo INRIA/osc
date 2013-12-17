@@ -1,0 +1,79 @@
+<div class="section impair">
+	<h2>Informations générales</h2>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Date
+		</div>
+		<div class='valeur'>
+			<%=h french_date @refu.date %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Est sur une liste d'attente ?
+		</div>
+		<div class='valeur'>
+		  <% if @refu.liste_attente %>
+			Oui
+			<% else %>
+			Non
+			<% end %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	
+	<div class='entree'>
+		<div class='intitule'>
+			Est labellisé ?
+		</div>
+		<div class='valeur'>
+		  <% if @refu.labelise %>
+			Oui
+			<% else %>
+			Non
+			<% end %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+
+	<div class='entree'>
+		<div class='intitule'>
+			Commentaires
+		</div>
+		<div class='valeur'>
+		  <%= simple_format @refu.commentaire %>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+</div>
+
+
+<div id="content_footer">
+	<div class="left">
+		Création le <%= french_datetime @refu.created_at %> par <%= print_user_infos @refu.created_by %>
+		<% if @refu.created_at != @refu.updated_at %>
+		<br />
+		Dernière modification le <%= french_datetime @refu.updated_at %> par <%= print_user_infos @refu.updated_by %>
+		<% end %>
+	</div>
+	<div class="right">
+		<% if @contrat.is_editable? current_user %>
+		<%= link_to_remote_redbox "Supprimer le refus",
+		    {	:url => ask_delete_contrat_refu_path(@contrat, @refu), :method => :get}, 
+				{	:class => "destroy",
+					:title => "Supprimer le refus" }	%>
+		<% end %>
+	</div>
+	<div style="clear:both;"></div>
+</div>
+
+<% content_for :right do %>
+	<%= render :partial => 'contrats/show_entite_tree' %>
+	<div class="section">
+	  <h2>Export PDF</h2>
+	  <%= link_to 'Obtenir le refus au format PDF', contrat_refu_path(@contrat, @refu, :pdf), :class => "to_pdf" %>
+	</div>
+<% end %>

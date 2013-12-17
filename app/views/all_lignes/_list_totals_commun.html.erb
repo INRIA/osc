@@ -1,0 +1,12 @@
+<tr>
+  <td colspan='<%= @colspan_totals %>'></td><td class="total-header">Sous-total</td>
+  <td class="money sous-total<%= ' neg' if @subtotal_montant_engages < 0 %>"><%= my_number_to_currency @subtotal_montant_engages %></td>
+  <td class="money sous-total<%= ' neg' if @subtotal_montant_paye_ht < 0 %>"><%= my_number_to_currency @subtotal_montant_paye_ht %></td>
+  <td class="money sous-total<%= ' neg' if @subtotal_montant_paye_ttc < 0 %>"><%= my_number_to_currency @subtotal_montant_paye_ttc %></td>
+  <td></td>
+</tr>
+
+<tr id="list_totaux_globaux" >
+  <td colspan='<%= @colspan_totals%>'></td>
+  <td colspan='4' class="total-header"><a href="" onClick="ComputeTotaux();return false;" title="Calculer le Total pour toutes les pages">Calculer le Total pour toutes les pages</a></td> 
+</tr>

@@ -1,0 +1,206 @@
+<% content_for :right do %>
+  <% if !Contrat.find_all_editable(current_user).empty? %>
+    <%= link_to '', new_ligne_path, {:class => "addLigne"} %>
+  <% end %>
+  <h2 style="margin:0">Recherche //
+    <span id="ajax_result">
+      <%= pluralize(@count, 'ligne trouvée', 'lignes trouvées').html_safe() %>
+    </span>
+  </h2>
+  <div id="recherche">
+    <form name="sform" id="sform" class="search" action=""> 
+
+			<div class="box" style="width:215px">
+				<%- value = @nom -%>
+        <%- css_class = ("blank" unless !value.blank? and value != "Nom") -%>
+        <%= text_field_tag("nom", "#{value}", :size => 20,
+        :onblur => "if (this.value == '') { $(this).addClassName('blank'); this.value='Nom' };",
+        :onfocus => "if (this.value == 'Nom') { $(this).removeClassName('blank'); this.value=''; };",
+        :class => css_class,
+        :style => "width:200px;",
+        :tabindex => '10' ) %>
+      </div>			
+			<div class="box">
+				<%- value = @projet -%>
+				<%- css_class = ("blank" unless !value.blank? and value != "Equipe") -%>
+        <%= text_field_tag("projet", "#{value}", :size => 10,
+        :onblur => "if (this.value == '') { $(this).addClassName('blank'); this.value='Equipe' };",
+        :onfocus => "if (this.value == 'Equipe') { $(this).removeClassName('blank'); this.value=''; };",
+        :class => css_class,
+        :style => "width:70px;",
+        :tabindex => '12' ) %>
+      </div>		
+      <div style="clear:both"></div>
+      <p class="checkbox">	
+			<% if @mes_equipes_nom.size == 0 %>
+				<%= check_box_tag "filtre_projet", "filtre_projet_active", @filtre_mes_projets, :disabled => 'disabled' -%>
+		  <% else %>
+			  <%= check_box_tag "filtre_projet", "filtre_projet_active", @filtre_mes_projets -%> 
+			<% end %>      
+				<label for="filtre_projet">Limiter l'affichage &agrave;  <a href="#" onclick="new Effect.toggle('mes_equipes', 'blind', {duration:0.4}); return false;">mes &eacute;quipes</a></label>        
+			</p>
+			<% if @mes_equipes_nom.size == 0 %>
+			  <div id="mes_equipes" style="color:#666666;display:none;">
+			    <%= image_tag "error.png", :alt => "warning", :height => "15px" %>Vous n'avez des droits sur aucune &eacute;quipe
+        </div>
+			<% else %>
+			  <div id="mes_equipes" style="display:none;">
+		      <% for equipe_nom in @mes_equipes_nom %>
+					  <span class="projet_name"><%= equipe_nom %></span>
+					<% end %>
+	      </div>
+			<% end %>
+
+      <a href="#" onclick="new Effect.toggle('contrat_recherche_avancee', 'blind', {duration:0.4}); return false;" class="toggle">Recherche avanc&eacute;e</a>
+      <div id="contrat_recherche_avancee" style="display:none;">
+        <p class="checkbox first">
+          <%= radio_button_tag 'position', 'default', checked = true %>
+          <label for="position_default">Lignes en cours</label>
+        </p>
+        <p class="checkbox">
+          <%= radio_button_tag 'position', 'desactivees' %>
+          <label for="position_desactivees">Lignes désactivées</label>
+        </p>
+        <p class="checkbox">
+          <%= radio_button_tag 'position', 'clos' %>
+          <label for="position_clos">Lignes contrats clos</label>
+        </p>
+        <p class="checkbox">
+          <%= radio_button_tag 'position', 'tous' %>
+          <label for="position_tous">Toutes les lignes</label>
+        </p>
+      </div>
+      <input OnClick="updateResult('1'); return false;" id="extraction_submit" class="submit" type="submit" value="Lancer la Recherche" />   
+    </form>
+
+    <script type="text/javascript" language="javascript">
+      function updateResult(page_number){
+
+        new Ajax.Request('/lignes/search',
+          {asynchronous:true, evalScripts:true, method:'get',
+          parameters:'nom='+escape($F('nom'))+
+                     '&projet='+escape($F('projet'))+
+                     '&filtre_projet='+escape($F('filtre_projet'))+
+                     '&def='+$F('position_default')+
+                     '&clos='+$F('position_clos')+
+                     '&tous='+$F('position_tous')+
+                     '&desactivees='+$F('position_desactivees')+
+                     '&page='+page_number
+                          });
+        }
+    </script>
+    <div id="list">
+      <%= render :partial => 'list' %>
+    </div>
+  </div>
+<% end %>
+
+
+
+
+<div id="recent_history">
+<table>
+<%-
+temp_d = ''
+i = 0 
+j = 0
+@lasts.each do |last| 
+  i = i+1 
+  if (french_datetime_with_word last[:updated_at]) != temp_d 
+    j = j+1 
+    if i > 15 or j > 3
+      break 
+    end -%>
+<tr>
+  <td class="date"><span><%= french_datetime_with_word last[:updated_at] %></span></td>
+</tr>
+<%- end -%>
+
+<tr class="history_item">
+  <td class="contrat">
+    <% ligne_nom = last[:ligne].nom%>
+    <%- if !ligne_nom.rindex(' - ').nil? -%>    
+      <%- if ligne_nom.rindex(' - ') > 25 -%>
+        <%= (ligne_nom[0,25] + "[...]<br />" + truncate(ligne_nom[ligne_nom.rindex(' - ')+2, ligne_nom.size],:length => 34,:ommission => '...')).html_safe() %>
+      <%- else -%>	
+        <%= (ligne_nom[0,ligne_nom.rindex(' - ')]+"<br />"+truncate(ligne_nom[ligne_nom.rindex(' - ')+2,ligne_nom.size],:length => 34,:ommission => '...')).html_safe() %>
+      <%- end -%>
+    <%- else -%>
+      <%= truncate(ligne_nom,:length => 34, :ommission => '...') %>
+    <% end %>
+  </td>
+  <td class="type">
+    <span class="<%= last[:type] %>">
+      <%- if last[:type] != "Versement" -%>
+        <%= last[:type] -%>
+      <%- else -%>
+        Crédit
+      <%- end -%>
+    </span>
+    <%- if last[:type] != "Versement" &&  last[:type] != "Ligne" -%>
+      <%- if last[:soldee] -%>
+        <span class="soldee"></span>
+      <%- else -%>
+        <span class="non_soldee"></span>
+      <%- end -%>
+    <%- end -%>   
+  </td>
+  
+  <td class="infos" style="width:370px">
+    <%- if last[:updated_at] == last[:created_at]  -%>
+      <%- temp = 'Création' -%>
+    <%- else -%>
+      <%- temp = 'Modification' -%>
+    <%- end -%>
+    <%- case last[:type]
+        when "Fonct" %>
+          <%= link_to temp+" de la dépense en fonctionnement", ligne_depense_fonctionnement_path(last[:ligne].id, last[:id]) %><br />
+          <abbr title="<%=h last[:intitule] %>"><%= truncate((simple_format last[:intitule]),:length => 50, :ommission => '...').html_safe() %>
+    <%- when "Equipement" %>
+          <%= link_to temp+" de la dépense en équipement", ligne_depense_equipement_path(last[:ligne].id, last[:id]) %><br />
+          <abbr title="<%=h last[:intitule] %>"><%= truncate((simple_format last[:intitule]), :length =>50, :ommission => '...').html_safe() %>
+    <%- when "NonVentilee" %>
+          <%= link_to temp+" de la dépense non ventilée", ligne_depense_non_ventilee_path(last[:ligne].id, last[:id]) %><br />
+          <abbr title="<%=h last[:intitule] %>"><%= truncate((simple_format last[:intitule]),:length => 50, :ommission => '...').html_safe() %>
+    <%- when "Mission" %>
+          <%= link_to temp+" de la mission de "+last[:agent], ligne_depense_mission_path(last[:ligne].id, last[:id]) %><br />
+          Du <%= french_small_date last[:date_depart] %>
+          au <%= french_small_date last[:date_retour] %>
+    <%- when "Salaire" %>
+          <%= link_to temp+" Salaire de "+last[:agent], ligne_depense_salaire_path(last[:ligne].id, last[:id]) %><br />
+          <%= last[:statut] %> du <%= french_small_date last[:date_debut] %> au <%= french_small_date last[:date_fin] %>
+    <%- when "Versement" %>
+          <%= link_to temp+" du crédit", ligne_versement_path(last[:ligne].id, last[:id]) %><br />
+          <%= last[:origine] %> le <%= french_small_date(last[:date_effet]) %>
+    <%- when "Ligne" %>
+          <%= link_to temp+ " de la ligne ", ligne_path(last[:ligne].id) %>
+    <%- end -%>
+  </td>
+  <td class="montant">
+    <%- case last[:type]
+        when "Fonct" %>
+          <%= my_number_to_currency last[:montant] %>
+    <%- when "Equipement" %>
+          <%= my_number_to_currency last[:montant] %> 
+    <%- when "NonVentilee" %>
+          <%= my_number_to_currency last[:montant] %>
+    <%- when "Mission" %>
+          <%= my_number_to_currency last[:montant] %>
+    <%- when "Salaire" %>
+          <%= my_number_to_currency last[:montant] %>
+    <%- when "Versement" %>
+          <%= my_number_to_currency last[:montant] %>
+    <%- end -%>
+  </td>
+  <td class="who">
+    <%- if last[:updated_at] == last[:created_at]  -%>
+      <%= print_small_user_infos last[:created_by] -%>
+    <%- else -%>
+      <%= print_small_user_infos last[:updated_by] -%>
+    <%- end -%>
+    <%- temp_d = french_datetime_with_word last[:updated_at] -%>
+  </td>
+</tr>
+<%- end -%>
+</table>
+</div>

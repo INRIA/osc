@@ -1,0 +1,74 @@
+<% if controller.action_name.to_s == 'ask_delete' %>
+  <%= yield  %>
+<% else %>
+  <% content_for :head do %>
+  	<% if controller.action_name.to_s == 'index' %>
+  		<div class='header_title'>
+  			<strong>Listes des tutelles</strong>
+  			// <%= @tutelles.size %> entrées
+  		</div>
+  		<div class='header_link'>
+  		</div>
+  		<div style='clear:both;'></div>	
+  	<% end %>
+  	
+  	<% if controller.action_name.to_s == 'new' or controller.action_name.to_s == 'create'  %>
+  		<div class='header_title'>
+  			<strong>Création de tutelle</strong>
+  		</div>
+  		<div class='header_link'></div>
+  		<div style='clear:both;'></div>
+  	<% end %>
+  
+  	<% if controller.action_name.to_s == 'show' %>	
+  		<div class='header_title'>
+  			<div class="showInfos">
+  				<p class="visibilite">
+  					<strong><%= @tutelle.nom %></strong>
+  					<a href="#" onclick="Effect.toggle('more', 'blind', {duration:0.4});return false;">(+)</a>
+  				</p>
+  				<p>
+  					Description : <strong><%=h @tutelle.description %></strong>
+  				</p>
+  				<%= show_dates(@tutelle) %>
+  			</div>
+  			<div style='clear:both;'></div>
+  		</div>
+  		<div class='header_link'>
+  			<%= link_to 'Editer la tutelle', edit_tutelle_path(@tutelle) %>
+  		</div>
+  		<div style='clear:both;'></div>
+  	<% end %>
+  	
+  	<% if controller.action_name.to_s == 'edit' or controller.action_name.to_s == 'update'  %>
+  		<div class='header_title'>
+  			<strong><%= @tutelle.nom %></strong>
+  			// Edition
+  		</div>
+  		<div class='header_link'>
+  			<%= link_to 'Visualiser la tutelle', tutelle_path(@tutelle) %>
+  		</div>
+  		<div style='clear:both;'></div>
+  	<% end %>
+  	
+  <% end %>
+  
+  <% content_for :right do %>
+  	<% if controller.action_name.to_s == 'index' %>
+  		<%= link_to '', new_tutelle_path, {:class => "addTutelle"} %>
+  	<% end %>
+  
+  	<% if controller.action_name.to_s != 'index' && controller.action_name.to_s != 'show' %>
+  		<div class="aide">
+  			<% if controller.action_name.to_s == 'new' or controller.action_name.to_s == 'create' %>
+  				<p>Une tutelle peut être associée à un ou plusieurs projets. Vous devez dans un premier temps créer la tutelle et ensuite l'éditer afin de lui associer des projets.</p>
+  			<% end %>
+  			<% if controller.action_name.to_s == 'edit' or controller.action_name.to_s == 'update' %>
+  				<p>Un tutelle peut être associée à un ou plusieurs projets. Vous avez ici la possibilité d'ajouter et supprimer des associations.</p>
+  			<% end %>
+  		</div>
+  	<% end %>
+  <% end %>
+  
+  <%= render :file => 'layouts/application_admin' %>
+<% end %>

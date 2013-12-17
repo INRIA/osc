@@ -1,0 +1,10 @@
+<%= form_for(:todolist, :url => contrat_todolist_path(@contrat, @todolist), :remote => true, :html => { :method => :put }) do |f| %>
+	  Intitulé de la To-Do List<br />
+    <%= f.text_field :nom, :class => "textfield" %>
+		<div id="error_edit_todolist_<%= @todolist.id.to_s %>" class="error"></div>
+    <%= submit_tag "Mettre à jour", :class => "submit"  %> ou 
+		<a href="" onclick="$('show_todolist_<%= @todolist.id.to_s %>').show();$('edit_todolist_<%= @todolist.id.to_s %>').hide();return false;">Annuler</a>
+<% end %>
+
+
+<%= javascript_tag "Try.these(function(){$$('#edit_todolist_#{@todolist.id.to_s} #todolist_nom').first().focus();});" %>

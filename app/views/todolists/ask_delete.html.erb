@@ -1,0 +1,10 @@
+<div class="content">
+	<p>
+	Etes-vous certain de vouloir supprimer la To-Do List <strong>"<%= @todolist.nom %>"</strong> et ses tâches associées ?
+	</p>
+	<%= link_to_close_redbox "Non", :class => 'annuler' %>
+	<%= link_to_remote "Oui",
+ 									{ :url => contrat_todolist_path(@todolist.contrat, @todolist),
+										:method => :delete} %>
+	<div style="clear:both;"></div>
+</div>

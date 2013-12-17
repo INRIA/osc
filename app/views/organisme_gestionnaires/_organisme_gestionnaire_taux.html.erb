@@ -1,0 +1,20 @@
+<% @organisme_gestionnaire_taux = organisme_gestionnaire_taux %>
+
+<div class="nested_resource"  id="<%= "organisme_gestionnaire_taux_#{organisme_gestionnaire_taux.id}" %>">
+	<div class="remove_nested_resource">
+		<%= sub_list_remove_link organisme_gestionnaire_taux, 'OrganismeGestionnaireTaux' %>
+	</div>
+	<div class="two_col">
+		<p>
+			<label class="required">Année</label>
+			<%= text_field 'organisme_gestionnaire_taux[]', 'annee' %>
+		</p>
+	</div>
+	<div class="two_col second_col">
+		<p>
+			<label class="required">Taux</label>
+			<%= text_field 'organisme_gestionnaire_taux[]', 'taux' %>
+		</p>
+	</div>
+	<div style="clear:both;"></div>
+</div>
