@@ -135,6 +135,17 @@ class DepenseMission < ActiveRecord::Base
       self.montant_factures(type_montant, date_start, date_end)
     end
   end
+  
+  def montant_paye(type_montant = 'htr', date_start = '1900-01-01', date_end = '4000-01-01')
+    date_commande = self.millesime || self.date_commande
+    if self.depense_mission_factures.size != 0
+      self.montant_factures(type_montant, date_start, date_end)
+    elsif self.commande_solde && date_commande.to_date <= date_end.to_date && date_commande.to_date >= date_start.to_date 
+      self.montant_engage
+    else
+      0
+    end    
+  end
 
   def reporting_montant(date_start = '1900-01-01', date_end = '4000-01-01', type = 'facture_htr')
     if type == 'facture_htr'

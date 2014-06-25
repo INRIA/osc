@@ -59,8 +59,8 @@ class AllLignesController < ApplicationController
       if @ref_cp.blank?
         @colspan_totals = 7
         @total_montant_engages = @depenses.inject(0) { |s,d| s += d.montant_engage }  
-        @total_montant_paye_ht = @depenses.inject(0) { |s,d| s += d.montant_factures('ht') }
-        @total_montant_paye_ttc = @depenses.inject(0) { |s,d| s += d.montant_factures('ttc') }
+        @total_montant_paye_ht = @depenses.inject(0) { |s,d| s += d.montant_paye('ht') }
+        @total_montant_paye_ttc = @depenses.inject(0) { |s,d| s += d.montant_paye('ttc') }
       else
         @colspan_totals = 10
         @total_montant_engages = @depenses.inject(0) { |s,d| s += d.depense_commun.montant_engage }  
@@ -71,8 +71,8 @@ class AllLignesController < ApplicationController
     when 'salaire'
       @colspan_totals = 8
       @total_cout_periode = @depenses.inject(0) { |s,d| s += d.cout_periode }  
-      @total_montant_paye_htr = @depenses.inject(0) { |s,d| s += d.montant_factures('htr') }   
-      @total_montant_paye_ttc = @depenses.inject(0) { |s,d| s += d.montant_factures('ht') }
+      @total_montant_paye_htr = @depenses.inject(0) { |s,d| s += d.montant_paye('htr') }   
+      @total_montant_paye_ttc = @depenses.inject(0) { |s,d| s += d.montant_paye('ht') }
 
     when 'fonctionnement', 'equipement', 'non_ventilee', 'mission', 'toutes_depenses_hors_salaires'
       # Ajustement du nb total de colonnes avant les colonnes de montant
@@ -86,9 +86,9 @@ class AllLignesController < ApplicationController
 
       if @ref_cp.blank?
         @total_montant_engages = @depenses.inject(0) { |s,d| s += d.montant_engage }  
-        @total_montant_paye_htr = @depenses.inject(0) { |s,d| s += d.montant_factures('htr') }
-        @total_montant_paye_ht = @depenses.inject(0) { |s,d| s += d.montant_factures('ht') }
-        @total_montant_paye_ttc = @depenses.inject(0) { |s,d| s += d.montant_factures('ttc') }
+        @total_montant_paye_htr = @depenses.inject(0) { |s,d| s += d.montant_paye('htr') }
+        @total_montant_paye_ht = @depenses.inject(0) { |s,d| s += d.montant_paye('ht') }
+        @total_montant_paye_ttc = @depenses.inject(0) { |s,d| s += d.montant_paye('ttc') }
       else
         case params['data']
         when 'fonctionnement'
@@ -246,9 +246,9 @@ class AllLignesController < ApplicationController
             end
      
             ligne << c.montant_engage
-            ligne << c.montant_factures('htr')
-            ligne << c.montant_factures('ht')
-            ligne << c.montant_factures('ttc')
+            ligne << c.montant_paye('htr')
+            ligne << c.montant_paye('ht')
+            ligne << c.montant_paye('ttc')
             if c.is_a?(DepenseFonctionnement)
               ligne << ligne_depense_fonctionnement_url(c.ligne, c)
               factures = c.depense_fonctionnement_factures
@@ -370,9 +370,9 @@ class AllLignesController < ApplicationController
             ligne << codingTranslation.iconv(c.intitule)
             ligne << codingTranslation.iconv(c.fournisseur)
             ligne << c.montant_engage
-            ligne << c.montant_factures('htr')
-            ligne << c.montant_factures('ht')
-            ligne << c.montant_factures('ttc')
+            ligne << c.montant_paye('htr')
+            ligne << c.montant_paye('ht')
+            ligne << c.montant_paye('ttc')
             ligne << send("ligne_#{depense_method}_url".to_sym, c.ligne, c)
             csv << ligne
             if @show_factures == 'yes'
@@ -451,9 +451,9 @@ class AllLignesController < ApplicationController
             ligne << codingTranslation.iconv(c.lieux)
             ligne << codingTranslation.iconv(c.intitule)
             ligne << c.montant_engage
-            ligne << c.montant_factures('htr')
-            ligne << c.montant_factures('ht')
-            ligne << c.montant_factures('ttc')
+            ligne << c.montant_paye('htr')
+            ligne << c.montant_paye('ht')
+            ligne << c.montant_paye('ttc')
             ligne << ligne_depense_mission_url(c.ligne, c)
             csv << ligne
             if @show_factures == 'yes'
@@ -534,8 +534,8 @@ class AllLignesController < ApplicationController
           ligne << c.nb_mois
           ligne << c.cout_mensuel
           ligne << c.cout_periode
-          ligne << c.montant_factures('htr')
-          ligne << c.montant_factures('ttc')
+          ligne << c.montant_paye('htr')
+          ligne << c.montant_paye('ttc')
           ligne << ligne_depense_salaire_url(c.ligne, c)
           csv << ligne
           if @show_factures == 'yes'
@@ -583,8 +583,8 @@ class AllLignesController < ApplicationController
             ligne << codingTranslation.iconv(c.intitule)
             ligne << codingTranslation.iconv(c.fournisseur)
             ligne << c.montant_engage
-            ligne << c.montant_factures('ht')
-            ligne << c.montant_factures('ttc')
+            ligne << c.montant_paye('ht')
+            ligne << c.montant_paye('ttc')
             ligne << ligne_depense_commun_url(c.ligne, c)
             csv << ligne
             if @show_factures == 'yes'
@@ -972,7 +972,10 @@ class AllLignesController < ApplicationController
     # Tris sql pour tous les champ à l'exception des Montant Payé des depenses, qui seront
     # effectués en ruby
     type_montant_facture = nil
-    if @order_value =~ /^montant_factures_(ttc|htr|ht?)$/ and params['ref_cp'].blank?
+   # if @order_value =~ /^montant_factures_(ttc|htr|ht?)$/ and params['ref_cp'].blank?
+   #   type_montant_facture = $1
+   # end
+    if @order_value =~ /^montant_paye_(ttc|htr|ht?)$/ and params['ref_cp'].blank?
       type_montant_facture = $1
     end
     order = @order_value+" "+@order_type
@@ -1171,9 +1174,9 @@ class AllLignesController < ApplicationController
         @depenses = @depenses_non_paginees
       else
         args = [@order_value.to_sym]
-        if @order_value == "montant_factures_ttc" or @order_value == "montant_factures_htr" or @order_value == "montant_factures_ht"
+        if @order_value == "montant_paye_ttc" or @order_value == "montant_paye_htr" or @order_value == "montant_paye_ht"
            @depenses_non_paginees.sort! {|a,b|
-             a.montant_factures(type_montant_facture) <=> b.montant_factures(type_montant_facture)}
+             a.montant_paye(type_montant_facture) <=> b.montant_paye(type_montant_facture)}
         else
           @depenses_non_paginees.sort! { |a,b| a.send(*args) <=> b.send(*args) }
         end  
@@ -1265,7 +1268,7 @@ class AllLignesController < ApplicationController
         
         if type_montant_facture
           @depenses_non_paginees.sort! {|a,b|
-            a.montant_factures(type_montant_facture) <=> b.montant_factures(type_montant_facture)}
+            a.montant_paye(type_montant_facture) <=> b.montant_paye(type_montant_facture)}
         elsif @order_value == "montant_engage"
           @depenses_non_paginees.sort! {|a,b| a.montant_engage <=> b.montant_engage}
         elsif @order_value == "date_commande"
@@ -1330,9 +1333,9 @@ class AllLignesController < ApplicationController
       if @compute_totaux_globaux
         depenses = depense_class.find(:all,:include=>include,:conditions => conditions)
       
-      elsif @order_value =~ /montant_factures_(ttc|htr|ht?)/
+      elsif @order_value =~ /montant_paye_(ttc|htr|ht?)/
         depenses = depense_class.find(:all, :include => include, :conditions => conditions)
-        depenses.sort! {|a,b| a.montant_factures($1) <=> b.montant_factures($1)}
+        depenses.sort! {|a,b| a.montant_paye($1) <=> b.montant_paye($1)}
         depenses.reverse! if @order_type != "asc"
         depenses = depenses.paginate(:page => @page, :per_page => @per_page)
   

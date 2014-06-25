@@ -13,7 +13,7 @@ class DepensesController < ApplicationController
     if ['fonctionnement', 'equipement', 'non_ventilee'].include? data
       CSV.generate(options) do |csv|
         ligne = ["Commande soldée ?","Verrou", "Date de demande d'achat","Date de millesime", "N° de demande d'achat",
-          "Intitulé", "Fournisseur", "Montant Engagé", "Montant Payé HTR","Montant Payé HT", "Montant Payé TTC"]
+          "Intitulé", "Fournisseur", "Montant Engagé", "Montant Facturé "+@type_montant,"Engagé/Payé "+@type_montant]
          #Conversion en UTF16 pour Excel (ms-office)
         new_ligne = []
         for l in ligne
@@ -35,9 +35,8 @@ class DepensesController < ApplicationController
           ligne << codingTranslation.iconv(c.intitule)
           ligne << codingTranslation.iconv(c.fournisseur)
           ligne << c.montant_engage
-          ligne << c.montant_factures('htr')
-          ligne << c.montant_factures('ht')
-          ligne << c.montant_factures('ttc')
+          ligne << c.montant_factures(@type_montant, @current_date_start, @current_date_end)
+          ligne << c.montant(@current_date_start, @current_date_end, "sommes_engagees", @type_montant)
           csv << ligne        
         end
       end
@@ -45,7 +44,7 @@ class DepensesController < ApplicationController
       CSV.generate(options) do |csv|
         ligne = ["Commande soldée ?","Verrou", "Date de demande d'achat","Date de millesime", "N° d'OM - Référence",
           "Agent", "Date de départ", "Date de retour", "Lieux", "Objet de la mission", "Montant Engagé",
-          "Montant Payé HTR","Montant Payé HT", "Montant Payé TTC"]
+          "Montant Facturé "+@type_montant,"Engagé/Payé "+@type_montant]
         #Conversion en UTF16 pour Excel (ms-office)
         new_ligne = []
         for l in ligne
@@ -70,9 +69,8 @@ class DepensesController < ApplicationController
           ligne << codingTranslation.iconv(c.lieux)
           ligne << codingTranslation.iconv(c.intitule)
           ligne << c.montant_engage
-          ligne << c.montant_factures('htr')
-          ligne << c.montant_factures('ht')
-          ligne << c.montant_factures('ttc')
+          ligne << c.montant_factures(@type_montant, @current_date_start, @current_date_end)
+          ligne << c.montant(@current_date_start, @current_date_end, "sommes_engagees", @type_montant)
           csv << ligne
         end
       end
@@ -110,7 +108,7 @@ class DepensesController < ApplicationController
     elsif data =='commun'
       CSV.generate(options) do |csv|
         ligne = ["Commande soldée ?","Verrou", "Date de demande d'achat","Date de millesime", "N° de demande d'achat",
-            "Réf.Budg.", "Intitulé", "Fournisseur", "Montant Engagé","Montant Payé HT",  "Montant Payé TTC"]
+            "Réf.Budg.", "Intitulé", "Fournisseur", "Montant Engagé","Montant Facturé "+@type_montant,"Engagé/Payé "+@type_montant]
         #Conversion en UTF16 pour Excel (ms-office)
         new_ligne = []
         for l in ligne
@@ -133,8 +131,8 @@ class DepensesController < ApplicationController
             ligne << codingTranslation.iconv(c.intitule)
             ligne << codingTranslation.iconv(c.fournisseur)
             ligne << c.montant_engage
-            ligne << c.montant_factures('ht')
-            ligne << c.montant_factures('ttc')
+            ligne << c.montant_factures(@type_montant, @current_date_start, @current_date_end)
+            ligne << c.montant(@current_date_start, @current_date_end, "sommes_engagees", @type_montant)
             csv << ligne
         end
       end

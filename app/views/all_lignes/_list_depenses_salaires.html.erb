@@ -68,14 +68,14 @@
 	</a>
       </th>
       <th class="money">
-	<a href="" onclick="tableOrderBy('montant_factures_htr');return false;"
-	   <% if @order_value == 'montant_factures_htr' %> <%= "class='"+@order_type+"'" %><% end %>>
+	<a href="" onclick="tableOrderBy('montant_paye_htr');return false;"
+	   <% if @order_value == 'montant_paye_htr' %> <%= "class='"+@order_type+"'" %><% end %>>
 	  Payé HTR
 	</a>
       </th>
       <th class="money">
-	<a href="" onclick="tableOrderBy('montant_factures_ttc');return false;"
-	   <% if @order_value == 'montant_factures' %> <%= "class='"+@order_type+"'" %><% end %>>
+	<a href="" onclick="tableOrderBy('montant_paye_ttc');return false;"
+	   <% if @order_value == 'montant_paye_ttc' %> <%= "class='"+@order_type+"'" %><% end %>>
 	  Payé
 	</a>
       </th>
@@ -89,8 +89,8 @@
     @subtotal_montant_paye_ttc = 0
     for depense in @depenses 
       cout_periode =  depense.cout_periode
-      montant_facture_htr = depense.montant_factures('htr')
-      montant_facture_ttc = depense.montant_factures('ttc') %>
+      montant_paye_htr = depense.montant_paye('htr')
+      montant_paye_ttc = depense.montant_paye('ttc') %>
       <% @tr_class =  cycle('odd', 'even') %>
       <tr class="depense <%= @tr_class %>">
   	    <%
@@ -115,8 +115,8 @@
 	        style="font-weight: bold;text-decoration : underline;"
 	      <%- end -%>
 	      ><%= my_number_to_currency cout_periode %></td>
-      	<td class="money"><%= my_number_to_currency montant_facture_htr %></td>
-      	<td class="money"><%= my_number_to_currency montant_facture_ttc %></td>
+      	<td class="money"><%= my_number_to_currency montant_paye_htr %></td>
+      	<td class="money"><%= my_number_to_currency montant_paye_ttc %></td>
         <%- if depense.ligne.contrat.is_budget_editable? current_user -%>
           <% if depense.verif %>
             <td class="actions_depenses" id=<%= "depense_toggle_verif_id_"+depense.id.to_s %>><a href="" onClick="toggle_verif_depense('salaire','<%=depense.id%>',0);return false;" title="Cette d&eacute;pense est v&eacute;rifi&eacute;e ! (Cliquez-moi pour annuler)"><%= image_tag "verif.jpg" %></a> </td>
@@ -130,8 +130,8 @@
         <%= render :partial => 'list_show_salaire_factures', :object => @factures %>
       <%- end -%>
       <% @subtotal_cout_periode =  @subtotal_cout_periode + cout_periode
-       @subtotal_montant_paye_htr = @subtotal_montant_paye_htr + montant_facture_htr
-       @subtotal_montant_paye_ttc =  @subtotal_montant_paye_ttc + montant_facture_ttc
+       @subtotal_montant_paye_htr = @subtotal_montant_paye_htr + montant_paye_htr
+       @subtotal_montant_paye_ttc =  @subtotal_montant_paye_ttc + montant_paye_ttc
      end -%>
 
   <tr>
