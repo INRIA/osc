@@ -58,7 +58,7 @@
         </td>
       <% end %>
       <td><%= facture.rubrique_comptable.small_intitule %></td>
-      <td><%= my_number_to_currency facture.taux_tva %>%</td>
+      <td><%= facture.taux_tva %>%</td>
       <td class="money"><%= my_number_to_currency facture.montant_htr %></td>
       <td class="money"><%= my_number_to_currency facture.cout_ht %></td>
       <td class="money"><%= my_number_to_currency facture.cout_ttc %></td>
