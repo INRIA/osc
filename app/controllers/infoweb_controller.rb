@@ -35,12 +35,12 @@ class InfowebController < ApplicationController
       # selection sur les paramètres tutelle et laboratoire
        if !params[:tutelle].nil? 
          contrats = Contrat.find_by_sql(["select v.id, v.nom,v.acronyme,v.etat,n.date_debut,n.date_fin,n.url,n.porteur,
-            n.contrat_type_id from V_contrats_tutelle_publiables v, notifications n
-            where v.tutelle = ? and v.id = n.contrat_id order by v.nom",params[:tutelle].upcase])
+            n.nom from V_contrats_tutelle_publiables v, notifications n, contrat_types ct
+            where v.tutelle = ? and v.id = n.contrat_id  and n.contrat_type_id = ct.id order by v.nom",params[:tutelle].upcase])
        elsif !params[:laboratoire].nil? 
          contrats = Contrat.find_by_sql(["select v.id, v.nom,v.acronyme,v.etat,n.date_debut,n.date_fin,n.url,n.porteur,
-            n.contrat_type_id from V_contrats_labo_publiables v, notifications n
-            where v.laboratoire = ? and v.id = n.contrat_id order by v.nom",params[:laboratoire].upcase])
+            ct.nom from V_contrats_labo_publiables v, notifications n, contrat_types ct
+            where v.laboratoire = ? and v.id = n.contrat_id and n.contrat_type_id = ct.id order by v.nom",params[:laboratoire].upcase])
       end
       @contrats = []
       contrats.each {|cont|
