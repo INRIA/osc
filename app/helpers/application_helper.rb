@@ -27,7 +27,7 @@ module ApplicationHelper
       f = (filesize / MEGABYTE).to_s 
       unit = "Mo"
     end
-    return my_number_to_currency(f, :unit => unit, :precision => 1)
+    return number_to_currency(f, :unit => unit, :precision => 1)
   end
 
   def print_user_infos(id)
