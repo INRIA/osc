@@ -34,17 +34,19 @@ class InfowebController < ApplicationController
     else
       # selection sur les paramètres tutelle et laboratoire
        if !params[:tutelle].nil? 
-         contrats = Contrat.find_by_sql(["select v.id, v.nom,v.acronyme,v.etat,n.date_debut,n.date_fin,n.url,n.porteur,
-            ct.nom as type from V_contrats_tutelle_publiables v, notifications n, contrat_types ct
-            where v.tutelle = ? and v.id = n.contrat_id  and n.contrat_type_id = ct.id order by v.nom",params[:tutelle].upcase])
+         contrats = Contrat.find_by_sql(["select v.id, v.nom,v.acronyme,v.etat,n.date_debut,n.date_fin,n.url,n.porteur
+            from V_contrats_tutelle_publiables v, notifications n
+            where v.tutelle = ? and v.id = n.contrat_id order by v.nom",params[:tutelle].upcase])
        elsif !params[:laboratoire].nil? 
-         contrats = Contrat.find_by_sql(["select v.id, v.nom,v.acronyme,v.etat,n.date_debut,n.date_fin,n.url,n.porteur,
-            ct.nom as type from V_contrats_labo_publiables v, notifications n, contrat_types ct
-            where v.laboratoire = ? and v.id = n.contrat_id and n.contrat_type_id = ct.id order by v.nom",params[:laboratoire].upcase])
+         contrats = Contrat.find_by_sql(["select v.id, v.nom,v.acronyme,v.etat,n.date_debut,n.date_fin,n.url,n.porteur
+            from V_contrats_labo_publiables v, notifications n
+            where v.laboratoire = ? and v.id = n.contrat_id order by v.nom",params[:laboratoire].upcase])
       end
       @contrats = []
       contrats.each {|cont|
         co = cont.attributes()
+        # recherche du type de contrat (arbre complet)
+        co["type"] = cont.notification.contrat_type.nom_complet
         # Recherche des descriptifs
         co["descriptifs"] = Descriptif.find(:all, :select => "descriptif,langue_id", :conditions=> ["contrat_id = ?",cont.id])
         # recherche des partenaires
