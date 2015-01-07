@@ -7,11 +7,11 @@ class ContratFilesController < ApplicationController
   
   def sort_by
     params[:classement] ||= "date"
+    session[:doc_classement]= params[:classement]
     @contrat = Contrat.find(params[:contrat_id])
-    if params[:classement] == "date"
-      @contrat_files = @contrat.contrat_files
-    else
-      @contrat_files = @contrat.contrat_files.find(:all, :order => "file")
+    @contrat_files = @contrat.contrat_files
+    if params[:classement] != "date"      
+      @contrat_files = @contrat_files.sort_by{ |file| file['file'].downcase}
     end
     respond_to do |format|
       format.js {
@@ -31,12 +31,11 @@ class ContratFilesController < ApplicationController
   
   # GET /contrat_files
   def index
-    params[:classement] ||= "date"
+    session[:doc_classement] ||= "date"
     @contrat = Contrat.find(params[:contrat_id])
-    if params[:classement] == "date"
-      @contrat_files = @contrat.contrat_files
-    else
-      @contrat_files = @contrat.contrat_files.find(:all, :order => "file")
+    @contrat_files = @contrat.contrat_files
+    if session[:doc_classement] != "date"      
+      @contrat_files = @contrat_files.sort_by{ |file| file['file'].downcase}
     end
   end
 

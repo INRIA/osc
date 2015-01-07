@@ -30,7 +30,7 @@
 </div>
 
 <div id="list_files">
-	<% if params[:classement] == "date" %>
+	<% if session[:doc_classement] == "date" %>
 		<%= render :partial => 'list_files' 	%>
 	<% else %>
 		<%= render :partial => 'list_files_by_AZ' 	%>

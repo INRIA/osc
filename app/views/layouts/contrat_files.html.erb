@@ -38,16 +38,22 @@
 		>
 		<h2>Classer les documents</h2>
 		
-		<%= form_for(:contrat_file,:remote=>true, :url => sort_by_contrat_contrat_files_path(@contrat), :html => {:method => :post, :id => "sort_by" }) do |f| %>
-		
-			<%= radio_button_tag("classement", "date", checked = true) %>	<label for="classement_date">par date</label> <br />
-			<%= radio_button_tag("classement", "alphabetique", checked = false) %> <label for="classement_alphabetique">par ordre alphabétique</label>
-<% end %>
-			<%= observe_form 'sort_by',
-								:frequency => 0.25,
-								:on => 'changed',
-			         	:url => sort_by_contrat_contrat_files_path(@contrat),
-								:with => "'classement='+$F('classement_date')" %>
+		<%= form_for(:contrat_file,:remote=>true, :url => sort_by_contrat_contrat_files_path(@contrat), :html => {:method => :post, :id => "sort_by" }) do |f| %>		
+		  <% if session[:doc_classement] != "date" %>
+		    <% options = "<option value='date'>par date</option><option value='alphabetique' selected>par ordre alphabétique</option>".html_safe %>
+		  <% else %>
+		    <% options = "<option value='date' selected>par date</option><option value='alphabetique'>par ordre alphabétique</option>".html_safe %>
+		  <% end %>
+		  
+		  <%= select_tag "classement", options %>		  				
+    
+    <% end %>
+		<%= observe_form 'sort_by',
+			:frequency => 0.25,
+		  :on => 'changed',
+      :url => sort_by_contrat_contrat_files_path(@contrat),
+			:with => "'classement='+$F('classement')" 
+		%>
 	</div>
 	<% end %>
 	
