@@ -1,3 +1,5 @@
+#encoding: utf-8 
+
 class UpdateRoles < ActiveRecord::Migration
   def self.up
     add_column :roles, :commentaire, :text
