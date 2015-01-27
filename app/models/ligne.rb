@@ -244,11 +244,7 @@ class Ligne < ActiveRecord::Base
     else
         self.nom =  self.sous_contrat.contrat.acronyme+" - "+self.sous_contrat.entite.nom
     end
-    current_user = User.current_user
-    User.current_user = User.find(self.updated_by)
     self.update_record_without_timestamping
-    User.current_user = current_user
-
   end
 
   def organisme_gestionnaire
