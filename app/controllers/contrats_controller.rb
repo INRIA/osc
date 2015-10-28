@@ -138,7 +138,8 @@ class ContratsController < ApplicationController
     # Tâches à réalisées dans le mois à venir ou dont la date d'execution est dépassée
     @alertes = Todoitem.find( :all,
                             :include => [:todolist],
-                            :conditions => [ "todolist_id IN (?) AND todoitems.has_alerte = '1' AND done = '0' AND date <= '"+(Time.now + 1.month).to_date.to_s+"'", ids_todolist],                                                           
+                            #:conditions => [ "todolist_id IN (?) AND todoitems.has_alerte = '1' AND done = '0' AND date <= '"+(Time.now + 1.month).to_date.to_s+"'", ids_todolist],                                                           
+                            :conditions => [ "todolist_id IN (?) AND todoitems.has_alerte = '1' AND done = '0' ", ids_todolist],
                             :order => 'todoitems.date ASC')
     
     
