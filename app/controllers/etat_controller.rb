@@ -109,7 +109,15 @@ class EtatController < ApplicationController
         ligne << codingTranslation.iconv(c.etat) if params['contrats.etat']
         ligne << codingTranslation.iconv(c.nom) if params['contrats.nom']
         ligne << codingTranslation.iconv(c.num_contrat_etab) if params['contrats.num_contrat_etab']
-
+        if params['contrats.etablissement.nom']
+          if c.etablissement
+            ligne << codingTranslation.iconv(c.etablissement.nom)
+          else
+            ligne << ""  
+          end
+        end
+        
+        
         if ['soumission', 'refu', 'signature', 'notification', 'cloture'].include? params[:type]
           # Soumission - Informations générales
           ligne << codingTranslation.iconv(c.soumission.contrat_type.nom_complet) if params['soumissions.contrat_type.nom']
@@ -553,7 +561,7 @@ class EtatController < ApplicationController
         values = params[:filter_value][index].split('+')
 
         case params[:filter_item][index]
-
+        
         when "soumissions.organisme_gestionnaire.nom"
           params[:filter_item][index] = "organisme_gestionnaires.nom"
 
@@ -679,6 +687,11 @@ class EtatController < ApplicationController
     @select << {:sort => true, :id => "contrats.etat", :intitule => "Contrat : Etat"} if params['contrats.etat']
     @select << {:sort => true, :id => "contrats.nom", :intitule => "Contrat : Nom"} if params['contrats.nom']
     @select << {:sort => true, :id => "contrats.num_contrat_etab", :intitule => "Contrat : N° contrat établissement"} if params['contrats.num_contrat_etab']
+    if params['contrats.etablissement.nom']
+      @select << {:sort => true, :id => "laboratoires.nom", :intitule => "Contrat : Etablissement à l'origine de la saisie"}
+      @include << :laboratoire   
+    end
+    
 
 
     #

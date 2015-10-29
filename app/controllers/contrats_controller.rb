@@ -237,6 +237,7 @@ class ContratsController < ApplicationController
       flash[:error] = "Vos droits dans l'application ne vous permettent pas d'accéder à la page demandée."
       redirect_to :controller => 'contrats', :action => 'index'
     end
+    @etablissements = Laboratoire.find(:all)
     @contrat = Contrat.new
     @non_modifiables = @contrat.get_non_modifiables
   end
@@ -354,6 +355,7 @@ class ContratsController < ApplicationController
     end
     @contrat = Contrat.new(params[:contrat])
     @non_modifiables = @contrat.get_non_modifiables
+    @etablissements = Laboratoire.find(:all)
     respond_to do |format|
       if @contrat.save
         # Sauvegarde réussie, on donne le droit de modification à l'administrateur 
@@ -933,6 +935,7 @@ class ContratsController < ApplicationController
     @laboratoires = Laboratoire.find(:all) - Laboratoire.find(:all, :include => [:sous_contrats] ,:conditions => ["sous_contrats.entite_type = 'Laboratoire' AND contrat_id = ?", @contrat.id])
     @langues = Langue.find(:all)
     @descriptifs = Descriptif.find(:all, :conditions => ["descriptifs.contrat_id = ?", @contrat.id])
+    @etablissements = Laboratoire.find(:all)
   end
   
   def my_private_search(acronym,noContrat,team,labo,selection,params=nil)

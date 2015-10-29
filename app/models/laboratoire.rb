@@ -10,6 +10,7 @@ class Laboratoire < ActiveRecord::Base
   has_many :projets, :through => :laboratoire_subscriptions, :order => "nom"
   
   has_many :sous_contrats, :as => :entite
+  has_many :contrats, :as => :etablissement  
   
   validates_presence_of :nom, :message => " est obligatoire"
   

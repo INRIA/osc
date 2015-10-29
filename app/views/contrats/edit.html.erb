@@ -281,8 +281,17 @@
 					  <% else %>
 					    <%= f.text_field :num_contrat_etab, :class => "textfield_num_contrat" %>
 					  <% end %>
-					  
-                  </p>
+					  </p>
+            <p <%= "class='disabled'" if @non_modifiables.include?('etablissement_id')%>>
+					    <b>Etablissement (Laboratoire) à l'origine de la saisie</b><br />
+					    <% if @non_modifiables.include?('etablissement_id') %>
+					      <input id="affichage_etablissement" type="text" value="<%= @contrat.etablissement.nom %>" size="30" disable="true">
+                <input id="contrat_etablissement_id" type="hidden" value="<%= @contrat.etablissement.id %>" name="contrat[etablissement_id]">
+              <% else %>
+					      <%= select("contrat", "etablissement_id", @etablissements.collect {|p| [ p.nom, p.id ] },:include_blank => true) %>
+					      <%= f.hidden_field :etablissement_type, :value => 'Laboratoire' %>
+					    <% end %>
+            </p>
                 </div>
                 <h2><strong>Publicité</strong></h2>
                 <div class="fieldset">

@@ -14,7 +14,11 @@
     <b>Numéro contrat établissement</b><br />
 	  <%= f.text_field :num_contrat_etab, :size => 25, :maxlenght => 25 %>
   </p>
-
+  <p>
+    <b>Etablissement (Laboratoire) à l'origine de la saisie</b><br />
+    <%= select("contrat", "etablissement_id", @etablissements.collect {|p| [ p.nom, p.id ] },:include_blank => true) %>
+    <%= f.hidden_field :etablissement_type, :value => 'Laboratoire' %>
+  </p>
 </fieldset>
 
 <p class="submit">

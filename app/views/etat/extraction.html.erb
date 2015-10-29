@@ -54,6 +54,7 @@
 			<div class="select" id="init_select" style="display:none;">
 				<%= my_check_box("contrats.nom", "Nom du contrat").html_safe() %>
 				<%= my_check_box("contrats.num_contrat_etab", "Numéro contrat établissement").html_safe() %>
+				<%= my_check_box("contrats.etablissement.nom", "Etablissement à l'origine de la saisie").html_safe() %>
 				<%= my_check_box("contrats.etat", "Etat du contrat").html_safe() %>
 				<%= my_check_box("contrats.associations", "Associations", "last").html_safe() %>			
 		</div>

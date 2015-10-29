@@ -36,6 +36,13 @@
 			<%- if params['contrats.num_contrat_etab'] -%>
 				<td><%= contrat.num_contrat_etab %></td>
 			<%- end -%>
+			<%- if params['contrats.etablissement.nom'] -%>
+        <td>
+          <% if contrat.etablissement %>
+            <%= contrat.etablissement.nom %>
+          <% end %>          
+        </td>
+      <%- end -%>
 			
 			<%- if ['soumission', 'refu', 'signature', 'notification', 'cloture'].include? params[:type] -%>
 			

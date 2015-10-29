@@ -36,13 +36,17 @@ class Contrat < ActiveRecord::Base
 
   has_one :echeancier, :as => :echeanciable, :dependent => :destroy
   has_many :roles , :as => :authorizable
-
+  belongs_to :etablissement, :polymorphic => true
+  belongs_to :laboratoire, foreign_key: 'etablissement_id', conditions: "contrats.etablissement_type = 'Laboratoire'"
+  
   validates_presence_of :nom, :message => "est obligatoire"
   validates_presence_of :acronyme, :message => "est obligatoire"
   validates_length_of :num_contrat_etab, :within => 0..25, :message => "ne doit pas dépasser 25 caractères"
-
+  
+  
   attr_reader :contrat_dotation
-
+  attr_accessible :etablissement_id, :etablissement_type
+  
   before_update :strip_name_and_update
   before_create 'self.created_by = User.current_user.id',
                 :strip_name_and_update

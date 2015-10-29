@@ -153,6 +153,18 @@
       </td>
     </tr>
   </table>
+  <h3> Etablissement à l'origine de la saisie</h3>
+  <table>
+    <tr class="impair">
+      <td>
+        <%- if @contrat.etablissement -%>
+          <%= @contrat.etablissement.nom %>
+        <% else %>
+          Non renseigné
+        <% end %>
+      </td>
+    </tr>
+  </table>
 </div>
 <div style="clear:both;"></div>
 

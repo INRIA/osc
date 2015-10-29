@@ -100,7 +100,7 @@ class LaboratoiresController < ApplicationController
   # DELETE /laboratoires/1.xml
   def destroy
     @laboratoire = Laboratoire.find(params[:id])    
-    if @laboratoire.sous_contrats.size == 0 && @laboratoire.projets.size == 0
+    if @laboratoire.sous_contrats.size == 0 && @laboratoire.projets.size == 0 && @laboratoire.contrats.size == 0
       flash[:notice] = "Le laboratoire "+@laboratoire.nom+" a été supprimé"
       @laboratoire.destroy
     else
