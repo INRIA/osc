@@ -7,8 +7,8 @@ class Cloture < ActiveRecord::Base
   
   
   validates_date  :date_fin_depenses,
-                  :on_or_after => Proc.new { |n| n.date_max },
-                  :on_or_after_message => "Le champ <strong>Date de fin des dépenses</strong> doit être supérieure ou égale à la date de fin du contrat définie dans la notification et à toutes les dates des versements ou factures des lignes correspondantes au contrat",
+                  :after => Proc.new { |n| n.date_max-1 },
+                  :after_message => "Le champ <strong>Date de fin des dépenses</strong> doit être supérieure ou égale à la date de fin du contrat définie dans la notification et à toutes les dates des versements ou factures des lignes correspondantes au contrat",
                   :message => "Le champ <strong>Date de fin des dépenses</strong>  doit être une date valide"
   
   attr_accessible :commentaires, :date_fin_depenses

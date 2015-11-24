@@ -17,6 +17,7 @@
 /public/user_image/*
 /public/contrat_file/*
 /public/aide/*
+/public/assets/*
 /log/*
 /tmp/*
 .project
