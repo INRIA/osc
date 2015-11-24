@@ -495,6 +495,10 @@ class EtatController < ApplicationController
 
 
       case params[:sort][index]
+        
+      when 'laboratoires.nom'
+        @include << :laboratoire
+        column = params[:sort][index] 
 
       when "notifications.contrat_type.nom"
         if params['soumissions.contrat_type.nom']
@@ -561,6 +565,9 @@ class EtatController < ApplicationController
         values = params[:filter_value][index].split('+')
 
         case params[:filter_item][index]
+        
+        when 'laboratoires.nom'
+          @include << :laboratoire   
         
         when "soumissions.organisme_gestionnaire.nom"
           params[:filter_item][index] = "organisme_gestionnaires.nom"
@@ -689,7 +696,6 @@ class EtatController < ApplicationController
     @select << {:sort => true, :id => "contrats.num_contrat_etab", :intitule => "Contrat : N° contrat établissement"} if params['contrats.num_contrat_etab']
     if params['contrats.etablissement.nom']
       @select << {:sort => true, :id => "laboratoires.nom", :intitule => "Contrat : Etablissement à l'origine de la saisie"}
-      @include << :laboratoire   
     end
     
 

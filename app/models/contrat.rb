@@ -45,7 +45,6 @@ class Contrat < ActiveRecord::Base
   
   
   attr_reader :contrat_dotation
-  attr_accessible :etablissement_id, :etablissement_type
   
   before_update :strip_name_and_update
   before_create 'self.created_by = User.current_user.id',
