@@ -1,7 +1,7 @@
 #07-2013 Migration in Ruby On Rails  3.2 by Benjamin Ninassi
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.13'
+gem 'rails', '3.2.22.1'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -20,6 +20,7 @@ gem "acts_as_list", "~> 0.2.0"
 gem "acts_as_tree", "~> 1.4.0"
 gem 'prawn', "~> 0.12.0" #for pdf generation
 
+gem "ruby-oci8", "~> 2.1.5" # for oracle DB connexion
 
 # Gems used only for assets and not required
 # in production environments by default.
