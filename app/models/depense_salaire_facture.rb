@@ -39,7 +39,7 @@ class DepenseSalaireFacture < ActiveRecord::Base
              
   def cout_cannot_be_greater_than_montant_htr
     if cout
-      errors.add(:cout, "ne peut être supérieur au montant HTR") if !montant_htr.blank? and montant_htr < cout
+      errors.add(:cout, "ne peut être supérieur au montant HTR") if !montant_htr.blank? and montant_htr.abs < cout.abs
     end
   end
  

@@ -55,7 +55,7 @@ class DepenseMissionFacture < ActiveRecord::Base
   
   def cout_ht_cannot_be_greater_than_montant_htr
     if cout_ht
-      errors.add(:cout_ht, "ne peut être supérieur au montant HTR") if !montant_htr.blank? and montant_htr < cout_ht
+      errors.add(:cout_ht, "ne peut être supérieur au montant HTR") if !montant_htr.blank? and montant_htr.abs < cout_ht.abs
     end
   end
 
