@@ -196,7 +196,14 @@ class EtatController < ApplicationController
           ligne << codingTranslation.iconv(c.notification.organisme_payeur) if params['notifications.organisme_payeur']
           ligne << c.notification.numero_ligne_budgetaire if params['notifications.numero_ligne_budgetaire']
           ligne << c.notification.numero_contrat if params['notifications.numero_contrat']
-          ligne << codingTranslation.iconv(c.notification.a_justifier) if params['notifications.a_justifier']
+          if params['notifications.a_justifier'] 
+            if c.notification.a_justifier
+              ligne << codingTranslation.iconv("oui") 
+            else
+              ligne << codingTranslation.iconv("non") 
+            end
+          end
+            
           ligne << c.notification.url if params['notifications.url']
           # Notification - Porteur et coordinateur
           ligne << codingTranslation.iconv(c.notification.porteur) if params['notifications.porteur']
