@@ -201,13 +201,7 @@ class EtatController < ApplicationController
           # Notification - Porteur et coordinateur
           ligne << codingTranslation.iconv(c.notification.porteur) if params['notifications.porteur']
           ligne << codingTranslation.iconv(c.notification.etablissement_rattachement_porteur) if params['notifications.etablissement_rattachement_porteur']
-          if params['notifications.est_porteur']
-            if c.notification.est_porteur
-              ligne << "Oui"
-            else
-              ligne << "Non"
-            end  
-          end
+          ligne << boolean_to_csv(c.notification.est_porteur) if params['notifications.est_porteur']
            
           ligne << codingTranslation.iconv(c.notification.coordinateur) if params['notifications.coordinateur']
           ligne << codingTranslation.iconv(c.notification.etablissement_gestionnaire_du_coordinateur) if params['notifications.etablissement_gestionnaire_du_coordinateur']
