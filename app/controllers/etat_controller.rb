@@ -196,14 +196,7 @@ class EtatController < ApplicationController
           ligne << codingTranslation.iconv(c.notification.organisme_payeur) if params['notifications.organisme_payeur']
           ligne << c.notification.numero_ligne_budgetaire if params['notifications.numero_ligne_budgetaire']
           ligne << c.notification.numero_contrat if params['notifications.numero_contrat']
-          if params['notifications.a_justifier'] 
-            if c.notification.a_justifier
-              ligne << codingTranslation.iconv("oui") 
-            else
-              ligne << codingTranslation.iconv("non") 
-            end
-          end
-            
+          ligne << boolean_to_csv(c.notification.a_justifier) if params['notifications.a_justifier']
           ligne << c.notification.url if params['notifications.url']
           # Notification - Porteur et coordinateur
           ligne << codingTranslation.iconv(c.notification.porteur) if params['notifications.porteur']
@@ -551,6 +544,19 @@ class EtatController < ApplicationController
     @filter_params = []
     params[:filter_item].each_with_index {|item, index|
       if @select_for_filter.to_s.include? params[:filter_item][index]
+        
+        case params[:filter_item][index]
+        
+        when "notifications.a_justifier"          
+          if params[:filter_value][index] == "oui"
+            params[:filter_value][index] = "1"
+          elsif params[:filter_value][index] == "non"
+            params[:filter_value][index] = "0"
+            
+          end
+          
+        end
+        
         @filter_params << { :filter_item => params[:filter_item][index],
           :filter_type => params[:filter_type][index],
           :filter_value => params[:filter_value][index]}
@@ -561,6 +567,7 @@ class EtatController < ApplicationController
         :filter_type => 'contient',
         :filter_value => ''}
     end
+  
 
 
     # Construction des filtres pour la requete sql
@@ -588,7 +595,7 @@ class EtatController < ApplicationController
           else
             params[:filter_item][index] = "contrat_types.nom"
           end
-
+        
         when "soumissions.contrat_type.nom"
           params[:filter_item][index] = "contrat_types.nom"
 
