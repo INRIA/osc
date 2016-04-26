@@ -6,7 +6,7 @@ class AddCodeAnalytiqueDepensesCredits < ActiveRecord::Migration
     add_column :depense_missions, :code_analytique, :string
     add_column :depense_salaires, :code_analytique, :string
     add_column :depense_communs, :code_analytique, :string
-    add_column :versement, :code_analytique, :string
+    add_column :versements, :code_analytique, :string
   end
 
   def self.down
@@ -16,6 +16,6 @@ class AddCodeAnalytiqueDepensesCredits < ActiveRecord::Migration
     remove_column :depense_missions, :code_analytique
     remove_column :depense_salaires, :code_analytique
     remove_column :depense_communs, :code_analytique
-    remove_column :versement, :code_analytique
+    remove_column :versements, :code_analytique
   end
 end

@@ -6,7 +6,7 @@ class AddCompteBudgetaireDepensesCredits < ActiveRecord::Migration
     add_column :depense_missions, :compte_budgetaire, :string
     add_column :depense_salaires, :compte_budgetaire, :string
     add_column :depense_communs, :compte_budgetaire, :string
-    add_column :versement, :compte_budgetaire, :string
+    add_column :versements, :compte_budgetaire, :string
   end
 
   def self.down
@@ -16,6 +16,6 @@ class AddCompteBudgetaireDepensesCredits < ActiveRecord::Migration
     remove_column :depense_missions, :compte_budgetaire
     remove_column :depense_salaires, :compte_budgetaire
     remove_column :depense_communs, :compte_budgetaire
-    remove_column :versement, :compte_budgetaire
+    remove_column :versements, :compte_budgetaire
   end
 end
