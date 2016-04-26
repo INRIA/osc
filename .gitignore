@@ -21,3 +21,4 @@
 /log/*
 /tmp/*
 .project
+/vendor/bundle/*
