@@ -37,6 +37,14 @@
         <span class="attribute">Commentaire</span>
         <div class="value"><%= simple_format @depense_commun.commentaire %></div>
       </div>
+      <div class="line clearfix">
+        <span class="attribute">Compte Budgétaire</span>
+        <div class="value"><%=simple_format @depense_commun.compte_budgetaire %></div>
+      </div>
+      <div class="line last clearfix">
+        <span class="attribute">Code Analytique</span>
+        <div class="value"><%=simple_format @depense_commun.code_analytique %></div>
+      </div>
     </div>
     <div class="small-col">
       <div class='line last clearfix'>
