@@ -63,6 +63,24 @@
           <%= f.text_area :commentaire %>
         <% end %>
       </p>
+      <p>
+        <div class="code_analytique">
+          <label for="code_analytique">Code Analytique</label><br />
+          <% if @non_modifiable.include?('code_analytique') %>
+            <strong><%= @versement.code_analytique %></strong>
+          <% else %>
+            <%= f.text_field :code_analytique %>
+          <% end %>
+        </div>      
+        <div class="compte_budgetaire">
+          <label for="compte_budgetaire">Compte Budgétaire</label><br />
+          <% if @non_modifiable.include?('compte_budgetaire') %>
+            <strong><%= @versement.compte_budgetaire %></strong>
+          <% else %>
+            <%= f.text_field :compte_budgetaire %>
+          <% end %>
+        </div>
+      </p>
     </div>
   </div>
 </div>  

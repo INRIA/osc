@@ -17,7 +17,7 @@ class Versement < ActiveRecord::Base
   before_create 'self.created_by = User.current_user.id',
                 'self.updated_by = User.current_user.id'
   
-  attr_accessible :ligne_id,:date_effet, :reference, :montant, :ventilation, :origine, :commentaire
+  attr_accessible :ligne_id,:date_effet, :reference, :montant, :ventilation, :origine, :commentaire, :code_analytique, :compte_budgetaire
   
   def come_from_inria?
     true if self.verrou == "SI INRIA" || false
