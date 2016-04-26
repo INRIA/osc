@@ -34,9 +34,17 @@
         <span class="attribute">Structure</span>
         <span class="value"><%= @depense_non_ventilee.structure %></span>
       </div>
-      <div class='line last clearfix'>
+      <div class='line clearfix'>
         <span class="attribute">Commentaire</span>
         <div class="value"><%= simple_format @depense_non_ventilee.commentaire %></div>
+      </div>
+      <div class="line clearfix">
+        <span class="attribute">Compte Budgétaire</span>
+        <div class="value"><%=simple_format @depense_non_ventilee.compte_budgetaire %></div>
+      </div>
+      <div class="line last clearfix">
+        <span class="attribute">Code Analytique</span>
+        <div class="value"><%=simple_format @depense_non_ventilee.code_analytique %></div>
       </div>
     </div>
     <div class="small-col">
