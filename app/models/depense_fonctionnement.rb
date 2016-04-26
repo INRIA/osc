@@ -22,7 +22,7 @@ class DepenseFonctionnement < ActiveRecord::Base
 
   attr_accessible :ligne_id, :reference, :date_commande, :fournisseur, :structure, :commentaire, 
                   :montant_engage, :intitule, :commande_solde, :tache, :eligible, :prestation_service,
-                  :type_activite
+                  :type_activite, :code_analytique, :compte_budgetaire
                   
   
   def self.localized_human_attribute_name(attr)
