@@ -73,14 +73,14 @@
       
       <div class="col-1-of-2" >
         <p <%= "class='disabled'" if @non_modifiables.include?('compte_budgetaire')%>>
-          <label for="depense_fonctionnement_compte_budgetaire">Compte Budgétaire</label><br />
+          <label for="depense_non_ventilee_compte_budgetaire">Compte Budgétaire</label><br />
           <% options = ({:disabled => true} if @non_modifiables.include?('compte_budgetaire')) || {} %>
           <%= f.text_field :compte_budgetaire, options %>
         </p>
       </div>
       <div class="col-2-of-2">
         <p <%= "class='disabled'" if @non_modifiables.include?('code_analytique')%>>
-          <label for="depense_fonctionnement_code_analytique">Code Analytique</label><br />
+          <label for="depense_non_ventilee_code_analytique">Code Analytique</label><br />
           <% options = ({:disabled => true} if @non_modifiables.include?('code_analytique')) || {} %>
           <%= f.text_field :code_analytique, options %>
         </p>

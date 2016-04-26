@@ -54,7 +54,7 @@
       
       <div class="col-1-of-2" >
         <p <%= "class='disabled'" if @non_modifiables.include?('compte_budgetaire')%>>
-          <label for="depense_fonctionnement_compte_budgetaire">Compte Budgétaire</label><br />
+          <label for="depense_commun_compte_budgetaire">Compte Budgétaire</label><br />
           <% options = ({:disabled => true} if @non_modifiables.include?('compte_budgetaire')) || {} %>
           <%= f.text_field :compte_budgetaire, options %>
         </p>
