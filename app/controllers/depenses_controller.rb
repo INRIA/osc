@@ -13,7 +13,8 @@ class DepensesController < ApplicationController
     if ['fonctionnement', 'equipement', 'non_ventilee'].include? data
       CSV.generate(options) do |csv|
         ligne = ["Commande soldée ?","Verrou", "Date de demande d'achat","Date de millesime", "N° de demande d'achat",
-          "Intitulé", "Fournisseur", "Montant Engagé", "Montant Facturé "+@type_montant,"Engagé/Payé "+@type_montant]
+          "Compte Budgetaire","Code Analytique","Intitulé", "Fournisseur", "Montant Engagé", "Montant Facturé "+@type_montant,
+          "Engagé/Payé "+@type_montant]
          #Conversion en UTF16 pour Excel (ms-office)
         new_ligne = []
         for l in ligne
@@ -32,6 +33,8 @@ class DepensesController < ApplicationController
             ligne << "non renseigne" 
           end
           ligne << codingTranslation.iconv(c.reference)
+          ligne << codingTranslation.iconv(c.compte_budgetaire)
+          ligne << codingTranslation.iconv(c.code_analytique)
           ligne << codingTranslation.iconv(c.intitule)
           ligne << codingTranslation.iconv(c.fournisseur)
           ligne << c.montant_engage
@@ -43,8 +46,8 @@ class DepensesController < ApplicationController
     elsif data=='mission'
       CSV.generate(options) do |csv|
         ligne = ["Commande soldée ?","Verrou", "Date de demande d'achat","Date de millesime", "N° d'OM - Référence",
-          "Agent", "Date de départ", "Date de retour", "Lieux", "Objet de la mission", "Montant Engagé",
-          "Montant Facturé "+@type_montant,"Engagé/Payé "+@type_montant]
+          "Compte Budgetaire","Code Analytique","Agent", "Date de départ", "Date de retour", "Lieux", 
+          "Objet de la mission", "Montant Engagé","Montant Facturé "+@type_montant,"Engagé/Payé "+@type_montant]
         #Conversion en UTF16 pour Excel (ms-office)
         new_ligne = []
         for l in ligne
@@ -63,6 +66,8 @@ class DepensesController < ApplicationController
             ligne << "non renseigne" 
           end
           ligne << codingTranslation.iconv(c.reference)
+          ligne << codingTranslation.iconv(c.compte_budgetaire)
+          ligne << codingTranslation.iconv(c.code_analytique)
           ligne << codingTranslation.iconv(c.agent)
           ligne << date_to_csv(c.date_depart)
           ligne << date_to_csv(c.date_retour)
@@ -76,8 +81,8 @@ class DepensesController < ApplicationController
       end
     elsif data=='salaire'
       CSV.generate(options) do |csv|
-        ligne = ["Salaire soldé ?","Verrou", "Agent", "Type de contrat",
-          "Statut", "Date de début", "Date de fin", "Nombre de mois",
+        ligne = ["Salaire soldé ?","Verrou", "Compte Budgetaire","Code Analytique","Agent", 
+          "Type de contrat","Statut", "Date de début", "Date de fin", "Nombre de mois",
           "Coût Mensuel", "Coût Période", "Montant Payé HTR", "Montant Payé"]
 
         #Conversion en UTF16 pour Excel (ms-office)
@@ -92,6 +97,8 @@ class DepensesController < ApplicationController
           ligne = []
           ligne << boolean_to_csv(c.commande_solde)
           ligne << c.verrou
+          ligne << codingTranslation.iconv(c.compte_budgetaire)
+          ligne << codingTranslation.iconv(c.code_analytique)
           ligne << codingTranslation.iconv(c.nom_agent)
           ligne << codingTranslation.iconv(c.type_contrat)
           ligne << codingTranslation.iconv(c.statut)
@@ -108,7 +115,8 @@ class DepensesController < ApplicationController
     elsif data =='commun'
       CSV.generate(options) do |csv|
         ligne = ["Commande soldée ?","Verrou", "Date de demande d'achat","Date de millesime", "N° de demande d'achat",
-            "Réf.Budg.", "Intitulé", "Fournisseur", "Montant Engagé","Montant Facturé "+@type_montant,"Engagé/Payé "+@type_montant]
+            "Compte Budgetaire","Code Analytique","Réf.Budg.", "Intitulé", "Fournisseur", "Montant Engagé",
+            "Montant Facturé "+@type_montant,"Engagé/Payé "+@type_montant]
         #Conversion en UTF16 pour Excel (ms-office)
         new_ligne = []
         for l in ligne
@@ -127,6 +135,8 @@ class DepensesController < ApplicationController
               ligne << "non renseigne" 
             end
             ligne << codingTranslation.iconv(c.reference)
+            ligne << codingTranslation.iconv(c.compte_budgetaire)
+            ligne << codingTranslation.iconv(c.code_analytique)
             ligne << codingTranslation.iconv(c.budgetaire_reference.code)
             ligne << codingTranslation.iconv(c.intitule)
             ligne << codingTranslation.iconv(c.fournisseur)
@@ -138,7 +148,7 @@ class DepensesController < ApplicationController
       end
     elsif data =='credit'
       CSV.generate(options) do |csv|
-        ligne = ["Verrou","Date d'effet", "Référence", "Ventilation", "Origine", "Commentaire", "Montant"]
+        ligne = ["Verrou","Date d'effet", "Référence","Compte Budgetaire","Code Analytique", "Ventilation", "Origine", "Commentaire", "Montant"]
         #Conversion en UTF16 pour Excel (ms-office)
         new_ligne = []
         for l in ligne
@@ -151,6 +161,8 @@ class DepensesController < ApplicationController
             ligne << c.verrou
             ligne << date_to_csv(c.date_effet)
             ligne << codingTranslation.iconv(c.reference)
+            ligne << codingTranslation.iconv(c.compte_budgetaire)
+            ligne << codingTranslation.iconv(c.code_analytique)
             ligne << codingTranslation.iconv(c.ventilation)
             ligne << codingTranslation.iconv(c.origine)
             ligne << codingTranslation.iconv(c.commentaire)

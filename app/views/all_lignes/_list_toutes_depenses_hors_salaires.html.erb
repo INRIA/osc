@@ -37,6 +37,18 @@
       	</a>
       </th>
       <th>
+        <a href="" onclick="tableOrderBy('compte_budgetaire');return false;"
+           <% if @order_value == 'compte_budgetaire' %> <%= "class='"+@order_type+"'" %><% end %>>
+          Compte Budg.
+        </a>
+      </th>
+      <th>
+        <a href="" onclick="tableOrderBy('code_analytique');return false;"
+           <% if @order_value == 'code_analytique' %> <%= "class='"+@order_type+"'" %><% end %>>
+          Code Ana.
+        </a>
+      </th>
+      <th>
     	<a href="" onclick="tableOrderBy('intitule');return false;"
     	   <% if @order_value == 'intitule' %> <%= "class='"+@order_type+"'" %><% end %>>
     	  Intitulé
@@ -110,6 +122,8 @@
       	<td><%= french_small_date depense.date_commande %>
           <% if !@millesime.blank? %><br/><%= display_millesime depense %><% end %>
 	      <td style="min-width:60px"><%=h depense.reference %></td>
+	      <td><%=h depense.compte_budgetaire %></td>
+	      <td><%=h depense.code_analytique %></td>
 	      <td>
     	  <%- if depense.is_a?(DepenseFonctionnement) -%>
     	    <%= link_to simple_format(depense.intitule), ligne_depense_fonctionnement_path(depense.ligne, depense) %>
@@ -175,7 +189,7 @@
        @subtotal_montant_paye_ttc = @subtotal_montant_paye_ttc + montant_paye_ttc
     end -%>
 
-    <% @colspan_totals = 7 %>
+    <% @colspan_totals = 9 %>
     <%= render :partial => 'list_totals_default' %> 
  
   </tbody>

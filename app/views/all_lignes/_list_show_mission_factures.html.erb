@@ -8,7 +8,7 @@
   <th>Date de mandatement</th>
   <th>Justifiable</th>
   <th>Rubrique</th>
-  <th>Tiers R&eacute;gl&eacute;</th>
+  <th colspan="3">Tiers R&eacute;gl&eacute;</th>
   <th>TVA</th>
   <th class="money">Pay&eacute; HTR</th>
   <th class="money">Pay&eacute; HT</th>
@@ -47,7 +47,7 @@
         <% end %>
       </td>
       <td><%= facture.rubrique_comptable.small_intitule %></td>
-      <td><abbr title="<%= facture.fournisseur %>"><%= truncate(facture.fournisseur,:length =>40, :ommission => '...') %></abbr></td>
+      <td colspan="3"><abbr title="<%= facture.fournisseur %>"><%= truncate(facture.fournisseur,:length =>40, :ommission => '...') %></abbr></td>
       <td><%= facture.taux_tva %>%</td>
       <td class="money"><%= my_number_to_currency facture.montant_htr %></td>
       <td class="money"><%= my_number_to_currency facture.cout_ht %></td>

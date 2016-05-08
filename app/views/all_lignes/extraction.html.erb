@@ -34,7 +34,11 @@
     </div>
     <div style="clear:both;"></div>
   </div>
-  <div id="recherche_avancee">
+  <%- if params['data'] == "mission" -%>
+    <div id="recherche_avancee" style="height:235px;">
+  <%- else -%>
+    <div id="recherche_avancee">
+  <%- end -%>
     <form id="form_recherche">
       <div class="small_box">
 				<h3>S&eacute;lection sur le contrat</h3>
@@ -76,13 +80,17 @@
 					<input type="text" id="annee" name="annee" /><br />
 					<label>R&eacute;f&eacute;rence</label>
 					<input type="text" id="reference" name="reference" />
+					<label>Compte Budg&eacute;taire</label>
+          <input type="text" id="compte_budgetaire" name="compte_budgetaire" />
+          <label>Code Analytique</label>
+          <input type="text" id="code_analytique" name="code_analytique" />
 				</div>
 				<div class="small_box">
 					<h3>Autres s&eacute;lections</h3>
 					<label>Origine</label>
 					<input type="text" id="origine" name="origine" /><br />
 					<label>Commentaire</label>
-					<input type="text" id="commentaire" name="commentaire" />
+					<input type="text" id="commentaire" name="commentaire" />				
 				</div>
       <%- end -%>
 
@@ -93,13 +101,17 @@
 				<input type="text" id="annee" name="annee" /><br />
 				<label>Date de mill&eacute;sime <span>(AAAA-MM-JJ)</span></label>
 				<input type="text" id="millesime" name="millesime" /><br />
-				<label>N° de demande d'achat</label>
-				<input type="text" id="reference" name="reference" />
+				<label>Compte Budg&eacute;taire</label>
+				<input type="text" id="compte_budgetaire" name="compte_budgetaire" />
+				<label>Code Analytique</label>
+        <input type="text" id="code_analytique" name="code_analytique" />
 			</div>
 			<div class="small_box">
 				<h3>Autres s&eacute;lections</h3>
-				<label>Intitul&eacute;</label>
-				<input type="text" id="intitule" name="intitule" /><br />
+				<label>N° de demande d'achat</label>
+        <input type="text" id="reference" name="reference" />
+        <label>Intitul&eacute;</label>
+        <input type="text" id="intitule" name="intitule" /><br />
 				<%- if ['commun','fonctionnement', 'equipement', 'non_ventilee'].include? params['data'] -%>
 				  <label>Fournisseur</label>
 				  <input type="text" id="fournisseur" name="fournisseur" />
@@ -121,25 +133,30 @@
 			<div class="small_box">
 				<h3>Autres s&eacute;lections</h3>
 				<label>Date de commande <span>(AAAA-MM-JJ)</span></label>
-				<input type="text" id="annee" name="annee" /><br />
+				<input type="text" id="annee" name="annee" />
 				<label>Date de mill&eacute;sime <span>(AAAA-MM-JJ)</span></label>
-				<input type="text" id="millesime" name="millesime" /><br />
+				<input type="text" id="millesime" name="millesime" />
 				<label>Date de d&eacute;part <span>(AAAA-MM-JJ)</span></label>
-        <input type="text" id="annee2" name="annee2" /><br />
+        <input type="text" id="annee2" name="annee2" />
         <label>Date de retour <span>(AAAA-MM-JJ)</span></label>
-        <input type="text" id="annee3" name="annee3" /><br />
+        <input type="text" id="annee3" name="annee3" />
+        <label>Compte Budg&eacute;taire</label>
+        <input type="text" id="compte_budgetaire" name="compte_budgetaire" />
 			</div>
 			<div class="small_box">
 				<label>N° d'OM</label>
-        <input type="text" id="reference" name="reference" /><br />
+        <input type="text" id="reference" name="reference" />
         <label>Objet de la mission</label>
         <input type="text" id="intitule" name="intitule" />
         <label>Agent</label>
         <input type="text" id="agent" name="agent" />
 				<label>Lieux</label>
-				<input type="text" id="lieux" name="lieux" />
+				<input type="text" id="lieux" name="lieux" />		
 				<label>R&eacute;f comptable (factures)</label>
-				<input type="text" id="ref_cp" name="ref_cp" />			</div>
+				<input type="text" id="ref_cp" name="ref_cp" />
+				<label>Code Analytique</label>
+        <input type="text" id="code_analytique" name="code_analytique" />     
+		</div>
       <%- end -%>
 
       <%- if params['data'] == "salaire" -%>
@@ -158,6 +175,10 @@
 				<input type="text" id="annee" name="annee" /><br />
 				<label>Date de fin <span>(AAAA-MM-JJ)</span></label>
 				<input type="text" id="annee2" name="annee2" />
+				<label>Compte Budg&eacute;taire</label>
+        <input type="text" id="compte_budgetaire" name="compte_budgetaire" />
+        <label>Code Analytique</label>
+        <input type="text" id="code_analytique" name="code_analytique" />
 			</div>
       <%- end -%>
       <div style="clear:both;"></div>     

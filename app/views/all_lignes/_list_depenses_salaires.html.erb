@@ -16,7 +16,7 @@
 <table class="depenses">
   <thead>
     <tr>
-      <th style="border:none;" colspan="8"></th>
+      <th style="border:none;" colspan="10"></th>
       <th style="border-color:#ccc;text-align:center;" colspan="4">Montant</th>
     </tr>
     <tr>
@@ -42,8 +42,21 @@
 	   <% if @order_value == 'statut' %> <%= "class='"+@order_type+"'" %><% end %>>
 	  Statut
 	</a>
-      </th>
-      <th>
+  </th>
+  <th>
+    <a href="" onclick="tableOrderBy('compte_budgetaire');return false;"
+       <% if @order_value == 'compte_budgetaire' %> <%= "class='"+@order_type+"'" %><% end %>>
+      Compte Budg.
+    </a>
+  </th>
+  <th>
+    <a href="" onclick="tableOrderBy('code_analytique');return false;"
+       <% if @order_value == 'code_analytique' %> <%= "class='"+@order_type+"'" %><% end %>>
+      Code Ana.
+    </a>
+  </th>
+      
+  <th>
 	<a href="" onclick="tableOrderBy('date_debut');return false;"
 	   <% if @order_value == 'date_debut' %> <%= "class='"+@order_type+"'" %><% end %>>
 	  Date de début
@@ -107,6 +120,8 @@
       	<td><%= link_to depense.nom_agent, ligne_depense_salaire_path(depense.ligne, depense) %></td>
       	<td><%=h depense.type_contrat %></td>
       	<td><%=h depense.statut %></td>
+      	<td><%=h depense.compte_budgetaire %></td>
+      	<td><%=h depense.code_analytique %></td>
       	<td><%= french_small_date depense.date_debut %></td>
       	<td><%= french_small_date depense.date_fin %></td>
       	<td><%= my_number_to_currency depense.cout_mensuel %></td>
@@ -135,14 +150,14 @@
      end -%>
 
   <tr>
-    <td colspan='8'></td><td class="total-header">Sous-total</td>
+    <td colspan='10'></td><td class="total-header">Sous-total</td>
     <td class="money sous-total<%= ' neg' if @subtotal_cout_periode < 0 %>"><%= my_number_to_currency @subtotal_cout_periode %></td>
     <td class="money sous-total<%= ' neg' if @subtotal_montant_paye_htr < 0 %>"><%= my_number_to_currency @subtotal_montant_paye_htr %></td>
     <td class="money sous-total<%= ' neg' if @subtotal_montant_paye_ttc < 0 %>"><%= my_number_to_currency @subtotal_montant_paye_ttc %></td>
     <td></td>
   </tr>
 	<tr id="list_totaux_globaux" >
-    <td colspan='8'></td>
+    <td colspan='10'></td>
     <td colspan='4' class="total-header"><a href="" onClick="ComputeTotaux();return false;" title="Calculer le Total pour toutes les pages">Calculer le Total pour toutes les pages</a></td> 
   </tr>
 	

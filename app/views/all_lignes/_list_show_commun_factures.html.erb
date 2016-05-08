@@ -8,6 +8,8 @@
   <th>Justifiable</th>
   <th>Rubrique</th>
   <th>TVA</th>
+  <th></th>
+  <th></th>
   <th class="money">Pay&eacute; HT</th>
   <th class="money">Pay&eacute; TTC</th>
   <th></th>
@@ -44,8 +46,9 @@
       </td>
       <td><%= facture.rubrique_comptable.small_intitule %></td>
       <td><%= facture.taux_tva %>%</td>
+      <td></td>
+      <td></td>
       <td class="money"><%= my_number_to_currency facture.cout_ht %></td>
       <td class="money"><%= my_number_to_currency facture.cout_ttc %></td>
-      <td></td>
     </tr>
 <% end %>

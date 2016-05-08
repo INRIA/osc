@@ -5,11 +5,11 @@
   <th>Date <br/>(Millesime)</th>
   <th>Justifiable</th>
   <% if @mission %>
-    <th>N° de mandat<br/>
+    <th colspan="3">N° de mandat<br/>
         Date de mandatement</th>
     <th>Fournisseur</th>
   <% else %>
-    <th>N° de mandat</th>
+    <th colspan="3">N° de mandat</th>
     <th>Date de mandatement</th>
   <% end %> 
   <th>Rubrique</th>
@@ -41,7 +41,7 @@
           <%= facture.justifiable %>
         <% end %>
       </td>
-      <td>
+      <td colspan="3">
         <abbr title="<%= facture.numero_mandat %>"><%= truncate(facture.numero_mandat,:length => 25, :ommission => '...') %></abbr>
         <% if @mission %>
           <br/>

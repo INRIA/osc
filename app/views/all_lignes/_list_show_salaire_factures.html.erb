@@ -4,7 +4,7 @@
   <th class="first">N° de Mandat</th>
   <th>Date de Mandatement</th>
   <th>Service fait (Millesime)</th>
-  <th colspan="5">Commentaire</th>
+  <th colspan="7">Commentaire</th>
   <th class="money">Pay&eacute; HTR</th>
   <th class="money">Pay&eacute; TTC</th>
   <th colspan="3"></th>
@@ -25,7 +25,7 @@
         <%= french_small_date facture.millesime %>
       <% end %>
       </td>
-      <td colspan="5"><abbr title="<%= facture.commentaire %>"><%= facture.commentaire %></abbr></td>
+      <td colspan="7"><abbr title="<%= facture.commentaire %>"><%= facture.commentaire %></abbr></td>
       <td class="money"><%= my_number_to_currency facture.montant_htr %></td>
       <td class="money"><%= my_number_to_currency facture.cout %></td>
       <td colspan="3"></td>

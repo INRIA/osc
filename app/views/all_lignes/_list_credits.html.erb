@@ -47,6 +47,12 @@
 				</a>
 			</th>
 			<th>
+        <a href="" onclick="tableOrderBy('compte_budgetaire');return false;"
+        <% if @order_value == 'compte_budgetaire' %> <%= "class='"+@order_type+"'" %><% end %>>
+          Compte Budg&eacute;taire
+        </a>
+      </th>
+			<th>
 				<a href="" onclick="tableOrderBy('commentaire');return false;"
 				<% if @order_value == 'commentaire' %> <%= "class='"+@order_type+"'" %><% end %>>
 					Commentaire
@@ -76,6 +82,7 @@
 	    <td><%=h credit.reference %></td>
 	    <td><%=h credit.origine %></td>
 	    <td><%=h credit.ventilation %></td>
+	    <td><%=h credit.compte_budgetaire %></td>
 	    <td><%= simple_format credit.commentaire %></td>
 	    <td class="money"><%= link_to my_number_to_currency(montant_credit), ligne_versement_path(credit.ligne, credit) %></td>
   	</tr>
@@ -83,7 +90,7 @@
     end -%>
 
   <tr>
-    <td colspan='6'></td><td class="total-header">Sous-total</td>
+    <td colspan='7'></td><td class="total-header">Sous-total</td>
     <td class="money sous-total<%= ' neg' if @subtotal_montant_credit < 0 %>"><%= my_number_to_currency @subtotal_montant_credit %></td>
     <td></td>
   </tr>

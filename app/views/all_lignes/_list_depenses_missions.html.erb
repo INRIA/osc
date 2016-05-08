@@ -41,9 +41,21 @@
 	   <% if @order_value == 'agent' %> <%= "class='"+@order_type+"'" %><% end %>>
 	  Agent
 	</a>
-      </th>
+  </th>
+  <th>
+    <a href="" onclick="tableOrderBy('compte_budgetaire');return false;"
+       <% if @order_value == 'compte_budgetaire' %> <%= "class='"+@order_type+"'" %><% end %>>
+      Compte Budg.
+    </a>
+  </th>
+  <th>
+    <a href="" onclick="tableOrderBy('code_analytique');return false;"
+       <% if @order_value == 'code_analytique' %> <%= "class='"+@order_type+"'" %><% end %>>
+      Code Ana.
+    </a>
+  </th>
 
-      <th>
+  <th>
 	<a href="" onclick="tableOrderBy('date_depart');return false;"
 	   <% if @order_value == 'date_depart' %> <%= "class='"+@order_type+"'" %><% end %>>
 	  Départ
@@ -123,6 +135,8 @@
 	    </td>
 	    <td><%= depense.reference %></td>
       <td><%= link_to depense.agent, ligne_depense_mission_path(depense.ligne, depense) %></td>
+      <td><%= depense.compte_budgetaire %></td>
+      <td><%= depense.code_analytique %></td>
       <td><%= french_small_date depense.date_depart %></td>
       <td><%= french_small_date depense.date_retour %></td>
     	<td><%=h depense.lieux %></td>
@@ -155,7 +169,7 @@
        @subtotal_montant_paye_ht =  @subtotal_montant_paye_ht + montant_paye_ht
        @subtotal_montant_paye_ttc = @subtotal_montant_paye_ttc + montant_paye_ttc
     end -%>
-  <% @colspan_totals = 9 %>
+  <% @colspan_totals = 11 %>
 	<%= render :partial => 'list_totals_default' %>
   </tbody>
 </table>

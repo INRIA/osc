@@ -46,9 +46,17 @@
         <span class="attribute">Structure :</span>
         <span class="value"><%= @depense_salaire.structure %></span>
       </div>
-      <div class='line last clearfix'>
+      <div class='line clearfix'>
         <span class="attribute">% r&eacute;partition contrat :</span>
         <span class="value"><%= @depense_salaire.pourcentage %> %</span>
+      </div>
+      <div class="line clearfix">
+        <span class="attribute">Compte Budgétaire</span>
+        <div class="value"><%=simple_format @depense_salaire.compte_budgetaire %></div>
+      </div>
+      <div class="line last clearfix">
+        <span class="attribute">Code Analytique</span>
+        <div class="value"><%=simple_format @depense_salaire.code_analytique %></div>
       </div>
     </div>
     <div class="small-col">

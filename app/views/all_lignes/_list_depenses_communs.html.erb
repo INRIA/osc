@@ -17,7 +17,7 @@
 <table class="depenses">
   <thead>
     <tr>
-      <th style="border:none;" colspan="8"></th>
+      <th style="border:none;" colspan="10"></th>
       <th style="border-color:#ccc;text-align:center;" colspan="3">Montant</th>
     </tr>
     <tr>
@@ -37,9 +37,21 @@
       	</a>
       </th>
       <th>
+        <a href="" onclick="tableOrderBy('compte_budgetaire');return false;"
+           <% if @order_value == 'compte_budgetaire' %> <%= "class='"+@order_type+"'" %><% end %>>
+          Compte Budg.
+        </a>
+      </th>
+      <th>
+        <a href="" onclick="tableOrderBy('code_analytique');return false;"
+           <% if @order_value == 'code_analytique' %> <%= "class='"+@order_type+"'" %><% end %>>
+          Code Ana.
+        </a>
+      </th>
+      <th>
       	<a href="" onclick="tableOrderBy('budgetaire_reference_id');return false;"
       	   <% if @order_value == 'budgetaire_reference_id' %> <%= "class='"+@order_type+"'" %><% end %>>
-      	  Réf.Budg.
+      	  Réf. Budg.
       	</a>
       </th>
       <th>
@@ -99,6 +111,8 @@
         <% if !depense.millesime.blank? %><br/><%= display_millesime depense %><% end %>
 	    </td>
     	<td><%=h depense.reference %></td>
+    	<td><%=h depense.compte_budgetaire %></td>
+    	<td><%=h depense.code_analytique %></td>
     	<td><%=h depense.budgetaire_reference.code %></td>
     	<td>
     	  <%= link_to simple_format(depense.intitule), ligne_depense_commun_path(depense.ligne, depense) %>
@@ -126,7 +140,7 @@
        @subtotal_montant_paye_ht =  @subtotal_montant_paye_ht + montant_paye_ht
        @subtotal_montant_paye_ttc = @subtotal_montant_paye_ttc + montant_paye_ttc
     end -%>
-    <% @colspan_totals = 7 %>
+    <% @colspan_totals = 9 %>
     <%= render :partial => 'list_totals_commun' %>
   </tbody>
 </table>

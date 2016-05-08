@@ -94,15 +94,6 @@
         <% end %>
       </p>
 
-      <p <%= "class='disabled'" if @non_modifiables.include?('structure')%>>
-        <label for="depense_salaire_structure">Structure</label><br />
-        <% options = ({:disabled => true} if @non_modifiables.include?('structure')) || {} %>
-        <%= f.text_field :structure, options %>
-      </p>
-      
-    </div>
-    <div class="col-2-of-2">
-      
       <p <%= "class='disabled'" if @non_modifiables.include?('nb_mois')%>>
         <% if !@non_modifiables.include?('nb_mois') %>
           <a href="" onclick="verouiller('depense_salaire_nb_mois'); return false;" 
@@ -115,10 +106,20 @@
         <label for="depense_salaire_nb_mois" class="required">Nombre de mois sur l'année</label><br />
         <% options = ({:disabled => true} if @non_modifiables.include?('nb_mois')) || {} %>
         <%= f.text_field :nb_mois, options %>
-				<span id='depense_salaire_nb_mois_cach' style="display:none;"><%= @depense_salaire.nb_mois.to_s %></span>
+        <span id='depense_salaire_nb_mois_cach' style="display:none;"><%= @depense_salaire.nb_mois.to_s %></span>
 
       </p>
-
+      
+      <p <%= "class='disabled'" if @non_modifiables.include?('structure')%>>
+        <label for="depense_salaire_structure">Structure</label><br />
+        <% options = ({:disabled => true} if @non_modifiables.include?('structure')) || {} %>
+        <%= f.text_field :structure, options %>
+      </p>
+      
+    </div>
+    <div class="col-2-of-2">
+      
+      
       <p <%= "class='disabled'" if @non_modifiables.include?('cout_mensuel')%>>
         <label for="depense_salaire_cout_mensuel" class="required">Coût mensuel</label><br />
         <% options = ({:disabled => true} if @non_modifiables.include?('cout_mensuel')) || {} %>
@@ -162,6 +163,20 @@
         <%= check_box_tag 'ajuster_montant', "1", false, options %>
         <label for="ajuster_montant">Ajuster le montant engagé en fonction des payes saisies</label>       
       </p>
+      <div class="col-1-of-2" >
+        <p <%= "class='disabled'" if @non_modifiables.include?('compte_budgetaire')%>>
+          <label for="depense_salaire_compte_budgetaire">Compte Budgétaire</label><br />
+          <% options = ({:disabled => true} if @non_modifiables.include?('compte_budgetaire')) || {} %>
+          <%= f.text_field :compte_budgetaire, options %>
+        </p>
+      </div>
+      <div class="col-2-of-2">
+        <p <%= "class='disabled'" if @non_modifiables.include?('code_analytique')%>>
+          <label for="depense_salaire_code_analytique">Code Analytique</label><br />
+          <% options = ({:disabled => true} if @non_modifiables.include?('code_analytique')) || {} %>
+          <%= f.text_field :code_analytique, options %>
+        </p>
+      </div>
       
     </div>
   </div>
