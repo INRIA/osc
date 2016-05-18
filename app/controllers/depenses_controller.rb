@@ -15,12 +15,18 @@ class DepensesController < ApplicationController
         ligne = ["Commande soldée ?","Verrou", "Date de demande d'achat","Date de millesime", "N° de demande d'achat",
           "Compte Budgetaire","Code Analytique","Intitulé", "Fournisseur", "Montant Engagé", "Montant Facturé "+@type_montant,
           "Engagé/Payé "+@type_montant]
+        #En tête facture
+        if @afficher_factures == 'true' 
+          ligne.insert(12, "N° de facture", "Date de facture", "Millesime de facture" ,"Date de  Mand.", "N° Mand.", "Justifiable", "Rub.CP.", "Taux TVA", "Payé HTR", "Payé HT", "Payé TTC")  
+        end
          #Conversion en UTF16 pour Excel (ms-office)
         new_ligne = []
         for l in ligne
           newl = codingTranslation.iconv(l)
           new_ligne << newl
         end
+        
+        
         csv << new_ligne
         depenses.each do |c|
           ligne = []
@@ -40,7 +46,25 @@ class DepensesController < ApplicationController
           ligne << c.montant_engage
           ligne << c.montant_factures(@type_montant, @current_date_start, @current_date_end)
           ligne << c.montant(@current_date_start, @current_date_end, "sommes_engagees", @type_montant)
-          csv << ligne        
+          csv << ligne 
+          if @afficher_factures == 'true'
+            depense_method = "depense_#{data}"
+            for facture in c.send(depense_method+"_factures") do
+              ligne = ["FACTURE ->",facture.verrou,"","","","","","","","","",""]
+              ligne << facture.numero_facture
+              ligne << date_to_csv(facture.date)
+              ligne << (facture.millesime.blank? ? "" : date_to_csv(facture.millesime) )
+              ligne << (facture.date_mandatement.blank? ? "" : date_to_csv(facture.date_mandatement) )
+              ligne << facture.numero_mandat
+              ligne << (facture.justifiable.blank? ? "" : facture.justifiable)
+              ligne << facture.rubrique_comptable.small_intitule
+              ligne << facture.taux_tva
+              ligne << facture.montant_htr
+              ligne << facture.cout_ht
+              ligne << facture.cout_ttc
+              csv << ligne
+            end
+          end       
         end
       end
     elsif data=='mission'
@@ -48,6 +72,9 @@ class DepensesController < ApplicationController
         ligne = ["Commande soldée ?","Verrou", "Date de demande d'achat","Date de millesime", "N° d'OM - Référence",
           "Compte Budgetaire","Code Analytique","Agent", "Date de départ", "Date de retour", "Lieux", 
           "Objet de la mission", "Montant Engagé","Montant Facturé "+@type_montant,"Engagé/Payé "+@type_montant]
+        if @afficher_factures == 'true'
+          ligne.insert(15, "N° de facture", "Date de facture", "Millesime de facture" ,"Date de  Mand.", "N° Mand.", "Justifiable", "Rub.CP.","Tiers Réglé", "Taux TVA", "Payé HTR", "Payé HT", "Payé TTC")
+        end
         #Conversion en UTF16 pour Excel (ms-office)
         new_ligne = []
         for l in ligne
@@ -77,6 +104,24 @@ class DepensesController < ApplicationController
           ligne << c.montant_factures(@type_montant, @current_date_start, @current_date_end)
           ligne << c.montant(@current_date_start, @current_date_end, "sommes_engagees", @type_montant)
           csv << ligne
+          if @afficher_factures == 'true'
+            for facture in c.depense_mission_factures do
+              ligne = ["FACTURE ->",facture.verrou,"","","","","","","","","","","","",""]
+              ligne << facture.numero_facture
+              ligne << date_to_csv(facture.date)
+              ligne << (facture.millesime.blank? ? "" : date_to_csv(facture.millesime) )
+              ligne << (facture.date_mandatement.blank? ? "" : date_to_csv(facture.date_mandatement) )
+              ligne << facture.numero_mandat
+              ligne << (facture.justifiable.blank? ? "" : facture.justifiable)
+              ligne << facture.rubrique_comptable.small_intitule
+              ligne << facture.fournisseur
+              ligne << facture.taux_tva
+              ligne << facture.montant_htr
+              ligne << facture.cout_ht
+              ligne << facture.cout_ttc
+              csv << ligne
+            end
+          end
         end
       end
     elsif data=='salaire'
@@ -84,7 +129,9 @@ class DepensesController < ApplicationController
         ligne = ["Salaire soldé ?","Verrou", "Compte Budgetaire","Code Analytique","Agent", 
           "Type de contrat","Statut", "Date de début", "Date de fin", "Nombre de mois",
           "Coût Mensuel", "Coût Période", "Montant Payé HTR", "Montant Payé"]
-
+        if @afficher_factures == 'true'
+          ligne.insert(14, "N° de mandat", "Date de mandatement", "Millesime" ,"Commentaire", "Payé HTR", "Payé TTC")
+        end
         #Conversion en UTF16 pour Excel (ms-office)
         new_ligne = []
         for l in ligne
@@ -110,6 +157,18 @@ class DepensesController < ApplicationController
           ligne << c.montant_factures('htr')
           ligne << c.montant_factures('ttc')
           csv << ligne
+          if @afficher_factures == 'true'
+            for facture in c.depense_salaire_factures do
+              ligne = ["PAYE ->",facture.verrou,"","","","","","","","","","","",""]
+              ligne << facture.numero_mandat
+              ligne << date_to_csv(facture.date_mandatement)
+              ligne << (facture.millesime.blank? ? "" : date_to_csv(facture.millesime))
+              ligne << facture.commentaire 
+              ligne << facture.montant_htr
+              ligne << facture.cout 
+              csv << ligne
+            end
+          end
         end
       end
     elsif data =='commun'
@@ -117,6 +176,9 @@ class DepensesController < ApplicationController
         ligne = ["Commande soldée ?","Verrou", "Date de demande d'achat","Date de millesime", "N° de demande d'achat",
             "Compte Budgetaire","Code Analytique","Réf.Budg.", "Intitulé", "Fournisseur", "Montant Engagé",
             "Montant Facturé "+@type_montant,"Engagé/Payé "+@type_montant]
+        if @afficher_factures == 'true'
+          ligne.insert(12, "N° de facture", "Date de facture", "Millesime de facture" ,"Date de  Mand.", "N° Mand.", "Justifiable", "Rub.CP.", "Taux TVA", "Payé HT", "Payé TTC")
+        end
         #Conversion en UTF16 pour Excel (ms-office)
         new_ligne = []
         for l in ligne
@@ -126,24 +188,40 @@ class DepensesController < ApplicationController
         csv << new_ligne
         depenses.each do |c|
           ligne = []
-            ligne << boolean_to_csv(c.commande_solde)
-            ligne << c.verrou
-            ligne << date_to_csv(c.date_commande)
-            if(c.millesime)
-              ligne << date_to_csv(c.millesime)
-            else
-              ligne << "non renseigne" 
+          ligne << boolean_to_csv(c.commande_solde)
+          ligne << c.verrou
+          ligne << date_to_csv(c.date_commande)
+          if(c.millesime)
+            ligne << date_to_csv(c.millesime)
+          else
+            ligne << "non renseigne" 
+          end
+          ligne << codingTranslation.iconv(c.reference)
+          ligne << codingTranslation.iconv(c.compte_budgetaire)
+          ligne << codingTranslation.iconv(c.code_analytique)
+          ligne << codingTranslation.iconv(c.budgetaire_reference.code)
+          ligne << codingTranslation.iconv(c.intitule)
+          ligne << codingTranslation.iconv(c.fournisseur)
+          ligne << c.montant_engage
+          ligne << c.montant_factures(@type_montant, @current_date_start, @current_date_end)
+          ligne << c.montant(@current_date_start, @current_date_end, "sommes_engagees", @type_montant)
+          csv << ligne
+          if @afficher_factures == 'true'
+            for facture in c.depense_commun_factures do
+              ligne = ["FACTURE ->",facture.verrou,"","","","","","","","","",""]
+              ligne << facture.numero_facture
+              ligne << date_to_csv(facture.date)
+              ligne << (facture.millesime.blank? ? "" : date_to_csv(facture.millesime) )
+              ligne << (facture.date_mandatement.blank? ? "" : date_to_csv(facture.date_mandatement) )
+              ligne << facture.numero_mandat
+              ligne << (facture.justifiable.blank? ? "" : facture.justifiable)
+              ligne << facture.rubrique_comptable.small_intitule
+              ligne << facture.taux_tva
+              ligne << facture.cout_ht
+              ligne << facture.cout_ttc
+              csv << ligne
             end
-            ligne << codingTranslation.iconv(c.reference)
-            ligne << codingTranslation.iconv(c.compte_budgetaire)
-            ligne << codingTranslation.iconv(c.code_analytique)
-            ligne << codingTranslation.iconv(c.budgetaire_reference.code)
-            ligne << codingTranslation.iconv(c.intitule)
-            ligne << codingTranslation.iconv(c.fournisseur)
-            ligne << c.montant_engage
-            ligne << c.montant_factures(@type_montant, @current_date_start, @current_date_end)
-            ligne << c.montant(@current_date_start, @current_date_end, "sommes_engagees", @type_montant)
-            csv << ligne
+          end
         end
       end
     elsif data =='credit'
