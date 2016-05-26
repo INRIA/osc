@@ -197,8 +197,8 @@ class AllLignesController < ApplicationController
           ligne << codingTranslation.iconv(c.ligne.nom)
           ligne << c.verrou
           ligne << date_to_csv(c.date_effet)
-          ligne << c.compte_budgetaire
-          ligne << c.code_analytique
+          ligne << '="'+codingTranslation.iconv(c.compte_budgetaire)+'"'
+          ligne << '="'+codingTranslation.iconv(c.code_analytique)+'"'
           ligne << codingTranslation.iconv(c.reference)
           ligne << codingTranslation.iconv(c.origine)
           ligne << codingTranslation.iconv(c.ventilation)
@@ -234,8 +234,8 @@ class AllLignesController < ApplicationController
             ligne << boolean_to_csv(c.commande_solde)
             ligne << c.verrou
             ligne << date_to_csv(c.date_commande)
-            ligne << c.compte_budgetaire
-            ligne << c.code_analytique
+            ligne << '="'+codingTranslation.iconv(c.compte_budgetaire)+'"'
+            ligne << '="'+codingTranslation.iconv(c.code_analytique)+'"'
             ligne << codingTranslation.iconv(c.reference)
             ligne << codingTranslation.iconv(c.intitule)
             if c.is_a?(DepenseFonctionnement) || c.is_a?(DepenseEquipement) || c.is_a?(DepenseNonVentilee)
@@ -306,8 +306,8 @@ class AllLignesController < ApplicationController
             ligne << boolean_to_csv(depense.commande_solde)
             ligne << depense.verrou
             ligne << date_to_csv(depense.date_commande)
-            ligne << depense.compte_budgetaire
-            ligne << depense.code_analytique
+            ligne << '="'+codingTranslation.iconv(depense.compte_budgetaire)+'"'
+            ligne << '="'+codingTranslation.iconv(depense.code_analytique)+'"'
             ligne << codingTranslation.iconv(depense.reference)
             ligne << codingTranslation.iconv(depense.intitule)
             if depense.is_a?(DepenseFonctionnement) || depense.is_a?(DepenseEquipement) || depense.is_a?(DepenseNonVentilee)
@@ -372,8 +372,8 @@ class AllLignesController < ApplicationController
             ligne << boolean_to_csv(c.commande_solde)
             ligne << c.verrou
             ligne << date_to_csv(c.date_commande)
-            ligne << c.compte_budgetaire
-            ligne << c.code_analytique
+            ligne << '="'+codingTranslation.iconv(c.compte_budgetaire)+'"'
+            ligne << '="'+codingTranslation.iconv(c.code_analytique)+'"'
             ligne << codingTranslation.iconv(c.reference)
             ligne << codingTranslation.iconv(c.intitule)
             ligne << codingTranslation.iconv(c.fournisseur)
@@ -408,8 +408,8 @@ class AllLignesController < ApplicationController
             ligne << boolean_to_csv(c.send(depense_method_sym).commande_solde)
             ligne << c.send(depense_method_sym).verrou
             ligne << date_to_csv(c.send(depense_method_sym).date_commande)
-            ligne << c.send(depense_method_sym).compte_budgetaire
-            ligne << c.send(depense_method_sym).code_analytique
+            ligne << '="'+codingTranslation.iconv(c.send(depense_method_sym).compte_budgetaire)+'"'
+            ligne << '="'+codingTranslation.iconv(c.send(depense_method_sym).code_analytique)+'"'
             ligne << codingTranslation.iconv(c.send(depense_method_sym).reference)
             ligne << codingTranslation.iconv(c.send(depense_method_sym).intitule)
             ligne << codingTranslation.iconv(c.send(depense_method_sym).fournisseur)
@@ -454,8 +454,8 @@ class AllLignesController < ApplicationController
             ligne << boolean_to_csv(c.commande_solde)
             ligne << c.verrou
             ligne << date_to_csv(c.date_commande)  
-            ligne << c.compte_budgetaire
-            ligne << c.code_analytique
+            ligne << '="'+codingTranslation.iconv(c.compte_budgetaire)+'"'
+            ligne << '="'+codingTranslation.iconv(c.code_analytique)+'"'
             ligne << codingTranslation.iconv(c.reference)
             ligne << codingTranslation.iconv(c.agent)
             ligne << date_to_csv(c.date_depart)
@@ -492,8 +492,8 @@ class AllLignesController < ApplicationController
             ligne << boolean_to_csv(c.depense_mission.commande_solde)
             ligne << c.depense_mission.verrou
             ligne << date_to_csv(c.depense_mission.date_commande)
-            ligne << c.depense_mission.compte_budgetaire
-            ligne << c.depense_mission.code_analytique
+            ligne << '="'+codingTranslation.iconv(c.depense_mission.compte_budgetaire)+'"'
+            ligne << '="'+codingTranslation.iconv(c.depense_mission.code_analytique)+'"'
             ligne << codingTranslation.iconv(c.depense_mission.reference)
             ligne << codingTranslation.iconv(c.depense_mission.agent)
             ligne << date_to_csv(c.depense_mission.date_depart)
@@ -540,8 +540,8 @@ class AllLignesController < ApplicationController
           ligne << codingTranslation.iconv(c.ligne.nom)
           ligne << boolean_to_csv(c.commande_solde)
           ligne << c.verrou
-          ligne << c.compte_budgetaire
-          ligne << c.code_analytique
+          ligne << '="'+codingTranslation.iconv(c.compte_budgetaire)+'"'
+          ligne << '="'+codingTranslation.iconv(c.code_analytique)+'"'
           ligne << codingTranslation.iconv(c.nom_agent)
           ligne << codingTranslation.iconv(c.type_contrat)
           ligne << codingTranslation.iconv(c.statut)
@@ -594,8 +594,8 @@ class AllLignesController < ApplicationController
             ligne << boolean_to_csv(c.commande_solde)
             ligne << c.verrou
             ligne << date_to_csv(c.date_commande)
-            ligne << c.compte_budgetaire
-            ligne << c.code_analytique
+            ligne << '="'+codingTranslation.iconv(c.compte_budgetaire)+'"'
+            ligne << '="'+codingTranslation.iconv(c.code_analytique)+'"'
             ligne << codingTranslation.iconv(c.reference)
             ligne << codingTranslation.iconv(c.budgetaire_reference.code)
             ligne << codingTranslation.iconv(c.intitule)
@@ -627,8 +627,8 @@ class AllLignesController < ApplicationController
             ligne << boolean_to_csv(c.depense_commun.commande_solde)
             ligne << c.depense_commun.verrou
             ligne << date_to_csv(c.depense_commun.date_commande)
-            ligne << c.depense_commun.compte_budgetaire
-            ligne << c.depense_commun.code_analytique
+            ligne << '="'+codingTranslation.iconv(c.depense_commun.compte_budgetaire)+'"'
+            ligne << '="'+codingTranslation.iconv(c.depense_commun.code_analytique)+'"'
             ligne << codingTranslation.iconv(c.depense_commun.reference)
             ligne << codingTranslation.iconv(c.depense_commun.budgetaire_reference.code)
             ligne << codingTranslation.iconv(c.depense_commun.intitule)
