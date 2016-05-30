@@ -135,7 +135,16 @@
                      {},
                      options %>
         </p>
-  
+        <p <%= "class='disabled'" if @non_modifiable_facture.include?('compte_budgetaire')%>>
+          <label>Compte Budgétaire</label><br />
+          <% options = ({:disabled => true} if @non_modifiable_facture.include?('compte_budgetaire')) || {} %>
+          <%= text_field 'depense_fonctionnement_facture[]', :compte_budgetaire, options %>
+        </p>
+        <p <%= "class='disabled'" if @non_modifiable_facture.include?('code_analytique')%>>
+          <label>Code Analytique</label><br />
+          <% options = ({:disabled => true} if @non_modifiable_facture.include?('code_analytique')) || {} %>
+          <%= text_field 'depense_fonctionnement_facture[]', :code_analytique, options %>
+        </p>
       </div>
     </div>
   </div>

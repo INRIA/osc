@@ -213,12 +213,12 @@ class AllLignesController < ApplicationController
     # Demande d'affichage des dépenses hors salaires
     if params['data'] == 'toutes_depenses_hors_salaires'
       csv_string = CSV.generate(options) do |csv|
-        ligne = ["Ligne", "Commande soldée ?","Verrou", "Date de demande d'achat", "Compte budgétaire", "Code analytique", "N° de mission ou de commande",
+        ligne = ["Ligne", "Commande soldée ?","Verrou", "Date de demande d'achat", "Compte budgétaire (Dépense)", "Code analytique (Dépense)", "N° de mission ou de commande",
           "Intitulé", "Fournisseur", "Agent", "Montant Engagé","Montant Payé HTR","Montant Payé HT", "Montant Payé TTC", "url"]
         if !@ref_cp.blank?
-          ligne.insert(10, "Date Fac.", "N° Fac.", "Date Mand.", "N° Mand.", "Rub.CP.") 
+          ligne.insert(10, "Date Fac.", "N° Fac.", "Date Mand.", "N° Mand.","Compte budgétaire (Facture)", "Code analytique (Facture)",  "Rub.CP.") 
         elsif @show_factures == "yes"
-          ligne.insert(15, "N° de facture", "Date de facture", "Millesime de facture" ,"Date de  Mand.", "N° Mand.","Fournisseur (mission)", "Justifiable", "Rub.CP.", "Taux TVA", "Payé HTR", "Payé HT", "Payé TTC")
+          ligne.insert(15, "N° de facture", "Date de facture", "Millesime de facture" ,"Date de  Mand.", "N° Mand.","Compte budgétaire (Facture)", "Code analytique (Facture)", "Fournisseur (mission)", "Justifiable", "Rub.CP.", "Taux TVA", "Payé HTR", "Payé HT", "Payé TTC")
         end 
         #Conversion en UTF16 pour Excel (ms-office)
         new_ligne = []
@@ -275,6 +275,8 @@ class AllLignesController < ApplicationController
                 ligne << (facture.millesime.blank? ? "" : date_to_csv(facture.millesime) )
                 ligne << (facture.date_mandatement.blank? ? "" : date_to_csv(facture.date_mandatement) )
                 ligne << facture.numero_mandat
+                ligne << '="'+codingTranslation.iconv(facture.compte_budgetaire)+'"'
+                ligne << '="'+codingTranslation.iconv(facture.code_analytique)+'"'
                 if c.is_a?(DepenseMission)
                   ligne << facture.fournisseur
                 else
@@ -326,6 +328,8 @@ class AllLignesController < ApplicationController
             ligne << codingTranslation.iconv(c.numero_facture)
             ligne << (c.date_mandatement.blank? ? c.date_mandatement : date_to_csv(c.date_mandatement))
             ligne << codingTranslation.iconv(c.numero_mandat)
+            ligne << '="'+codingTranslation.iconv(c.compte_budgetaire)+'"'
+            ligne << '="'+codingTranslation.iconv(c.code_analytique)+'"'
             ligne << codingTranslation.iconv(c.rubrique_comptable.numero_rubrique)
             ligne << depense.montant_engage
             ligne << c.montant_htr
@@ -349,12 +353,12 @@ class AllLignesController < ApplicationController
     # Demande d'affichage des dépenses en fonctionnement ou en équipement ou non ventilées
     if ['fonctionnement', 'equipement', 'non_ventilee'].include? params['data']
       csv_string = CSV.generate(options) do |csv|
-        ligne = ["Ligne", "Commande soldée ?","Verrou", "Date de demande d'achat","Compte budgétaire", "Code analytique", "N° de demande d'achat",
+        ligne = ["Ligne", "Commande soldée ?","Verrou", "Date de demande d'achat","Compte budgétaire (Dépense)", "Code analytique (Dépense)", "N° de demande d'achat",
           "Intitulé", "Fournisseur", "Montant Engagé", "Montant Payé HTR","Montant Payé HT", "Montant Payé TTC", "url"]
         if !@ref_cp.blank?
-          ligne.insert(9, "Date Fac.", "N° Fac.", "Date Mand.", "N° Mand.", "Rub.CP.")
+          ligne.insert(9, "Date Fac.", "N° Fac.", "Date Mand.", "N° Mand.","Compte budgétaire (Facture)", "Code analytique (Facture)",  "Rub.CP.")
         elsif @show_factures == "yes"
-          ligne.insert(14, "N° de facture", "Date de facture", "Millesime de facture" ,"Date de  Mand.", "N° Mand.", "Justifiable", "Rub.CP.", "Taux TVA", "Payé HTR", "Payé HT", "Payé TTC")
+          ligne.insert(14, "N° de facture", "Date de facture", "Millesime de facture" ,"Date de  Mand.", "N° Mand.","Compte budgétaire (Facture)", "Code analytique (Facture)",  "Justifiable", "Rub.CP.", "Taux TVA", "Payé HTR", "Payé HT", "Payé TTC")
         end 
         #Conversion en UTF16 pour Excel (ms-office)
         new_ligne = []
@@ -391,6 +395,8 @@ class AllLignesController < ApplicationController
                 ligne << (facture.millesime.blank? ? "" : date_to_csv(facture.millesime) )
                 ligne << (facture.date_mandatement.blank? ? "" : date_to_csv(facture.date_mandatement) )
                 ligne << facture.numero_mandat
+                ligne << '="'+codingTranslation.iconv(facture.compte_budgetaire)+'"'
+                ligne << '="'+codingTranslation.iconv(facture.code_analytique)+'"'
                 ligne << (facture.justifiable.blank? ? "" : facture.justifiable)
                 ligne << facture.rubrique_comptable.small_intitule
                 ligne << facture.taux_tva
@@ -417,6 +423,8 @@ class AllLignesController < ApplicationController
             ligne << codingTranslation.iconv(c.numero_facture)
             ligne << (c.date_mandatement.blank? ? c.date_mandatement : date_to_csv(c.date_mandatement))
             ligne << codingTranslation.iconv(c.numero_mandat)
+            ligne << '="'+codingTranslation.iconv(c.compte_budgetaire)+'"'
+            ligne << '="'+codingTranslation.iconv(c.code_analytique)+'"'
             ligne << codingTranslation.iconv(c.rubrique_comptable.numero_rubrique)
             ligne << c.send(depense_method_sym).montant_engage
             ligne << c.montant_htr
@@ -432,13 +440,13 @@ class AllLignesController < ApplicationController
     # Demande d'affichage des dépenses en missions
     if params['data'] == 'mission'
       csv_string = CSV.generate(options) do |csv|
-        ligne = ["Ligne", "Commande soldée ?","Verrou", "Date de demande d'achat","Compte budgétaire", "Code analytique", "N° d'OM - Référence",
+        ligne = ["Ligne", "Commande soldée ?","Verrou", "Date de demande d'achat","Compte budgétaire (Dépense)", "Code analytique (Dépense)", "N° d'OM - Référence",
           "Agent", "Date de départ", "Date de retour", "Lieux", "Objet de la mission", "Montant Engagé",
           "Montant Payé HTR","Montant Payé HT", "Montant Payé TTC", "url"]
         if !@ref_cp.blank?
-          ligne.insert(12, "Tiers Réglé", "Date Fac.", "N° Fac.", "Date Mand.", "N° Mand.", "Rub.CP.")
+          ligne.insert(12, "Tiers Réglé", "Date Fac.", "N° Fac.", "Date Mand.", "N° Mand.","Compte budgétaire (Facture)", "Code analytique (Facture)",  "Rub.CP.")
         elsif @show_factures == "yes"
-          ligne.insert(17, "N° de facture", "Date de facture", "Millesime de facture" ,"Date de  Mand.", "N° Mand.", "Justifiable", "Rub.CP.","Tiers Réglé", "Taux TVA", "Payé HTR", "Payé HT", "Payé TTC")
+          ligne.insert(17, "N° de facture", "Date de facture", "Millesime de facture" ,"Date de  Mand.", "N° Mand.","Compte budgétaire (Facture)", "Code analytique (Facture)",  "Justifiable", "Rub.CP.","Tiers Réglé", "Taux TVA", "Payé HTR", "Payé HT", "Payé TTC")
         end 
         #Conversion en UTF16 pour Excel (ms-office)
         new_ligne = []
@@ -476,6 +484,8 @@ class AllLignesController < ApplicationController
                 ligne << (facture.millesime.blank? ? "" : date_to_csv(facture.millesime) )
                 ligne << (facture.date_mandatement.blank? ? "" : date_to_csv(facture.date_mandatement) )
                 ligne << facture.numero_mandat
+                ligne << '="'+codingTranslation.iconv(facture.compte_budgetaire)+'"'
+                ligne << '="'+codingTranslation.iconv(facture.code_analytique)+'"'
                 ligne << (facture.justifiable.blank? ? "" : facture.justifiable)
                 ligne << facture.rubrique_comptable.small_intitule
                 ligne << facture.fournisseur
@@ -505,6 +515,8 @@ class AllLignesController < ApplicationController
             ligne << codingTranslation.iconv(c.numero_facture)
             ligne << (c.date_mandatement.blank? ? c.date_mandatement : date_to_csv(c.date_mandatement))
             ligne << codingTranslation.iconv(c.numero_mandat)
+            ligne << '="'+codingTranslation.iconv(c.compte_budgetaire)+'"'
+            ligne << '="'+codingTranslation.iconv(c.code_analytique)+'"'
             ligne << codingTranslation.iconv(c.rubrique_comptable.numero_rubrique)
             ligne << c.depense_mission.montant_engage
             ligne << c.montant_htr
@@ -520,12 +532,12 @@ class AllLignesController < ApplicationController
     # Demande d'affichage des dépenses en salaire
     if params['data'] == 'salaire'
       csv_string = CSV.generate(options) do |csv|
-        ligne = ["Ligne", "Salaire soldé ?","Verrou","Compte budgétaire","Code analytique", "Agent", "Type de contrat",
+        ligne = ["Ligne", "Salaire soldé ?","Verrou","Compte budgétaire (Dépense)","Code analytique (Dépense)", "Agent", "Type de contrat",
           "Statut", "Date de début", "Date de fin", "Nombre de mois",
           "Coût Mensuel", "Coût Période", "Montant Payé HTR", "Montant Payé",
           "url"]
         if @show_factures == "yes"
-          ligne.insert(16, "N° de mandat", "Date de mandatement", "Millesime" ,"Commentaire", "Payé HTR", "Payé TTC")
+          ligne.insert(16, "N° de mandat", "Date de mandatement", "Millesime" ,"Compte budgétaire (Facture)", "Code analytique (Facture)", "Commentaire", "Payé HTR", "Payé TTC")
         end 
         #Conversion en UTF16 pour Excel (ms-office)
         new_ligne = []
@@ -560,6 +572,8 @@ class AllLignesController < ApplicationController
               ligne << facture.numero_mandat
               ligne << date_to_csv(facture.date_mandatement)
               ligne << (facture.millesime.blank? ? "" : date_to_csv(facture.millesime))
+              ligne << '="'+codingTranslation.iconv(facture.compte_budgetaire)+'"'
+              ligne << '="'+codingTranslation.iconv(facture.code_analytique)+'"'
               ligne << facture.commentaire 
               ligne << facture.montant_htr
               ligne << facture.cout 
@@ -573,12 +587,12 @@ class AllLignesController < ApplicationController
     # Demande d'affichage des dépenses du commun
     if params['data'] == 'commun'
       csv_string = CSV.generate(options) do |csv|
-        ligne = ["Ligne", "Commande soldée ?","Verrou", "Date de demande d'achat","Compte budgétaire","Code analytique", "N° de demande d'achat",
+        ligne = ["Ligne", "Commande soldée ?","Verrou", "Date de demande d'achat","Compte budgétaire (Dépense)","Code analytique  (Dépense)", "N° de demande d'achat",
           "Réf.Budg.", "Intitulé", "Fournisseur", "Montant Engagé","Montant Payé HT",  "Montant Payé TTC", "url"]
         if !@ref_cp.blank?
-          ligne.insert(10, "Date Fac.", "N° Fac.", "Date Mand.", "N° Mand.", "Rub.CP.") 
+          ligne.insert(10, "Date Fac.", "N° Fac.", "Date Mand.", "N° Mand.","Compte budgétaire (Facture)", "Code analytique (Facture)",  "Rub.CP.") 
         elsif @show_factures == "yes"
-          ligne.insert(14, "N° de facture", "Date de facture", "Millesime de facture" ,"Date de  Mand.", "N° Mand.", "Justifiable", "Rub.CP.", "Taux TVA", "Payé HT", "Payé TTC")
+          ligne.insert(14, "N° de facture", "Date de facture", "Millesime de facture" ,"Date de  Mand.", "N° Mand.","Compte budgétaire (Facture)", "Code analytique (Facture)",  "Justifiable", "Rub.CP.", "Taux TVA", "Payé HT", "Payé TTC")
         end 
         #Conversion en UTF16 pour Excel (ms-office)
         new_ligne = []
@@ -613,6 +627,8 @@ class AllLignesController < ApplicationController
                 ligne << (facture.millesime.blank? ? "" : date_to_csv(facture.millesime) )
                 ligne << (facture.date_mandatement.blank? ? "" : date_to_csv(facture.date_mandatement) )
                 ligne << facture.numero_mandat
+                ligne << '="'+codingTranslation.iconv(facture.compte_budgetaire)+'"'
+                ligne << '="'+codingTranslation.iconv(facture.code_analytique)+'"'
                 ligne << (facture.justifiable.blank? ? "" : facture.justifiable)
                 ligne << facture.rubrique_comptable.small_intitule
                 ligne << facture.taux_tva
@@ -637,6 +653,8 @@ class AllLignesController < ApplicationController
             ligne << codingTranslation.iconv(c.numero_facture)
             ligne << (c.date_mandatement.blank? ? "" : date_to_csv(c.date_mandatement))
             ligne << codingTranslation.iconv(c.numero_mandat)
+            ligne << '="'+codingTranslation.iconv(c.compte_budgetaire)+'"'
+            ligne << '="'+codingTranslation.iconv(c.code_analytique)+'"'
             ligne << codingTranslation.iconv(c.rubrique_comptable.numero_rubrique)
             ligne << c.depense_commun.montant_engage
             ligne << c.cout_ht
@@ -1020,8 +1038,6 @@ class AllLignesController < ApplicationController
     @reference            = params['reference'] || ""
     @origine              = params['origine'] || ""
     @commentaire          = params['commentaire'] || ""
-    @compte_budgetaire    = params['compte_budgetaire'] || ""
-    @code_analytique      = params['code_analytique'] || ""
     @lieux                = params['lieux'] || ""
     @agent                = params['agent'] || ""
     @intitule             = params['intitule'] || ""
@@ -1030,6 +1046,18 @@ class AllLignesController < ApplicationController
     @type_contrat         = params['type_contrat'] || ""
     @ref_bud              = params['ref_bud'] || ""
     @ref_cp               = params['ref_cp'] || ""
+    
+    if @ref_cp.blank?
+      @compte_budgetaire    = params['compte_budgetaire'] || ""
+      @code_analytique      = params['code_analytique'] || ""
+      @compte_budg_facture  = ""
+      @code_anal_facture    = ""
+    else
+      @compte_budgetaire    = ""
+      @code_analytique      = ""
+      @compte_budg_facture  = params['compte_budgetaire'] || ""
+      @code_anal_facture    = params['code_analytique'] || ""
+    end
 
     @filtre_mes_projets_checked = false;
     if @filtre_mes_projets and @filtre_mes_projets == 'filtre_projet_active'
@@ -1124,8 +1152,10 @@ class AllLignesController < ApplicationController
       filters.contient @intitule, 'intitule'
       filters.contient @fournisseur, 'fournisseur'
       filters.contient @compte_budgetaire, 'compte_budgetaire'
-      filters.contient @code_analytique, 'code_analytique'
+      filters.contient @code_analytique, 'code_analytique' 
       filters.contient @ref_cp, 'rubrique_comptables.numero_rubrique' unless @ref_cp.blank?
+      
+
       @depenses = prepare_depenses([:ligne, :rubrique_comptables], filters, order)
 
     when 'mission'
@@ -1247,6 +1277,14 @@ class AllLignesController < ApplicationController
           @code_analytique = '%'+@code_analytique+'%'  
           @filter_req+= " AND d.code_analytique like '"+@code_analytique+"'"
         end
+        if !@compte_budg_facture.blank?
+          !@compte_budg_facture = '%'+!@compte_budg_facture+'%'  
+          @filter_req+= " AND f.compte_budgetaire like '"+!@compte_budg_facture+"'"
+        end
+        if @code_anal_facture.blank?
+          @code_anal_facture = '%'+@code_anal_facture+'%'  
+          @filter_req+= " AND f.code_analytique like '"+@code_anal_facture+"'"
+        end
         if !@intitule.blank?
           @intitule = '%'+@intitule+'%'
           @filter_req+= " AND d.intitule like '"+@intitule  +"'"
@@ -1284,7 +1322,7 @@ class AllLignesController < ApplicationController
           [req+" WHERE d.ligne_id IN (?) "+@filter_req,@filtered_lignes_id]
         else
           @ref_cp = '%'+@ref_cp+'%'
-          @filter_req += " AND r.numero_rubrique like '"+@ref_cp+"'"
+          @filter_req += " AND r.numero_rubrique like '"+@ref_cp+"'"          
           req += req_facture + " FROM #{facture_table_name} f"
           req += " LEFT OUTER JOIN #{depense_table_name} d ON d.id = f.#{depense_table_name.chop}_id"
           req += " LEFT OUTER JOIN rubrique_comptables r ON f.rubrique_comptable_id = r.id"
@@ -1376,6 +1414,20 @@ class AllLignesController < ApplicationController
       conditions_literals += " AND ( #{depense_table_name}.millesime LIKE ? \
       OR #{facture_table_name}.millesime LIKE ? )"
       conditions << "%#{@millesime}%" << "%#{@millesime}%"
+      conditions.unshift conditions_literals
+    end
+    #add compte_budgetaire_facture filter
+    if !@compte_budg_facture.blank?
+      conditions_literals = conditions.shift
+      conditions_literals += " AND #{facture_table_name}.compte_budgetaire LIKE ? )"
+      conditions << "%#{!@compte_budg_facture}%" << "%#{!@compte_budg_facture}%"
+      conditions.unshift conditions_literals
+    end
+     #add code_analytique_facture filter
+    if @code_anal_facture.blank?
+      conditions_literals = conditions.shift
+      conditions_literals += " AND #{facture_table_name}.code_analytique LIKE ? )"
+      conditions << "%#{@code_anal_facture}%" << "%#{@code_anal_facture}%"
       conditions.unshift conditions_literals
     end
 

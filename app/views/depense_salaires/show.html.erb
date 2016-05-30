@@ -182,11 +182,19 @@
           <div class="value"><%= french_date facture.date_mandatement %></div>
         </div>
         <% if !facture.millesime.blank? %>
-          <div class='line last clearfix'>
+          <div class='line clearfix'>
             <span class="attribute">Date de service fait (millésime)</span>
             <span class="value"><%= french_date facture.millesime  %></span>
           </div>
         <% end %>
+        <div class="line clearfix">
+          <span class="attribute">Compte Budgétaire</span>
+          <div class="value"><%=simple_format facture.compte_budgetaire %></div>
+        </div>
+        <div class="line last clearfix">
+          <span class="attribute">Code Analytique</span>
+          <div class="value"><%=simple_format facture.code_analytique %></div>
+        </div>
       </div>
       <div class="small-col">
         <div class='line clearfix'>

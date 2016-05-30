@@ -134,6 +134,14 @@
           <span class="attribute">Date de mandatement</span>
           <span class="value"><%= french_date facture.date_mandatement if !facture.date_mandatement.blank? %></span>
         </div>
+        <div class="line clearfix">
+          <span class="attribute">Compte Budgétaire</span>
+          <div class="value"><%=simple_format facture.compte_budgetaire %></div>
+        </div>
+        <div class="line last clearfix">
+          <span class="attribute">Code Analytique</span>
+          <div class="value"><%=simple_format facture.code_analytique %></div>
+        </div>
       </div>
       <div class="small-col">
         <div class='line clearfix'>

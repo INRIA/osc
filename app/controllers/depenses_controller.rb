@@ -13,11 +13,11 @@ class DepensesController < ApplicationController
     if ['fonctionnement', 'equipement', 'non_ventilee'].include? data
       CSV.generate(options) do |csv|
         ligne = ["Commande soldée ?","Verrou", "Date de demande d'achat","Date de millesime", "N° de demande d'achat",
-          "Compte Budgetaire","Code Analytique","Intitulé", "Fournisseur", "Montant Engagé", "Montant Facturé "+@type_montant,
+          "Compte Budgetaire (Dépense)","Code Analytique (Dépense)","Intitulé", "Fournisseur", "Montant Engagé", "Montant Facturé "+@type_montant,
           "Engagé/Payé "+@type_montant]
         #En tête facture
         if @afficher_factures == 'true' 
-          ligne.insert(12, "N° de facture", "Date de facture", "Millesime de facture" ,"Date de  Mand.", "N° Mand.", "Justifiable", "Rub.CP.", "Taux TVA", "Payé HTR", "Payé HT", "Payé TTC")  
+          ligne.insert(12, "N° de facture", "Date de facture", "Millesime de facture" ,"Date de  Mand.", "N° Mand.", "Compte Budgetaire (Facture)","Code Analytique (Facture)","Justifiable", "Rub.CP.", "Taux TVA", "Payé HTR", "Payé HT", "Payé TTC")  
         end
          #Conversion en UTF16 pour Excel (ms-office)
         new_ligne = []
@@ -56,6 +56,8 @@ class DepensesController < ApplicationController
               ligne << (facture.millesime.blank? ? "" : date_to_csv(facture.millesime) )
               ligne << (facture.date_mandatement.blank? ? "" : date_to_csv(facture.date_mandatement) )
               ligne << facture.numero_mandat
+              ligne << '="'+codingTranslation.iconv(facture.compte_budgetaire)+'"'
+              ligne << '="'+codingTranslation.iconv(facture.code_analytique)+'"'
               ligne << (facture.justifiable.blank? ? "" : facture.justifiable)
               ligne << facture.rubrique_comptable.small_intitule
               ligne << facture.taux_tva
@@ -70,10 +72,10 @@ class DepensesController < ApplicationController
     elsif data=='mission'
       CSV.generate(options) do |csv|
         ligne = ["Commande soldée ?","Verrou", "Date de demande d'achat","Date de millesime", "N° d'OM - Référence",
-          "Compte Budgetaire","Code Analytique","Agent", "Date de départ", "Date de retour", "Lieux", 
+          "Compte Budgetaire (Dépense)","Code Analytique (Dépense)","Agent", "Date de départ", "Date de retour", "Lieux", 
           "Objet de la mission", "Montant Engagé","Montant Facturé "+@type_montant,"Engagé/Payé "+@type_montant]
         if @afficher_factures == 'true'
-          ligne.insert(15, "N° de facture", "Date de facture", "Millesime de facture" ,"Date de  Mand.", "N° Mand.", "Justifiable", "Rub.CP.","Tiers Réglé", "Taux TVA", "Payé HTR", "Payé HT", "Payé TTC")
+          ligne.insert(15, "N° de facture", "Date de facture", "Millesime de facture" ,"Date de  Mand.", "N° Mand.","Compte Budgetaire (Facture)","Code Analytique (Facture)", "Justifiable", "Rub.CP.","Tiers Réglé", "Taux TVA", "Payé HTR", "Payé HT", "Payé TTC")
         end
         #Conversion en UTF16 pour Excel (ms-office)
         new_ligne = []
@@ -112,6 +114,8 @@ class DepensesController < ApplicationController
               ligne << (facture.millesime.blank? ? "" : date_to_csv(facture.millesime) )
               ligne << (facture.date_mandatement.blank? ? "" : date_to_csv(facture.date_mandatement) )
               ligne << facture.numero_mandat
+              ligne << '="'+codingTranslation.iconv(facture.compte_budgetaire)+'"'
+              ligne << '="'+codingTranslation.iconv(facture.code_analytique)+'"'
               ligne << (facture.justifiable.blank? ? "" : facture.justifiable)
               ligne << facture.rubrique_comptable.small_intitule
               ligne << facture.fournisseur
@@ -126,11 +130,11 @@ class DepensesController < ApplicationController
       end
     elsif data=='salaire'
       CSV.generate(options) do |csv|
-        ligne = ["Salaire soldé ?","Verrou", "Compte Budgetaire","Code Analytique","Agent", 
+        ligne = ["Salaire soldé ?","Verrou", "Compte Budgetaire (Dépense)","Code Analytique (Dépense)","Agent", 
           "Type de contrat","Statut", "Date de début", "Date de fin", "Nombre de mois",
           "Coût Mensuel", "Coût Période", "Montant Payé HTR", "Montant Payé"]
         if @afficher_factures == 'true'
-          ligne.insert(14, "N° de mandat", "Date de mandatement", "Millesime" ,"Commentaire", "Payé HTR", "Payé TTC")
+          ligne.insert(14, "N° de mandat", "Date de mandatement", "Millesime" ,"Compte Budgetaire (Facture)","Code Analytique (Facture)","Commentaire", "Payé HTR", "Payé TTC")
         end
         #Conversion en UTF16 pour Excel (ms-office)
         new_ligne = []
@@ -163,6 +167,8 @@ class DepensesController < ApplicationController
               ligne << facture.numero_mandat
               ligne << date_to_csv(facture.date_mandatement)
               ligne << (facture.millesime.blank? ? "" : date_to_csv(facture.millesime))
+              ligne << '="'+codingTranslation.iconv(facture.compte_budgetaire)+'"'
+              ligne << '="'+codingTranslation.iconv(facture.code_analytique)+'"'
               ligne << facture.commentaire 
               ligne << facture.montant_htr
               ligne << facture.cout 
@@ -174,10 +180,10 @@ class DepensesController < ApplicationController
     elsif data =='commun'
       CSV.generate(options) do |csv|
         ligne = ["Commande soldée ?","Verrou", "Date de demande d'achat","Date de millesime", "N° de demande d'achat",
-            "Compte Budgetaire","Code Analytique","Réf.Budg.", "Intitulé", "Fournisseur", "Montant Engagé",
+            "Compte Budgetaire (Dépense)","Code Analytique (Dépense)","Réf.Budg.", "Intitulé", "Fournisseur", "Montant Engagé",
             "Montant Facturé "+@type_montant,"Engagé/Payé "+@type_montant]
         if @afficher_factures == 'true'
-          ligne.insert(12, "N° de facture", "Date de facture", "Millesime de facture" ,"Date de  Mand.", "N° Mand.", "Justifiable", "Rub.CP.", "Taux TVA", "Payé HT", "Payé TTC")
+          ligne.insert(12, "N° de facture", "Date de facture", "Millesime de facture" ,"Date de  Mand.", "N° Mand.","Compte Budgetaire (Facture)","Code Analytique (Facture)", "Justifiable", "Rub.CP.", "Taux TVA", "Payé HT", "Payé TTC")
         end
         #Conversion en UTF16 pour Excel (ms-office)
         new_ligne = []
@@ -214,6 +220,8 @@ class DepensesController < ApplicationController
               ligne << (facture.millesime.blank? ? "" : date_to_csv(facture.millesime) )
               ligne << (facture.date_mandatement.blank? ? "" : date_to_csv(facture.date_mandatement) )
               ligne << facture.numero_mandat
+              ligne << '="'+codingTranslation.iconv(facture.compte_budgetaire)+'"'
+              ligne << '="'+codingTranslation.iconv(facture.code_analytique)+'"'
               ligne << (facture.justifiable.blank? ? "" : facture.justifiable)
               ligne << facture.rubrique_comptable.small_intitule
               ligne << facture.taux_tva
