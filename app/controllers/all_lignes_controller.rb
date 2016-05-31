@@ -1272,7 +1272,7 @@ class AllLignesController < ApplicationController
           @filter_req+= " AND d.code_analytique like '"+@code_analytique+"'"
         end
         if !@compte_budg_facture.blank?
-          !@compte_budg_facture = '%'+!@compte_budg_facture+'%'  
+          @compte_budg_facture = '%'+@compte_budg_facture+'%'  
           @filter_req+= " AND f.compte_budgetaire like '"+!@compte_budg_facture+"'"
         end
         if @code_anal_facture.blank?
