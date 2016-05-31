@@ -35,7 +35,7 @@
         <p <%= "class='disabled'" if @non_modifiable_facture.include?('compte_budgetaire')%>>
           <label>Compte Budgétaire</label><br />
           <% options = ({:disabled => true} if @non_modifiable_facture.include?('compte_budgetaire')) || {} %>
-          <%= text_field 'depense_fonctionnement_facture[]', :compte_budgetaire, options %>
+          <%= text_field 'depense_salaire_facture[]', :compte_budgetaire, options %>
         </p>
       </div>
       <div class="col-2-of-2">
@@ -87,7 +87,7 @@
         <p <%= "class='disabled'" if @non_modifiable_facture.include?('code_analytique')%>>
           <label>Code Analytique</label><br />
           <% options = ({:disabled => true} if @non_modifiable_facture.include?('code_analytique')) || {} %>
-          <%= text_field 'depense_fonctionnement_facture[]', :code_analytique, options %>
+          <%= text_field 'depense_salaire_facture[]', :code_analytique, options %>
         </p>
       </div>
     </div>
