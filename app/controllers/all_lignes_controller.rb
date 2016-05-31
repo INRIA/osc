@@ -1140,8 +1140,6 @@ class AllLignesController < ApplicationController
       filters.contient @reference, 'reference'
       filters.contient @intitule, 'depense_communs.intitule'
       filters.contient @fournisseur, 'fournisseur'
-      filters.contient @compte_budgetaire, 'compte_budgetaire'
-      filters.contient @code_analytique, 'code_analytique'
       filters.contient @ref_bud, 'budgetaire_references.code' unless @ref_bud.blank?
       filters.contient @ref_cp, 'rubrique_comptables.numero_rubrique' unless @ref_cp.blank?
       @depenses = prepare_depenses([:ligne, :budgetaire_reference], filters, order)
@@ -1151,8 +1149,6 @@ class AllLignesController < ApplicationController
       filters.contient @reference, 'reference'
       filters.contient @intitule, 'intitule'
       filters.contient @fournisseur, 'fournisseur'
-      filters.contient @compte_budgetaire, 'compte_budgetaire'
-      filters.contient @code_analytique, 'code_analytique' 
       filters.contient @ref_cp, 'rubrique_comptables.numero_rubrique' unless @ref_cp.blank?
       
 
@@ -1166,8 +1162,6 @@ class AllLignesController < ApplicationController
       filters.contient @annee3, 'date_retour'
       filters.contient @agent, 'agent'
       filters.contient @lieux, 'lieux'
-      filters.contient @compte_budgetaire, 'compte_budgetaire'
-      filters.contient @code_analytique, 'code_analytique'
       filters.contient @ref_cp, 'rubrique_comptables.numero_rubrique' unless @ref_cp.blank?
       @depenses = prepare_depenses([:ligne, :rubrique_comptables], filters, order)
 
@@ -1416,11 +1410,26 @@ class AllLignesController < ApplicationController
       conditions << "%#{@millesime}%" << "%#{@millesime}%"
       conditions.unshift conditions_literals
     end
+
+    #add compte_budgetaire_depense filter
+    if !@compte_budgetaire.blank?
+      conditions_literals = conditions.shift
+      conditions_literals += " AND #{depense_table_name}.compte_budgetaire LIKE ? )"
+      conditions << "%#{@compte_budgetaire}%" << "%#{@compte_budgetaire}%"
+      conditions.unshift conditions_literals
+    end
     #add compte_budgetaire_facture filter
     if !@compte_budg_facture.blank?
       conditions_literals = conditions.shift
       conditions_literals += " AND #{facture_table_name}.compte_budgetaire LIKE ? )"
       conditions << "%#{@compte_budg_facture}%" << "%#{@compte_budg_facture}%"
+      conditions.unshift conditions_literals
+    end
+     #add code_analytique_depense filter
+    if !@code_analytique.blank?
+      conditions_literals = conditions.shift
+      conditions_literals += " AND #{depense_table_name}.code_analytique LIKE ? )"
+      conditions << "%#{@code_analytique}%" << "%#{@code_analytique}%"
       conditions.unshift conditions_literals
     end
      #add code_analytique_facture filter
