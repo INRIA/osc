@@ -1,4 +1,4 @@
-class AddCodeAnalytiqueDepensesCredits < ActiveRecord::Migration
+class AddCodeAnalytiqueFactures < ActiveRecord::Migration
   def self.up
     add_column :depense_non_ventilee_factures, :code_analytique, :string, :default => ''
     add_column :depense_fonctionnement_factures, :code_analytique, :string, :default => ''

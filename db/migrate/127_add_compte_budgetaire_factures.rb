@@ -1,4 +1,4 @@
-class AddCompteBudgetaireDepensesCredits < ActiveRecord::Migration
+class AddCompteBudgetaireFactures < ActiveRecord::Migration
   def self.up
     add_column :depense_non_ventilee_factures, :compte_budgetaire, :string, :default => ''
     add_column :depense_fonctionnement_factures, :compte_budgetaire, :string, :default => ''
