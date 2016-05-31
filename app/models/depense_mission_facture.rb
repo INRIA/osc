@@ -33,7 +33,7 @@ class DepenseMissionFacture < ActiveRecord::Base
   before_validation :compute_cout
    
   attr_accessible :date, :millesime, :numero_facture, :commentaire, :numero_mandat, :date_mandatement, :fournisseur, 
-                  :cout_ht, :taux_tva, :montant_htr, :justifiable, :rubrique_comptable_id
+                  :cout_ht, :taux_tva, :montant_htr, :justifiable, :rubrique_comptable_id, :code_analytique, :compte_budgetaire
         
   def update_depense
     self.updated_by = User.current_user.id

@@ -41,7 +41,7 @@ class DepenseEquipementFacture < ActiveRecord::Base
   attr_accessible :date, :millesime, :numero_facture, :commentaire, :numero_mandat, :date_mandatement, 
                   :cout_ht, :taux_tva, :montant_htr, :amortissement, :duree_amortissement, :date_amortissement_debut, 
                   :date_amortissement_fin, :amortissement_is_in_auto_mode, :taux_amortissement, :montant_justifiable_htr, 
-                  :justifiable, :rubrique_comptable_id
+                  :justifiable, :rubrique_comptable_id, :code_analytique, :compte_budgetaire
        
   def update_depense
     self.updated_by = User.current_user.id

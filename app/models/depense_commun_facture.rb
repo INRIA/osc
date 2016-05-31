@@ -29,7 +29,7 @@ class DepenseCommunFacture < ActiveRecord::Base
   before_validation :compute_cout_ttc
                 
   attr_accessible  :date,:millesime, :numero_facture, :commentaire, :numero_mandat, :date_mandatement, :cout_ht, 
-                   :taux_tva, :justifiable, :rubrique_comptable_id
+                   :taux_tva, :justifiable, :rubrique_comptable_id, :code_analytique, :compte_budgetaire
   
   def update_depense
     self.updated_by = User.current_user.id

@@ -24,7 +24,7 @@ class DepenseSalaireFacture < ActiveRecord::Base
                 
   after_destroy :update_depense_destroy
   
-  attr_accessible :millesime,:cout, :montant_htr, :commentaire, :numero_mandat, :date_mandatement
+  attr_accessible :millesime,:cout, :montant_htr, :commentaire, :numero_mandat, :date_mandatement, :code_analytique, :compte_budgetaire
   
   def update_depense
     self.updated_by = User.current_user.id
