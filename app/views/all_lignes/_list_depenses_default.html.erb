@@ -5,10 +5,13 @@
     <% add = '' %>
     <% add = 's' if @depenses.total_entries > 1  %>
     <%- if params['data'] == "fonctionnement" -%>
+      <%= depenseTable = 'depense_fonctionnements' %>
       <%= @depenses.total_entries %> dépense<%= add %> en fonctionnement trouvée<%= add %>
     <%- elsif params['data'] == "equipement" -%>
+      <%= depenseTable = 'depense_equipements' %>
       <%= @depenses.total_entries %> dépense<%= add %> en équipement trouvée<%= add %>
     <%- else -%>
+      <%= depenseTable = 'depense_non_ventilees' %>
       <%= @depenses.total_entries %> dépense<%= add %> non ventilée<%= add %> trouvée<%= add %>
     <%- end -%>
   </div>
@@ -43,13 +46,13 @@
       	</a>
       </th>
       <th>
-        <a href="" onclick="tableOrderBy('compte_budgetaire');return false;"
+        <a href="" onclick="tableOrderBy(depenseTable+'_.compte_budgetaire');return false;"
            <% if @order_value == 'compte_budgetaire' %> <%= "class='"+@order_type+"'" %><% end %>>
           Compte Budg.
         </a>
       </th>
       <th>
-        <a href="" onclick="tableOrderBy('code_analytique');return false;"
+        <a href="" onclick="tableOrderBy(depenseTable+'_.code_analytique');return false;"
            <% if @order_value == 'code_analytique' %> <%= "class='"+@order_type+"'" %><% end %>>
           Code Ana.
         </a>
