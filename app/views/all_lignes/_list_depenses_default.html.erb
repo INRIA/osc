@@ -5,13 +5,13 @@
     <% add = '' %>
     <% add = 's' if @depenses.total_entries > 1  %>
     <%- if params['data'] == "fonctionnement" -%>
-      <%= depenseTable = 'depense_fonctionnements' %>
+      <% depenseTable = 'depense_fonctionnements' %>
       <%= @depenses.total_entries %> dépense<%= add %> en fonctionnement trouvée<%= add %>
     <%- elsif params['data'] == "equipement" -%>
-      <%= depenseTable = 'depense_equipements' %>
+      <% depenseTable = 'depense_equipements' %>
       <%= @depenses.total_entries %> dépense<%= add %> en équipement trouvée<%= add %>
     <%- else -%>
-      <%= depenseTable = 'depense_non_ventilees' %>
+      <% depenseTable = 'depense_non_ventilees' %>
       <%= @depenses.total_entries %> dépense<%= add %> non ventilée<%= add %> trouvée<%= add %>
     <%- end -%>
   </div>
