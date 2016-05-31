@@ -46,13 +46,13 @@
       	</a>
       </th>
       <th>
-        <a href="" onclick="tableOrderBy(depenseTable+'_.compte_budgetaire');return false;"
+        <a href="" onclick="tableOrderBy('<%= depenseTable %>_.compte_budgetaire');return false;"
            <% if @order_value == 'compte_budgetaire' %> <%= "class='"+@order_type+"'" %><% end %>>
           Compte Budg.
         </a>
       </th>
       <th>
-        <a href="" onclick="tableOrderBy(depenseTable+'_.code_analytique');return false;"
+        <a href="" onclick="tableOrderBy('<%= depenseTable %>_.code_analytique');return false;"
            <% if @order_value == 'code_analytique' %> <%= "class='"+@order_type+"'" %><% end %>>
           Code Ana.
         </a>
