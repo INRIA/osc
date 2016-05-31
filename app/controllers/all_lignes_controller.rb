@@ -303,6 +303,7 @@ class AllLignesController < ApplicationController
             elsif c.is_a?(DepenseMissionFacture)
               depense = c.depense_mission
             end
+         
             ligne = []
             ligne << codingTranslation.iconv(depense.ligne.nom)
             ligne << boolean_to_csv(depense.commande_solde)
@@ -1299,7 +1300,7 @@ class AllLignesController < ApplicationController
         end
           
         req ="SELECT d.id,d.ligne_id,d.intitule,d.reference,d.compte_budgetaire,d.code_analytique,d.date_commande,d.montant_engage,d.commande_solde,d.montant_paye,d.millesime,d.verif,d.verrou"
-        req_facture =" ,f.id,f.#{depense_table_name.chop}_id,f.date,f.date_mandatement,f.rubrique_comptable_id,f.numero_facture, f.millesime,f.numero_mandat,f.montant_htr,f.cout_ht,f.cout_ttc, r.numero_rubrique"
+        req_facture =" ,f.id,f.#{depense_table_name.chop}_id,f.date,f.date_mandatement,f.rubrique_comptable_id,f.numero_facture, f.millesime,f.numero_mandat,f.compte_budgetaire, f.code_analytique, f.montant_htr,f.cout_ht,f.cout_ttc, r.numero_rubrique"
         if depense_table_name == 'depense_missions'
           req +=',d.agent'
           req_facture += ",f.fournisseur"
