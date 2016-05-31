@@ -1414,28 +1414,28 @@ class AllLignesController < ApplicationController
     #add compte_budgetaire_depense filter
     if !@compte_budgetaire.blank?
       conditions_literals = conditions.shift
-      conditions_literals += " AND #{depense_table_name}.compte_budgetaire LIKE ? )"
+      conditions_literals += " AND #{depense_table_name}.compte_budgetaire LIKE ? "
       conditions << "%#{@compte_budgetaire}%" << "%#{@compte_budgetaire}%"
       conditions.unshift conditions_literals
     end
     #add compte_budgetaire_facture filter
     if !@compte_budg_facture.blank?
       conditions_literals = conditions.shift
-      conditions_literals += " AND #{facture_table_name}.compte_budgetaire LIKE ? )"
+      conditions_literals += " AND #{facture_table_name}.compte_budgetaire LIKE ? "
       conditions << "%#{@compte_budg_facture}%" << "%#{@compte_budg_facture}%"
       conditions.unshift conditions_literals
     end
      #add code_analytique_depense filter
     if !@code_analytique.blank?
       conditions_literals = conditions.shift
-      conditions_literals += " AND #{depense_table_name}.code_analytique LIKE ? )"
+      conditions_literals += " AND #{depense_table_name}.code_analytique LIKE ? "
       conditions << "%#{@code_analytique}%" << "%#{@code_analytique}%"
       conditions.unshift conditions_literals
     end
      #add code_analytique_facture filter
     if !@code_anal_facture.blank?
       conditions_literals = conditions.shift
-      conditions_literals += " AND #{facture_table_name}.code_analytique LIKE ? )"
+      conditions_literals += " AND #{facture_table_name}.code_analytique LIKE ? "
       conditions << "%#{@code_anal_facture}%" << "%#{@code_anal_facture}%"
       conditions.unshift conditions_literals
     end
