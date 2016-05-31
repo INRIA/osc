@@ -1420,11 +1420,11 @@ class AllLignesController < ApplicationController
     if !@compte_budg_facture.blank?
       conditions_literals = conditions.shift
       conditions_literals += " AND #{facture_table_name}.compte_budgetaire LIKE ? )"
-      conditions << "%#{!@compte_budg_facture}%" << "%#{!@compte_budg_facture}%"
+      conditions << "%#{@compte_budg_facture}%" << "%#{@compte_budg_facture}%"
       conditions.unshift conditions_literals
     end
      #add code_analytique_facture filter
-    if @code_anal_facture.blank?
+    if !@code_anal_facture.blank?
       conditions_literals = conditions.shift
       conditions_literals += " AND #{facture_table_name}.code_analytique LIKE ? )"
       conditions << "%#{@code_anal_facture}%" << "%#{@code_anal_facture}%"
