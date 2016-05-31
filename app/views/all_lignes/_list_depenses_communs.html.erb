@@ -43,13 +43,13 @@
         </a>
       </th>
       <th>
-        <a href="" onclick="tableOrderBy('code_analytique');return false;"
+        <a href="" onclick="tableOrderBy('depense_communs.code_analytique');return false;"
            <% if @order_value == 'code_analytique' %> <%= "class='"+@order_type+"'" %><% end %>>
           Code Ana.
         </a>
       </th>
       <th>
-      	<a href="" onclick="tableOrderBy('budgetaire_reference_id');return false;"
+      	<a href="" onclick="tableOrderBy('depense_communs.budgetaire_reference_id');return false;"
       	   <% if @order_value == 'budgetaire_reference_id' %> <%= "class='"+@order_type+"'" %><% end %>>
       	  Réf. Budg.
       	</a>
