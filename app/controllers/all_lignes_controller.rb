@@ -1275,7 +1275,7 @@ class AllLignesController < ApplicationController
           @compte_budg_facture = '%'+@compte_budg_facture+'%'  
           @filter_req+= " AND f.compte_budgetaire like '"+@compte_budg_facture+"'"
         end
-        if @code_anal_facture.blank?
+        if !@code_anal_facture.blank?
           @code_anal_facture = '%'+@code_anal_facture+'%'  
           @filter_req+= " AND f.code_analytique like '"+@code_anal_facture+"'"
         end
