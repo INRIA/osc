@@ -84,15 +84,13 @@
                      options_for_rubrique_comptables(RubriqueComptable.find(:all, :order => 'numero_rubrique')),
                      {} %>
         </p>
-         <p <%= "class='disabled'" if @non_modifiable_facture.include?('compte_budgetaire')%>>
+         <p>
           <label>Compte Budgétaire</label><br />
-          <% options = ({:disabled => true} if @non_modifiable_facture.include?('compte_budgetaire')) || {} %>
-          <%= text_field 'depense_commun_facture[]', :compte_budgetaire, options %>
+          <%= text_field 'depense_commun_facture[]', :compte_budgetaire %>
         </p>
-        <p <%= "class='disabled'" if @non_modifiable_facture.include?('code_analytique')%>>
+        <p>
           <label>Code Analytique</label><br />
-          <% options = ({:disabled => true} if @non_modifiable_facture.include?('code_analytique')) || {} %>
-          <%= text_field 'depense_commun_facture[]', :code_analytique, options %>
+          <%= text_field 'depense_commun_facture[]', :code_analytique %>
         </p>
       </div>
     </div>
