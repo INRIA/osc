@@ -190,7 +190,7 @@
 
 
 <div id="list">
-  <%- if @index=true -%>
+  <%- if @index == true -%>
     <%= render :partial => 'saved_param' %>
     <p>Merci de s&eacute;lectionner ci-dessus vos crit&egrave;res et de lancer la recherche.</p>
   <%- elsif params['data'].nil? -%>
