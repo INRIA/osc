@@ -98,13 +98,35 @@ class User < ActiveRecord::Base
         flag = false
         port = ldap["port"]
         host = ldap["host"]
+        base = ldap["base"]
+	auth = ldap["auth"]
+	if auth == 1
+	  binddn = ldap["binddn"]
+	  bindpw = ldap["bindpw"]
+	end
+
         if port == 389
-          conn = Net::LDAP.new(:host=>host, :port=>port)
+	  if auth == 0
+            conn = Net::LDAP.new(:host=>host, :port=>port)
+	  else
+            conn = Net::LDAP.new(:host=>host, :port=>port, :base=>base, :auth => {
+           		:method => :simple,
+           		:username => binddn,
+           		:password => bindpw }
+	    )
+	  end
         else
-          conn = Net::LDAP.new(:host=>host, :port=>port, :encryption => :simple_tls)
+	  if auth == 0
+            conn = Net::LDAP.new(:host=>host, :port=>port, :encryption => :simple_tls)
+	  else
+            conn = Net::LDAP.new(:host=>host, :port=>port, :encryption => :simple_tls, :base=>base, :auth => {
+           		:method => :simple,
+           		:username => binddn,
+           		:password => bindpw }
+	    )
+	  end
         end
         begin
-          base = ldap["base"]
           if ldap["type"] == 'ildap INRIA'
              
             if conn.bind_as(:base => base,:filter =>"(inriaLogin=#{login})",:password => password) 
