@@ -77,14 +77,42 @@ class UsersController < ApplicationController
         host = ldap["host"]
         base = ldap["base"]
         port = ldap["port"]
+        auth = ldap["auth"]
+       if auth == 1
+          binddn = ldap["binddn"]
+          bindpw = ldap["bindpw"]
+        end
+
         filter = Net::LDAP::Filter.eq("sn",@research[:nom]+'*')        
         begin        
           
-          if port == 389
+        if port == 389
+          if auth == 0
             conn = Net::LDAP.new(:host=>host, :port=>port)
           else
-            conn = Net::LDAP.new(:host=>host, :port=>port, :encryption => :simple_tls)
+            conn = Net::LDAP.new(:host=>host, :port=>port, :auth => {
+                        :method => :simple,
+                        :username => binddn,
+                        :password => bindpw }
+            )
           end
+        else
+          if auth == 0
+            conn = Net::LDAP.new(:host=>host, :port=>port, :encryption => :simple_tls)
+          else
+            conn = Net::LDAP.new(:host=>host, :port=>port, :encryption => :simple_tls, :auth => {
+                        :method => :simple,
+                        :username => binddn,
+                        :password => bindpw }
+            )
+          end
+        end
+
+          #if port == 389
+          #  conn = Net::LDAP.new(:host=>host, :port=>port)
+          #else
+          #  conn = Net::LDAP.new(:host=>host, :port=>port, :encryption => :simple_tls)
+          #end
           res["results"] = conn.search(:base => base, :filter => filter)
           res["flag"]=true
           
