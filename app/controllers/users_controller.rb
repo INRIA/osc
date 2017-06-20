@@ -529,7 +529,8 @@ class UsersController < ApplicationController
           end
         }
       else
-        format.html { render :action => "edit"}
+        flash[:notice] = "Les paramètres saisies ne sont pas valides! Aucune modification n'a été enregistrée."
+        format.html { redirect_to :action => "edit"}
       end
     end
   end
