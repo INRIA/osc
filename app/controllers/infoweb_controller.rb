@@ -201,41 +201,49 @@ def lignes
 
        elsif !params[:laboratoire].nil?
 				 nom_labo = params[:laboratoire].upcase
-				 @lignes = Ligne.find_by_sql(["SELECT l.id, l.nom, trim(substring_index(p.nom,': 07RECH',1)) as 'projet', cl.date_fin_depenses as 'datc'
-						FROM lignes l, sous_contrats ss, projets p, contrats c left outer join clotures cl on c.id = cl.contrat_id 
+				 @lignes = Ligne.find_by_sql(["SELECT l.id, l.nom, trim(substring_index(p.nom,': 07RECH',1)) as 'projet', cl.date_fin_depenses as 'datc',
+            n.numero_ligne_budgetaire
+						FROM lignes l, sous_contrats ss, projets p, contrats c left outer join clotures cl on c.id = cl.contrat_id, notifications n 
 						WHERE l.sous_contrat_id  = ss.id
 							AND ss.contrat_id = c.id
               AND c.verrou = 'Aucun'
+              AND c.id = n.contrat_id
 							AND ss.entite_type = 'Projet'
 							AND ss.entite_id = p.id
 							AND ss.entite_id IN ( SELECT projet_id from laboratoire_subscriptions lb, laboratoires b
 																		where lb.laboratoire_id = b.id AND b.nom=?)
 						UNION
-						SELECT l.id, l.nom, trim(substring_index(p.nom,': 07RECH',1)) as 'projet', cl.date_fin_depenses as 'datc'
-						FROM lignes l, sous_contrats ss, projets p, contrats c left outer join clotures cl on c.id = cl.contrat_id 
+						SELECT l.id, l.nom, trim(substring_index(p.nom,': 07RECH',1)) as 'projet', cl.date_fin_depenses as 'datc',
+            n.numero_ligne_budgetaire
+						FROM lignes l, sous_contrats ss, projets p, contrats c left outer join clotures cl on c.id = cl.contrat_id, notifications n 
 						WHERE l.sous_contrat_id  = ss.id
 							AND ss.contrat_id = c.id
               AND c.verrou = 'Aucun'
+              AND c.id = n.contrat_id
 							AND ss.entite_type = 'Projet'
 							AND ss.entite_id = p.id
 							AND ss.entite_id IN (SELECT projet_id FROM departement_subscriptions ds, departements d, laboratoires b
 									WHERE ds.departement_id = d.id and d.laboratoire_id = b.id and b.nom = ?)
 						UNION
-						SELECT l.id, l.nom, trim(substring_index(d.nom,': 07RECH',1)) as 'projet', cl.date_fin_depenses as 'datc'
-						FROM lignes l, sous_contrats ss, contrats c left outer join clotures cl on c.id = cl.contrat_id , departements d, laboratoires b
+						SELECT l.id, l.nom, trim(substring_index(d.nom,': 07RECH',1)) as 'projet', cl.date_fin_depenses as 'datc',
+            n.numero_ligne_budgetaire
+						FROM lignes l, sous_contrats ss, contrats c left outer join clotures cl on c.id = cl.contrat_id , departements d, laboratoires b, notifications n 
 						WHERE l.sous_contrat_id  = ss.id
 							AND ss.contrat_id = c.id
               AND c.verrou = 'Aucun'
-							AND ss.entite_type = 'Departement'
+              AND c.id = n.contrat_id
+              AND ss.entite_type = 'Departement'
 							AND ss.entite_id = d.id
 							AND d.laboratoire_id = b.id
 							AND b.nom=?
 						UNION
-						SELECT l.id, l.nom, '#{nom_labo}' as 'projet', cl.date_fin_depenses as 'datc'
-						FROM lignes l, sous_contrats ss, projets p, contrats c left outer join clotures cl on c.id = cl.contrat_id , laboratoires b
+						SELECT l.id, l.nom, '#{nom_labo}' as 'projet', cl.date_fin_depenses as 'datc',
+            n.numero_ligne_budgetaire
+						FROM lignes l, sous_contrats ss, projets p, contrats c left outer join clotures cl on c.id = cl.contrat_id , laboratoires b, notifications n 
 						WHERE l.sous_contrat_id  = ss.id
 							AND ss.contrat_id = c.id
               AND c.verrou = 'Aucun'
+              AND c.id = n.contrat_id
 							AND ss.entite_type = 'Laboratoire'
 							AND ss.entite_id = b.id AND b.nom=?;",nom_labo,nom_labo,nom_labo,nom_labo])
 
