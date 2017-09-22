@@ -706,6 +706,7 @@ class AllLignesController < ApplicationController
     end
     # On va différencier les contrats du commun
     @contrats_dotation_for_select = []
+    @contrats_classic_for_select = []
     @contrats_for_select = [""]
     @ids_contrats_for_select= Array.new
     @ids_contrats_dotation_for_select = Array.new
@@ -713,9 +714,9 @@ class AllLignesController < ApplicationController
       @contrats_for_select_all.each {|c|
         if c.contrat_type_id.to_i == ID_CONTRAT_DOTATION
           @contrats_dotation_for_select << c
-          @contrats_for_select_all.delete(c)
           @ids_contrats_dotation_for_select << c.id
         else
+          @contrats_classic_for_select << c
           @ids_contrats_for_select << c.id
         end
       }
@@ -736,7 +737,7 @@ class AllLignesController < ApplicationController
       
       @departements_for_select.insert(0,"")
       
-      @contrats_for_select      = [""]+@contrats_for_select_all.collect{ |c| c.acronyme+(c.num_contrat_etab.to_s.blank? ? "" : c.num_contrat_etab.to_s.gsub(/(^[\s]*)/,' N° \1') )}
+      @contrats_for_select      = [""]+@contrats_classic_for_select.collect{ |c| c.acronyme+(c.num_contrat_etab.to_s.blank? ? "" : c.num_contrat_etab.to_s.gsub(/(^[\s]*)/,' N° \1') )}
       @contrats_dotation_for_select = [""]+@contrats_dotation_for_select.collect{|c|c.acronyme+(c.num_contrat_etab.to_s.blank? ? "" : c.num_contrat_etab.to_s.gsub(/(^[\s]*)/,' N° \1') )} if @contrats_dotation_for_select.size > 0
     end
     
