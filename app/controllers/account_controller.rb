@@ -22,10 +22,10 @@ class AccountController < ApplicationController
       if logged_in?
         if params['remember_me'] == "on"
           self.current_user.remember_me
-          cookies[:auth_token] = { :value => self.current_user.remember_token , :expires => self.current_user.remember_token_expires_at }
+          cookies[:auth_token] = { :value => self.current_user.remember_token , :expires => self.current_user.remember_token_expires_at,:httponly => true  }
         end
         if params['style_bis'] == "on"
-          cookies[:style]= CHOIX_STYLE
+          cookies[:style]= { :value => CHOIX_STYLE, :httponly => true }
         else
           cookies[:style]=nil
         end
