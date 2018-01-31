@@ -25,7 +25,7 @@ class AccountController < ApplicationController
           cookies[:auth_token] = { :value => self.current_user.remember_token , :expires => self.current_user.remember_token_expires_at,:httponly => true  }
         end
         if params['style_bis'] == "on"
-          cookies[:style]= HOIX_STYLE
+          cookies[:style]= CHOIX_STYLE
         else
           cookies[:style]=nil
         end
