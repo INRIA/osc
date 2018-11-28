@@ -94,9 +94,9 @@ class Ligne < ActiveRecord::Base
               query_where_string +="("
             end            
             if equipe_iterator == equipe_research_array.length
-              query_where_string += "p_equipe_research.nom like ? or "
+              query_where_string += "p_equipe_research.nom like ? ) "
             else
-              query_where_string += "p_equipe_research.nom like ? ) "  
+              query_where_string += "p_equipe_research.nom like ? or "  
             end
             query.push "%"+equipe+"%"  
             equipe_iterator += 1
