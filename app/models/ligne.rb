@@ -44,6 +44,8 @@ class Ligne < ActiveRecord::Base
       end
       if (equipe_research == "Equipe") or (equipe_research == "") or (equipe_research == "%%")
         equipe_research = nil
+      elsif equipe_research.include? " + "
+         equipe_research_array = equipe_research.split(" + ")
       end
       if (laboratoire_research == "Laboratoire") or (laboratoire_research == "") or (laboratoire_research == "%%")
         laboratoire_research = nil
@@ -85,8 +87,15 @@ class Ligne < ActiveRecord::Base
       if equipe_research
         query_string += " inner join sous_contrats as sc_equipe_research on sc_equipe_research.id = lignes.sous_contrat_id and sc_equipe_research.entite_type = 'Projet'
                          inner join projets as p_equipe_research on sc_equipe_research.entite_id = p_equipe_research.id"
-        query_where_string += "p_equipe_research.nom like ? and "
-        query.push "%"+equipe_research+"%"
+        if equipe_research_array
+          for equipe in  equipe_research_array
+            query_where_string += "p_equipe_research.nom like ? and "
+            query.push "%"+equipe+"%"  
+          end
+        else
+          query_where_string += "p_equipe_research.nom like ? and "
+          query.push "%"+equipe_research+"%"  
+        end        
       end
       if laboratoire_research
         query_string += " inner join sous_contrats as sc_laboratoire_research on sc_laboratoire_research.id = lignes.sous_contrat_id and sc_laboratoire_research.entite_type = 'Laboratoire'
