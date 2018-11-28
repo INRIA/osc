@@ -24,7 +24,7 @@ class DepenseCommun < ActiveRecord::Base
 
   attr_accessible :ligne_id, :reference, :date_commande, :fournisseur, :budgetaire_reference_id, :commentaire, 
                   :montant_engage, :intitule, :commande_solde, :tache, :eligible, :prestation_service, :type_activite,
-                  :code_analytique, :compte_budgetaire
+                  :code_analytique, :compte_budgetaire, :code_projet
   
   def self.localized_human_attribute_name(attr)
     return case attr

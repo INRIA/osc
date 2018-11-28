@@ -27,7 +27,7 @@ class DepenseMission < ActiveRecord::Base
   
   attr_accessible :ligne_id, :reference, :date_commande, :agent, :date_depart, :date_retour, :structure, :commentaire, 
                   :lieux, :montant_engage, :intitule, :commande_solde, :tache, :eligible, :type_activite, :code_analytique,
-                  :compte_budgetaire
+                  :compte_budgetaire, :code_projet
   
   def self.localized_human_attribute_name(attr)
     return case attr

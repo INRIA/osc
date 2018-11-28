@@ -21,7 +21,7 @@ class DepenseNonVentilee < ActiveRecord::Base
                 'self.updated_by = User.current_user.id'
 
   attr_accessible :ligne_id, :reference, :date_commande, :fournisseur, :structure, :commentaire, :montant_engage, 
-                  :intitule, :commande_solde, :tache, :eligible, :type_activite, :code_analytique, :compte_budgetaire
+                  :intitule, :commande_solde, :tache, :eligible, :type_activite, :code_analytique, :compte_budgetaire, :code_projet
   
   def self.localized_human_attribute_name(attr)
     return case attr

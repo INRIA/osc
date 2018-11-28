@@ -56,7 +56,7 @@ class DepenseSalaire < ActiveRecord::Base
   attr_accessible :ligne_id, :agent_si_origine, :agent, :type_contrat, :statut, :date_debut, :date_fin, :structure, 
                   :nb_mois, :cout_mensuel, :pourcentage, :commentaire, :commande_solde, :tache, :eligible, :type_personnel, 
                   :date_debut_prise_en_charge_sur_contrat, :date_fin_prise_en_charge_sur_contrat, :nb_heures_declarees, :nb_heures_justifiees, 
-                  :cout_indirect_unitaire, :somme_salaires_charges, :cout_periode, :type_activite, :code_analytique, :compte_budgetaire
+                  :cout_indirect_unitaire, :somme_salaires_charges, :cout_periode, :type_activite, :code_analytique, :compte_budgetaire, :code_projet
                
   def date_fin_cannot_be_greater_than_date_debut
       if self.date_debut > self.date_fin
