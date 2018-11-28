@@ -36,6 +36,8 @@
   </div>
   <%- if params['data'] == "mission" -%>
     <div id="recherche_avancee" style="height:270px;">
+  <%- elsif ['commun','toutes_depenses_hors_salaires', 'salaire'].include? params['data'] -%>
+    <div id="recherche_avancee" style="height:200px;">
   <%- else -%>
     <div id="recherche_avancee">
   <%- end -%>
