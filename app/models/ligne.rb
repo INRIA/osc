@@ -88,9 +88,18 @@ class Ligne < ActiveRecord::Base
         query_string += " inner join sous_contrats as sc_equipe_research on sc_equipe_research.id = lignes.sous_contrat_id and sc_equipe_research.entite_type = 'Projet'
                          inner join projets as p_equipe_research on sc_equipe_research.entite_id = p_equipe_research.id"
         if equipe_research_array
+          equipe_iterator = 1
           for equipe in  equipe_research_array
-            query_where_string += "p_equipe_research.nom like ? and "
+            if equipe_iterator == 1
+              query_where_string +="("
+            end            
+            if equipe_iterator == equipe_research_array.length
+              query_where_string += "p_equipe_research.nom like ? or "
+            else
+              query_where_string += "p_equipe_research.nom like ? ) "  
+            end
             query.push "%"+equipe+"%"  
+            equipe_iterator += 1
           end
         else
           query_where_string += "p_equipe_research.nom like ? and "
