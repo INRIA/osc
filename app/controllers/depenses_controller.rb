@@ -13,11 +13,11 @@ class DepensesController < ApplicationController
     if ['fonctionnement', 'equipement', 'non_ventilee'].include? data
       CSV.generate(options) do |csv|
         ligne = ["Commande soldée ?","Verrou", "Date de demande d'achat","Date de millesime", "N° de demande d'achat",
-          "Compte Budgetaire (Dépense)","Code Analytique (Dépense)","Intitulé", "Fournisseur", "Montant Engagé", "Montant Facturé "+@type_montant,
+          "Compte Budgetaire (Dépense)","Code Analytique (Dépense)","Code Projet (Dépense)", "Intitulé", "Fournisseur", "Montant Engagé", "Montant Facturé "+@type_montant,
           "Engagé/Payé "+@type_montant]
         #En tête facture
         if @afficher_factures == 'true' 
-          ligne.insert(12, "N° de facture", "Date de facture", "Millesime de facture" ,"Date de  Mand.", "N° Mand.", "Compte Budgetaire (Facture)","Code Analytique (Facture)","Justifiable", "Rub.CP.", "Taux TVA", "Payé HTR", "Payé HT", "Payé TTC")  
+          ligne.insert(13, "N° de facture", "Date de facture", "Millesime de facture" ,"Date de  Mand.", "N° Mand.", "Compte Budgetaire (Facture)","Code Analytique (Facture)","Justifiable", "Rub.CP.", "Taux TVA", "Payé HTR", "Payé HT", "Payé TTC")  
         end
          #Conversion en UTF16 pour Excel (ms-office)
         new_ligne = []
@@ -41,6 +41,7 @@ class DepensesController < ApplicationController
           ligne << codingTranslation.iconv(c.reference)
           ligne << '="'+codingTranslation.iconv(c.compte_budgetaire)+'"'
           ligne << '="'+codingTranslation.iconv(c.code_analytique)+'"'
+          ligne << '="'+codingTranslation.iconv(c.code_projet)+'"'
           ligne << codingTranslation.iconv(c.intitule)
           ligne << codingTranslation.iconv(c.fournisseur)
           ligne << c.montant_engage
@@ -72,10 +73,10 @@ class DepensesController < ApplicationController
     elsif data=='mission'
       CSV.generate(options) do |csv|
         ligne = ["Commande soldée ?","Verrou", "Date de demande d'achat","Date de millesime", "N° d'OM - Référence",
-          "Compte Budgetaire (Dépense)","Code Analytique (Dépense)","Agent", "Date de départ", "Date de retour", "Lieux", 
+          "Compte Budgetaire (Dépense)","Code Analytique (Dépense)","Code Projet (Dépense)","Agent", "Date de départ", "Date de retour", "Lieux", 
           "Objet de la mission", "Montant Engagé","Montant Facturé "+@type_montant,"Engagé/Payé "+@type_montant]
         if @afficher_factures == 'true'
-          ligne.insert(15, "N° de facture", "Date de facture", "Millesime de facture" ,"Date de  Mand.", "N° Mand.","Compte Budgetaire (Facture)","Code Analytique (Facture)", "Justifiable", "Rub.CP.","Tiers Réglé", "Taux TVA", "Payé HTR", "Payé HT", "Payé TTC")
+          ligne.insert(16, "N° de facture", "Date de facture", "Millesime de facture" ,"Date de  Mand.", "N° Mand.","Compte Budgetaire (Facture)","Code Analytique (Facture)", "Justifiable", "Rub.CP.","Tiers Réglé", "Taux TVA", "Payé HTR", "Payé HT", "Payé TTC")
         end
         #Conversion en UTF16 pour Excel (ms-office)
         new_ligne = []
@@ -97,6 +98,7 @@ class DepensesController < ApplicationController
           ligne << codingTranslation.iconv(c.reference)
           ligne << '="'+codingTranslation.iconv(c.compte_budgetaire)+'"'
           ligne << '="'+codingTranslation.iconv(c.code_analytique)+'"'
+          ligne << '="'+codingTranslation.iconv(c.code_projet)+'"'
           ligne << codingTranslation.iconv(c.agent)
           ligne << date_to_csv(c.date_depart)
           ligne << date_to_csv(c.date_retour)
@@ -130,11 +132,11 @@ class DepensesController < ApplicationController
       end
     elsif data=='salaire'
       CSV.generate(options) do |csv|
-        ligne = ["Salaire soldé ?","Verrou", "Compte Budgetaire (Dépense)","Code Analytique (Dépense)","Agent", 
+        ligne = ["Salaire soldé ?","Verrou", "Compte Budgetaire (Dépense)","Code Analytique (Dépense)","Code Projet (Dépense)","Agent", 
           "Type de contrat","Statut", "Date de début", "Date de fin", "Nombre de mois",
           "Coût Mensuel", "Coût Période", "Montant Payé HTR", "Montant Payé"]
         if @afficher_factures == 'true'
-          ligne.insert(14, "N° de mandat", "Date de mandatement", "Millesime" ,"Compte Budgetaire (Facture)","Code Analytique (Facture)","Commentaire", "Payé HTR", "Payé TTC")
+          ligne.insert(15, "N° de mandat", "Date de mandatement", "Millesime" ,"Compte Budgetaire (Facture)","Code Analytique (Facture)","Commentaire", "Payé HTR", "Payé TTC")
         end
         #Conversion en UTF16 pour Excel (ms-office)
         new_ligne = []
@@ -150,6 +152,7 @@ class DepensesController < ApplicationController
           ligne << c.verrou
           ligne << '="'+codingTranslation.iconv(c.compte_budgetaire)+'"'
           ligne << '="'+codingTranslation.iconv(c.code_analytique)+'"'
+          ligne << '="'+codingTranslation.iconv(c.code_projet)+'"'
           ligne << codingTranslation.iconv(c.nom_agent)
           ligne << codingTranslation.iconv(c.type_contrat)
           ligne << codingTranslation.iconv(c.statut)
@@ -180,7 +183,7 @@ class DepensesController < ApplicationController
     elsif data =='commun'
       CSV.generate(options) do |csv|
         ligne = ["Commande soldée ?","Verrou", "Date de demande d'achat","Date de millesime", "N° de demande d'achat",
-            "Compte Budgetaire (Dépense)","Code Analytique (Dépense)","Réf.Budg.", "Intitulé", "Fournisseur", "Montant Engagé",
+            "Compte Budgetaire (Dépense)","Code Analytique (Dépense)","Code Projet (Dépense)","Réf.Budg.", "Intitulé", "Fournisseur", "Montant Engagé",
             "Montant Facturé "+@type_montant,"Engagé/Payé "+@type_montant]
         if @afficher_factures == 'true'
           ligne.insert(12, "N° de facture", "Date de facture", "Millesime de facture" ,"Date de  Mand.", "N° Mand.","Compte Budgetaire (Facture)","Code Analytique (Facture)", "Justifiable", "Rub.CP.", "Taux TVA", "Payé HT", "Payé TTC")
@@ -205,6 +208,7 @@ class DepensesController < ApplicationController
           ligne << codingTranslation.iconv(c.reference)
           ligne << '="'+codingTranslation.iconv(c.compte_budgetaire)+'"'
           ligne << '="'+codingTranslation.iconv(c.code_analytique)+'"'
+          ligne << '="'+codingTranslation.iconv(c.code_projet)+'"'
           ligne << codingTranslation.iconv(c.budgetaire_reference.code)
           ligne << codingTranslation.iconv(c.intitule)
           ligne << codingTranslation.iconv(c.fournisseur)
