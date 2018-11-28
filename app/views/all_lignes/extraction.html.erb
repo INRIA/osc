@@ -105,6 +105,10 @@
 				<input type="text" id="compte_budgetaire" name="compte_budgetaire" />
 				<label>Code Analytique</label>
         <input type="text" id="code_analytique" name="code_analytique" />
+        <%- if ['fonctionnement', 'equipement', 'non_ventilee'].include? params['data'] -%>
+        <label>Code Projet</label>
+        <input type="text" id="code_projet" name="code_projet" />
+        <%- end -%>
 			</div>
 			<div class="small_box">
 				<h3>Autres s&eacute;lections</h3>
@@ -114,10 +118,14 @@
         <input type="text" id="intitule" name="intitule" /><br />
 				<%- if ['commun','fonctionnement', 'equipement', 'non_ventilee'].include? params['data'] -%>
 				  <label>Fournisseur</label>
-				  <input type="text" id="fournisseur" name="fournisseur" />
+				  <input type="text" id="fournisseur" name="fournisseur" />				
 				<%- end -%>
 				<label>R&eacute;f comptable (factures)</label>
 				<input type="text" id="ref_cp" name="ref_cp" />
+				<%- if params['data'] == "toutes_depenses_hors_salaires" -%>
+				<label>Code Projet</label>
+        <input type="text" id="code_projet" name="code_projet" />
+				<%- end -%>
 			</div>
 		<%- end -%>
 
@@ -126,6 +134,8 @@
 					<h3>Autre s&eacute;lection</h3>
 				<label>Code R&eacute;f&eacute;rence budg&eacute;taire</label>
 				<input type="text" id="ref_bud" name="ref_bud" /><br />
+				<label>Code Projet</label>
+        <input type="text" id="code_projet" name="code_projet" />
 				</div>
       <%- end -%>
 
@@ -142,8 +152,11 @@
         <input type="text" id="annee3" name="annee3" />
         <label>Compte Budg&eacute;taire</label>
         <input type="text" id="compte_budgetaire" name="compte_budgetaire" />
+        <label>Code Projet</label>
+        <input type="text" id="code_projet" name="code_projet" />
 			</div>
 			<div class="small_box">
+			  <h3>Autres s&eacute;lections</h3>
 				<label>N° d'OM</label>
         <input type="text" id="reference" name="reference" />
         <label>Objet de la mission</label>
@@ -168,6 +181,8 @@
 				<input type="text" id="type_contrat" name="type_contrat" /><br />
 				<label>Statut</label>
 				<input type="text" id="statut" name="statut" />
+				<label>Code Projet</label>
+        <input type="text" id="code_projet" name="code_projet" />
 			</div>
 			<div class="small_box">
 				<h3>Autres s&eacute;lections</h3>
