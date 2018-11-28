@@ -86,6 +86,11 @@
           <%= f.text_field :code_analytique, options %>
         </p>
       </div>
+      <p <%= "class='disabled'" if @non_modifiables.include?('code_projet')%>>
+        <label for="depense_equipement_code_projet">Code Projet</label><br />
+        <% options = ({:disabled => true} if @non_modifiables.include?('code_projet')) || {} %>
+        <%= f.text_field :code_projet, options %>
+      </p>
     </div>  
   </div>
 </div>
