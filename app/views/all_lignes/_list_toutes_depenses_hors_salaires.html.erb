@@ -120,7 +120,7 @@
         <td class="<%= verrou_class %> "></td>
       	<td><%= link_to depense.ligne.nom, ligne_path(depense.ligne) %></td>
       	<td><%= french_small_date depense.date_commande %>
-          <% if !@millesime.blank? %><br/><%= display_millesime depense %><% end %>
+          <% if !depense.millesime.blank? %><br/><%= display_millesime depense %><% end %>
 	      <td style="min-width:60px"><%=h depense.reference %></td>
 	      <td><%=h depense.compte_budgetaire %></td>
 	      <td><%=h depense.code_analytique %></td>
