@@ -130,7 +130,7 @@ class Ligne < ActiveRecord::Base
           end
         elsif noContrat_no_research
           query_where_string += "contrats_ligne.num_contrat_etab not like ? and "
-          query.push "%"+noContrat_research+"%"
+          query.push "%"+noContrat_no_research+"%"
         else
           query_where_string += "contrats_ligne.num_contrat_etab like ? and "
           query.push "%"+noContrat_research+"%"
@@ -155,7 +155,7 @@ class Ligne < ActiveRecord::Base
           end
         elsif equipe_no_research
           query_where_string += "p_equipe_research.nom not like ? and "
-          query.push "%"+equipe_research+"%"  
+          query.push "%"+equipe_no_research+"%"  
         else
           query_where_string += "p_equipe_research.nom like ? and "
           query.push "%"+equipe_research+"%"  
