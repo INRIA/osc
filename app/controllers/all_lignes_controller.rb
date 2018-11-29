@@ -1072,23 +1072,34 @@ class AllLignesController < ApplicationController
     end
 
     @filtre_mes_projets_checked = false;
-    if @filtre_mes_projets and @filtre_mes_projets == 'filtre_projet_active'
+    if @filtre_mes_projets and @filtre_mes_projets == 'filtre_projet_active'     
+      mes_projets_nom_query = ["SELECT p.nom from projets p where p.id in (?) ORDER BY p.nom",@ids_mes_equipes]
+      mes_projets_nom = Projet.find_by_sql(mes_projets_nom_query).collect{|d| d.nom}
+      projet_iterator = 1 
+      @equipe_research = ""
+      for projet in mes_projets_nom
+        @equipe_research += projet
+        if projet_iterator != mes_projets_nom.length          
+          @equipe_research += " + "
+        end
+        projet_iterator += 1
+      end
       @filtre_mes_projets_checked = true;
-      @ids_lignes = Ligne.find_all_with_projects_for(current_user,@show_contrat_clos ="no")
-    else
-      @ids_contrats_viewables = @ids_consultables+@ids_editables
-      @ids_contrats_viewables = ['-1'] if @ids_contrats_viewables.size == 0
-      @ids_lignes = Ligne.my_find_all(@ids_contrats_viewables,
-                                        @acronyme_research,
-                                        @noContrat_research,
-                                        @equipe_research,
-                                        @laboratoire_research,
-                                        @departement_research,
-                                        @in_laboratoire,
-                                        @in_departement,
-                                        @in_tutelle,
-                                        @show_contrat_clos)
+     
     end
+    
+    @ids_contrats_viewables = @ids_consultables+@ids_editables
+    @ids_contrats_viewables = ['-1'] if @ids_contrats_viewables.size == 0
+    @ids_lignes = Ligne.my_find_all(@ids_contrats_viewables,
+                                      @acronyme_research,
+                                      @noContrat_research,
+                                      @equipe_research,
+                                      @laboratoire_research,
+                                      @departement_research,
+                                      @in_laboratoire,
+                                      @in_departement,
+                                      @in_tutelle,
+                                      @show_contrat_clos)
 
     @ids_lignes = ['-1'] if @ids_lignes.size == 0
 
