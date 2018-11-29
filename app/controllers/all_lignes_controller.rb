@@ -1095,27 +1095,11 @@ class AllLignesController < ApplicationController
     if !params['organisme_gestionnaire'].blank?
       lignes = Ligne.find(:all, :conditions => {:id => @ids_lignes})
       @filtered_lignes_id = []
-      if !params['equipe_research'].blank? 
-        for ligne in lignes
-          if (ligne.entite.nom.upcase.include? params['equipe_research'].upcase ) and (ligne.organisme_gestionnaire.nom.upcase.include? @organisme_gestionnaire.upcase)
-            @filtered_lignes_id << ligne.id
-          end
-        end
-      else
-        for ligne in lignes
-          if ligne.organisme_gestionnaire.nom.upcase.include? @organisme_gestionnaire.upcase
-            @filtered_lignes_id << ligne.id
-          end
-        end
-      end    
-    elsif !params['equipe_research'].blank?
-      lignes = Ligne.find(:all, :conditions => {:id => @ids_lignes})
-      @filtered_lignes_id = []
       for ligne in lignes
-        if ligne.entite.nom.upcase.include? params['equipe_research'].upcase
+        if ligne.organisme_gestionnaire.nom.upcase.include? @organisme_gestionnaire.upcase
           @filtered_lignes_id << ligne.id
         end
-      end
+      end   
     else
       @filtered_lignes_id = @ids_lignes
     end
