@@ -60,7 +60,6 @@ class Ligne < ActiveRecord::Base
         equipe_no_research = equipe_research
         equipe_no_research[0]=''
       end
-      end
       if (laboratoire_research == "Laboratoire") or (laboratoire_research == "") or (laboratoire_research == "%%")
         laboratoire_research = nil
       end
