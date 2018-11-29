@@ -40,6 +40,8 @@ class Ligne < ActiveRecord::Base
         acronyme_research = nil
       elsif acronyme_research.include? " + "
          acronyme_research_array = acronyme_research.split(" + ")
+      elsif acronyme_research..start_with?('!')
+        acronyme_no_research = acronyme_research
       end
       if (noContrat_research == "NumContrat") or (noContrat_research == "") or (noContrat_research == "%%")
         noContrat_research = nil
@@ -95,6 +97,9 @@ class Ligne < ActiveRecord::Base
             query.push "%"+acronyme+"%"  
             acronyme_research_iterator += 1
           end
+        elsif acronyme_no_research
+          query_where_string += "contrats_ligne.acronyme not like ? and "
+          query.push "%"+acronyme_no_research+"%"
         else
           query_where_string += "contrats_ligne.acronyme like ? and "
           query.push "%"+acronyme_research+"%"
