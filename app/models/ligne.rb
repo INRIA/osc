@@ -40,7 +40,7 @@ class Ligne < ActiveRecord::Base
         acronyme_research = nil
       elsif acronyme_research.include? " + "
          acronyme_research_array = acronyme_research.split(" + ")
-      elsif acronyme_research..start_with?('!')
+      elsif acronyme_research.start_with?('!')
         acronyme_no_research = acronyme_research
       end
       if (noContrat_research == "NumContrat") or (noContrat_research == "") or (noContrat_research == "%%")
