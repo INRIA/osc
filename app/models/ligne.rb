@@ -38,9 +38,14 @@ class Ligne < ActiveRecord::Base
     
       if (acronyme_research == "Acronyme") or (acronyme_research == "") or (acronyme_research == "%%")
         acronyme_research = nil
+      elsif acronyme_research.include? " + "
+         acronyme_research_array = acronyme_research.split(" + ")
+      end
       end
       if (noContrat_research == "NumContrat") or (noContrat_research == "") or (noContrat_research == "%%")
         noContrat_research = nil
+      elsif noContrat_research.include? " + "
+         noContrat_research_array = noContrat_research.split(" + ")
       end
       if (equipe_research == "Equipe") or (equipe_research == "") or (equipe_research == "%%")
         equipe_research = nil
@@ -77,12 +82,44 @@ class Ligne < ActiveRecord::Base
         query_where_string += "lignes.active is true and "
       end
       if acronyme_research
-        query_where_string += "contrats_ligne.acronyme like ? and "
-        query.push "%"+acronyme_research+"%"
+        if acronyme_research_array
+          acronyme_research_iterator = 1
+          for acronyme in  acronyme_research_array
+            if acronyme_research_iterator == 1
+              query_where_string +="("
+            end            
+            if acronyme_research_iterator == acronyme_research_array.length
+              query_where_string += "contrats_ligne.acronyme like ? ) and "
+            else
+              query_where_string += "contrats_ligne.acronyme like ? or "  
+            end
+            query.push "%"+acronyme+"%"  
+            acronyme_research_iterator += 1
+          end
+        else
+          query_where_string += "contrats_ligne.acronyme like ? and "
+          query.push "%"+acronyme_research+"%"
+        end     
       end
       if noContrat_research
-        query_where_string += "contrats_ligne.num_contrat_etab like ? and "
-        query.push "%"+noContrat_research+"%"
+        if noContrat_research_array
+          noContrat_research_array_iterator = 1
+          for noContrat in  noContrat_research_array
+            if noContrat_research_array_iterator == 1
+              query_where_string +="("
+            end            
+            if noContrat_research_array_iterator == noContrat_research_array.length
+              query_where_string += "contrats_ligne.num_contrat_etab like ? ) and "
+            else
+              query_where_string += "contrats_ligne.num_contrat_etab like ? or "  
+            end
+            query.push "%"+noContrat+"%"  
+            noContrat_research_array_iterator += 1
+          end
+        else
+          query_where_string += "contrats_ligne.num_contrat_etab like ? and "
+          query.push "%"+noContrat_research+"%"
+        end   
       end
       if equipe_research
         query_string += " inner join sous_contrats as sc_equipe_research on sc_equipe_research.id = lignes.sous_contrat_id and sc_equipe_research.entite_type = 'Projet'

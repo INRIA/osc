@@ -1072,8 +1072,9 @@ class AllLignesController < ApplicationController
     end
 
     @filtre_mes_projets_checked = false;
-    if @filtre_mes_projets and @filtre_mes_projets == 'filtre_projet_active'     
-      mes_projets_nom_query = ["SELECT p.nom from projets p where p.id in (?) ORDER BY p.nom",@ids_mes_equipes]
+    if @filtre_mes_projets and @filtre_mes_projets == 'filtre_projet_active'
+      projets_id = Projet.find_all_team_for(current_user)
+      mes_projets_nom_query = ["SELECT p.nom from projets p where p.id in (?) ORDER BY p.nom",projets_id]
       mes_projets_nom = Projet.find_by_sql(mes_projets_nom_query).collect{|d| d.nom}
       projet_iterator = 1 
       @equipe_research = ""
