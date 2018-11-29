@@ -48,11 +48,18 @@ class Ligne < ActiveRecord::Base
         noContrat_research = nil
       elsif noContrat_research.include? " + "
          noContrat_research_array = noContrat_research.split(" + ")
+      elsif noContrat_research.start_with?('!')
+        noContrat_no_research = noContrat_research
+        noContrat_no_research[0]=''
       end
       if (equipe_research == "Equipe") or (equipe_research == "") or (equipe_research == "%%")
         equipe_research = nil
       elsif equipe_research.include? " + "
          equipe_research_array = equipe_research.split(" + ")
+      elsif equipe_research.start_with?('!')
+        equipe_no_research = equipe_research
+        equipe_no_research[0]=''
+      end
       end
       if (laboratoire_research == "Laboratoire") or (laboratoire_research == "") or (laboratoire_research == "%%")
         laboratoire_research = nil
@@ -121,6 +128,9 @@ class Ligne < ActiveRecord::Base
             query.push "%"+noContrat+"%"  
             noContrat_research_array_iterator += 1
           end
+        elsif noContrat_no_research
+          query_where_string += "contrats_ligne.num_contrat_etab not like ? and "
+          query.push "%"+noContrat_research+"%"
         else
           query_where_string += "contrats_ligne.num_contrat_etab like ? and "
           query.push "%"+noContrat_research+"%"
@@ -143,6 +153,9 @@ class Ligne < ActiveRecord::Base
             query.push "%"+equipe+"%"  
             equipe_iterator += 1
           end
+        elsif equipe_no_research
+          query_where_string += "p_equipe_research.nom not like ? and "
+          query.push "%"+equipe_research+"%"  
         else
           query_where_string += "p_equipe_research.nom like ? and "
           query.push "%"+equipe_research+"%"  
