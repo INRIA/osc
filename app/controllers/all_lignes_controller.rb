@@ -1215,7 +1215,7 @@ class AllLignesController < ApplicationController
         @code_analytique = '%'+@code_analytique+'%'  
         filter_req+= " AND d.code_analytique like '"+@code_analytique+"'"
       end
-      if @code_projet.blank?
+      if !@code_projet.blank?
         @code_projet = '%'+@code_projet+'%'  
         filter_req+= " AND d.code_projet like '"+@code_projet+"'"
       end
