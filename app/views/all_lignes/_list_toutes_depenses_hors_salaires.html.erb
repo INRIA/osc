@@ -125,22 +125,27 @@
 	      <td><%=h depense.compte_budgetaire %></td>
 	      <td><%=h depense.code_analytique %></td>
 	      <td>
+	      <% toggle_check = "" %>
     	  <%- if depense.is_a?(DepenseFonctionnement) -%>
     	    <%= link_to simple_format(depense.intitule), ligne_depense_fonctionnement_path(depense.ligne, depense) %>
     	    <% @factures = depense.depense_fonctionnement_factures %>
+    	    <% toggle_check = "fonctionnement" %>
     	  <%- end -%>
     	  <%- if depense.is_a?(DepenseEquipement) -%>
     	    <%= link_to simple_format(depense.intitule), ligne_depense_equipement_path(depense.ligne, depense) %>
     	    <% @factures = depense.depense_equipement_factures %>
+    	    <% toggle_check = "equipement" %>
     	  <%- end -%>
     	  <%- if depense.is_a?(DepenseNonVentilee) -%>
     	    <%= link_to simple_format(depense.intitule), ligne_depense_non_ventilee_path(depense.ligne, depense) %>
     	    <% @factures = depense.depense_non_ventilee_factures %>
+    	    <% toggle_check = "non_ventilee" %>
     	  <%- end -%>
     	  <%- if depense.is_a?(DepenseMission) -%>
     	    <%= link_to simple_format(depense.intitule), ligne_depense_mission_path(depense.ligne, depense) %>
     	    <% @mission = true
     	       @factures = depense.depense_mission_factures %>
+    	    <% toggle_check = "mission" %>
     	  <%- end -%>
     	</td>
     	<td  style="min-width:85px">
@@ -171,10 +176,10 @@
     	</td>
       <%- if depense.ligne.contrat.is_budget_editable? current_user -%>
         <%# if depense.ligne.contrat.come_from_inria? %>
-          <% if depense.verif %>
-            <td class="actions_depenses" id=<%= "depense_toggle_verif_id_"+depense.id.to_s %>><a href="" onClick="toggle_verif_depense('mission','<%=depense.id%>',0);return false;" title="Cette d&eacute;pense est v&eacute;rifi&eacute;e ! (Cliquez-moi pour annuler)"><%= image_tag "verif.jpg" %></a> </td>
+          <% if depense.verif && toggle_check != "" %>
+            <td class="actions_depenses" id=<%= "depense_toggle_verif_id_"+depense.id.to_s %>><a href="" onClick="toggle_verif_depense('<%=toggle_check%>','<%=depense.id%>',0);return false;" title="Cette d&eacute;pense est v&eacute;rifi&eacute;e ! (Cliquez-moi pour annuler)"><%= image_tag "verif.jpg" %></a> </td>
           <% else %>
-            <td class="actions_depenses" id=<%= "depense_toggle_verif_id_"+depense.id.to_s %>><a href="" onClick="toggle_verif_depense('mission','<%=depense.id%>',1);return false;" title="Cette d&eacute;pense n'est pas v&eacute;rifi&eacute;e. (Cliquez-moi pour valider la v&eacute;rification)"><%= image_tag "question_mark.png" %></a> </td>
+            <td class="actions_depenses" id=<%= "depense_toggle_verif_id_"+depense.id.to_s %>><a href="" onClick="toggle_verif_depense('<%=toggle_check%>','<%=depense.id%>',1);return false;" title="Cette d&eacute;pense n'est pas v&eacute;rifi&eacute;e. (Cliquez-moi pour valider la v&eacute;rification)"><%= image_tag "question_mark.png" %></a> </td>
           <% end %>
         <%# end %>
       <%- end -%>    
