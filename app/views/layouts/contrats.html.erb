@@ -5,7 +5,7 @@
 		<% content_for :right do %>
 		
 		  <%- if (@contrat.is_editable? current_user  and current_user.is_contrat_admin?) or current_user.is_admin? -%>
-		    <%= link_to 'Dupliquer le contrat',  duplicate_contrat_path(@contrat), :method => :post, :class => "duplicate-contrat",:onclick => "var f = document.createElement('form'); f.style.display = 'none'; this.parentNode.appendChild(f); f.method = 'POST'; f.action = this.href;f.submit();return false;"  %>
+		    <%= link_to 'Dupliquer le contrat',  duplicate_contrat_path(@contrat), {:method => :post, :class => "duplicate-contrat"} %>
 			<%- end -%>
 			
 			<% if controller.action_name.to_s != "new" %>
