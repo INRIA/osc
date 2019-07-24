@@ -54,6 +54,8 @@ class Ligne < ActiveRecord::Base
       end
       if (equipe_research == "Equipe") or (equipe_research == "") or (equipe_research == "%%")
         equipe_research = nil
+      elsif equipe_research.is_a?(Array)
+        equipe_research_array = equipe_research
       elsif equipe_research.include? " + "
          equipe_research_array = equipe_research.split(" + ")
       elsif equipe_research.start_with?('!')
