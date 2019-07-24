@@ -582,6 +582,67 @@ table#table_bilan tr.title td strong {
   color: <%= red_link %>;
 }
 
+/* select multiple javascript tail-select */
+#recherche_avancee .tail-select:hover .select-label,
+#recherche_avancee .tail-select.idle .select-label,
+#recherche_avancee .tail-select.active .select-label{
+  box-shadow: 0 0 0 1px <%= menu_black %>;
+  -webkit-box-shadow: 0 0 0 1px <%= menu_black %>;
+}
+
+#recherche_avancee .tail-select .select-label{
+  background-color: <%= background_grey %>;
+  border: 1px solid <%= menu_black %>;
+  color: #5E5542;
+  box-shadow: 0 0 0 1px <%= menu_black %>;
+  -webkit-box-shadow: 0 0 0 1px <%= menu_black %>;
+  transition: background 142ms linear, box-shadow 142ms linear;
+  -webkit-transition: background 142ms linear, box-shadow 142ms linear;
+}
+#recherche_avancee .tail-select .select-label .label-count{
+  color: #5E5542;
+  border-color: <%= menu_black %>;
+}
+#recherche_avancee .tail-select button.tail-none,
+#recherche_avancee .tail-select button.tail-all{
+  color: <%= menu_hover_black %>;
+  border-color: <%= menu_hover_black %>;
+}
+#recherche_avancee .tail-select button.tail-none:hover,
+#recherche_avancee .tail-select button.tail-all:hover{
+  color: <%= background_grey %>;
+  border-color: <%= background_grey %>;
+}
+#recherche_avancee .tail-select input[type="text"]:focus{
+  color: #5E5542;
+}
+#recherche_avancee .tail-select .select-dropdown{
+  box-shadow: 0 0 0 1px <%= menu_black %>;
+  -webkit-box-shadow: 0 0 0 1px <%= menu_black %>;
+  transition: background 142ms linear, box-shadow 142ms linear;
+  -webkit-transition: background 142ms linear, box-shadow 142ms linear;
+}
+#recherche_avancee .tail-select .select-dropdown{
+  background-color: <%= background_grey %>;
+  border: 1px solid <%= menu_black %>;
+  color: <%= menu_black %>;
+}
+#recherche_avancee .tail-select .select-dropdown .dropdown-search{
+  border-color: <%= menu_black %>;
+}
+#recherche_avancee .tail-select .select-dropdown ul li.dropdown-option{
+  color: <%= menu_black %>;
+}
+#recherche_avancee .tail-select .select-dropdown ul li.dropdown-option:hover{
+  background-color: <%= menu_hover_black %>;
+  color:<%= background_grey %>;
+}
+#recherche_avancee .tail-select .select-dropdown ul li.dropdown-option.selected{
+  background-color: <%= menu_hover_black %>;
+  color:<%= background_grey %>;
+}
+/* END select multiple javascript tail-select */
+
 #left table.depenses tr.odd td,
 #left table.depenses tbody tr.odd th,
 #left table.depenses tbody tr.odd td.soldee,

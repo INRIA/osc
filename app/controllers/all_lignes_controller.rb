@@ -736,8 +736,7 @@ class AllLignesController < ApplicationController
                   WHERE sc.contrat_id IN (?) ORDER BY p.nom ", @ids_contrats_for_select]
     
       @projets_for_select = Projet.find_by_sql(req_projet).collect{|p| p.nom}
-      
-      @projets_for_select.insert(0,"")
+
       
       req_departement = ["SELECT DISTINCT d.nom FROM departements d, sous_contrats sc, departement_subscriptions ds
                     WHERE ((sc.entite_type = 'Departement' AND sc.entite_id = d.id) OR (sc.entite_type = 'Projet' AND sc.entite_id = ds.projet_id AND d.id = ds.departement_id )) AND sc.contrat_id IN (?) ORDER BY d.nom ", @ids_contrats_for_select]

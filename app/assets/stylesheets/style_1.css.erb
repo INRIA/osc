@@ -2893,7 +2893,76 @@ a#export_budget_oo{
   margin-top:15px;
   
 }
-#submit_div{
+
+/*select multiple javascript tail-select */
+#recherche_avancee .tail-select:hover .select-label,
+#recherche_avancee .tail-select.idle .select-label,
+#recherche_avancee .tail-select.active .select-label{
+  box-shadow: 0 0 0 1px #80745B;
+  -webkit-box-shadow: 0 0 0 1px #80745B;
+}
+
+#recherche_avancee .tail-select {
+  width: 200px;
+}
+#recherche_avancee .tail-select input {
+  width: 200px;
+}
+#recherche_avancee .tail-select .select-label{
+  border-radius: 0;
+  background-color: #D6C196;
+  border: 1px solid #80745B;
+  color: #5E5542;
+  box-shadow: 0 0 0 1px #80745B;
+  -webkit-box-shadow: 0 0 0 1px #80745B;
+  transition: background 142ms linear, box-shadow 142ms linear;
+  -webkit-transition: background 142ms linear, box-shadow 142ms linear;
+}
+#recherche_avancee .tail-select .select-label .label-count{
+  color: #5E5542;
+  border-color: #80745B;
+}
+#recherche_avancee .tail-select button.tail-none,
+#recherche_avancee .tail-select button.tail-all{
+  color: #80745B;
+  border-color: #80745B;
+}
+#recherche_avancee .tail-select button.tail-none:hover,
+#recherche_avancee .tail-select button.tail-all:hover{
+  color: white;
+  border-color: white;
+}
+#recherche_avancee .tail-select input[type="text"]:focus{
+  color: #5E5542;
+}
+#recherche_avancee .tail-select .select-dropdown{
+  box-shadow: 0 0 0 1px #80745B;
+  -webkit-box-shadow: 0 0 0 1px #80745B;
+  transition: background 142ms linear, box-shadow 142ms linear;
+  -webkit-transition: background 142ms linear, box-shadow 142ms linear;
+}
+#recherche_avancee .tail-select .select-dropdown{
+  background-color: #D6C196;
+  border: 1px solid #80745B;
+  color: #5E5542;
+}
+#recherche_avancee .tail-select .select-dropdown .dropdown-search{
+  border-color: #80745B;
+}
+#recherche_avancee .tail-select .select-dropdown ul li.dropdown-option{
+  color: #5E5542;
+}
+#recherche_avancee .tail-select .select-dropdown ul li.dropdown-option:hover{
+  background-color: #80745B;
+  color:white;
+}
+#recherche_avancee .tail-select .select-dropdown ul li.dropdown-option.selected{
+  background-color: #80745B;
+  color:white;
+}
+/* END select multiple javascript tail-select */
+
+ #submit_div{
   text-align:center;
 }
 
