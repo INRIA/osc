@@ -116,8 +116,10 @@
 			<h3>Lignes associ&eacute;es à l'&eacute;quipe</h3>
 			<form action="?" method="get" id="form_equipe"> 
 			  Limiter &agrave;  <a href="" onclick="alert('<%= @tool_tip_mes_equipes.html_safe() %>');return false;" %>mes &eacute;quipes</a> 
-        <%= check_box_tag "filtre_projet", "filtre_projet_active", @filtre_mes_projets_checked, :style=>'width:15px;', :onchange =>onclick="toggle_disable_other_inputs('filtre_projet'); return false;" %>   
-				<%= select_tag "equipe", options_for_select(@projets_for_select, params['equipe']), :disabled=>@filtre_mes_projets_checked, multiple: true, :class=>'select-move' %>
+        <%= check_box_tag "filtre_projet", "filtre_projet_active", @filtre_mes_projets_checked, :style=>'width:15px;', :onchange =>onclick="toggle_disable_other_inputs('filtre_projet'); return false;" %>
+        <div id="equipeSelect">
+				<%= select_tag "equipe", options_for_select(@projets_for_select, params['equipe']), multiple: true, :class=>'select-move' %>
+        </div>
 				<h3>Limit&eacute; à l'organisme gestionnaire :</h3>
 				<%= select_tag "organisme_gestionnaire", options_for_select(@organisme_gestionnaires, params['organisme_gestionnaire']) %>
 				<input type="hidden" name="type_recherche" value="<%= @type_bilan %>" class="type_bilan" />
@@ -240,12 +242,12 @@
 <script type="text/javascript" src="/vendor/tail.select-master/langs/tail.select-fr.js"></script>
 <script type="text/javascript" language="javascript">
 
-    tail.select(".select-move", {
-        search: true,
-        locale: 'fr',
-        multiSelectAll: true,
-        placeholder: 'Sélection Multiple'
-    });
+  tail.select(".select-move", {
+    search: true,
+    locale: 'fr',
+    multiSelectAll: true,
+    placeholder: 'Sélection Multiple'
+  });
 
 function selectBilan(num,type){
   addClassName_for_bilan_global = false;
@@ -399,9 +401,10 @@ function toggle_disable_other_inputs(valeur){
   var form = document.getElementById('form_equipe');
   if(form.filtre_projet.checked){
     form.equipe.value = "";
-    form.equipe.disabled = true;
+    new Effect.toggle('equipeSelect','slide', {duration: 0.3});
   }else{
     form.equipe.disabled = false;
+    new Effect.toggle('equipeSelect','slide', {duration: 0.3});
   }
   
 }
