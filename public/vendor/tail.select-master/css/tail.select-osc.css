@@ -92,6 +92,7 @@
     background-color: transparent;
 }
 #recherche_avancee .tail-select input {
+	width: 200px;
 	background-color: #202428;
     border: 1px solid #101418;
 }
