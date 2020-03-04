@@ -13,7 +13,7 @@ gem 'prototype-rails'
 gem 'debugger-ruby_core_source', '~> 1.2.3'
 gem 'debugger', group: [:development, :test]
 gem 'rmagick', '~> 2.13.2'
-gem "net-ldap" ,   '~> 0.3.1'
+gem "net-ldap" ,   '~> 0.16.0'
 gem "validates_date_time", :git => "https://github.com/sofatutor/validates_date_time", :branch => 'rails-3'
 gem "rails-i18n", '~> 0.7.4'
 gem "acts_as_list", "~> 0.2.0"
