@@ -1,0 +1,59 @@
+version: '2.4'
+
+services:
+
+    mysql_db:
+        container_name: mysql_db
+        environment:
+            MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+            MYSQL_DATABASE: 'osc'
+            MYSQL_USER: 'db_user'
+            MYSQL_PASSWORD: 'db_password'
+        expose:
+            - '3306/tcp'
+        image: mysql:5
+        healthcheck:
+            test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+            timeout: 20s
+            retries: 10
+        hostname: mysql_db
+        networks:
+            osc_net:
+                ipv4_address: 192.168.200.10
+        ports:
+            - '3306:3306'
+        volumes:
+            - osc_database:/var/lib/mysql
+        restart: unless-stopped
+
+    osc:
+        build: 
+            context: .
+            dockerfile: Dockerfile
+        command: bash -c "cd /app && bundle exec rails server -b 0.0.0.0 -e production"
+        container_name: osc
+        depends_on:
+            mysql_db:
+                condition: service_healthy
+        expose:
+            - '3000/tcp'
+        hostname: osc
+        networks:
+            osc_net:
+                ipv4_address: 192.168.200.20
+        ports:
+            - '3000:3000'
+        restart: unless-stopped
+
+volumes:
+
+    osc_database:
+
+networks:
+
+    osc_net:
+        name: osc_net
+        ipam:
+            driver: default
+            config: 
+                - subnet: "192.168.200.0/24"
