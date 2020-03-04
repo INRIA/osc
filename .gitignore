@@ -23,3 +23,4 @@
 .project
 .idea*
 /vendor/bundle/*
+config/database.yml
