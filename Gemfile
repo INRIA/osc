@@ -35,7 +35,7 @@ group :assets do
 end
 
 gem 'jquery-rails', '~> 3.0.4'
-gem 'json', '~> 1.8.0'
+gem 'json', '~> 2.3.1'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
